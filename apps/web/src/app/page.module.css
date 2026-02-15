@@ -58,7 +58,6 @@
   justify-content: right;
   align-items: start;
   position: relative;
-  padding: 4rem 0;
 }
 
 .center::before {
@@ -104,7 +103,6 @@
 }
 @media (max-width: 1024px) {
   .center {
-    padding: 2rem 0;
     justify-content: start;
     align-items: end;
   }
