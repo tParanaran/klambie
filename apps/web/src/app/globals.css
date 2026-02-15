@@ -99,10 +99,10 @@
   }
 }
 
-@import 'tailwindcss/utilities';
-
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
   }
 }
+
+@import 'tailwindcss/utilities';
