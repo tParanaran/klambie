@@ -5,11 +5,9 @@ import Container from '@/components/container';
 export default function Home() {
   return (
     <main>
-      <Container>
-        <div className={styles.center}>
-          <HomeView />
-        </div>
-      </Container>
+      <div className={styles.center}>
+        <HomeView />
+      </div>
     </main>
   );
 }
