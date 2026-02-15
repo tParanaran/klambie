@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
-import prisma from '@/prisma';
-
+import { prisma } from 'lib/prisma';
 
 export class SampleController {
   async getSampleData(req: Request, res: Response) {
@@ -34,4 +33,4 @@ export class SampleController {
   }
 }
 
-console.log('Hello')
+console.log('Hello');
