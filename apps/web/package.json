@@ -10,21 +10,22 @@
     "test": "npx cypress verify & cypress run --component"
   },
   "dependencies": {
+    "@tailwindcss/postcss": "^4.1.18",
     "cross-env": "^7.0.3",
     "next": "^16.1.6",
+    "postcss": "^8.4.31",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-icons": "^5.5.0",
     "react-toastify": "^11.0.5",
+    "tailwindcss": "^4.1.18",
     "zustand": "^5.0.11"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4.1.18",
     "@types/node": "^20.19.33",
     "@types/react": "^18.3.28",
     "@types/react-dom": "^18.3.7",
     "cypress": "^13.6.2",
-    "tailwindcss": "^4.1.18",
     "typescript": "^5.9.3"
   }
 }
