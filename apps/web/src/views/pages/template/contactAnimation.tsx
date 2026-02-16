@@ -1,6 +1,6 @@
 import { antonFont } from '@/utils/fonts';
 import { redirect } from 'next/navigation';
-import WalkingTextAnimation from '../gsap';
+import WalkingTextAnimation from '@/views/components/walkingTextAnimation';
 
 export default function ContactAnimation() {
   return (

@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { MdCopyright } from 'react-icons/md';
 import Logo from './components/logo';
-import Container from '../container';
+import Container from '@/views/components/container';
 
 export default function Footer() {
   return (

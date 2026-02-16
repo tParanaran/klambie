@@ -1,4 +1,4 @@
-import WalkingTextAnimation from '../gsap';
+import WalkingTextAnimation from '@/views/components/walkingTextAnimation';
 
 export default function BannerAnimation() {
   return (

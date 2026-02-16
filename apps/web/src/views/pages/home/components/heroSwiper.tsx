@@ -5,8 +5,8 @@ import 'swiper/css/pagination';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper/modules';
 import { photo } from '@/utils/photo';
-import HeroMain from '../home/heroMain';
-import PhotoContainer from '../home/photoContainer';
+import HeroMain from './heroMain';
+import PhotoContainer from './photoContainer';
 
 export default function HeroSwiper() {
   return (

@@ -8,7 +8,7 @@ import MobileButton from './components/mobileButton';
 import MobileMenu from './components/mobileMenu';
 import ProfileMenu from './components/profileMenu';
 import NavLink from './components/navLink';
-import BackgroundModal from '../background-modal';
+import BackgroundModal from '@/views/components/backgoundModal';
 
 export default function NavbarBottom() {
   const [isScroll, setIsScroll] = useState<boolean>(false);

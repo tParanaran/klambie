@@ -1,7 +1,7 @@
-import HeroMain from '@/components/home/heroMain';
-import HeroPhoto from '@/components/home/heroPhoto';
-import HeroText from '@/components/home/heroText';
-import HeroSwiper from '@/components/swiper/heroSwiper';
+import HeroMain from './components/heroMain';
+import HeroPhoto from './components/heroPhoto';
+import HeroSwiper from './components/heroSwiper';
+import HeroText from './components/heroText';
 
 export default async function HomeView() {
   return (
