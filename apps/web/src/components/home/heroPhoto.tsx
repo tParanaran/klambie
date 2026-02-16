@@ -1,11 +1,5 @@
-import { antonFont } from '@/utils/fonts';
-import Image from 'next/image';
-import PhotoContainer from './photo-container';
-
-export const photo = [
-  { idx: 1, src: '/cap.jpg', alt: 'Cap', text: '#Trending 2026' },
-  { idx: 2, src: '/hat.jpg', alt: 'Hat', text: '#OldButGold' },
-];
+import { photo } from '@/utils/photo';
+import PhotoContainer from './photoContainer';
 
 export default function HeroPhoto() {
   return (

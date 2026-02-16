@@ -1,4 +1,5 @@
 import { useNavbarStore } from '@/store/navbar-store';
+import { navLink } from '@/utils/navLink';
 import Link from 'next/link';
 
 export default function NavLink({
@@ -10,17 +11,9 @@ export default function NavLink({
 }) {
   const navbar = useNavbarStore();
 
-  const link = [
-    { id: 1, name: 'About', href: '/about' },
-    { id: 2, name: 'Shop', href: '/shop' },
-    { id: 3, name: 'Men', href: '/men' },
-    { id: 4, name: 'Women', href: '/women' },
-    { id: 5, name: 'Kids', href: '/kids' },
-    { id: 6, name: 'Contact', href: '/contact' },
-  ];
   return (
     <div className={classDiv}>
-      {link.map((item, idx) => (
+      {navLink.map((item, idx) => (
         <Link
           key={idx}
           href={item.href}

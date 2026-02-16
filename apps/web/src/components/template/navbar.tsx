@@ -3,11 +3,11 @@ import { useEffect, useState } from 'react';
 import { useNavbarStore } from '@/store/navbar-store';
 import { useProfileStore } from '@/store/profile-store';
 import Logo from './components/logo';
-import IconLink from './components/icon-link';
-import MobileButton from './components/mobile-button';
-import MobileMenu from './components/mobile-menu';
-import ProfileMenu from './components/profile-menu';
-import NavLink from './components/nav-link';
+import IconLink from './components/iconLink';
+import MobileButton from './components/mobileButton';
+import MobileMenu from './components/mobileMenu';
+import ProfileMenu from './components/profileMenu';
+import NavLink from './components/navLink';
 import BackgroundModal from '../background-modal';
 
 export default function NavbarBottom() {

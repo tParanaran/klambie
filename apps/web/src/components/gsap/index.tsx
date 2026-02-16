@@ -5,7 +5,7 @@ import { useGSAP } from '@gsap/react';
 
 gsap.registerPlugin(useGSAP);
 
-export default function WalkingText({ text }: { text: string }) {
+export default function WalkingTextAnimation({ text }: { text: string }) {
   const textRef = useRef<HTMLDivElement>(null);
 
   useGSAP(

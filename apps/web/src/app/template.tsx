@@ -1,8 +1,8 @@
 'use client';
 
 import Container from '@/components/container';
-import BannerWalkingText from '@/components/template/banner-walking-text';
-import ContactWalkingText from '@/components/template/contact-walking-text';
+import BannerAnimation from '@/components/template/bannerAnimation';
+import ContactAnimation from '@/components/template/contactAnimation';
 import Footer from '@/components/template/footer';
 import Navbar from '@/components/template/navbar';
 import { ToastContainer } from 'react-toastify';
@@ -10,13 +10,13 @@ import { ToastContainer } from 'react-toastify';
 export default function Template({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <BannerWalkingText />
+      <BannerAnimation />
       <Navbar />
       <Container>
         {children}
         <ToastContainer />
       </Container>
-      <ContactWalkingText />
+      <ContactAnimation />
       <Footer />
     </>
   );

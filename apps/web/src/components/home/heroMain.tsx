@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import ContactLink from './contact-link';
+import ContactLink from './contactLink';
 
 export default function HeroMain() {
   return (

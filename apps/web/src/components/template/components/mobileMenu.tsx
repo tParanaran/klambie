@@ -1,4 +1,4 @@
-import NavLink from './nav-link';
+import NavLink from './navLink';
 
 export default function MobileMenu({ isScroll }: { isScroll: boolean }) {
   return (
