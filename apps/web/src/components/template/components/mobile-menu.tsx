@@ -9,7 +9,7 @@ export default function MobileMenu({ isScroll }: { isScroll: boolean }) {
     >
       <NavLink
         classDiv="flex gap-2 flex-wrap"
-        classLink="flex bg-background flex-1/3 hover:bg-orange-700 hover:text-[#ededed] w-auto h-18 justify-center items-center rounded-2xl"
+        classLink="flex nav-bg flex-1/3 hover:bg-orange-700 hover:text-[#ededed] w-auto h-18 justify-center items-center rounded-2xl"
       />
     </div>
   );

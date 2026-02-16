@@ -1,6 +1,6 @@
 import { IoReceiptOutline } from 'react-icons/io5';
 import Link from 'next/link';
-import LogoutButton from '@/components/logout';
+import LogoutButton from '@/components/logout-button';
 import ProfileButton from './profile-button';
 
 export default function ProfileMenu({ isScroll }: { isScroll: boolean }) {

@@ -98,11 +98,30 @@
       )
       rgb(var(--background-start-rgb));
   }
+
+  .nav-bg {
+    background: whitesmoke;
+  }
+
+  .swiper-pagination-bullet-active {
+    background-color: var(--color-orange-800) !important;
+  }
+
+  .swiper-pagination-bullet {
+    background-color: var(--color-orange-800) !important;
+    padding: 7px;
+    /* #eab308  */
+    /* #063852 */
+  }
 }
 
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
+  }
+
+  .nav-bg {
+    background: #1b1a1e;
   }
 }
 
