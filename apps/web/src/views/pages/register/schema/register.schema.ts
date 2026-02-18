@@ -1,6 +1,7 @@
 import { object, string } from 'yup';
 
-export const LoginSchema = object({
+export const RegisterSchema = object({
+  name: string().label('Name').email().min(3).max(100).required(),
   email: string().label('Email').email().min(10).max(100).required(),
   password: string()
     .label('Password')
