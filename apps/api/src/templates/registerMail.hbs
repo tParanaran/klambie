@@ -1,16 +1,101 @@
-<html lang="en">
+<html lang='en'>
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <title>Verify your Klambie account</title>
+
+    <style>
+      @import
+      url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@100..900&display=swap');
+      body { font-family: 'Noto Sans', sans-serif; margin: 0; padding: 0;
+      background-color: #f4f4f4; } .wrapper { width: 100%; table-layout: fixed;
+      background-color: #f4f4f4; padding-bottom: 40px; } .main {
+      background-color: #ffffff; margin: 0 auto; width: 100%; max-width: 600px;
+      border-spacing: 0; font-family: 'Noto Sans'; color: #333333;
+      border-radius: 12px; } .button { background-color: oklch(55.3% 0.195
+      38.402); color: #ffffff; padding: 15px 30px; text-decoration: none;
+      border-radius: 10px; display: inline-block; font-weight: 600; } .footer {
+      padding: 20px; text-align: center; background-color: #1b1a1e; color:
+      #666666; font-size: 13px; border-radius: 0px 0px 10px 10px; }
+      .social-icons img { width: 30px; height: 30px; margin: 0 10px; } @media
+      only screen and (max-width: 600px) { .container { width: 100% !important;
+      } .content { padding: 20px !important; } }
+    </style>
   </head>
   <body>
-    <div>
-      <h1>Registration</h1>
-      <p>Hello {{email}}</p>
-      <p>Thank you for registering with us
-        {{name}}, to complete your registration please click verify bellow</p>
-      <a href="{{vertificationUrl}}">Verify</a>
-    </div>
+    <main style='padding: 5%'>
+      <center class='wrapper'>
+        <table class='main' width='100%' role='presentation'>
+          <tr>
+            <td
+              style='
+                padding: 30px;
+                text-align: center;
+                font-size: 15px;
+                font-weight: 400;
+              '
+            >
+              <img
+                src='https://i.postimg.cc/9Qm9HXgq/klambie.png'
+                alt='Logo Klambie'
+                style='max-width: 80px; height: auto'
+              />
+              <h1>Hi Really Real People, Welcome to Klambie!</h1>
+            </td>
+          </tr>
+          <tr>
+            <td style='padding: 30px'>
+              <h3 style='margin-top: 0'>Hello {{name}},</h3>
+              <p>
+                Thanks for registering an account with Klambie! In order to
+                start using Klambie, you need to verify your email.
+              </p>
+
+              <div style='text-align: center; padding: 30px 0'>
+                <a
+                  href='{{vertificationUrl}}'
+                  class='button'
+                  target='_blank'
+                >Verify your email</a>
+              </div>
+
+              <p style='font-size: 14px; color: #666666; padding-bottom: 30px'>
+                Can't click the button above? Copy and paste this link into your
+                browser.<br />
+                <a
+                  href='[Link_Verifikasi]'
+                  style='color: oklch(55.3% 0.195 38.402)'
+                >{{vertificationUrl}}</a>
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td class='footer'>
+              <div class='social-icons'>
+                <a href='https://www.instagram.com' target='_blank'><img
+                    src='https://img.icons8.com/?size=100&id=eRJfQw0Zs44S&format=png&color=666666'
+                    alt='Instagram'
+                  />
+                </a>
+                <a href='https://www.facebook.com' target='_blank'><img
+                    src='https://img.icons8.com/?size=100&id=118468&format=png&color=666666'
+                    alt='Facebook'
+                  /></a>
+                <a href='https://www.youtube.com' target='_blank'><img
+                    src='https://img.icons8.com/?size=100&id=36908&format=png&color=666666'
+                    alt='Youtube'
+                  /></a>
+              </div>
+              <p>
+                You're receiving this email because you have registered an
+                account in Klambie. If you are not sure why you`re receiving
+                this, please contact us by replying on this email.
+              </p>
+              <p>&copy; 2026 Klambie. All rights reserved.</p>
+            </td>
+          </tr>
+        </table>
+      </center>
+    </main>
   </body>
 </html>

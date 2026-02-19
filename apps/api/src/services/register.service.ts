@@ -72,14 +72,13 @@ export class RegisterService {
 
       const token = sign({ email }, SECRET_KEY as string, { expiresIn: '1hr' });
 
-      const vertificationUrl = BASE_WEB_URL + '/email-verification/' + token;
-      console.log(BASE_WEB_URL, SECRET_KEY);
+      const vertificationUrl = BASE_WEB_URL + '/verification/' + token;
 
       const html = compiledTemplate({ name, email, vertificationUrl });
 
       await transporter.sendMail({
         to: email,
-        subject: 'Registration',
+        subject: 'Verify your Klambie account',
         html: html,
       });
 
