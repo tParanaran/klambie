@@ -1,7 +1,9 @@
 import { prisma } from 'lib/prisma';
-import { Profile } from 'generated/prisma/client';
-import GenerateUsername from '@/utils/username';
 import { genSalt, hash } from 'bcrypt';
+import GenerateUsername from '@/utils/username';
+import path from 'path';
+import fs from 'fs';
+import { transporter } from '@/lib/mail';
 
 type Register = {
   email: string;
@@ -11,8 +13,10 @@ type Register = {
 
 export class AuthService {
   async createUser(data: Register): Promise<{ message: string }> {
+    const { email, password, name } = data;
+
     const userExists = await prisma.user.findUnique({
-      where: { email: data.email },
+      where: { email },
     });
     if (userExists) throw new Error('User already exists');
 
@@ -35,12 +39,21 @@ export class AuthService {
 
     const salt = await genSalt(10);
 
-    const hashPassword = await hash(data.password, salt);
+    const hashPassword = await hash(password, salt);
+
+    const templatePath = path.join(
+      __dirname,
+      '../templates',
+      'registerMail.hbs',
+    );
+
+    const templateSource = await fs.readFileSync(templatePath, 'utf-8');
+    const compiledTemplate = Handlebars.compile(templateSource);
 
     const result = await prisma.$transaction(async (prisma) => {
       const user = await prisma.user.create({
         data: {
-          email: data.email,
+          email,
           password: hashPassword,
           username,
           roleId: findRoleUser.id,
@@ -49,9 +62,17 @@ export class AuthService {
 
       await prisma.profile.create({
         data: {
-          name: data.name,
+          name,
           userId: user.id,
         },
+      });
+
+      const html = compiledTemplate({ name, email });
+
+      await transporter.sendMail({
+        to: email,
+        subject: 'Registration',
+        html: html,
       });
 
       return {
