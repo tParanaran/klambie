@@ -1,9 +1,12 @@
 import { prisma } from 'lib/prisma';
+import { sign } from 'jsonwebtoken';
 import { genSalt, hash } from 'bcrypt';
+import { transporter } from '@/lib/mail';
+import { BASE_WEB_URL, SECRET_KEY } from '@/config';
 import GenerateUsername from '@/utils/username';
+import Handlebars from 'handlebars';
 import path from 'path';
 import fs from 'fs';
-import { transporter } from '@/lib/mail';
 
 type Register = {
   email: string;
@@ -11,7 +14,7 @@ type Register = {
   name: string;
 };
 
-export class AuthService {
+export class RegisterService {
   async createUser(data: Register): Promise<{ message: string }> {
     const { email, password, name } = data;
 
@@ -67,7 +70,12 @@ export class AuthService {
         },
       });
 
-      const html = compiledTemplate({ name, email });
+      const token = sign({ email }, SECRET_KEY as string, { expiresIn: '1hr' });
+
+      const vertificationUrl = BASE_WEB_URL + '/email-verification/' + token;
+      console.log(BASE_WEB_URL, SECRET_KEY);
+
+      const html = compiledTemplate({ name, email, vertificationUrl });
 
       await transporter.sendMail({
         to: email,
