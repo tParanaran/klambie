@@ -9,6 +9,7 @@ import express, {
 import cors from 'cors';
 import { PORT } from './config';
 import { AuthRouter } from './routers/auth.roter';
+import ErrorMiddleware from './middlewares/error.middleware';
 
 export default class App {
   private app: Express;
@@ -56,6 +57,8 @@ export default class App {
       res.send(`Hello, Purwadhika Student API!`);
     });
     this.app.use('/api/auth', authRouter.getRouter());
+
+    this.app.use(ErrorMiddleware);
   }
 
   public start(): void {

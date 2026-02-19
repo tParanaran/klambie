@@ -1,4 +1,5 @@
 import { AuthUser } from '@/controllers/auth.controller';
+import { RegisterValidation } from '@/middlewares/validations/auth.validation';
 import { Router } from 'express';
 
 export class AuthRouter {
@@ -12,7 +13,7 @@ export class AuthRouter {
   }
 
   private initializeRoutes(): void {
-    this.router.post('/register', this.authUser.Register);
+    this.router.post('/register', RegisterValidation, this.authUser.Register);
   }
 
   getRouter(): Router {
