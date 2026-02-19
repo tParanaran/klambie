@@ -13,12 +13,39 @@ datasource db {
   provider = "mysql"
 }
 
-model Sample {
-  id        Int      @id @default(autoincrement())
-  name      String
-  code      String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model User {
+  id         Int      @id @unique @default(autoincrement())
+  username   String   @unique @db.VarChar(100)
+  email      String   @unique
+  password   String
+  isVerified Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  profile    Profile?
+  roleId     Int
+  role       Role     @relation(fields: [roleId], references: [id])
+}
 
-  @@map("samples") // if you want to use snake_case format
+model Role {
+  id    Int    @id @unique
+  role  String @unique
+  users User[]
+}
+
+enum Gender {
+  Men
+  Women
+  Other
+}
+
+model Profile {
+  id        Int       @id @default(autoincrement())
+  name      String    @db.VarChar(100)
+  avatar    String?
+  bio       String?   @db.VarChar(200)
+  birthday  DateTime?
+  gender    Gender?
+  userId    Int       @unique
+  user      User      @relation(fields: [userId], references: [id])
+  updatedAt DateTime  @updatedAt
 }
