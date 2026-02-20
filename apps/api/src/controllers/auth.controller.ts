@@ -7,7 +7,7 @@ export class AuthUser {
   async Register(req: Request, res: Response, next: NextFunction) {
     try {
       const result = await registerService.createUser(req.body);
-      return res.status(200).send(result.message);
+      return res.status(200).send(result);
     } catch (error) {
       next(error);
     }

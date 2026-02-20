@@ -77,14 +77,19 @@ export class RegisterService {
       const html = compiledTemplate({ name, email, vertificationUrl });
 
       await transporter.sendMail({
+        from: '<klambie@klambie.com>',
         to: email,
         subject: 'Verify your Klambie account',
         html: html,
       });
 
       return {
-        message:
-          'Register successfully, please check your email for validation',
+        success: true,
+        message: `<div>
+              <p>You're almost there! We sent an email to</p>
+              <p style="margin-bottom: 1.25rem; font-size: 18px;"><b>${email}</b></p>
+              <p>Just click on the link in that email to complete your sign up. If you don't see it, you may need to check your spam folder</p>
+          </div>`,
       };
     });
 

@@ -7,7 +7,7 @@ import express, {
   NextFunction,
 } from 'express';
 import cors from 'cors';
-import { PORT } from './config';
+import { BASE_WEB_URL, PORT } from './config';
 import { AuthRouter } from './routers/auth.roter';
 import ErrorMiddleware from './middlewares/error.middleware';
 
@@ -22,7 +22,12 @@ export default class App {
   }
 
   private configure(): void {
-    this.app.use(cors());
+    this.app.use(
+      cors({
+        origin: BASE_WEB_URL || 'http://localhost:3000',
+        credentials: true,
+      }),
+    );
     this.app.use(json());
     this.app.use(urlencoded({ extended: true }));
   }
