@@ -13,7 +13,21 @@ const adapter = new PrismaMariaDb({
   connectionLimit: 5,
 });
 
-export const prisma = new PrismaClient({
-  adapter,
-  log: ['query', 'info', 'warn', 'error'],
-});
+class PrismaService {
+  private static instance: PrismaClient;
+
+  // Private constructor to prevent direct instantiation
+  private constructor() {}
+
+  public static getInstance(): PrismaClient {
+    if (!PrismaService.instance) {
+      PrismaService.instance = new PrismaClient({
+        adapter,
+        log: ['query', 'info', 'warn', 'error'],
+      });
+    }
+    return PrismaService.instance;
+  }
+}
+
+export const prisma = PrismaService.getInstance();
