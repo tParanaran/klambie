@@ -1,5 +1,9 @@
 import { AuthUser } from '@/controllers/auth.controller';
-import { RegisterValidation } from '@/middlewares/validations/auth.validation';
+import { VerificationToken } from '@/middlewares/auth.middlleware';
+import {
+  EmailValidation,
+  RegisterValidation,
+} from '@/middlewares/validations/auth.validation';
 import { Router } from 'express';
 
 export class AuthRouter {
@@ -14,6 +18,16 @@ export class AuthRouter {
 
   private initializeRoutes(): void {
     this.router.post('/register', RegisterValidation, this.authUser.Register);
+    this.router.get(
+      '/verification',
+      VerificationToken,
+      this.authUser.Verification,
+    );
+    this.router.post(
+      '/resend',
+      EmailValidation,
+      this.authUser.ResendVerification,
+    );
   }
 
   getRouter(): Router {

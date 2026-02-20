@@ -1,34 +1,42 @@
 'use client';
 
+import axiosInstance from '@/app/lib/axios';
+import VertificationdModal from '@/views/components/vertificationModal';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 export default function VeritificationButton(prop: { token: string }) {
   const redirect = useRouter();
+  const [message, setMessage] = useState<string>('');
+
+  const errorMessage = `<p style="margin-bottom: 1.25rem; font-size: 20px;"><b>Your email  verification link expired</b></p>
+                        <p style="margin-bottom: 2.5rem;">Looks like the verification link has expired. Do not worry, we can send the link again.</p>`;
 
   const verifyUser = async () => {
     try {
-      //   const { data } = await axiosInstance.get('/auth/verify', {
-      //     headers: {
-      //       Authorization: `Bearer ${prop.token}`,
-      //     },
-      //   });
-      //   Swal.fire({
-      //     icon: "success",
-      //     title: data.message,
-      //     showConfirmButton: false,
-      //     timer: 2000,
-      //   }).then(() => redirect.push("/login"));
-    } catch (error) {
-      //   ErrorHandler(error);
+      const { data } = await axiosInstance.get('/auth/verification', {
+        headers: {
+          Authorization: `Bearer ${prop.token}`,
+        },
+      });
+      if (data.success) {
+        redirect.push('/login');
+      }
+    } catch (err) {
+      return setMessage(errorMessage);
     }
   };
 
   return (
-    <button
-      onClick={verifyUser}
-      className="rounded-full py-2 sm:py-3 px-4 bg-orange-800 text-[#ededed] hover:bg-orange-700 font-semibold uppercase"
-    >
-      Confirm Email
-    </button>
+    <>
+      {' '}
+      <button
+        onClick={verifyUser}
+        className="rounded-full py-2 sm:py-3 px-4 bg-orange-800 text-[#ededed] hover:bg-orange-700 font-semibold uppercase"
+      >
+        Confirm Email
+      </button>
+      {message && <VertificationdModal html={message} />}
+    </>
   );
 }

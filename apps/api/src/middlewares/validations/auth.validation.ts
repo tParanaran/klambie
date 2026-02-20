@@ -36,3 +36,23 @@ export const RegisterValidation = [
     }
   },
 ];
+
+export const EmailValidation = [
+  body('email')
+    .notEmpty()
+    .withMessage('Email is required')
+    .isEmail()
+    .withMessage('Invalid email')
+    .isLength({ min: 10, max: 100 })
+    .withMessage('Email must be at least 10 characters'),
+  (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) throw new Error(errors.array()[0].msg);
+
+      next();
+    } catch (error) {
+      next(error);
+    }
+  },
+];

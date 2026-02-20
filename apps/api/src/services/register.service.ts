@@ -1,12 +1,7 @@
 import { prisma } from 'lib/prisma';
-import { sign } from 'jsonwebtoken';
 import { genSalt, hash } from 'bcrypt';
-import { transporter } from '@/lib/mail';
-import { BASE_WEB_URL, SECRET_KEY } from '@/config';
 import GenerateUsername from '@/utils/username';
-import Handlebars from 'handlebars';
-import path from 'path';
-import fs from 'fs';
+import SendMail from '@/utils/sendMail';
 
 type Register = {
   email: string;
@@ -41,17 +36,7 @@ export class RegisterService {
     }
 
     const salt = await genSalt(10);
-
     const hashPassword = await hash(password, salt);
-
-    const templatePath = path.join(
-      __dirname,
-      '../templates',
-      'registerMail.hbs',
-    );
-
-    const templateSource = await fs.readFileSync(templatePath, 'utf-8');
-    const compiledTemplate = Handlebars.compile(templateSource);
 
     const result = await prisma.$transaction(async (prisma) => {
       const user = await prisma.user.create({
@@ -70,25 +55,16 @@ export class RegisterService {
         },
       });
 
-      const token = sign({ email }, SECRET_KEY as string, { expiresIn: '1hr' });
-
-      const vertificationUrl = BASE_WEB_URL + '/verification/' + token;
-
-      const html = compiledTemplate({ name, email, vertificationUrl });
-
-      await transporter.sendMail({
-        from: '<klambie@klambie.com>',
-        to: email,
-        subject: 'Verify your Klambie account',
-        html: html,
-      });
+      SendMail(email, name);
 
       return {
         success: true,
         message: `<div>
+              <h1 style="font-size: 20px; margin-bottom: 1.25rem;"><b>Woowee! Please verify your email</b></h1>
               <p>You're almost there! We sent an email to</p>
               <p style="margin-bottom: 1.25rem; font-size: 18px;"><b>${email}</b></p>
               <p>Just click on the link in that email to complete your sign up. If you don't see it, you may need to check your spam folder</p>
+              <p style="margin-bottom: 1.25rem; margin-top: 2.5rem;">Still can't find the email? No problem</p>
           </div>`,
       };
     });
