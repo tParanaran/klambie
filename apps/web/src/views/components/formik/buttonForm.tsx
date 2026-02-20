@@ -10,10 +10,9 @@ export default function ButtonForm(props: IButtonForm) {
   return (
     <div>
       <button
-        disabled={message !== ''}
         type="submit"
         aria-label={href}
-        className="bg-orange-800 w-full rounded-full font-semibold uppercase hover:bg-orange-700 py-3 px-4 text-[#ededed] disabled:opacity-40 disabled:cursor-not-allowed"
+        className="bg-orange-800 w-full rounded-full font-semibold uppercase hover:bg-orange-700 py-3 px-4 text-[#ededed]"
       >
         {href}
       </button>
