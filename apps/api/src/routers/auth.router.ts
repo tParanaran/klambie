@@ -29,7 +29,7 @@ export class AuthRouter {
       EmailValidation,
       this.authUser.ResendVerification,
     );
-    this.router.post('/login', LoginValidation);
+    this.router.post('/login', LoginValidation, this.authUser.Login);
   }
 
   getRouter(): Router {

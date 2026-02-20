@@ -9,12 +9,28 @@ import Link from 'next/link';
 import TextFieldForm from '@/views/components/formik/textFieldForm';
 import PasswordFieldForm from '@/views/components/formik/passwordFieldForm';
 import ButtonForm from '@/views/components/formik/buttonForm';
+import { deleteCookie } from 'cookies-next';
+import { isAxiosError } from 'axios';
+import axiosInstance from '@/app/lib/axios';
 
 export default function LoginForm() {
   const redirect = useRouter();
   const [message, setMessage] = useState<string>('');
 
-  const LoginHandler = async (values: ILogin) => {};
+  const LoginHandler = async (values: ILogin) => {
+    try {
+      const { data } = await axiosInstance.post('/auth/login', values);
+
+      if (data.success) {
+        redirect.push('/');
+      }
+    } catch (err: any) {
+      if (isAxiosError(err)) {
+        return setMessage(err.response?.data.message as string);
+      }
+      setMessage(err.message);
+    }
+  };
   return (
     <Formik
       initialValues={{
