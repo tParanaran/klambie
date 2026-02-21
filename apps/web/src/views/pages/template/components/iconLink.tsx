@@ -5,13 +5,13 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 export default function IconLink() {
-  const profile = useProfileStore();
-  const authStore = useAuthStore();
+  const { isOpen } = useProfileStore();
+  const { user } = useAuthStore();
   const redirect = useRouter();
 
   const ProfileHandler = () => {
-    if (authStore.user) {
-      profile.isOpen();
+    if (user) {
+      isOpen();
     } else {
       redirect.push('/login');
     }

@@ -14,7 +14,7 @@ export default function NavbarBottom() {
   const [isScroll, setIsScroll] = useState<boolean>(false);
   const [brands, setBrands] = useState<string[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
-  const navbar = useNavbarStore();
+  const { isClose, isNavbar } = useNavbarStore();
   const profile = useProfileStore();
   //   const searchStore = useSearchStore();
 
@@ -75,12 +75,12 @@ export default function NavbarBottom() {
           />
         </>
       )} */}
-      {navbar.isNavbar && (
+      {isNavbar && (
         <>
           {' '}
           <MobileMenu isScroll={isScroll} />{' '}
           <BackgroundModal
-            setIsModal={navbar.isClose}
+            setIsModal={isClose}
             classZIndex="z-20 lg:hidden"
             classBackground="bg-none"
           />{' '}

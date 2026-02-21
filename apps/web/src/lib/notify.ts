@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify';
 
-export const notify = (messsage: string) => {
+export const Notify = (messsage: string) => {
   toast.error(messsage, {
     autoClose: 500,
     closeButton: false,

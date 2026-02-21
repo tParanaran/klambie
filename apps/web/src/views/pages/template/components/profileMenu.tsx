@@ -5,7 +5,7 @@ import ProfileButton from './profileButton';
 import LogoutButton from '@/views/components/logoutButton';
 
 export default function ProfileMenu({ isScroll }: { isScroll: boolean }) {
-  const authStore = useAuthStore();
+  const { user } = useAuthStore();
 
   return (
     <div
@@ -14,7 +14,8 @@ export default function ProfileMenu({ isScroll }: { isScroll: boolean }) {
     >
       <div className="absolute text-[#ededed] right-0 h-fit w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/6 lg:mr-10 rounded-2xl">
         <div className="h-fit w-full bg-black/70 backdrop-blur-lg py-3 sm:py-5 text-sm rounded-2xl">
-          {authStore.user?.role !== 'Customer' ? (
+          <h1 className="px-2 sm:px-5 py-2 font-semibold">Hi, {user?.name}</h1>
+          {user?.role !== 'customer' ? (
             <Link
               href={'/dashboard'}
               className="hover:bg-orange-800 px-2 sm:px-5 py-1.5 flex items-center overflow-hidden"
