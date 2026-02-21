@@ -44,7 +44,8 @@ export default function Footer() {
               <div className="flex flex-col space-y-5 mt-5">
                 <h1 className="opacity-50">Quick Links</h1>
                 <Link href="/shop">Shop</Link>
-                <Link href="/about">About us</Link>
+                <Link href="/register">Register</Link>
+                <Link href="/login">Login</Link>
                 <Link href="/question">FAQ</Link>
                 <Link href="/contact">Contact us</Link>
               </div>
