@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { useNavbarStore } from '@/store/navbar-store';
-import { useProfileStore } from '@/store/profile-store';
+import { useNavbarStore } from '@/store/navbarStore';
+import { useProfileStore } from '@/store/profileStore';
 import Logo from './components/logo';
 import IconLink from './components/iconLink';
 import MobileButton from './components/mobileButton';

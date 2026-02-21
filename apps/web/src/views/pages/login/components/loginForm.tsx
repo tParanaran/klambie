@@ -1,5 +1,7 @@
 'use client';
 
+import { deleteCookie } from 'cookies-next';
+import { isAxiosError } from 'axios';
 import { LoginSchema } from '../schema/login.schema';
 import { ILogin } from '../types/login.types';
 import { Form, Formik, FormikProps } from 'formik';
@@ -9,9 +11,8 @@ import Link from 'next/link';
 import TextFieldForm from '@/views/components/formik/textFieldForm';
 import PasswordFieldForm from '@/views/components/formik/passwordFieldForm';
 import ButtonForm from '@/views/components/formik/buttonForm';
-import { deleteCookie } from 'cookies-next';
-import { isAxiosError } from 'axios';
-import axiosInstance from '@/app/lib/axios';
+
+import axiosInstance from '@/lib/axios';
 
 export default function LoginForm() {
   const redirect = useRouter();

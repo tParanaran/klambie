@@ -1,10 +1,17 @@
 'use client';
+import { useAuthStore } from '@/store/authStore';
 import { useRouter } from 'next/navigation';
 import { IoPower } from 'react-icons/io5';
 
 export default function LogoutButton({ className }: { className: string }) {
   const redirect = useRouter();
-  const LogoutHandler = async () => {};
+  const authStore = useAuthStore();
+
+  const LogoutHandler = async () => {
+    await authStore.clearAuth();
+
+    redirect.push('/');
+  };
 
   return (
     <button className={className} onClick={LogoutHandler} aria-label="Logout">

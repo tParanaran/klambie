@@ -9,7 +9,7 @@ import Link from 'next/link';
 import TextFieldForm from '@/views/components/formik/textFieldForm';
 import PasswordFieldForm from '@/views/components/formik/passwordFieldForm';
 import ButtonForm from '@/views/components/formik/buttonForm';
-import axiosInstance from '@/app/lib/axios';
+import axiosInstance from '@/lib/axios';
 import DOMPurify from 'dompurify';
 import VertificationdModal from '@/views/components/vertificationModal';
 

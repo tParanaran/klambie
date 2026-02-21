@@ -1,4 +1,4 @@
-import { useNavbarStore } from '@/store/navbar-store';
+import { useNavbarStore } from '@/store/navbarStore';
 import { navLink } from '@/utils/navLink';
 import Link from 'next/link';
 

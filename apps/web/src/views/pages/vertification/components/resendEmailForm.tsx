@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { ResendSchema } from './schemas/resend.schema';
 import TextFieldForm from '@/views/components/formik/textFieldForm';
 import ButtonForm from '@/views/components/formik/buttonForm';
-import axiosInstance from '@/app/lib/axios';
+import axiosInstance from '@/lib/axios';
 import DOMPurify from 'dompurify';
 import VertificationdModal from '@/views/components/vertificationModal';
 

@@ -1,5 +1,5 @@
 'use client';
-import { useNavbarStore } from '@/store/navbar-store';
+import { useNavbarStore } from '@/store/navbarStore';
 import { IoMenu } from 'react-icons/io5';
 
 export default function MobileButton() {

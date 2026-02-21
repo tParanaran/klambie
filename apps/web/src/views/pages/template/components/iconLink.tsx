@@ -1,9 +1,21 @@
 import { IoSearch, IoPerson, IoBagHandle } from 'react-icons/io5';
-import { useProfileStore } from '@/store/profile-store';
+import { useProfileStore } from '@/store/profileStore';
+import { useAuthStore } from '@/store/authStore';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 export default function IconLink() {
   const profile = useProfileStore();
+  const authStore = useAuthStore();
+  const redirect = useRouter();
+
+  const ProfileHandler = () => {
+    if (authStore.user) {
+      profile.isOpen();
+    } else {
+      redirect.push('/login');
+    }
+  };
 
   return (
     <div className="flex space-x-2 text-2xl">
@@ -20,7 +32,7 @@ export default function IconLink() {
       </div>
       <button
         aria-label="Profile"
-        onClick={profile.isOpen}
+        onClick={ProfileHandler}
         className="hover:scale-125"
       >
         <IoPerson />

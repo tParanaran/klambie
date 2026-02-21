@@ -23,7 +23,7 @@ export const RegisterValidation = [
       /^(?=.*[\d])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+=?/\|"':;><.,`~}{}])(?!.*\s).{6,}$/,
     )
     .withMessage(
-      'Password need to have atleast 1 number and special characters',
+      'Password must contain a combination of one lowercase, one uppercase, one number, one symbol and no space',
     ),
   (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -74,12 +74,11 @@ export const LoginValidation = [
       /^(?=.*[\d])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+=?/\|"':;><.,`~}{}])(?!.*\s).{6,}$/,
     )
     .withMessage(
-      'Password need to have atleast 1 number and special characters',
+      'Password must contain a combination of one lowercase, one uppercase, one number, one symbol and no space',
     ),
   (req: Request, res: Response, next: NextFunction) => {
     try {
       const errors = validationResult(req);
-      console.log(errors.array());
 
       if (!errors.isEmpty()) throw new Error(errors.array()[0].msg);
 
