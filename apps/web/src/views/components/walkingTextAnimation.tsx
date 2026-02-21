@@ -6,16 +6,16 @@ import { useGSAP } from '@gsap/react';
 gsap.registerPlugin(useGSAP);
 
 export default function WalkingTextAnimation({ text }: { text: string }) {
-  const textRef = useRef<HTMLDivElement>(null);
+  const conatinerRef = useRef<HTMLDivElement | null>(null);
 
   useGSAP(
     () => {
-      const duplicatedText = textRef.current?.cloneNode(true);
+      const duplicatedText = conatinerRef.current?.cloneNode(true);
       if (duplicatedText) {
-        textRef.current?.parentNode?.appendChild(duplicatedText);
+        conatinerRef.current?.parentNode?.appendChild(duplicatedText);
       }
 
-      gsap.to([textRef.current, duplicatedText], {
+      gsap.to([duplicatedText, conatinerRef.current], {
         xPercent: -100,
         duration: 35,
         ease: 'none',
@@ -25,13 +25,13 @@ export default function WalkingTextAnimation({ text }: { text: string }) {
         },
       });
     },
-    { scope: textRef },
+    { scope: conatinerRef },
   );
 
   return (
     <div className="overflow-hidden whitespace-nowrap">
-      <div ref={textRef} className="inline-block">
-        {text}
+      <div ref={conatinerRef} className="inline-block">
+        <span className="pr-3">{text}</span>
       </div>
     </div>
   );

@@ -1,5 +1,4 @@
 import VerificationContainer from '@/views/components/verificationContainer';
-import VeritificationButton from './components/vertificationButton';
 import ResendEmailForm from './components/resendEmailForm';
 
 export default function VerificationView() {
