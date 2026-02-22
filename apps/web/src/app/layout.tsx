@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Noto_Sans } from 'next/font/google';
 import './globals.css';
-import AuthProvider from '@/provider/auth-provider';
+import AuthProvider from '@/provider/authProvider';
 
 const notoSans = Noto_Sans({
   subsets: ['latin'],
