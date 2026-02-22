@@ -9,7 +9,7 @@ import { ToastContainer } from 'react-toastify';
 
 export default function Template({ children }: { children: React.ReactNode }) {
   return (
-    <>
+    <div>
       <BannerAnimation />
       <Navbar />
       <Container>
@@ -18,6 +18,6 @@ export default function Template({ children }: { children: React.ReactNode }) {
       </Container>
       <ContactAnimation />
       <Footer />
-    </>
+    </div>
   );
 }
