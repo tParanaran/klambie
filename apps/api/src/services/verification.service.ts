@@ -3,14 +3,28 @@ import { prisma } from 'lib/prisma';
 
 export class VerificationService {
   async verifyUser(email: string): Promise<{ success: boolean }> {
-    await prisma.user.update({
+    const result = await prisma.user.update({
       where: {
         email,
       },
       data: {
         isVerified: true,
       },
+      include: {
+        profile: true,
+      },
     });
+
+    if (!result) throw new Error('User not found');
+
+    const dataMail = {
+      email: result.email,
+      name: result.profile?.name || result.email,
+      subject: 'Klambie account verified',
+      htmlPath: 'verifySuccessMail.hbs',
+    };
+
+    SendMail(dataMail);
 
     return { success: true };
   }
@@ -31,7 +45,14 @@ export class VerificationService {
 
     const name = !result.profile?.name ? result.email : result.profile.name;
 
-    SendMail(result.email, name);
+    const dataMail = {
+      email: result.email,
+      name,
+      subject: 'Verification email for your Klambie account',
+      htmlPath: 'vertificationMail.hbs',
+    };
+
+    SendMail(dataMail);
 
     return {
       success: true,

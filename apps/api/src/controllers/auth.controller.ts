@@ -2,9 +2,11 @@ import { Request, Response, NextFunction } from 'express';
 import { RegisterService } from '@/services/register.service';
 import { VerificationService } from '@/services/verification.service';
 import { User } from '@/custom';
+import { LoginService } from '@/services/login.service';
 
 const registerService = new RegisterService();
 const verificationService = new VerificationService();
+const loginService = new LoginService();
 
 export class AuthUser {
   async Register(req: Request, res: Response, next: NextFunction) {
@@ -29,6 +31,17 @@ export class AuthUser {
     try {
       const result = await verificationService.resendVerifyUser(req.body);
       return res.status(200).send(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+  async Login(req: Request, res: Response, next: NextFunction) {
+    try {
+      const result = await loginService.userEnter(req.body);
+      return res
+        .status(200)
+        .cookie('access_token', result.token)
+        .send({ success: true });
     } catch (error) {
       next(error);
     }

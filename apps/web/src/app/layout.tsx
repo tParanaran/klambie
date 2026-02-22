@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Noto_Sans } from 'next/font/google';
 import './globals.css';
+import AuthProvider from '@/provider/auth-provider';
 
 const notoSans = Noto_Sans({
   subsets: ['latin'],
@@ -19,7 +20,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={notoSans.className}>{children}</body>
+      <AuthProvider>
+        <body className={notoSans.className}>{children}</body>
+      </AuthProvider>
     </html>
   );
 }

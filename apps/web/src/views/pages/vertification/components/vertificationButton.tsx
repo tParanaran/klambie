@@ -1,6 +1,6 @@
 'use client';
 
-import axiosInstance from '@/app/lib/axios';
+import axiosInstance from '@/lib/axios';
 import VertificationdModal from '@/views/components/vertificationModal';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';

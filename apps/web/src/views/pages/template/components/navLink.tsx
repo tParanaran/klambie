@@ -1,4 +1,4 @@
-import { useNavbarStore } from '@/store/navbar-store';
+import { useNavbarStore } from '@/store/navbarStore';
 import { navLink } from '@/utils/navLink';
 import Link from 'next/link';
 
@@ -9,7 +9,7 @@ export default function NavLink({
   classDiv: string;
   classLink: string;
 }) {
-  const navbar = useNavbarStore();
+  const { isClose } = useNavbarStore();
 
   return (
     <div className={classDiv}>
@@ -18,7 +18,7 @@ export default function NavLink({
           key={idx}
           href={item.href}
           className={`font-semibold uppercase ${classLink}`}
-          onClick={navbar.isClose}
+          onClick={isClose}
         >
           {item.name}
         </Link>

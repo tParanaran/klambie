@@ -8,7 +8,7 @@ import express, {
 } from 'express';
 import cors from 'cors';
 import { BASE_WEB_URL, PORT } from './config';
-import { AuthRouter } from './routers/auth.roter';
+import { AuthRouter } from './routers/auth.router';
 import ErrorMiddleware from './middlewares/error.middleware';
 
 export default class App {

@@ -2,6 +2,7 @@ import { AuthUser } from '@/controllers/auth.controller';
 import { VerificationToken } from '@/middlewares/auth.middlleware';
 import {
   EmailValidation,
+  LoginValidation,
   RegisterValidation,
 } from '@/middlewares/validations/auth.validation';
 import { Router } from 'express';
@@ -28,6 +29,7 @@ export class AuthRouter {
       EmailValidation,
       this.authUser.ResendVerification,
     );
+    this.router.post('/login', LoginValidation, this.authUser.Login);
   }
 
   getRouter(): Router {
