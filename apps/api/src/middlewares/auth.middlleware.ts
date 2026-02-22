@@ -25,4 +25,15 @@ async function VerificationToken(
   }
 }
 
-export { VerificationToken };
+async function AdminGuard(req: Request, res: Response, next: NextFunction) {
+  try {
+    if (req.user?.role !== 77790)
+      throw new Error('Woowee! Sorry user unauthorized');
+
+    next();
+  } catch (err) {
+    next(err);
+  }
+}
+
+export { VerificationToken, AdminGuard };

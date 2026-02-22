@@ -19,7 +19,7 @@ export class RegisterService {
     if (userExists) throw new Error('User already exists');
 
     const findRoleUser = await prisma.role.findUnique({
-      where: { role: 'Customer' },
+      where: { role: 'customer' },
     });
 
     if (!findRoleUser) throw new Error('User not found');

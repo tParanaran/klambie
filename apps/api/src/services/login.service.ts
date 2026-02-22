@@ -54,7 +54,7 @@ export class LoginService {
       email,
       username: findUser.username,
       name: findUser.profile?.name,
-      role: findUser.role.role,
+      role: findUser.role.id,
     };
 
     const token = sign(payload, SECRET_KEY as string, { expiresIn: '1d' });

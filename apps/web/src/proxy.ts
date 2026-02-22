@@ -1,6 +1,5 @@
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
-import axiosInstance from './lib/axios';
 import { jwtDecode } from 'jwt-decode';
 import { IUser } from './store/authStore';
 
@@ -20,14 +19,11 @@ export default async function proxy(req: NextRequest) {
 
     const user: IUser = jwtDecode(token);
 
-    if (
-      user.role === 'customer' &&
-      req.nextUrl.pathname.startsWith('/dashboard')
-    ) {
+    if (user.role === 6969 && req.nextUrl.pathname.startsWith('/dashboard')) {
       return NextResponse.redirect(new URL('/cart', req.nextUrl));
     }
 
-    if (user.role !== 'customer' && req.nextUrl.pathname.startsWith('/login')) {
+    if (user.role !== 6969 && req.nextUrl.pathname.startsWith('/login')) {
       return NextResponse.redirect(new URL('/dashboard', req.nextUrl));
     }
 

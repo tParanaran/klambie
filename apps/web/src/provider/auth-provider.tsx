@@ -10,7 +10,7 @@ type Token = {
   email: string;
   username: string;
   name: string;
-  role: string;
+  role: number;
   iat: number;
   exp: number;
 };

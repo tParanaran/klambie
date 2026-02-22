@@ -10,6 +10,7 @@ export const AuthHandler = async (
 
     if (access_token) {
       const user: IUser = jwtDecode(access_token);
+
       onAuthSuccess(user);
     }
 
