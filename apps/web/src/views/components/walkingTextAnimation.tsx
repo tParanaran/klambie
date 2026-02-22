@@ -6,7 +6,7 @@ import { useGSAP } from '@gsap/react';
 gsap.registerPlugin(useGSAP);
 
 export default function WalkingTextAnimation({ text }: { text: string }) {
-  const conatinerRef = useRef<HTMLDivElement | null>(null);
+  const conatinerRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
@@ -15,7 +15,7 @@ export default function WalkingTextAnimation({ text }: { text: string }) {
         conatinerRef.current?.parentNode?.appendChild(duplicatedText);
       }
 
-      gsap.to([duplicatedText, conatinerRef.current], {
+      gsap.to([conatinerRef.current, duplicatedText], {
         xPercent: -100,
         duration: 35,
         ease: 'none',
