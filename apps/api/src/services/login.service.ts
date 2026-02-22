@@ -29,7 +29,14 @@ export class LoginService {
         ? findUser.email
         : findUser.profile.name;
 
-      SendMail(findUser.email, name);
+      const dataMail = {
+        email: findUser.email,
+        name,
+        subject: 'Verification email for your Klambie account',
+        htmlPath: 'vertificationMail.hbs',
+      };
+
+      SendMail(dataMail);
 
       throw new Error(
         'Woowee! We already sent you an email, Please verify your email to be able to start shopping.',

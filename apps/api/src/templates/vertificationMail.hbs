@@ -3,36 +3,36 @@
     <meta charset='UTF-8' />
     <meta name='viewport' content='width=device-width, initial-scale=1.0' />
     <title>Verify your Klambie account</title>
-
     <style>
-      @import
-      url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@100..900&display=swap');
-      body { font-family: 'Noto Sans', sans-serif; margin: 0; padding: 0;
-      background-color: #f4f4f4; } .wrapper { width: 100%; table-layout: fixed;
-      background-color: #f4f4f4; padding-bottom: 40px; } .main {
-      background-color: #ffffff; margin: 0 auto; width: 100%; max-width: 600px;
-      border-spacing: 0; font-family: 'Noto Sans'; color: #333333;
-      border-radius: 12px; } .button { background-color: oklch(55.3% 0.195
-      38.402); color: #ffffff; padding: 15px 30px; text-decoration: none;
-      border-radius: 10px; display: inline-block; font-weight: 600; } .footer {
-      padding: 20px; text-align: center; background-color: #1b1a1e; color:
-      #666666; font-size: 13px; border-radius: 0px 0px 10px 10px; }
-      .social-icons img { width: 30px; height: 30px; margin: 0 10px; } @media
-      only screen and (max-width: 600px) { .container { width: 100% !important;
-      } .content { padding: 20px !important; } }
+      * { font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+      Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue',
+      sans-serif; }
     </style>
   </head>
-  <body>
+  <body style='margin: 0; padding: 0'>
     <main style='padding: 5%'>
-      <center class='wrapper'>
-        <table class='main' width='100%' role='presentation'>
+      <center
+        style='width: 100%; table-layout: fixed; background-color: #ffffff'
+      >
+        <table
+          style='
+            margin: 0 auto;
+            width: 100%;
+            max-width: 600px;
+            border-spacing: 0;
+            color: #333333;
+            border-radius: 12px;
+            background-color: #f4f4f4;
+          '
+          width='100%'
+        >
           <tr>
             <td
               style='
-                padding: 30px;
                 text-align: center;
-                font-size: 15px;
+                font-size: 16px;
                 font-weight: 400;
+                padding: 5% 5% 2.5% 5%;
               '
             >
               <img
@@ -44,44 +44,65 @@
             </td>
           </tr>
           <tr>
-            <td style='padding: 30px'>
+            <td style='padding: 2.5% 5%; font-size: 16px'>
               <h3 style='margin-top: 0'>Hello {{name}},</h3>
               <p>
                 Thanks for registering an account with Klambie! In order to
-                start using Klambie, you need to verify your email.
+                start using Klambie, you need to verify your email. Once it's
+                done you will be able to start shopping!
               </p>
 
-              <div style='text-align: center; padding: 30px 0'>
+              <div style='text-align: center; padding: 2.5%'>
                 <a
                   href='{{vertificationUrl}}'
-                  class='button'
+                  style='
+                    background-color: #9a3412;
+                    color: #ffffff;
+                    padding: 15px 30px;
+                    text-decoration: none;
+                    border-radius: 10px;
+                    display: inline-block;
+                    font-weight: 600;
+                  '
                   target='_blank'
                 >Verify your email</a>
               </div>
 
-              <p style='font-size: 14px; color: #666666; padding-bottom: 30px'>
+              <p style='color: #666666'>
                 Can't click the button above? Copy and paste this link into your
                 browser.<br />
                 <a
-                  href='[Link_Verifikasi]'
-                  style='color: oklch(55.3% 0.195 38.402)'
+                  href='{{vertificationUrl}}'
+                  style='color: #9a3412; font-size: 14px'
                 >{{vertificationUrl}}</a>
               </p>
             </td>
           </tr>
           <tr>
-            <td class='footer'>
-              <div class='social-icons'>
+            <td
+              style='
+                padding: 2.5% 5%;
+                text-align: center;
+                background-color: #1b1a1e;
+                color: #666666;
+                font-size: 14px;
+                border-radius: 0px 0px 10px 10px;
+              '
+            >
+              <div>
                 <a href='https://www.instagram.com' target='_blank'><img
+                    style='width: 30px; height: 30px; margin: 0 10px'
                     src='https://img.icons8.com/?size=100&id=eRJfQw0Zs44S&format=png&color=666666'
                     alt='Instagram'
                   />
                 </a>
                 <a href='https://www.facebook.com' target='_blank'><img
+                    style='width: 30px; height: 30px; margin: 0 10px'
                     src='https://img.icons8.com/?size=100&id=118468&format=png&color=666666'
                     alt='Facebook'
                   /></a>
                 <a href='https://www.youtube.com' target='_blank'><img
+                    style='width: 30px; height: 30px; margin: 0 10px'
                     src='https://img.icons8.com/?size=100&id=36908&format=png&color=666666'
                     alt='Youtube'
                   /></a>

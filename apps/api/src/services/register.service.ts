@@ -55,7 +55,14 @@ export class RegisterService {
         },
       });
 
-      SendMail(email, name);
+      const dataMail = {
+        email,
+        name,
+        subject: 'Verification email for your Klambie account',
+        htmlPath: 'vertificationMail.hbs',
+      };
+
+      SendMail(dataMail);
 
       return {
         success: true,

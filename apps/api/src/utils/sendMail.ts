@@ -5,22 +5,37 @@ import Handlebars from 'handlebars';
 import path from 'path';
 import fs from 'fs';
 
-export default async function SendMail(email: string, name: string) {
-  const templatePath = path.join(__dirname, '../templates', 'registerMail.hbs');
+type SendMail = {
+  email: string;
+  name: string;
+  htmlPath: string;
+  subject: string;
+};
 
+export default async function SendMail(dataMail: SendMail) {
+  const { email, name, htmlPath, subject } = dataMail;
+
+  const templatePath = path.join(__dirname, '../templates', htmlPath);
   const templateSource = await fs.readFileSync(templatePath, 'utf-8');
   const compiledTemplate = Handlebars.compile(templateSource);
 
   const token = sign({ email }, SECRET_KEY as string, { expiresIn: '1hr' });
 
   const vertificationUrl = BASE_WEB_URL + '/verification/' + token;
+  const loginUrl = BASE_WEB_URL + '/login';
+  const contactUrl = BASE_WEB_URL + '/contact';
 
-  const html = compiledTemplate({ name, email, vertificationUrl });
+  const html = compiledTemplate({
+    name,
+    vertificationUrl,
+    loginUrl,
+    contactUrl,
+  });
 
   await transporter.sendMail({
-    from: '<klambie@klambie.com>',
+    from: '"Klambie Team" <support@klambie.com>',
     to: email,
-    subject: 'Verify your Klambie account',
+    subject: subject,
     html: html,
   });
 }
