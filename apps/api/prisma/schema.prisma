@@ -14,16 +14,19 @@ datasource db {
 }
 
 model User {
-  id         Int      @id @unique @default(autoincrement())
-  username   String   @unique @db.VarChar(100)
-  email      String   @unique
+  id         Int           @id @unique @default(autoincrement())
+  username   String        @unique @db.VarChar(100)
+  email      String        @unique
   password   String
-  isVerified Boolean  @default(false)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  isVerified Boolean       @default(false)
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
   profile    Profile?
+  referredBy String?
   roleId     Int
-  role       Role     @relation(fields: [roleId], references: [id])
+  role       Role          @relation(fields: [roleId], references: [id])
+  points     Point[]
+  coupons    User_Coupon[]
 }
 
 model Role {
@@ -48,4 +51,39 @@ model Profile {
   userId    Int       @unique
   user      User      @relation(fields: [userId], references: [id])
   updatedAt DateTime  @updatedAt
+}
+
+model Point {
+  id         Int      @id @default(autoincrement())
+  userId     Int
+  user       User     @relation(fields: [userId], references: [id])
+  amount     Decimal  @default(10000) @db.Decimal(18, 2)
+  redeemed   Boolean  @default(false)
+  validUntil DateTime
+  createdAt  DateTime @default(now())
+}
+
+model User_Coupon {
+  id         Int      @id @default(autoincrement())
+  userId     Int
+  user       User     @relation(fields: [userId], references: [id])
+  couponId   Int
+  coupon     Coupon   @relation(fields: [couponId], references: [id])
+  isUsed     Boolean  @default(false)
+  validUntil DateTime
+  createdAt  DateTime @default(now())
+}
+
+enum Type_Coupon {
+  FIXED_AMOUNT
+  PERCENTAGE
+}
+
+model Coupon {
+  id          Int           @id @default(autoincrement())
+  code        String        @db.VarChar(30)
+  amount      Decimal       @db.Decimal(18, 2)
+  type        Type_Coupon
+  expiredAt   DateTime?
+  user_coupon User_Coupon[]
 }

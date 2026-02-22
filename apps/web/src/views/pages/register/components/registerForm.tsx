@@ -1,7 +1,7 @@
 'use client';
 
 import { RegisterSchema } from '../schema/register.schema';
-import { IRegister } from '../types/register.types';
+import { IRefferal, IRegister } from '../types/register.types';
 import { Form, Formik, FormikProps } from 'formik';
 import { useState } from 'react';
 import { isAxiosError } from 'axios';
@@ -13,7 +13,7 @@ import axiosInstance from '@/lib/axios';
 import DOMPurify from 'dompurify';
 import VertificationdModal from '@/views/components/vertificationModal';
 
-export default function RegisterForm() {
+export default function RegisterForm(prop: IRefferal) {
   const [message, setMessage] = useState<string>('');
   const [html, setHtml] = useState<string>('');
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
@@ -40,6 +40,7 @@ export default function RegisterForm() {
           name: '',
           email: '',
           password: '',
+          refferal: prop.refferal,
         }}
         validationSchema={RegisterSchema}
         onSubmit={(values) => {

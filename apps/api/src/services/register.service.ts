@@ -7,15 +7,17 @@ type Register = {
   email: string;
   password: string;
   name: string;
+  refferal: string;
 };
 
 export class RegisterService {
   async createUser(data: Register): Promise<{ message: string }> {
-    const { email, password, name } = data;
+    const { email, password, name, refferal } = data;
 
     const userExists = await prisma.user.findUnique({
       where: { email },
     });
+
     if (userExists) throw new Error('User already exists');
 
     const findRoleUser = await prisma.role.findUnique({
@@ -28,11 +30,23 @@ export class RegisterService {
     let usernameExists = await prisma.user.findUnique({
       where: { username },
     });
-    while (userExists) {
+    while (usernameExists) {
       username = GenerateUsername();
       usernameExists = await prisma.user.findUnique({
         where: { username },
       });
+    }
+
+    let userRefferal: string | null = null;
+
+    if (refferal) {
+      const findRefferal = await prisma.user.findUnique({
+        where: { username: refferal },
+      });
+
+      if (findRefferal) {
+        userRefferal = findRefferal.username;
+      }
     }
 
     const salt = await genSalt(10);
@@ -45,6 +59,7 @@ export class RegisterService {
           password: hashPassword,
           username,
           roleId: findRoleUser.id,
+          referredBy: userRefferal,
         },
       });
 

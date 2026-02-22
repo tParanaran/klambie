@@ -3,7 +3,7 @@ import { prisma } from 'lib/prisma';
 
 export class VerificationService {
   async verifyUser(email: string): Promise<{ success: boolean }> {
-    const result = await prisma.user.update({
+    const verified = await prisma.user.update({
       where: {
         email,
       },
@@ -15,11 +15,42 @@ export class VerificationService {
       },
     });
 
-    if (!result) throw new Error('User not found');
+    if (!verified) throw new Error('User not found');
+
+    if (verified.referredBy) {
+      const findRefferal = await prisma.user.findUnique({
+        where: {
+          username: verified.referredBy,
+        },
+      });
+
+      if (findRefferal) {
+        await prisma.$transaction(async (prisma) => {
+          const expiredDate = new Date();
+          expiredDate.setMonth(expiredDate.getMonth() + 3);
+          expiredDate.toISOString();
+
+          await prisma.point.create({
+            data: {
+              userId: findRefferal.id,
+              validUntil: expiredDate,
+            },
+          });
+
+          await prisma.user_Coupon.create({
+            data: {
+              couponId: 1,
+              userId: verified.id,
+              validUntil: expiredDate,
+            },
+          });
+        });
+      }
+    }
 
     const dataMail = {
-      email: result.email,
-      name: result.profile?.name || result.email,
+      email: verified.email,
+      name: verified?.profile?.name || verified.email,
       subject: 'Klambie account verified',
       htmlPath: 'verifySuccessMail.hbs',
     };
