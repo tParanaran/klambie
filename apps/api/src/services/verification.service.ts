@@ -3,61 +3,65 @@ import { prisma } from 'lib/prisma';
 
 export class VerificationService {
   async verifyUser(email: string): Promise<{ success: boolean }> {
-    const verified = await prisma.user.update({
-      where: {
-        email,
-      },
-      data: {
-        isVerified: true,
-      },
-      include: {
-        profile: true,
-      },
-    });
-
-    if (!verified) throw new Error('User not found');
-
-    if (verified.referredBy) {
-      const findRefferal = await prisma.user.findUnique({
+    const result = await prisma.$transaction(async (prisma) => {
+      const verified = await prisma.user.update({
         where: {
-          username: verified.referredBy,
+          email,
+        },
+        data: {
+          isVerified: true,
+        },
+        include: {
+          profile: true,
         },
       });
 
-      if (findRefferal) {
-        await prisma.$transaction(async (prisma) => {
+      if (!verified) throw new Error('User not found');
+
+      if (verified.referredBy) {
+        const findRefferal = await prisma.user.findUnique({
+          where: {
+            username: verified.referredBy,
+          },
+        });
+
+        if (findRefferal) {
           const expiredDate = new Date();
           expiredDate.setMonth(expiredDate.getMonth() + 3);
           expiredDate.toISOString();
 
-          await prisma.point.create({
+          await prisma.userPoint.create({
             data: {
               userId: findRefferal.id,
               validUntil: expiredDate,
+              type: 'EARN',
+              amount: 10000,
             },
           });
 
-          await prisma.user_Coupon.create({
+          await prisma.userCoupon.create({
             data: {
               couponId: 1,
               userId: verified.id,
               validUntil: expiredDate,
             },
           });
-        });
+        }
       }
-    }
 
-    const dataMail = {
-      email: verified.email,
-      name: verified?.profile?.name || verified.email,
-      subject: 'Klambie account verified',
-      htmlPath: 'verifySuccessMail.hbs',
-    };
+      const dataMail = {
+        email: verified.email,
+        name: verified?.profile?.name || verified.email,
+        subject: 'Klambie account verified',
+        htmlPath: 'verifySuccessMail.hbs',
+      };
 
-    SendMail(dataMail);
+      SendMail(dataMail);
 
-    return { success: true };
+      return { success: true };
+    });
+
+    return result;
   }
   async resendVerifyUser(data: {
     email: string;

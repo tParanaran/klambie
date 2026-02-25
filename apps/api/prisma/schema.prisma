@@ -14,19 +14,20 @@ datasource db {
 }
 
 model User {
-  id         Int           @id @unique @default(autoincrement())
-  username   String        @unique @db.VarChar(100)
-  email      String        @unique
+  id         Int      @id @unique @default(autoincrement())
+  username   String   @unique @db.VarChar(100)
+  email      String   @unique
   password   String
-  isVerified Boolean       @default(false)
-  createdAt  DateTime      @default(now())
-  updatedAt  DateTime      @updatedAt
+  isVerified Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
   profile    Profile?
   referredBy String?
   roleId     Int
-  role       Role          @relation(fields: [roleId], references: [id])
-  points     Point[]
-  coupons    User_Coupon[]
+  role       Role     @relation(fields: [roleId], references: [id])
+
+  userCoupons UserCoupon[]
+  userPoints  UserPoint[]
 }
 
 model Role {
@@ -49,41 +50,269 @@ model Profile {
   birthday  DateTime?
   gender    Gender?
   userId    Int       @unique
-  user      User      @relation(fields: [userId], references: [id])
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   updatedAt DateTime  @updatedAt
 }
 
-model Point {
-  id         Int      @id @default(autoincrement())
-  userId     Int
-  user       User     @relation(fields: [userId], references: [id])
-  amount     Decimal  @default(10000) @db.Decimal(18, 2)
-  redeemed   Boolean  @default(false)
-  validUntil DateTime
-  createdAt  DateTime @default(now())
+enum PointType {
+  REDEEM
+  EARN
 }
 
-model User_Coupon {
+model UserPoint {
+  id         Int       @id @default(autoincrement())
+  userId     Int
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  amount     Decimal   @db.Decimal(18, 2)
+  type       PointType
+  validUntil DateTime
+  createdAt  DateTime  @default(now())
+
+  @@index([userId])
+  @@map("user_point")
+}
+
+model UserCoupon {
   id         Int      @id @default(autoincrement())
   userId     Int
-  user       User     @relation(fields: [userId], references: [id])
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   couponId   Int
   coupon     Coupon   @relation(fields: [couponId], references: [id])
   isUsed     Boolean  @default(false)
   validUntil DateTime
   createdAt  DateTime @default(now())
+
+  @@index([userId])
+  @@map("user_coupon")
 }
 
-enum Type_Coupon {
+enum TypeCoupon {
   FIXED_AMOUNT
   PERCENTAGE
 }
 
 model Coupon {
-  id          Int           @id @default(autoincrement())
-  code        String        @db.VarChar(30)
-  amount      Decimal       @db.Decimal(18, 2)
-  type        Type_Coupon
-  expiredAt   DateTime?
-  user_coupon User_Coupon[]
+  id        Int        @id @default(autoincrement())
+  code      String     @unique @db.VarChar(30)
+  amount    Decimal    @db.Decimal(18, 2)
+  type      TypeCoupon
+  expiredAt DateTime?
+
+  userCoupons UserCoupon[]
+
+  @@index([expiredAt])
+}
+
+enum ProductStatus {
+  ARCHIVE
+  DRAFT
+  ACTIVE
+}
+
+model Product {
+  id                Int                @id @default(autoincrement())
+  name              String             @db.VarChar(200)
+  slug              String             @unique
+  brandId           Int
+  brand             Brand              @relation(fields: [brandId], references: [id])
+  basePrice         Decimal            @db.Decimal(18, 2)
+  comparePrice      Decimal?           @db.Decimal(18, 2)
+  status            ProductStatus      @default(ACTIVE)
+  sizingGuideId     Int?
+  sizingGuide       SizingGuide?       @relation(fields: [sizingGuideId], references: [id])
+  productDetails    ProductDetails[]
+  productAttributes ProductAttribute[]
+  productVariants   ProductVariant[]
+  productCategories ProductCategory[]
+  images            ProductImage[]
+  productTags       ProductTag[]
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+
+  @@index([brandId])
+}
+
+model Brand {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique @db.VarChar(100)
+  logo      String?
+  bio       String?
+  createdAt DateTime @default(now())
+
+  products Product[]
+}
+
+model ProductDetails {
+  id          Int     @id @default(autoincrement())
+  productId   Int     @unique
+  product     Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  description String  @db.Text
+  material    String?
+  feature     String? @db.Text
+  weight      Int
+  length      Int?
+  width       Int?
+  height      Int?
+  volume      Int?
+  care        String? @db.Text
+
+  @@map("product_details")
+}
+
+model SizingGuide {
+  id        Int    @id @default(autoincrement())
+  name      String
+  guideData Json
+
+  products Product[]
+
+  @@map("sizing_guide")
+}
+
+model ProductImage {
+  id               Int             @id @default(autoincrement())
+  url              String
+  productId        Int?
+  product          Product?        @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productVariantId Int?
+  productVariant   ProductVariant? @relation(fields: [productVariantId], references: [id], onDelete: Cascade)
+
+  @@map("product_image")
+}
+
+model Attribute {
+  id   Int    @id @default(autoincrement())
+  name String @unique @db.VarChar(100)
+
+  attributeValues   AttributeValue[]
+  productAttributes ProductAttribute[]
+}
+
+model AttributeValue {
+  id          Int     @id @default(autoincrement())
+  attributeId Int
+  value       String  @db.VarChar(100)
+  hexUrl      String?
+
+  attribute                Attribute                 @relation(fields: [attributeId], references: [id], onDelete: Cascade)
+  productVariantAttributes ProductVariantAttribute[]
+
+  @@unique([attributeId, value])
+  @@map("attribute_value")
+}
+
+model ProductAttribute {
+  productId   Int
+  attributeId Int
+
+  product   Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  attribute Attribute @relation(fields: [attributeId], references: [id], onDelete: Cascade)
+
+  @@id([productId, attributeId])
+  @@map("product_attribute")
+}
+
+model ProductVariant {
+  id                       Int                       @id @default(autoincrement())
+  productId                Int
+  sku                      String                    @unique
+  barcode                  String?                   @unique
+  price                    Decimal                   @db.Decimal(18, 2)
+  comparePrice             Decimal?                  @db.Decimal(18, 2)
+  stock                    Int
+  reservedStock            Int                       @default(0)
+  isActive                 Boolean                   @default(true)
+  createdAt                DateTime                  @default(now())
+  updatedAt                DateTime                  @updatedAt
+  productImages            ProductImage[]
+  productVariantAttributes ProductVariantAttribute[]
+  product                  Product                   @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId, stock])
+  @@index([productId, price])
+  @@index([productId, isActive])
+  @@map("product_variant")
+}
+
+model ProductVariantAttribute {
+  productVariantId Int
+  attributeValueId Int
+
+  productVariant ProductVariant @relation(fields: [productVariantId], references: [id], onDelete: Cascade)
+  attributeValue AttributeValue @relation(fields: [attributeValueId], references: [id], onDelete: Cascade)
+
+  @@id([productVariantId, attributeValueId])
+  @@index([attributeValueId])
+  @@map("product_variant_attribute")
+}
+
+model Department {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+
+  categoryHierarchies CategoryHierarchy[]
+}
+
+model Collection {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+
+  categoryHierarchies CategoryHierarchy[]
+}
+
+model Category {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+
+  categoryHierarchies CategoryHierarchy[]
+}
+
+model Subcategory {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+
+  categoryHierarchies CategoryHierarchy[]
+}
+
+model CategoryHierarchy {
+  id                Int               @id @default(autoincrement())
+  departmentId      Int
+  collectionId      Int
+  categoryId        Int
+  subcategoryId     Int?
+  department        Department        @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+  collection        Collection        @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  category          Category          @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  subcategory       Subcategory?      @relation(fields: [subcategoryId], references: [id], onDelete: Cascade)
+  productCategories ProductCategory[]
+
+  @@map("category_hierarchy")
+}
+
+model ProductCategory {
+  categoryHierarchyId Int
+  categoryHierarchy   CategoryHierarchy @relation(fields: [categoryHierarchyId], references: [id])
+  productId           Int
+  product             Product           @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@id([categoryHierarchyId, productId])
+  @@index([categoryHierarchyId])
+  @@map("product_category")
+}
+
+model Tag {
+  id          Int          @id @default(autoincrement())
+  name        String       @unique @db.VarChar(100)
+  productTags ProductTag[]
+}
+
+model ProductTag {
+  productId Int
+  tagId     Int
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  tag       Tag     @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([productId, tagId])
+  @@index([tagId])
+  @@map("product_tag")
 }
