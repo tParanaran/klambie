@@ -1,12 +1,15 @@
 import { Product as product } from 'generated/prisma/client';
-import { GetAllProducts, Product } from '@/types/product.type';
+import {
+  AllProductsResponse,
+  InsertProduct,
+  OneProductResponse,
+} from '@/types/product.type';
 import { prisma } from 'lib/prisma';
 import { Decimal } from 'decimal.js';
+import { Price } from '@/utils/price';
 
 export class ProductService {
-  async newProduct(
-    data: Product,
-  ): Promise<{ message: string; result: product }> {
+  async newProduct(data: InsertProduct): Promise<{ message: string }> {
     const { name, brandId, slug, sizingGuideId, basePrice } = data;
     const { productDetails, productCategories, productTags, images } = data;
     const { productAttributes, productVariants, comparePrice } = data;
@@ -59,17 +62,18 @@ export class ProductService {
           },
         });
       }
-      return product;
+      return product.name;
     });
 
-    return { message: 'Create Product Successfully', result };
+    return { message: `Create ${result} Successfully` };
   }
-  async getAllProducts(): Promise<GetAllProducts[]> {
+  async getAllProducts(): Promise<AllProductsResponse[]> {
     const products = await prisma.product.findMany({
       select: {
         name: true,
         basePrice: true,
         comparePrice: true,
+        slug: true,
         brand: {
           select: {
             name: true,
@@ -126,39 +130,19 @@ export class ProductService {
     });
 
     const result = products.map((p) => {
-      const allBasePrices = [
-        p.basePrice,
-        ...p.productVariants.map((v) => v.basePrice),
-      ].filter(Boolean);
-      const allComparePrices = [
-        p.comparePrice,
-        ...p.productVariants.map((v) => v.comparePrice),
-      ].filter(Boolean);
-
-      console.log(allBasePrices);
-      console.log(allComparePrices);
-
-      const minBasePrice = Decimal.min(...allBasePrices);
-      const minComparePrice = Decimal.max(...allComparePrices);
-
-      console.log(minBasePrice);
-      console.log(minComparePrice);
+      const price = {
+        bPrice: p.basePrice,
+        cPrice: p.comparePrice,
+        variantPrice: p.productVariants,
+      };
+      const { basePrice, comparePrice, discountPercentage } = Price(price);
 
       return {
         name: p.name,
-        basePrice: String(minBasePrice),
-        comparePrice:
-          minComparePrice && !minComparePrice.isZero()
-            ? String(minComparePrice)
-            : null,
-        discountPercentage:
-          minComparePrice && !minComparePrice.isZero()
-            ? minComparePrice
-                .minus(minBasePrice)
-                .dividedBy(minComparePrice)
-                .times(100)
-                .toFixed(1)
-            : null,
+        slug: p.slug,
+        basePrice,
+        comparePrice,
+        discountPercentage,
         brand: p.brand.name,
         variants: [
           ...new Set(
@@ -188,6 +172,161 @@ export class ProductService {
         images: [...new Set(p.images.map((i) => i.url).filter(Boolean))],
       };
     });
+
+    return result;
+  }
+  async getOneProduct(slug: string): Promise<OneProductResponse | null> {
+    const product = await prisma.product.findUnique({
+      where: { slug },
+      select: {
+        id: true,
+        name: true,
+        basePrice: true,
+        comparePrice: true,
+        brand: {
+          select: {
+            name: true,
+          },
+        },
+        productDetails: {
+          select: {
+            description: true,
+            length: true,
+            material: true,
+            feature: true,
+            weight: true,
+            width: true,
+            height: true,
+            volume: true,
+            care: true,
+          },
+        },
+        sizingGuide: {
+          select: {
+            guideData: true,
+          },
+        },
+        productCategories: {
+          select: {
+            categoryHierarchy: {
+              select: {
+                department: true,
+                collection: true,
+                category: true,
+                subcategory: true,
+              },
+            },
+          },
+        },
+        productTags: {
+          select: {
+            tag: {
+              select: { name: true },
+            },
+          },
+        },
+        images: {
+          select: {
+            url: true,
+            attributeValueId: true,
+          },
+        },
+        productVariants: {
+          select: {
+            id: true,
+            sku: true,
+            barcode: true,
+            basePrice: true,
+            stock: true,
+            reservedStock: true,
+            comparePrice: true,
+            productVariantAttributes: {
+              select: {
+                attributeValue: {
+                  select: {
+                    value: true,
+                    id: true,
+                    hexUrl: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!product) return null;
+
+    const variants = product.productVariants.map((v) => {
+      const price = {
+        bPrice: v.basePrice,
+        cPrice: v.comparePrice,
+        variantPrice: null,
+      };
+      const { basePrice, comparePrice, discountPercentage } = Price(price);
+
+      return {
+        id: v.id,
+        sku: v.sku,
+        basePrice,
+        comparePrice,
+        discountPercentage,
+        stock: v.stock,
+        inStock: v.stock > 0,
+        attributes: v.productVariantAttributes.map((va) => ({
+          id: va.attributeValue.id,
+          value: va.attributeValue.value,
+          hexUrl: va.attributeValue.hexUrl,
+        })),
+      };
+    });
+
+    const price = {
+      bPrice: product.basePrice,
+      cPrice: product.comparePrice,
+      variantPrice: null,
+    };
+    const { basePrice, comparePrice, discountPercentage } = Price(price);
+
+    const {
+      productDetails,
+      name,
+      id,
+      brand,
+      images,
+      productTags,
+      productCategories,
+    } = product;
+
+    const result: OneProductResponse = {
+      id,
+      name,
+      productDetails,
+      basePrice,
+      comparePrice,
+      discountPercentage,
+      brand: brand.name,
+      categories: [
+        ...new Set(
+          productCategories.flatMap((c) => {
+            const ch = c.categoryHierarchy;
+            return [
+              ch.department.name,
+              ch.collection.name,
+              ch.category.name,
+              ch.subcategory?.name,
+            ].filter(Boolean);
+          }),
+        ),
+      ],
+      tags: [...new Set(productTags.map((t) => t.tag.name).filter(Boolean))],
+      images: images.map((i) => ({
+        attributeId: i.attributeValueId,
+        url: i.url,
+      })),
+      variants,
+    };
 
     return result;
   }

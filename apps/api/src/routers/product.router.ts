@@ -20,7 +20,8 @@ export class ProductRouter {
   }
 
   private initializeRoutes(): void {
-    this.router.get('/all-products', this.product.fetchAllProduct);
+    this.router.get('/products', this.product.fetchAllProduct);
+    this.router.get('/:slug', this.product.fetchSlugProduct);
     this.router.post('/add-product', this.product.CreateProduct);
     this.router.post('/generate-category', this.category.generateHierarchy);
     this.router.post('/add-brand', this.brandAttribute.createNewBrand);

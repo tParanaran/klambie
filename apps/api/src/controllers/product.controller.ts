@@ -20,4 +20,12 @@ export class Product {
       next(error);
     }
   }
+  async fetchSlugProduct(req: Request, res: Response, next: NextFunction) {
+    try {
+      const result = await productService.getOneProduct(req.params.slug);
+      res.status(200).send(result);
+    } catch (error) {
+      next(error);
+    }
+  }
 }

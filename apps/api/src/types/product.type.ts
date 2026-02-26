@@ -1,4 +1,4 @@
-export type Product = {
+export type InsertProduct = {
   name: string;
   brandId: number;
   basePrice: number;
@@ -31,9 +31,10 @@ export type Product = {
   }[];
 };
 
-export type GetAllProducts = {
+export type AllProductsResponse = {
   name: string;
   basePrice: string;
+  slug: string;
   brand: string;
   comparePrice: string | null;
   discountPercentage: string | null;
@@ -41,4 +42,41 @@ export type GetAllProducts = {
   categories: (string | undefined)[];
   tags: string[];
   images: string[];
+};
+
+export type OneProductResponse = {
+  id: number;
+  name: string;
+  brand: string;
+  basePrice: string;
+  comparePrice: string | null;
+  discountPercentage: string | null;
+  categories: (string | undefined)[];
+  tags: string[];
+  productDetails: {
+    description: string;
+    material: string | null;
+    feature: string | null;
+    weight: number;
+    length: number | null;
+    width: number | null;
+    height: number | null;
+    volume: number | null;
+    care: string | null;
+  } | null;
+  images: { attributeId: number | null; url: string }[];
+  variants: {
+    id: number;
+    sku: string;
+    basePrice: string;
+    comparePrice: string | null;
+    discountPercentage: string | null;
+    stock: number;
+    inStock: boolean;
+    attributes: {
+      id: number;
+      value: string;
+      hexUrl: string | null;
+    }[];
+  }[];
 };

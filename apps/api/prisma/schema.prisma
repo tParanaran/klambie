@@ -120,7 +120,7 @@ model Product {
   status            ProductStatus      @default(ACTIVE)
   sizingGuideId     Int?
   sizingGuide       SizingGuide?       @relation(fields: [sizingGuideId], references: [id])
-  productDetails    ProductDetails[]
+  productDetails    ProductDetails?
   productAttributes ProductAttribute[]
   productVariants   ProductVariant[]
   productCategories ProductCategory[]
