@@ -2,7 +2,7 @@ export type Product = {
   name: string;
   brandId: number;
   basePrice: number;
-  comparePrice: number | null;
+  comparePrice: number;
   slug: string;
   sizingGuideId: number | null;
   productDetails: {
@@ -23,10 +23,22 @@ export type Product = {
   productVariants: {
     sku: string;
     barcode: string | null;
-    price: number;
-    comparePrice: number | null;
+    basePrice: number;
+    comparePrice: number;
     stock: number;
     productImages: string[];
     attributeValueId: number[];
   }[];
+};
+
+export type GetAllProducts = {
+  name: string;
+  basePrice: string;
+  brand: string;
+  comparePrice: string | null;
+  discountPercentage: string | null;
+  variants: (string | null)[];
+  categories: (string | undefined)[];
+  tags: string[];
+  images: string[];
 };

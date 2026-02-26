@@ -31,4 +31,13 @@ export class BrandAttribute {
       next(error);
     }
   }
+  async createNewTag(req: Request, res: Response, next: NextFunction) {
+    try {
+      const result = await brandService.createTag(req.body);
+
+      res.status(200).send(result);
+    } catch (error) {
+      next(error);
+    }
+  }
 }

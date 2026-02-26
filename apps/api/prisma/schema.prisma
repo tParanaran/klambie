@@ -24,7 +24,7 @@ model User {
   profile    Profile?
   referredBy String?
   roleId     Int
-  role       Role     @relation(fields: [roleId], references: [id])
+  role       Role     @relation(fields: [roleId], references: [id], onDelete: Restrict)
 
   userCoupons UserCoupon[]
   userPoints  UserPoint[]
@@ -114,9 +114,9 @@ model Product {
   name              String             @db.VarChar(200)
   slug              String             @unique
   brandId           Int
-  brand             Brand              @relation(fields: [brandId], references: [id])
+  brand             Brand              @relation(fields: [brandId], references: [id], onDelete: Restrict)
   basePrice         Decimal            @db.Decimal(18, 2)
-  comparePrice      Decimal?           @db.Decimal(18, 2)
+  comparePrice      Decimal            @default(0) @db.Decimal(18, 2)
   status            ProductStatus      @default(ACTIVE)
   sizingGuideId     Int?
   sizingGuide       SizingGuide?       @relation(fields: [sizingGuideId], references: [id])
@@ -219,8 +219,8 @@ model ProductVariant {
   productId                Int
   sku                      String                    @unique
   barcode                  String?                   @unique
-  price                    Decimal                   @db.Decimal(18, 2)
-  comparePrice             Decimal?                  @db.Decimal(18, 2)
+  basePrice                Decimal                   @db.Decimal(18, 2)
+  comparePrice             Decimal                   @default(0) @db.Decimal(18, 2)
   stock                    Int
   reservedStock            Int                       @default(0)
   isActive                 Boolean                   @default(true)
@@ -230,7 +230,7 @@ model ProductVariant {
   product                  Product                   @relation(fields: [productId], references: [id], onDelete: Cascade)
 
   @@index([productId, stock])
-  @@index([productId, price])
+  @@index([productId, basePrice])
   @@index([productId, isActive])
   @@map("product_variant")
 }
@@ -281,10 +281,10 @@ model CategoryHierarchy {
   collectionId      Int
   categoryId        Int
   subcategoryId     Int?
-  department        Department        @relation(fields: [departmentId], references: [id], onDelete: Cascade)
-  collection        Collection        @relation(fields: [collectionId], references: [id], onDelete: Cascade)
-  category          Category          @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  subcategory       Subcategory?      @relation(fields: [subcategoryId], references: [id], onDelete: Cascade)
+  department        Department        @relation(fields: [departmentId], references: [id], onDelete: Restrict)
+  collection        Collection        @relation(fields: [collectionId], references: [id], onDelete: Restrict)
+  category          Category          @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  subcategory       Subcategory?      @relation(fields: [subcategoryId], references: [id])
   productCategories ProductCategory[]
 
   @@map("category_hierarchy")

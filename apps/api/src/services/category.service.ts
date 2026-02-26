@@ -56,7 +56,6 @@ export class CategoryService {
                     subcategoryId: sub ? sub.id : null,
                   },
                 });
-
                 count++;
               }
             }

@@ -42,13 +42,22 @@ export class BrandAttributeService {
       const attributeValue = await tx.attributeValue.createMany({
         data: values.map((value: string, idx: number) => ({
           attributeId,
-          hexUrl: hexUrls[idx],
+          hexUrl: hexUrls ? hexUrls[idx] : null,
           value: value,
         })),
         skipDuplicates: true,
       });
 
       return attributeValue.count;
+    });
+
+    return result;
+  }
+  async createTag(data: Payload): Promise<{ id: number }[]> {
+    const result = await prisma.$transaction(async (tx) => {
+      const attribute = await productHelper.GetAndCreate(tx.tag, data.data);
+
+      return attribute;
     });
 
     return result;
