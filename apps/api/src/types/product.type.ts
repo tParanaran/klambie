@@ -1,3 +1,15 @@
+type ProductDetails = {
+  description: string;
+  material: string | null;
+  feature: string | null;
+  weight: number;
+  length: number | null;
+  width: number | null;
+  height: number | null;
+  volume: number | null;
+  care: string | null;
+};
+
 export type InsertProduct = {
   name: string;
   brandId: number;
@@ -5,17 +17,7 @@ export type InsertProduct = {
   comparePrice: number;
   slug: string;
   sizingGuideId: number | null;
-  productDetails: {
-    description: string;
-    care: string | null;
-    feature: string | null;
-    material: string | null;
-    weight: number;
-    height: number | null;
-    width: number | null;
-    length: number | null;
-    volume: number | null;
-  };
+  productDetails: ProductDetails;
   productAttributes: { attributeId: number; imageBased: boolean }[];
   productCategories: number[];
   productTags: number[];
@@ -31,13 +33,20 @@ export type InsertProduct = {
   }[];
 };
 
-export type AllProductsResponse = {
-  name: string;
-  basePrice: string;
-  slug: string;
-  brand: string;
+type Price = {
+  originalPrice: string;
+  finalPrice: string;
   comparePrice: string | null;
   discountPercentage: string | null;
+  discountEndsAt: Date | null;
+  hasDiscount: boolean;
+};
+
+export type AllProductsResponse = {
+  name: string;
+  price: Price;
+  slug: string;
+  brand: string;
   variants: (string | null)[];
   categories: (string | undefined)[];
   tags: string[];
@@ -48,29 +57,15 @@ export type OneProductResponse = {
   id: number;
   name: string;
   brand: string;
-  basePrice: string;
-  comparePrice: string | null;
-  discountPercentage: string | null;
+  price: Price;
   categories: (string | undefined)[];
   tags: string[];
-  productDetails: {
-    description: string;
-    material: string | null;
-    feature: string | null;
-    weight: number;
-    length: number | null;
-    width: number | null;
-    height: number | null;
-    volume: number | null;
-    care: string | null;
-  } | null;
+  productDetails: ProductDetails | null;
   images: { attributeId: number | null; url: string }[];
   variants: {
     id: number;
     sku: string;
-    basePrice: string;
-    comparePrice: string | null;
-    discountPercentage: string | null;
+    price: Price;
     stock: number;
     inStock: boolean;
     attributes: {

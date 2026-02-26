@@ -1,12 +1,10 @@
-import { Product as product } from 'generated/prisma/client';
 import {
   AllProductsResponse,
   InsertProduct,
   OneProductResponse,
 } from '@/types/product.type';
 import { prisma } from 'lib/prisma';
-import { Decimal } from 'decimal.js';
-import { Price } from '@/utils/price';
+import { CalculatePrice } from '@/utils/price';
 
 export class ProductService {
   async newProduct(data: InsertProduct): Promise<{ message: string }> {
@@ -83,6 +81,7 @@ export class ProductService {
           select: {
             basePrice: true,
             comparePrice: true,
+            stock: true,
             productVariantAttributes: {
               select: {
                 attributeValue: {
@@ -130,19 +129,18 @@ export class ProductService {
     });
 
     const result = products.map((p) => {
-      const price = {
+      const payload = {
         bPrice: p.basePrice,
         cPrice: p.comparePrice,
-        variantPrice: p.productVariants,
+        variants: p.productVariants,
+        discounts: null,
       };
-      const { basePrice, comparePrice, discountPercentage } = Price(price);
+      const { price } = CalculatePrice(payload);
 
       return {
         name: p.name,
         slug: p.slug,
-        basePrice,
-        comparePrice,
-        discountPercentage,
+        price,
         brand: p.brand.name,
         variants: [
           ...new Set(
@@ -259,19 +257,18 @@ export class ProductService {
     if (!product) return null;
 
     const variants = product.productVariants.map((v) => {
-      const price = {
+      const payload = {
         bPrice: v.basePrice,
         cPrice: v.comparePrice,
-        variantPrice: null,
+        variants: null,
+        discounts: null,
       };
-      const { basePrice, comparePrice, discountPercentage } = Price(price);
+      const { price } = CalculatePrice(payload);
 
       return {
         id: v.id,
         sku: v.sku,
-        basePrice,
-        comparePrice,
-        discountPercentage,
+        price,
         stock: v.stock,
         inStock: v.stock > 0,
         attributes: v.productVariantAttributes.map((va) => ({
@@ -282,13 +279,13 @@ export class ProductService {
       };
     });
 
-    const price = {
+    const payload = {
       bPrice: product.basePrice,
       cPrice: product.comparePrice,
-      variantPrice: null,
+      variants: null,
+      discounts: null,
     };
-    const { basePrice, comparePrice, discountPercentage } = Price(price);
-
+    const { price } = CalculatePrice(payload);
     const {
       productDetails,
       name,
@@ -303,9 +300,7 @@ export class ProductService {
       id,
       name,
       productDetails,
-      basePrice,
-      comparePrice,
-      discountPercentage,
+      price,
       brand: brand.name,
       categories: [
         ...new Set(
