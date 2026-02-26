@@ -10,8 +10,6 @@ export class AddProduct {
     const { productDetails, productCategories, productTags, images } = data;
     const { productAttributes, productVariants, comparePrice } = data;
 
-    console.log(data);
-
     const result = await prisma.$transaction(async (tx) => {
       const product = await tx.product.create({
         data: {
@@ -25,9 +23,7 @@ export class AddProduct {
             create: productDetails,
           },
           productAttributes: {
-            create: productAttributes.map((id: number) => ({
-              attributeId: id,
-            })),
+            create: productAttributes,
           },
           productCategories: {
             create: productCategories.map((id: number) => ({
@@ -40,7 +36,7 @@ export class AddProduct {
             })),
           },
           images: {
-            create: images.map((url: string) => ({ url: url })),
+            create: images,
           },
         },
       });
@@ -54,9 +50,6 @@ export class AddProduct {
             stock: va.stock,
             comparePrice: va.comparePrice,
             isActive: true,
-            productImages: {
-              create: va.productImages.map((url: string) => ({ url: url })),
-            },
             productVariantAttributes: {
               create: va.attributeValueId.map((attributeValueId: number) => ({
                 attributeValueId: attributeValueId,

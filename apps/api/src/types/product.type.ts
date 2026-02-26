@@ -16,10 +16,10 @@ export type Product = {
     length: number | null;
     volume: number | null;
   };
-  productAttributes: number[];
+  productAttributes: { attributeId: number; imageBased: boolean }[];
   productCategories: number[];
   productTags: number[];
-  images: string[];
+  images: { url: string; attributeValueId: number | null }[];
   productVariants: {
     sku: string;
     barcode: string | null;
