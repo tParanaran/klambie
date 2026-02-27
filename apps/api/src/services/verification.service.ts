@@ -39,11 +39,11 @@ export class VerificationService {
             },
           });
 
-          await prisma.userCoupon.create({
+          await prisma.userPromotion.create({
             data: {
-              couponId: 1,
+              promotionId: 2,
               userId: verified.id,
-              validUntil: expiredDate,
+              expiresAt: expiredDate,
             },
           });
         }

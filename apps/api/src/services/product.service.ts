@@ -46,6 +46,7 @@ export class ProductService {
       for (const va of productVariants) {
         await tx.productVariant.create({
           data: {
+            barcode: null,
             productId: product.id,
             sku: va.sku,
             basePrice: va.basePrice,

@@ -28,7 +28,6 @@ export type InsertProduct = {
     basePrice: number;
     comparePrice: number;
     stock: number;
-    productImages: string[];
     attributeValueId: number[];
   }[];
 };

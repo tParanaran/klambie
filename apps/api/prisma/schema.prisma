@@ -26,8 +26,12 @@ model User {
   roleId     Int
   role       Role     @relation(fields: [roleId], references: [id], onDelete: Restrict)
 
-  userCoupons UserCoupon[]
-  userPoints  UserPoint[]
+  userPoints      UserPoint[]
+  promotionUsages PromotionUsage[]
+  userPromotions  UserPromotion[]
+  userAddresses   UserAddress[]
+  carts           Cart[]
+  orders          Order[]
 }
 
 model Role {
@@ -54,6 +58,28 @@ model Profile {
   updatedAt DateTime  @updatedAt
 }
 
+enum AddressType {
+  HOME
+  OFFICE
+}
+
+model UserAddress {
+  id        Int         @id @default(autoincrement())
+  userId    Int
+  name      String      @db.VarChar(100)
+  phone     String      @db.VarChar(15)
+  street    String      @db.VarChar(200)
+  region    String      @db.VarChar(200)
+  line      String      @db.VarChar(200)
+  type      AddressType
+  latitude  Float
+  longitude Float
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  orders    Order[]
+
+  @@map("user_address")
+}
+
 enum PointType {
   REDEEM
   EARN
@@ -72,37 +98,6 @@ model UserPoint {
   @@map("user_point")
 }
 
-model UserCoupon {
-  id         Int      @id @default(autoincrement())
-  userId     Int
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  couponId   Int
-  coupon     Coupon   @relation(fields: [couponId], references: [id])
-  isUsed     Boolean  @default(false)
-  validUntil DateTime
-  createdAt  DateTime @default(now())
-
-  @@index([userId])
-  @@map("user_coupon")
-}
-
-enum TypeCoupon {
-  FIXED_AMOUNT
-  PERCENTAGE
-}
-
-model Coupon {
-  id        Int        @id @default(autoincrement())
-  code      String     @unique @db.VarChar(30)
-  amount    Decimal    @db.Decimal(18, 2)
-  type      TypeCoupon
-  expiredAt DateTime?
-
-  userCoupons UserCoupon[]
-
-  @@index([expiredAt])
-}
-
 enum ProductStatus {
   ARCHIVE
   DRAFT
@@ -116,7 +111,7 @@ model Product {
   brandId           Int
   brand             Brand              @relation(fields: [brandId], references: [id], onDelete: Restrict)
   basePrice         Decimal            @db.Decimal(18, 2)
-  comparePrice      Decimal            @default(0) @db.Decimal(18, 2)
+  comparePrice      Decimal?           @db.Decimal(18, 2)
   status            ProductStatus      @default(ACTIVE)
   sizingGuideId     Int?
   sizingGuide       SizingGuide?       @relation(fields: [sizingGuideId], references: [id])
@@ -126,6 +121,7 @@ model Product {
   productCategories ProductCategory[]
   images            ProductImage[]
   productTags       ProductTag[]
+  orderItems        OrderItem[]
   createdAt         DateTime           @default(now())
   updatedAt         DateTime           @updatedAt
 
@@ -220,7 +216,7 @@ model ProductVariant {
   sku                      String                    @unique
   barcode                  String?                   @unique
   basePrice                Decimal                   @db.Decimal(18, 2)
-  comparePrice             Decimal                   @default(0) @db.Decimal(18, 2)
+  comparePrice             Decimal?                  @db.Decimal(18, 2)
   stock                    Int
   reservedStock            Int                       @default(0)
   isActive                 Boolean                   @default(true)
@@ -228,6 +224,8 @@ model ProductVariant {
   updatedAt                DateTime                  @updatedAt
   productVariantAttributes ProductVariantAttribute[]
   product                  Product                   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  cartItems                CartItem[]
+  orderItems               OrderItem[]
 
   @@index([productId, stock])
   @@index([productId, basePrice])
@@ -316,4 +314,223 @@ model ProductTag {
   @@id([productId, tagId])
   @@index([tagId])
   @@map("product_tag")
+}
+
+enum PromotionType {
+  FIXED_AMOUNT
+  PERCENTAGE
+}
+
+enum PromotionApplyTo {
+  ORDER
+  PRODUCT
+  CATEGORY
+  BRAND
+}
+
+model Promotion {
+  id      Int              @id @default(autoincrement())
+  name    String
+  code    String?          @unique
+  type    PromotionType
+  value   Decimal          @db.Decimal(18, 2)
+  applyTo PromotionApplyTo
+
+  // Status and Behavior
+  isStackable Boolean @default(false)
+  // global “on/off” switch for the promotion.
+  isActive    Boolean @default(true)
+  // determines whether the user has to enter a code or it applies automatically.
+  isAutomatic Boolean @default(false)
+
+  promotionRule        PromotionRule?
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime              @updatedAt
+  promotionUsages      PromotionUsage[]
+  userPromotions       UserPromotion[]
+  promotionAssignments PromotionAssignment[]
+}
+
+model PromotionRule {
+  id                Int       @id @default(autoincrement())
+  promotionId       Int       @unique
+  minOrderValue     Decimal?  @db.Decimal(18, 2)
+  maxDiscount       Decimal?  @db.Decimal(18, 2)
+  usageLimit        Int?
+  usageLimitPerUser Int?
+  usedCount         Int       @default(0)
+  startsAt          DateTime?
+  endsAt            DateTime?
+  firstOrderOnly    Boolean   @default(false)
+  promotion         Promotion @relation(fields: [promotionId], references: [id], onDelete: Cascade)
+
+  @@map("promotion_rule")
+}
+
+enum AssignmentType {
+  PRODUCT
+  CATEGORY
+  BRAND
+  TAG
+}
+
+model PromotionAssignment {
+  id          Int            @id @default(autoincrement())
+  promotionId Int
+  targetType  AssignmentType
+  targetId    Int // references productId, categoryId, TagId or brandId
+
+  promotion Promotion @relation(fields: [promotionId], references: [id])
+
+  @@map("promotion_assignment")
+}
+
+model PromotionUsage {
+  id             Int      @id @default(autoincrement())
+  promotionId    Int
+  userId         Int
+  orderId        Int
+  usedAt         DateTime @default(now())
+  promotionName  String
+  promotionCode  String?
+  discountAmount Decimal  @db.Decimal(18, 2)
+
+  promotion Promotion @relation(fields: [promotionId], references: [id])
+  user      User      @relation(fields: [userId], references: [id])
+  order     Order     @relation(fields: [orderId], references: [id])
+
+  @@index([promotionId])
+  @@index([userId])
+  @@map("promotion_usage")
+}
+
+model UserPromotion {
+  id          Int @id @default(autoincrement())
+  userId      Int
+  promotionId Int
+
+  isUsed     Boolean   @default(false)
+  assignedAt DateTime  @default(now())
+  usedAt     DateTime?
+
+  expiresAt DateTime?
+
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  promotion Promotion @relation(fields: [promotionId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, promotionId])
+  @@index([userId])
+  @@map("user_promotion")
+}
+
+model Cart {
+  id        Int       @id @default(autoincrement())
+  userId    Int?
+  sessionId String?   @unique
+  expiresAt DateTime?
+  createdAt DateTime  @default(now())
+  updateAt  DateTime  @updatedAt
+
+  user      User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  cartItems CartItem[]
+
+  @@index([userId])
+}
+
+model CartItem {
+  id               Int      @id @default(autoincrement())
+  cartId           Int
+  productVariantId Int
+  quantity         Int
+  unitPrice        Decimal  @db.Decimal(18, 2)
+  createdAt        DateTime @default(now())
+  updateAt         DateTime @updatedAt
+
+  cart           Cart           @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  productVariant ProductVariant @relation(fields: [productVariantId], references: [id])
+
+  @@unique([cartId, productVariantId])
+  @@index([cartId])
+  @@map("cart_item")
+}
+
+enum OrderStatus {
+  PENDING_PAYMENT
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELED
+  REFUNDED
+  FAILED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+  PARTIALLY_REFUNDED
+}
+
+model Order {
+  id              Int              @id @default(autoincrement())
+  orderNumber     String           @unique
+  userId          Int
+  status          OrderStatus      @default(PENDING_PAYMENT)
+  paymentStatus   PaymentStatus    @default(PENDING)
+  subtotal        Decimal          @db.Decimal(18, 2)
+  discountTotal   Decimal          @default(0) @db.Decimal(18, 2)
+  pointsDiscount  Decimal          @default(0) @db.Decimal(18, 2)
+  shippingFee     Decimal          @default(0) @db.Decimal(18, 2)
+  grandTotal      Decimal          @db.Decimal(18, 2)
+  notes           String?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  orderAddress    OrderAddress?
+  user            User             @relation(fields: [userId], references: [id])
+  userAddressId   Int
+  userAddress     UserAddress?     @relation(fields: [userAddressId], references: [id])
+  orderItems      OrderItem[]
+  promotionUsages PromotionUsage[]
+
+  @@index([userId])
+  @@index([status])
+}
+
+model OrderItem {
+  id               Int            @id @default(autoincrement())
+  orderId          Int
+  productId        Int
+  productVariantId Int
+  productName      String
+  sku              String
+  variant          Json
+  quantity         Int
+  unitPrice        Decimal        @db.Decimal(18, 2)
+  discountAmount   Decimal        @default(0) @db.Decimal(18, 2)
+  finalUnitPrice   Decimal        @db.Decimal(18, 2)
+  totalPrice       Decimal        @db.Decimal(18, 2)
+  createdAt        DateTime       @default(now())
+  order            Order          @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product          Product        @relation(fields: [productId], references: [id])
+  productVariant   ProductVariant @relation(fields: [productVariantId], references: [id])
+
+  @@index([orderId])
+  @@map("order_item")
+}
+
+model OrderAddress {
+  id        Int         @id @default(autoincrement())
+  orderId   Int         @unique
+  order     Order       @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  name      String      @db.VarChar(100)
+  phone     String      @db.VarChar(15)
+  street    String      @db.VarChar(200)
+  region    String      @db.VarChar(200)
+  line      String      @db.VarChar(200)
+  type      AddressType
+  latitude  Float
+  longitude Float
+
+  @@map("order_address")
 }
