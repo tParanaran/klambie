@@ -1,7 +1,7 @@
 import slugify from 'slugify';
 import { prisma } from 'lib/prisma';
 
-export async function generateSlug(name: string): Promise<string> {
+export async function GenerateSlug(name: string): Promise<string> {
   const baseSlug = slugify(name, {
     lower: true,
     strict: true,

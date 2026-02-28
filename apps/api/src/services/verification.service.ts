@@ -39,9 +39,17 @@ export class VerificationService {
             },
           });
 
+          const coupon = await prisma.promotion.findUnique({
+            where: {
+              code: 'REFF10FF',
+            },
+          });
+
+          if (!coupon) throw new Error('Coupon not found');
+
           await prisma.userPromotion.create({
             data: {
-              promotionId: 2,
+              promotionId: coupon.id,
               userId: verified.id,
               expiresAt: expiredDate,
             },
@@ -56,7 +64,7 @@ export class VerificationService {
         htmlPath: 'verifySuccessMail.hbs',
       };
 
-      SendMail(dataMail);
+      await SendMail(dataMail);
 
       return { success: true };
     });
@@ -87,7 +95,7 @@ export class VerificationService {
       htmlPath: 'vertificationMail.hbs',
     };
 
-    SendMail(dataMail);
+    await SendMail(dataMail);
 
     return {
       success: true,

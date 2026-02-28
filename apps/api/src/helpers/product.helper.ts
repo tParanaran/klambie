@@ -1,6 +1,6 @@
-import { generateSlug } from '@/utils/slug';
+import { GenerateSlug } from '@/utils/slug';
 import { DefaultArgs } from '@prisma/client/runtime/client';
-import { Prisma, PrismaClient } from 'generated/prisma/client';
+import { PrismaClient } from 'generated/prisma/client';
 
 export class ProductHelper {
   async findOrCreate<
@@ -13,7 +13,7 @@ export class ProductHelper {
       data: await Promise.all(
         data.map(async (name) => ({
           name,
-          slug: await generateSlug(name),
+          slug: await GenerateSlug(name),
         })),
       ),
       skipDuplicates: true,
@@ -37,7 +37,7 @@ export class ProductHelper {
     let category = await tx.category.findUnique({ where: { name } });
     if (!category)
       category = await tx.category.create({
-        data: { name, slug: await generateSlug(name) },
+        data: { name, slug: await GenerateSlug(name) },
       });
 
     // Find or create hierarchy

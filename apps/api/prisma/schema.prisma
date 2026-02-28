@@ -108,10 +108,10 @@ model Product {
   id                Int                @id @default(autoincrement())
   name              String             @db.VarChar(200)
   slug              String             @unique
+  sku               String             @unique
   brandId           Int
   brand             Brand              @relation(fields: [brandId], references: [id], onDelete: Restrict)
   basePrice         Decimal            @db.Decimal(18, 2)
-  comparePrice      Decimal?           @db.Decimal(18, 2)
   status            ProductStatus      @default(ACTIVE)
   sizingGuideId     Int?
   sizingGuide       SizingGuide?       @relation(fields: [sizingGuideId], references: [id])
@@ -180,6 +180,7 @@ model ProductImage {
 model Attribute {
   id   Int    @id @default(autoincrement())
   name String @unique @db.VarChar(100)
+  slug String @unique
 
   attributeValues   AttributeValue[]
   productAttributes ProductAttribute[]
@@ -189,6 +190,7 @@ model AttributeValue {
   id          Int     @id @default(autoincrement())
   attributeId Int
   value       String  @db.VarChar(100)
+  slug        String  @unique
   hexUrl      String?
 
   attribute                Attribute                 @relation(fields: [attributeId], references: [id], onDelete: Cascade)
@@ -217,7 +219,6 @@ model ProductVariant {
   sku                      String                    @unique
   barcode                  String?                   @unique
   basePrice                Decimal                   @db.Decimal(18, 2)
-  comparePrice             Decimal?                  @db.Decimal(18, 2)
   stock                    Int
   reservedStock            Int                       @default(0)
   isActive                 Boolean                   @default(true)

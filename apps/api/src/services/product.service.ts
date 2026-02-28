@@ -5,23 +5,27 @@ import {
 } from '@/types/product.type';
 import { prisma } from 'lib/prisma';
 import { CalculatePrice } from '@/utils/price';
-import { generateSlug } from '@/utils/slug';
+import { GenerateSlug } from '@/utils/slug';
+import { SKU } from '@/utils/sku';
+import flattenCategories from '@/utils/categories';
+
+const sku = new SKU();
 
 export class ProductService {
   async newProduct(data: InsertProduct): Promise<{ message: string }> {
     const { name, brandId, sizingGuideId, basePrice } = data;
     const { productDetails, productCategories, productTags, images } = data;
-    const { productAttributes, productVariants, comparePrice } = data;
+    const { productAttributes, productVariants } = data;
 
     const result = await prisma.$transaction(async (tx) => {
       const product = await tx.product.create({
         data: {
           name,
           brandId,
-          slug: await generateSlug(name),
+          slug: await GenerateSlug(name),
+          sku: await sku.generateProductSKU(name, brandId),
           sizingGuideId,
           basePrice,
-          comparePrice,
           productDetails: {
             create: productDetails,
           },
@@ -49,10 +53,9 @@ export class ProductService {
           data: {
             barcode: null,
             productId: product.id,
-            sku: va.sku,
+            sku: await sku.generateVariantSKU(product.sku, va.attributeValueId),
             basePrice: va.basePrice,
             stock: va.stock,
-            comparePrice: va.comparePrice,
             isActive: true,
             productVariantAttributes: {
               create: va.attributeValueId.map((attributeValueId: number) => ({
@@ -72,7 +75,6 @@ export class ProductService {
       select: {
         name: true,
         basePrice: true,
-        comparePrice: true,
         slug: true,
         brand: {
           select: {
@@ -82,7 +84,6 @@ export class ProductService {
         productVariants: {
           select: {
             basePrice: true,
-            comparePrice: true,
             stock: true,
             productVariantAttributes: {
               select: {
@@ -99,16 +100,16 @@ export class ProductService {
           select: {
             categoryHierarchy: {
               select: {
-                category: true,
+                category: { select: { name: true } },
                 parent: {
                   select: {
-                    category: true,
+                    category: { select: { name: true } },
                     parent: {
                       select: {
-                        category: true,
+                        category: { select: { name: true } },
                         parent: {
                           select: {
-                            category: true,
+                            category: { select: { name: true } },
                           },
                         },
                       },
@@ -136,10 +137,9 @@ export class ProductService {
 
     const result = products.map((p) => {
       const payload = {
-        bPrice: p.basePrice,
-        cPrice: p.comparePrice,
+        basePrice: p.basePrice,
         variants: p.productVariants,
-        discounts: null,
+        promotion: null,
       };
       const { price } = CalculatePrice(payload);
 
@@ -158,7 +158,11 @@ export class ProductService {
           ),
         ],
         categories: [
-          ...new Set(p.productTags.map((t) => t.tag.name).filter(Boolean)),
+          ...new Set(
+            p.productCategories.flatMap((pc) =>
+              flattenCategories(pc.categoryHierarchy),
+            ),
+          ),
         ],
         tags: [
           ...new Set(p.productTags.map((t) => t.tag.name).filter(Boolean)),
@@ -176,7 +180,6 @@ export class ProductService {
         id: true,
         name: true,
         basePrice: true,
-        comparePrice: true,
         brand: {
           select: {
             name: true,
@@ -202,7 +205,26 @@ export class ProductService {
         },
         productCategories: {
           select: {
-            categoryHierarchy: true,
+            categoryHierarchy: {
+              select: {
+                category: { select: { name: true } },
+                parent: {
+                  select: {
+                    category: { select: { name: true } },
+                    parent: {
+                      select: {
+                        category: { select: { name: true } },
+                        parent: {
+                          select: {
+                            category: { select: { name: true } },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
           },
         },
         productTags: {
@@ -226,7 +248,6 @@ export class ProductService {
             basePrice: true,
             stock: true,
             reservedStock: true,
-            comparePrice: true,
             productVariantAttributes: {
               select: {
                 attributeValue: {
@@ -247,10 +268,9 @@ export class ProductService {
 
     const variants = product.productVariants.map((v) => {
       const payload = {
-        bPrice: v.basePrice,
-        cPrice: v.comparePrice,
+        basePrice: v.basePrice,
         variants: null,
-        discounts: null,
+        promotion: null,
       };
       const { price } = CalculatePrice(payload);
 
@@ -269,10 +289,9 @@ export class ProductService {
     });
 
     const payload = {
-      bPrice: product.basePrice,
-      cPrice: product.comparePrice,
+      basePrice: product.basePrice,
       variants: null,
-      discounts: null,
+      promotion: null,
     };
     const { price } = CalculatePrice(payload);
     const {
@@ -282,6 +301,7 @@ export class ProductService {
       brand,
       images,
       productTags,
+      sizingGuide,
       productCategories,
     } = product;
 
@@ -292,7 +312,11 @@ export class ProductService {
       price,
       brand: brand.name,
       categories: [
-        ...new Set(productTags.map((t) => t.tag.name).filter(Boolean)),
+        ...new Set(
+          productCategories.flatMap((pc) =>
+            flattenCategories(pc.categoryHierarchy),
+          ),
+        ),
       ],
       tags: [...new Set(productTags.map((t) => t.tag.name).filter(Boolean))],
       images: images.map((i) => ({

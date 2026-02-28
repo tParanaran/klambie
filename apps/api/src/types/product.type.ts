@@ -1,3 +1,5 @@
+import { JsonValue } from '@prisma/client/runtime/client';
+
 type ProductDetails = {
   description: string;
   material: string | null;
@@ -14,8 +16,6 @@ export type InsertProduct = {
   name: string;
   brandId: number;
   basePrice: number;
-  comparePrice: number;
-  slug: string;
   sizingGuideId: number | null;
   productDetails: ProductDetails;
   productAttributes: { attributeId: number; imageBased: boolean }[];
@@ -23,10 +23,8 @@ export type InsertProduct = {
   productTags: number[];
   images: { url: string; attributeValueId: number | null }[];
   productVariants: {
-    sku: string;
     barcode: string | null;
     basePrice: number;
-    comparePrice: number;
     stock: number;
     attributeValueId: number[];
   }[];
@@ -35,7 +33,6 @@ export type InsertProduct = {
 type Price = {
   originalPrice: string;
   finalPrice: string;
-  comparePrice: string | null;
   discountPercentage: string | null;
   discountEndsAt: Date | null;
   hasDiscount: boolean;

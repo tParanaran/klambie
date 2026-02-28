@@ -26,12 +26,12 @@ export class RegisterService {
 
     if (!findRoleUser) throw new Error('User not found');
 
-    let username = GenerateUsername();
+    let username = await GenerateUsername();
     let usernameExists = await prisma.user.findUnique({
       where: { username },
     });
     while (usernameExists) {
-      username = GenerateUsername();
+      username = await GenerateUsername();
       usernameExists = await prisma.user.findUnique({
         where: { username },
       });
@@ -77,7 +77,7 @@ export class RegisterService {
         htmlPath: 'vertificationMail.hbs',
       };
 
-      SendMail(dataMail);
+      await SendMail(dataMail);
 
       return {
         success: true,

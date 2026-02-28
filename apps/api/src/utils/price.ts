@@ -1,16 +1,20 @@
 import Decimal from 'decimal.js';
+import { PromotionRule } from 'generated/prisma/client';
 
-type Discount = {
-  type: 'PERCENTAGE' | 'FIXED';
+type Promotion = {
+  type: 'PERCENTAGE' | 'FIXED_AMOUNT';
+  applyTo: 'PRODUCT' | 'BRAND' | 'CATEGORY' | 'ORDER';
+  code: String | null;
   value: Decimal;
-  startDate: Date;
-  endDate: Date;
   isActive: boolean;
+  isStackable: boolean;
+  isAutomatic: boolean;
+  promotionRule?: PromotionRule;
+  targetIds?: number[];
 };
 
 type VariantPrice = {
   basePrice: Decimal;
-  comparePrice: Decimal | null;
   stock: number;
   productVariantAttributes: {
     attributeValue: {
@@ -20,17 +24,15 @@ type VariantPrice = {
 };
 
 type PriceInput = {
-  bPrice: Decimal;
-  cPrice: Decimal | null;
+  basePrice: Decimal;
   variants: VariantPrice[] | null;
-  discounts: Discount[] | null;
+  promotion: Promotion[] | null;
 };
 
 export function CalculatePrice(price: PriceInput) {
-  const { bPrice, cPrice, variants, discounts } = price;
+  const { basePrice, variants, promotion } = price;
 
-  let originalPrice = bPrice;
-  let manualComparePrice = cPrice ?? null;
+  let originalPrice = basePrice;
 
   // ----------------------------------
   // Choose Cheapest In-Stock Variant
@@ -45,7 +47,6 @@ export function CalculatePrice(price: PriceInput) {
       );
 
       originalPrice = cheapest.basePrice;
-      manualComparePrice = cheapest.comparePrice ?? null;
     }
   }
 
@@ -54,16 +55,10 @@ export function CalculatePrice(price: PriceInput) {
   // ----------------------------------
   const now = new Date();
 
-  const activeDiscount =
-    discounts?.find(
-      (d) =>
-        d.isActive &&
-        new Date(d.startDate) <= now &&
-        new Date(d.endDate) >= now,
-    ) ?? null;
+  const activeDiscount = promotion?.find((d) => d.isActive) ?? null;
 
   let finalPrice = originalPrice;
-  let effectiveComparePrice: Decimal | null = null;
+  let comparePrice: Decimal | null = null;
 
   // ----------------------------------
   // Check scheduled discount first
@@ -76,7 +71,7 @@ export function CalculatePrice(price: PriceInput) {
       );
     }
 
-    if (activeDiscount.type === 'FIXED') {
+    if (activeDiscount.type === 'FIXED_AMOUNT') {
       finalPrice = originalPrice.minus(activeDiscount.value);
     }
 
@@ -91,18 +86,7 @@ export function CalculatePrice(price: PriceInput) {
     // When scheduled discount exists,
     // we compare against ORIGINAL base price
     // ----------------------------------
-    effectiveComparePrice = originalPrice;
-  }
-
-  // ----------------------------------
-  // If no scheduled discount, use comparePrice
-  // ----------------------------------
-  else if (
-    manualComparePrice &&
-    manualComparePrice.greaterThan(originalPrice)
-  ) {
-    finalPrice = originalPrice;
-    effectiveComparePrice = manualComparePrice;
+    comparePrice = originalPrice;
   }
 
   // ----------------------------------
@@ -110,10 +94,10 @@ export function CalculatePrice(price: PriceInput) {
   // ----------------------------------
   let discountPercentage: string | null = null;
 
-  if (effectiveComparePrice && effectiveComparePrice.greaterThan(finalPrice)) {
-    discountPercentage = effectiveComparePrice
+  if (comparePrice && comparePrice.greaterThan(finalPrice)) {
+    discountPercentage = comparePrice
       .minus(finalPrice)
-      .dividedBy(effectiveComparePrice)
+      .dividedBy(comparePrice)
       .times(100)
       .toFixed(0);
   }
@@ -122,11 +106,9 @@ export function CalculatePrice(price: PriceInput) {
     price: {
       originalPrice: originalPrice.toString(), // price before discount
       finalPrice: finalPrice.toString(), // price customer pays
-      comparePrice: effectiveComparePrice
-        ? effectiveComparePrice.toString()
-        : null,
+      comparePrice: comparePrice ? comparePrice.toString() : null, // only exist when have discount
       discountPercentage,
-      discountEndsAt: activeDiscount?.endDate ?? null,
+      discountEndsAt: activeDiscount?.promotionRule?.endsAt ?? null,
       hasDiscount: discountPercentage !== null,
     },
   };

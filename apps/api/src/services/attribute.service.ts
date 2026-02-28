@@ -1,4 +1,5 @@
 import { ProductHelper } from '@/helpers/product.helper';
+import { GenerateSlug } from '@/utils/slug';
 import { prisma } from 'lib/prisma';
 
 type DataInput = {
@@ -47,11 +48,14 @@ export class AttributeService {
 
     const result = await prisma.$transaction(async (tx) => {
       const attributeValue = await tx.attributeValue.createMany({
-        data: values.map((value: string, idx: number) => ({
-          attributeId,
-          hexUrl: hexUrls ? hexUrls[idx] : null,
-          value: value,
-        })),
+        data: await Promise.all(
+          values.map(async (value: string, idx: number) => ({
+            attributeId,
+            hexUrl: hexUrls ? hexUrls[idx] : null,
+            slug: await GenerateSlug(value),
+            value: value,
+          })),
+        ),
         skipDuplicates: true,
       });
 
