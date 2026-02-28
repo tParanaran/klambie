@@ -13,4 +13,13 @@ export class Promotion {
       next(error);
     }
   }
+  async deactivePromotion(req: Request, res: Response, next: NextFunction) {
+    try {
+      const result = await promoService.deactivePromotion(req.params.id);
+
+      res.status(200).send(result);
+    } catch (error) {
+      next(error);
+    }
+  }
 }

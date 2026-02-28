@@ -32,4 +32,16 @@ export class PromotionService {
     });
     return result;
   }
+  async deactivePromotion(id: string): Promise<string> {
+    const promo = await prisma.promotion.findUnique({
+      where: { id: Number(id) },
+    });
+
+    const deactive = await prisma.promotion.update({
+      where: { id: Number(id) },
+      data: { isActive: !promo?.isActive },
+    });
+
+    return `${deactive.isActive ? 'Enable' : 'Disable'} ${deactive.name} successfully`;
+  }
 }

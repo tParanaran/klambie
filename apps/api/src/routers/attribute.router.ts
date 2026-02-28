@@ -17,11 +17,16 @@ export class AttributeRouter {
   private initializeRoutes(): void {
     this.router.post('/category', this.attribute.createNewCategory);
     this.router.post('/brand', this.attribute.createNewBrand);
+    this.router.patch('/brand/:slug', this.attribute.updateBrand);
     this.router.post('/tag', this.attribute.createNewTag);
     this.router.post(`/attribute`, this.attribute.createNewAttribute);
     this.router.post(
       '/attribute-value',
       this.attribute.createNewAttributeValue,
+    );
+    this.router.patch(
+      '/attribute-value/:slug',
+      this.attribute.updateAttributeValue,
     );
   }
 

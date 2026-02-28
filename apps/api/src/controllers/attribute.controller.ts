@@ -13,6 +13,18 @@ export class Attribute {
       next(error);
     }
   }
+  async updateBrand(req: Request, res: Response, next: NextFunction) {
+    try {
+      const result = await attributeService.updateBrand({
+        data: req.body,
+        slug: req.params.slug,
+      });
+
+      res.status(200).send(result);
+    } catch (error) {
+      next(error);
+    }
+  }
   async createNewAttribute(req: Request, res: Response, next: NextFunction) {
     try {
       const result = await attributeService.createAttribute(req.body);
@@ -29,6 +41,18 @@ export class Attribute {
   ) {
     try {
       const result = await attributeService.createAttributeValue(req.body);
+
+      res.status(200).send(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+  async updateAttributeValue(req: Request, res: Response, next: NextFunction) {
+    try {
+      const result = await attributeService.updateAttributeValue({
+        data: req.body,
+        slug: req.params.slug,
+      });
 
       res.status(200).send(result);
     } catch (error) {

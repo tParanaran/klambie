@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE `brand` MODIFY `logo` VARCHAR(200) NULL,
+    MODIFY `bio` VARCHAR(500) NULL;

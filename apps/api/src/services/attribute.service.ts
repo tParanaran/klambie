@@ -6,6 +6,19 @@ type DataInput = {
   data: string[];
 };
 
+type BrandInput = {
+  slug: string;
+  data: {
+    bio: string;
+    logo: string;
+  };
+};
+
+type AttributeValue = {
+  slug: string;
+  data: { hexUrl: string };
+};
+
 type AttributeValueInput = {
   attributeId: number;
   hexUrls: string[];
@@ -30,6 +43,18 @@ export class AttributeService {
     });
 
     return result;
+  }
+  async updateBrand(input: BrandInput): Promise<string> {
+    const { slug, data } = input;
+
+    const brand = await prisma.brand.update({
+      where: {
+        slug,
+      },
+      data: data,
+    });
+
+    return `Update ${brand.name} brand details successfully`;
   }
   async createAttribute(input: DataInput): Promise<{ id: number }[]> {
     const result = await prisma.$transaction(async (tx) => {
@@ -63,6 +88,18 @@ export class AttributeService {
     });
 
     return result;
+  }
+  async updateAttributeValue(input: AttributeValue): Promise<string> {
+    const { slug, data } = input;
+
+    const brand = await prisma.attributeValue.update({
+      where: {
+        slug,
+      },
+      data: data,
+    });
+
+    return `Update ${brand.value} brand details successfully`;
   }
   async createTag(input: DataInput): Promise<{ id: number }[]> {
     const result = await prisma.$transaction(async (tx) => {
