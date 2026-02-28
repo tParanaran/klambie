@@ -1,4 +1,5 @@
-import { Promotion, Prisma } from 'generated/prisma/client';
+import { Promotion as Promotions } from '@/utils/price';
+import { Prisma, Promotion } from 'generated/prisma/client';
 import { prisma } from 'lib/prisma';
 
 export class PromotionService {
@@ -43,5 +44,25 @@ export class PromotionService {
     });
 
     return `${deactive.isActive ? 'Enable' : 'Disable'} ${deactive.name} successfully`;
+  }
+  async getPromotion(): Promise<Promotions[]> {
+    return await prisma.promotion.findMany({
+      select: {
+        type: true,
+        applyTo: true,
+        name: true,
+        code: true,
+        value: true,
+        isActive: true,
+        isStackable: true,
+        isAutomatic: true,
+        promotionRule: true,
+        promotionAssignments: {
+          select: {
+            targetId: true,
+          },
+        },
+      },
+    });
   }
 }

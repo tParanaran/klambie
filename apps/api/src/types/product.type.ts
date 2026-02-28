@@ -1,4 +1,5 @@
-import { JsonValue } from '@prisma/client/runtime/client';
+import Decimal from 'decimal.js';
+import { Promotion } from '@/utils/price';
 
 type ProductDetails = {
   description: string;
@@ -30,12 +31,12 @@ export type InsertProduct = {
   }[];
 };
 
-type Price = {
-  originalPrice: string;
+export type Price = {
   finalPrice: string;
+  discountApplied: string | null;
   discountPercentage: string | null;
-  discountEndsAt: Date | null;
   hasDiscount: boolean;
+  appliedPromotions: Promotion[] | [];
 };
 
 export type AllProductsResponse = {
@@ -53,7 +54,6 @@ export type OneProductResponse = {
   id: number;
   name: string;
   brand: string;
-  price: Price;
   categories: (string | undefined)[];
   tags: string[];
   productDetails: ProductDetails | null;
@@ -61,6 +61,7 @@ export type OneProductResponse = {
   variants: {
     id: number;
     sku: string;
+    basePrice: string;
     price: Price;
     stock: number;
     inStock: boolean;

@@ -68,26 +68,22 @@ export class AttributeService {
 
     return result;
   }
-  async createAttributeValue(input: AttributeValueInput): Promise<number> {
+  async createAttributeValue(input: AttributeValueInput): Promise<string> {
     const { attributeId, values, hexUrls } = input;
 
-    const result = await prisma.$transaction(async (tx) => {
-      const attributeValue = await tx.attributeValue.createMany({
-        data: await Promise.all(
-          values.map(async (value: string, idx: number) => ({
-            attributeId,
-            hexUrl: hexUrls ? hexUrls[idx] : null,
-            slug: await GenerateSlug(value),
-            value: value,
-          })),
-        ),
-        skipDuplicates: true,
-      });
-
-      return attributeValue.count;
+    const attributeValue = await prisma.attributeValue.createMany({
+      data: await Promise.all(
+        values.map(async (value: string, idx: number) => ({
+          attributeId,
+          hexUrl: hexUrls ? hexUrls[idx] : null,
+          slug: await GenerateSlug(value),
+          value: value,
+        })),
+      ),
+      skipDuplicates: true,
     });
 
-    return result;
+    return `${attributeValue.count === 0 ? 'Attribute already exist' : `Create ${attributeValue.count} attribute successfully`} `;
   }
   async updateAttributeValue(input: AttributeValue): Promise<string> {
     const { slug, data } = input;

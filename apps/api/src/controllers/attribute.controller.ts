@@ -42,6 +42,8 @@ export class Attribute {
     try {
       const result = await attributeService.createAttributeValue(req.body);
 
+      console.log(result);
+
       res.status(200).send(result);
     } catch (error) {
       next(error);

@@ -73,12 +73,14 @@ export class ProductService {
   async getAllProducts(): Promise<AllProductsResponse[]> {
     const products = await prisma.product.findMany({
       select: {
+        id: true,
         name: true,
         basePrice: true,
         slug: true,
         brand: {
           select: {
             name: true,
+            id: true,
           },
         },
         productVariants: {
@@ -100,16 +102,16 @@ export class ProductService {
           select: {
             categoryHierarchy: {
               select: {
-                category: { select: { name: true } },
+                category: { select: { name: true, id: true } },
                 parent: {
                   select: {
-                    category: { select: { name: true } },
+                    category: { select: { name: true, id: true } },
                     parent: {
                       select: {
-                        category: { select: { name: true } },
+                        category: { select: { name: true, id: true } },
                         parent: {
                           select: {
-                            category: { select: { name: true } },
+                            category: { select: { name: true, id: true } },
                           },
                         },
                       },
@@ -123,7 +125,7 @@ export class ProductService {
         productTags: {
           select: {
             tag: {
-              select: { name: true },
+              select: { name: true, id: true },
             },
           },
         },
@@ -135,41 +137,59 @@ export class ProductService {
       },
     });
 
-    const result = products.map((p) => {
-      const payload = {
-        basePrice: p.basePrice,
-        variants: p.productVariants,
-        promotion: null,
-      };
-      const { price } = CalculatePrice(payload);
+    const result = await Promise.all(
+      products.map(async (p) => {
+        const inputPrice = {
+          variants: null,
+          userCountOrder: 0,
+          productPromo: {
+            id: p.id,
+            name: p.name,
+            basePrice: p.basePrice,
+            brandId: p.brand.id,
+            categoriesId: [
+              ...new Set(
+                p.productCategories.flatMap(
+                  (pc) => flattenCategories(pc.categoryHierarchy).categoriesId,
+                ),
+              ),
+            ],
+            tagsId: [
+              ...new Set(p.productTags.map((t) => t.tag.id).filter(Boolean)),
+            ],
+          },
+        };
 
-      return {
-        name: p.name,
-        slug: p.slug,
-        price,
-        brand: p.brand.name,
-        variants: [
-          ...new Set(
-            p.productVariants.flatMap((v) =>
-              v.productVariantAttributes
-                .map((a) => a.attributeValue.hexUrl)
-                .filter(Boolean),
+        const { price } = await CalculatePrice(inputPrice);
+
+        return {
+          name: p.name,
+          slug: p.slug,
+          price,
+          brand: p.brand.name,
+          variants: [
+            ...new Set(
+              p.productVariants.flatMap((v) =>
+                v.productVariantAttributes
+                  .map((a) => a.attributeValue.hexUrl)
+                  .filter(Boolean),
+              ),
             ),
-          ),
-        ],
-        categories: [
-          ...new Set(
-            p.productCategories.flatMap((pc) =>
-              flattenCategories(pc.categoryHierarchy),
+          ],
+          categories: [
+            ...new Set(
+              p.productCategories.flatMap(
+                (pc) => flattenCategories(pc.categoryHierarchy).categories,
+              ),
             ),
-          ),
-        ],
-        tags: [
-          ...new Set(p.productTags.map((t) => t.tag.name).filter(Boolean)),
-        ],
-        images: [...new Set(p.images.map((i) => i.url).filter(Boolean))],
-      };
-    });
+          ],
+          tags: [
+            ...new Set(p.productTags.map((t) => t.tag.name).filter(Boolean)),
+          ],
+          images: [...new Set(p.images.map((i) => i.url).filter(Boolean))],
+        };
+      }),
+    );
 
     return result;
   }
@@ -182,6 +202,7 @@ export class ProductService {
         basePrice: true,
         brand: {
           select: {
+            id: true,
             name: true,
           },
         },
@@ -207,16 +228,16 @@ export class ProductService {
           select: {
             categoryHierarchy: {
               select: {
-                category: { select: { name: true } },
+                category: { select: { name: true, id: true } },
                 parent: {
                   select: {
-                    category: { select: { name: true } },
+                    category: { select: { name: true, id: true } },
                     parent: {
                       select: {
-                        category: { select: { name: true } },
+                        category: { select: { name: true, id: true } },
                         parent: {
                           select: {
-                            category: { select: { name: true } },
+                            category: { select: { name: true, id: true } },
                           },
                         },
                       },
@@ -230,7 +251,7 @@ export class ProductService {
         productTags: {
           select: {
             tag: {
-              select: { name: true },
+              select: { name: true, id: true },
             },
           },
         },
@@ -266,34 +287,6 @@ export class ProductService {
 
     if (!product) return null;
 
-    const variants = product.productVariants.map((v) => {
-      const payload = {
-        basePrice: v.basePrice,
-        variants: null,
-        promotion: null,
-      };
-      const { price } = CalculatePrice(payload);
-
-      return {
-        id: v.id,
-        sku: v.sku,
-        price,
-        stock: v.stock,
-        inStock: v.stock > 0,
-        attributes: v.productVariantAttributes.map((va) => ({
-          id: va.attributeValue.id,
-          value: va.attributeValue.value,
-          hexUrl: va.attributeValue.hexUrl,
-        })),
-      };
-    });
-
-    const payload = {
-      basePrice: product.basePrice,
-      variants: null,
-      promotion: null,
-    };
-    const { price } = CalculatePrice(payload);
     const {
       productDetails,
       name,
@@ -305,16 +298,55 @@ export class ProductService {
       productCategories,
     } = product;
 
+    const variants = await Promise.all(
+      product.productVariants.map(async (v) => {
+        const inputPrice = {
+          variants: null,
+          userCountOrder: 0,
+          productPromo: {
+            id: product.id,
+            name: product.name,
+            basePrice: v.basePrice,
+            brandId: product.brand.id,
+            categoriesId: [
+              ...new Set(
+                productCategories.flatMap(
+                  (pc) => flattenCategories(pc.categoryHierarchy).categoriesId,
+                ),
+              ),
+            ],
+            tagsId: [
+              ...new Set(productTags.map((t) => t.tag.id).filter(Boolean)),
+            ],
+          },
+        };
+        const { price } = await CalculatePrice(inputPrice);
+
+        return {
+          id: v.id,
+          sku: v.sku,
+          basePrice: v.basePrice.toString(),
+          price,
+          stock: v.stock,
+          inStock: v.stock > 0,
+          attributes: v.productVariantAttributes.map((va) => ({
+            id: va.attributeValue.id,
+            value: va.attributeValue.value,
+            hexUrl: va.attributeValue.hexUrl,
+          })),
+        };
+      }),
+    );
+
     const result: OneProductResponse = {
       id,
       name,
       productDetails,
-      price,
       brand: brand.name,
       categories: [
         ...new Set(
-          productCategories.flatMap((pc) =>
-            flattenCategories(pc.categoryHierarchy),
+          productCategories.flatMap(
+            (pc) => flattenCategories(pc.categoryHierarchy).categories,
           ),
         ),
       ],

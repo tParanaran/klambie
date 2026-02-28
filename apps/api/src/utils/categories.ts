@@ -1,10 +1,35 @@
-export default function flattenCategories(ch: any): string[] {
-  const categories: string[] = [];
+type CategoryNode = {
+  category?: {
+    id?: number;
+    name?: string;
+  };
+  parent?: CategoryNode | null;
+};
 
-  let current = ch;
+export default function flattenCategories(ch: CategoryNode): {
+  categories: string[];
+  categoriesId: number[];
+} {
+  const chain: CategoryNode[] = [];
+  let current: CategoryNode | null | undefined = ch;
+
   while (current) {
-    if (current.category?.name) categories.push(current.category.name);
+    chain.unshift(current);
     current = current.parent;
   }
-  return categories.reverse();
+
+  return chain.reduce(
+    (acc, node) => {
+      if (node.category?.name) {
+        acc.categories.push(node.category.name);
+      }
+
+      if (node.category?.id !== undefined) {
+        acc.categoriesId.push(node.category.id);
+      }
+
+      return acc;
+    },
+    { categories: [] as string[], categoriesId: [] as number[] },
+  );
 }

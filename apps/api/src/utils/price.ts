@@ -1,16 +1,30 @@
 import Decimal from 'decimal.js';
+import { PromotionService } from '@/services/promotion.service';
 import { PromotionRule } from 'generated/prisma/client';
+import { Price } from '@/types/product.type';
 
-type Promotion = {
+const promotionService = new PromotionService();
+
+type Product = {
+  id: number;
+  name: string;
+  basePrice: Decimal;
+  brandId: number;
+  categoriesId: number[];
+  tagsId: number[];
+};
+
+export type Promotion = {
   type: 'PERCENTAGE' | 'FIXED_AMOUNT';
-  applyTo: 'PRODUCT' | 'BRAND' | 'CATEGORY' | 'ORDER';
-  code: String | null;
+  applyTo: 'PRODUCT' | 'BRAND' | 'CATEGORY' | 'ORDER' | 'TAG';
+  name: string;
+  code: string | null;
   value: Decimal;
   isActive: boolean;
   isStackable: boolean;
   isAutomatic: boolean;
-  promotionRule?: PromotionRule;
-  targetIds?: number[];
+  promotionRule: PromotionRule | null;
+  promotionAssignments: { targetId: number }[];
 };
 
 type VariantPrice = {
@@ -24,15 +38,40 @@ type VariantPrice = {
 };
 
 type PriceInput = {
-  basePrice: Decimal;
+  productPromo: Product;
   variants: VariantPrice[] | null;
-  promotion: Promotion[] | null;
+  userCountOrder: number;
 };
 
-export function CalculatePrice(price: PriceInput) {
-  const { basePrice, variants, promotion } = price;
+function CalculateSinglePromoPrice(
+  price: Decimal,
+  promo: Promotion,
+): { finalPrice: Decimal; discountApplied: Decimal } {
+  let discount = new Decimal(0);
+  const rule = promo.promotionRule;
 
-  let originalPrice = basePrice;
+  if (promo.type === 'PERCENTAGE') {
+    discount = price.mul(promo.value).div(100);
+  } else if (promo.type === 'FIXED_AMOUNT') {
+    discount = new Decimal(promo.value);
+  }
+
+  if (rule?.maxDiscount) {
+    discount = Decimal.min(discount, rule.maxDiscount);
+  }
+
+  const finalPrice = Decimal.max(price.minus(discount), 0);
+  return { finalPrice, discountApplied: discount };
+}
+
+export async function CalculatePrice(
+  price: PriceInput,
+): Promise<{ price: Price }> {
+  const { productPromo, variants, userCountOrder } = price;
+
+  const promotions = await promotionService.getPromotion();
+
+  let originalPrice = new Decimal(productPromo.basePrice);
 
   // ----------------------------------
   // Choose Cheapest In-Stock Variant
@@ -51,65 +90,122 @@ export function CalculatePrice(price: PriceInput) {
   }
 
   // ----------------------------------
-  // Find Active Discount
+  // Filter active promotions applicable to this productPromo
   // ----------------------------------
-  const now = new Date();
 
-  const activeDiscount = promotion?.find((d) => d.isActive) ?? null;
+  const applicablePromos = promotions.filter((p) => {
+    if (!p.isActive || !p.isAutomatic) return false;
 
-  let finalPrice = originalPrice;
-  let comparePrice: Decimal | null = null;
+    const rule = p.promotionRule;
+    const now = new Date();
 
-  // ----------------------------------
-  // Check scheduled discount first
-  // Scheduled Discount > ComparePrice
-  // ----------------------------------
-  if (activeDiscount) {
-    if (activeDiscount.type === 'PERCENTAGE') {
-      finalPrice = originalPrice.minus(
-        originalPrice.times(activeDiscount.value).dividedBy(100),
-      );
+    if (rule) {
+      if (rule.firstOrderOnly && userCountOrder > 0) return false;
+      if (
+        (rule.startsAt && now < rule.startsAt) ||
+        (rule.endsAt && now > rule.endsAt)
+      )
+        return false;
+      if (rule.usageLimit && rule.usedCount >= rule.usageLimit) return false;
+      if (rule.minOrderValue && originalPrice.lessThan(rule.minOrderValue))
+        return false;
     }
 
-    if (activeDiscount.type === 'FIXED_AMOUNT') {
-      finalPrice = originalPrice.minus(activeDiscount.value);
-    }
+    const targetIds = [
+      ...new Set(p.promotionAssignments.map((t) => t.targetId).filter(Boolean)),
+    ];
+    if (p.applyTo === 'PRODUCT' && targetIds.includes(productPromo.id))
+      return true;
+    if (p.applyTo === 'BRAND' && targetIds.includes(productPromo.brandId))
+      return true;
+    if (
+      p.applyTo === 'CATEGORY' &&
+      targetIds.some((id) => productPromo.categoriesId.includes(Number(id)))
+    )
+      return true;
+    if (
+      p.applyTo === 'TAG' &&
+      targetIds.some((id) => productPromo.tagsId.includes(id))
+    )
+      return true;
 
-    // ----------------------------------
-    // Prevent negative price
-    // ----------------------------------
-    if (finalPrice.isNegative()) {
-      finalPrice = new Decimal(0);
-    }
+    return false;
+  });
 
-    // ----------------------------------
-    // When scheduled discount exists,
-    // we compare against ORIGINAL base price
-    // ----------------------------------
-    comparePrice = originalPrice;
-  }
-
-  // ----------------------------------
-  // Calculate discount %
-  // ----------------------------------
   let discountPercentage: string | null = null;
 
-  if (comparePrice && comparePrice.greaterThan(finalPrice)) {
-    discountPercentage = comparePrice
-      .minus(finalPrice)
-      .dividedBy(comparePrice)
-      .times(100)
-      .toFixed(0);
+  if (applicablePromos.length === 0)
+    return {
+      price: {
+        finalPrice: originalPrice.toString(), // price before discount
+        discountApplied: null,
+        discountPercentage,
+        hasDiscount: discountPercentage !== null,
+        appliedPromotions: [],
+      },
+    };
+
+  // ----------------------------------
+  // Separate stackable vs non-stackable
+  // ----------------------------------
+
+  const stackablePromos = applicablePromos.filter((p) => p.isStackable);
+  const nonStackablePromos = applicablePromos.filter((p) => !p.isStackable);
+
+  let bestPrice = originalPrice;
+  let bestDiscount = new Decimal(0);
+  let bestApplied: Promotion[] = [];
+
+  for (const promo of nonStackablePromos) {
+    const { finalPrice, discountApplied } = CalculateSinglePromoPrice(
+      originalPrice,
+      promo,
+    );
+
+    if (discountApplied.greaterThan(bestDiscount)) {
+      bestDiscount = discountApplied;
+      bestPrice = finalPrice;
+      bestApplied = [promo];
+    }
   }
+
+  // ----------------------------------
+  // Evaluate stackable combination
+  // ----------------------------------
+
+  if (stackablePromos.length > 0) {
+    let combinedPrice = originalPrice;
+    let combinedDiscount = new Decimal(0);
+    const applied: Promotion[] = [];
+
+    for (const promo of stackablePromos) {
+      const { finalPrice, discountApplied } = CalculateSinglePromoPrice(
+        combinedPrice,
+        promo,
+      );
+      combinedDiscount = combinedDiscount.plus(discountApplied);
+      combinedPrice = finalPrice;
+      applied.push(promo);
+    }
+
+    if (combinedDiscount.greaterThan(bestDiscount)) {
+      bestDiscount = combinedDiscount;
+      bestPrice = combinedPrice;
+      bestApplied = applied;
+    }
+  }
+
+  discountPercentage = bestPrice.equals(0)
+    ? null
+    : bestDiscount.div(originalPrice).mul(100).toString();
 
   return {
     price: {
-      originalPrice: originalPrice.toString(), // price before discount
-      finalPrice: finalPrice.toString(), // price customer pays
-      comparePrice: comparePrice ? comparePrice.toString() : null, // only exist when have discount
+      finalPrice: bestPrice.toString(), // price customer pays
+      discountApplied: bestDiscount.toString(),
       discountPercentage,
-      discountEndsAt: activeDiscount?.promotionRule?.endsAt ?? null,
       hasDiscount: discountPercentage !== null,
+      appliedPromotions: bestApplied,
     },
   };
 }
