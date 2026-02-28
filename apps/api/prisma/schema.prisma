@@ -131,6 +131,7 @@ model Product {
 model Brand {
   id        Int      @id @default(autoincrement())
   name      String   @unique @db.VarChar(100)
+  slug      String   @unique
   logo      String?
   bio       String?
   createdAt DateTime @default(now())
@@ -245,46 +246,25 @@ model ProductVariantAttribute {
   @@map("product_variant_attribute")
 }
 
-model Department {
-  id   Int    @id @default(autoincrement())
-  name String @unique
-
-  categoryHierarchies CategoryHierarchy[]
-}
-
-model Collection {
-  id   Int    @id @default(autoincrement())
-  name String @unique
-
-  categoryHierarchies CategoryHierarchy[]
-}
-
 model Category {
   id   Int    @id @default(autoincrement())
   name String @unique
-
-  categoryHierarchies CategoryHierarchy[]
-}
-
-model Subcategory {
-  id   Int    @id @default(autoincrement())
-  name String @unique
+  slug String @unique
 
   categoryHierarchies CategoryHierarchy[]
 }
 
 model CategoryHierarchy {
-  id                Int               @id @default(autoincrement())
-  departmentId      Int
-  collectionId      Int
+  id                Int                 @id @default(autoincrement())
+  parentId          Int?
   categoryId        Int
-  subcategoryId     Int?
-  department        Department        @relation(fields: [departmentId], references: [id], onDelete: Restrict)
-  collection        Collection        @relation(fields: [collectionId], references: [id], onDelete: Restrict)
-  category          Category          @relation(fields: [categoryId], references: [id], onDelete: Restrict)
-  subcategory       Subcategory?      @relation(fields: [subcategoryId], references: [id])
+  level             Int // 1 = department, 2 collection, 3 = category, 4 = subcategory
+  parent            CategoryHierarchy?  @relation("CategoryParent", fields: [parentId], references: [id])
+  children          CategoryHierarchy[] @relation("CategoryParent")
+  category          Category            @relation(fields: [categoryId], references: [id])
   productCategories ProductCategory[]
 
+  @@index([parentId])
   @@map("category_hierarchy")
 }
 
@@ -302,6 +282,7 @@ model ProductCategory {
 model Tag {
   id          Int          @id @default(autoincrement())
   name        String       @unique @db.VarChar(100)
+  slug        String       @unique
   productTags ProductTag[]
 }
 

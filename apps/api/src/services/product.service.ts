@@ -5,10 +5,11 @@ import {
 } from '@/types/product.type';
 import { prisma } from 'lib/prisma';
 import { CalculatePrice } from '@/utils/price';
+import { generateSlug } from '@/utils/slug';
 
 export class ProductService {
   async newProduct(data: InsertProduct): Promise<{ message: string }> {
-    const { name, brandId, slug, sizingGuideId, basePrice } = data;
+    const { name, brandId, sizingGuideId, basePrice } = data;
     const { productDetails, productCategories, productTags, images } = data;
     const { productAttributes, productVariants, comparePrice } = data;
 
@@ -17,7 +18,7 @@ export class ProductService {
         data: {
           name,
           brandId,
-          slug,
+          slug: await generateSlug(name),
           sizingGuideId,
           basePrice,
           comparePrice,
@@ -98,17 +99,21 @@ export class ProductService {
           select: {
             categoryHierarchy: {
               select: {
-                department: {
-                  select: { name: true },
-                },
-                collection: {
-                  select: { name: true },
-                },
-                category: {
-                  select: { name: true },
-                },
-                subcategory: {
-                  select: { name: true },
+                category: true,
+                parent: {
+                  select: {
+                    category: true,
+                    parent: {
+                      select: {
+                        category: true,
+                        parent: {
+                          select: {
+                            category: true,
+                          },
+                        },
+                      },
+                    },
+                  },
                 },
               },
             },
@@ -153,17 +158,7 @@ export class ProductService {
           ),
         ],
         categories: [
-          ...new Set(
-            p.productCategories.flatMap((c) => {
-              const ch = c.categoryHierarchy;
-              return [
-                ch.department.name,
-                ch.collection.name,
-                ch.category.name,
-                ch.subcategory?.name,
-              ].filter(Boolean);
-            }),
-          ),
+          ...new Set(p.productTags.map((t) => t.tag.name).filter(Boolean)),
         ],
         tags: [
           ...new Set(p.productTags.map((t) => t.tag.name).filter(Boolean)),
@@ -207,14 +202,7 @@ export class ProductService {
         },
         productCategories: {
           select: {
-            categoryHierarchy: {
-              select: {
-                department: true,
-                collection: true,
-                category: true,
-                subcategory: true,
-              },
-            },
+            categoryHierarchy: true,
           },
         },
         productTags: {
@@ -304,17 +292,7 @@ export class ProductService {
       price,
       brand: brand.name,
       categories: [
-        ...new Set(
-          productCategories.flatMap((c) => {
-            const ch = c.categoryHierarchy;
-            return [
-              ch.department.name,
-              ch.collection.name,
-              ch.category.name,
-              ch.subcategory?.name,
-            ].filter(Boolean);
-          }),
-        ),
+        ...new Set(productTags.map((t) => t.tag.name).filter(Boolean)),
       ],
       tags: [...new Set(productTags.map((t) => t.tag.name).filter(Boolean))],
       images: images.map((i) => ({

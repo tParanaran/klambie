@@ -4,7 +4,7 @@ import { Request, Response, NextFunction } from 'express';
 const productService = new ProductService();
 
 export class Product {
-  async CreateProduct(req: Request, res: Response, next: NextFunction) {
+  async createProduct(req: Request, res: Response, next: NextFunction) {
     try {
       const result = await productService.newProduct(req.body);
       res.status(200).send(result);
@@ -12,7 +12,7 @@ export class Product {
       next(error);
     }
   }
-  async fetchAllProduct(req: Request, res: Response, next: NextFunction) {
+  async fetchAllProducts(req: Request, res: Response, next: NextFunction) {
     try {
       const result = await productService.getAllProducts();
       res.status(200).send(result);

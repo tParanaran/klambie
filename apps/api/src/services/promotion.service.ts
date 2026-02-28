@@ -1,8 +1,8 @@
 import { Promotion, Prisma } from 'generated/prisma/client';
 import { prisma } from 'lib/prisma';
 
-export class PromoService {
-  async createPromo(data: Prisma.PromotionCreateInput): Promise<Promotion> {
+export class PromotionService {
+  async createPromotion(data: Prisma.PromotionCreateInput): Promise<Promotion> {
     const result = await prisma.$transaction(async (tx) => {
       const {
         name,
