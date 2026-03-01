@@ -36,7 +36,7 @@ export class LoginService {
         htmlPath: 'vertificationMail.hbs',
       };
 
-      SendMail(dataMail);
+      await SendMail(dataMail);
 
       throw new Error(
         'Woowee! We already sent you an email, Please verify your email to be able to start shopping.',

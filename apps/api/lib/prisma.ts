@@ -26,6 +26,7 @@ class PrismaService {
         log: ['query', 'info', 'warn', 'error'],
       });
     }
+
     return PrismaService.instance;
   }
 }

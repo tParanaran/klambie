@@ -7,9 +7,12 @@ import express, {
   NextFunction,
 } from 'express';
 import cors from 'cors';
+import ErrorMiddleware from './middlewares/error.middleware';
 import { BASE_WEB_URL, PORT } from './config';
 import { AuthRouter } from './routers/auth.router';
-import ErrorMiddleware from './middlewares/error.middleware';
+import { ProductRouter } from './routers/product.router';
+import { PromotionRouter } from './routers/promotion.router';
+import { AttributeRouter } from './routers/attribute.router';
 
 export default class App {
   private app: Express;
@@ -57,11 +60,17 @@ export default class App {
 
   private routes(): void {
     const authRouter = new AuthRouter();
+    const productRouter = new ProductRouter();
+    const attributeRouter = new AttributeRouter();
+    const promotionRouter = new PromotionRouter();
 
     this.app.get('/api', (req: Request, res: Response) => {
       res.send(`Hello, Purwadhika Student API!`);
     });
     this.app.use('/api/auth', authRouter.getRouter());
+    this.app.use('/api/product', productRouter.getRouter());
+    this.app.use('/api/attribute', attributeRouter.getRouter());
+    this.app.use('/api/promotion', promotionRouter.getRouter());
 
     this.app.use(ErrorMiddleware);
   }

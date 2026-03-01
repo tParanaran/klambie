@@ -3,30 +3,73 @@ import { prisma } from 'lib/prisma';
 
 export class VerificationService {
   async verifyUser(email: string): Promise<{ success: boolean }> {
-    const result = await prisma.user.update({
-      where: {
-        email,
-      },
-      data: {
-        isVerified: true,
-      },
-      include: {
-        profile: true,
-      },
+    const result = await prisma.$transaction(async (prisma) => {
+      const verified = await prisma.user.update({
+        where: {
+          email,
+        },
+        data: {
+          isVerified: true,
+        },
+        include: {
+          profile: true,
+        },
+      });
+
+      if (!verified) throw new Error('User not found');
+
+      if (verified.referredBy) {
+        const findRefferal = await prisma.user.findUnique({
+          where: {
+            username: verified.referredBy,
+          },
+        });
+
+        if (findRefferal) {
+          const expiredDate = new Date();
+          expiredDate.setMonth(expiredDate.getMonth() + 3);
+          expiredDate.toISOString();
+
+          await prisma.userPoint.create({
+            data: {
+              userId: findRefferal.id,
+              validUntil: expiredDate,
+              type: 'EARN',
+              amount: 10000,
+            },
+          });
+
+          const coupon = await prisma.promotion.findUnique({
+            where: {
+              code: 'REFF10FF',
+            },
+          });
+
+          if (!coupon) throw new Error('Coupon not found');
+
+          await prisma.userPromotion.create({
+            data: {
+              promotionId: coupon.id,
+              userId: verified.id,
+              expiresAt: expiredDate,
+            },
+          });
+        }
+      }
+
+      const dataMail = {
+        email: verified.email,
+        name: verified?.profile?.name || verified.email,
+        subject: 'Klambie account verified',
+        htmlPath: 'verifySuccessMail.hbs',
+      };
+
+      await SendMail(dataMail);
+
+      return { success: true };
     });
 
-    if (!result) throw new Error('User not found');
-
-    const dataMail = {
-      email: result.email,
-      name: result.profile?.name || result.email,
-      subject: 'Klambie account verified',
-      htmlPath: 'verifySuccessMail.hbs',
-    };
-
-    SendMail(dataMail);
-
-    return { success: true };
+    return result;
   }
   async resendVerifyUser(data: {
     email: string;
@@ -52,7 +95,7 @@ export class VerificationService {
       htmlPath: 'vertificationMail.hbs',
     };
 
-    SendMail(dataMail);
+    await SendMail(dataMail);
 
     return {
       success: true,

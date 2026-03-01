@@ -1,6 +1,6 @@
 import { customAlphabet } from 'nanoid';
 
-export default function GenerateUsername() {
+export default async function GenerateUsername(): Promise<string> {
   const alphabet =
     '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 

@@ -12,7 +12,7 @@ type SendMail = {
   subject: string;
 };
 
-export default async function SendMail(dataMail: SendMail) {
+export default async function SendMail(dataMail: SendMail): Promise<void> {
   const { email, name, htmlPath, subject } = dataMail;
 
   const templatePath = path.join(__dirname, '../templates', htmlPath);

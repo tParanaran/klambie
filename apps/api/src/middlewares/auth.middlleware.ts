@@ -25,6 +25,23 @@ async function VerificationToken(
   }
 }
 
+async function IsUserLogin(req: Request, res: Response, next: NextFunction) {
+  try {
+    const token = req.header('Authorization')?.replace('Bearer ', '');
+
+    if (token) {
+      const user = verify(token, SECRET_KEY as string);
+      if (user) {
+        req.user = user as User;
+      }
+    }
+
+    next();
+  } catch (err) {
+    next();
+  }
+}
+
 async function AdminGuard(req: Request, res: Response, next: NextFunction) {
   try {
     if (req.user?.role !== 77790)
@@ -36,4 +53,4 @@ async function AdminGuard(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-export { VerificationToken, AdminGuard };
+export { VerificationToken, AdminGuard, IsUserLogin };
