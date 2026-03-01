@@ -1,5 +1,4 @@
-import Decimal from 'decimal.js';
-import { Promotion } from '@/utils/price';
+import { AppliedPromotions } from './promotion.type';
 
 type ProductDetails = {
   description: string;
@@ -32,11 +31,12 @@ export type InsertProduct = {
 };
 
 export type Price = {
+  originalPrice: string;
   finalPrice: string;
-  discountApplied: string | null;
-  discountPercentage: string | null;
+  discountApplied?: string;
+  discountPercentage?: string;
   hasDiscount: boolean;
-  appliedPromotions: Promotion[] | [];
+  appliedPromotions?: AppliedPromotions[];
 };
 
 export type AllProductsResponse = {
@@ -61,7 +61,6 @@ export type OneProductResponse = {
   variants: {
     id: number;
     sku: string;
-    basePrice: string;
     price: Price;
     stock: number;
     inStock: boolean;

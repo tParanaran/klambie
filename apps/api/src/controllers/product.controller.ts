@@ -14,7 +14,7 @@ export class Product {
   }
   async fetchAllProducts(req: Request, res: Response, next: NextFunction) {
     try {
-      const result = await productService.getAllProducts();
+      const result = await productService.getAllProducts(req.user?.id);
       res.status(200).send(result);
     } catch (error) {
       next(error);
@@ -22,7 +22,8 @@ export class Product {
   }
   async fetchSlugProduct(req: Request, res: Response, next: NextFunction) {
     try {
-      const result = await productService.getOneProduct(req.params.slug);
+      const { slug } = req.params;
+      const result = await productService.getOneProduct(slug, req.user?.id);
       res.status(200).send(result);
     } catch (error) {
       next(error);

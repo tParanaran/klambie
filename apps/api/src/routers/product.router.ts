@@ -1,5 +1,9 @@
 import { Product } from '@/controllers/product.controller';
-import { AdminGuard, VerificationToken } from '@/middlewares/auth.middlleware';
+import {
+  AdminGuard,
+  IsUserLogin,
+  VerificationToken,
+} from '@/middlewares/auth.middlleware';
 
 import { Router } from 'express';
 
@@ -14,8 +18,8 @@ export class ProductRouter {
   }
 
   private initializeRoutes(): void {
-    this.router.get('/all', this.product.fetchAllProducts);
-    this.router.get('/:slug', this.product.fetchSlugProduct);
+    this.router.get('/all', IsUserLogin, this.product.fetchAllProducts);
+    this.router.get('/:slug', IsUserLogin, this.product.fetchSlugProduct);
     this.router.post('/new', this.product.createProduct);
   }
 

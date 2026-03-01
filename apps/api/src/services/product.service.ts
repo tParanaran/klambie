@@ -1,15 +1,16 @@
+import flattenCategories from '@/utils/categories';
 import {
   AllProductsResponse,
   InsertProduct,
   OneProductResponse,
 } from '@/types/product.type';
 import { prisma } from 'lib/prisma';
-import { CalculatePrice } from '@/utils/price';
 import { GenerateSlug } from '@/utils/slug';
 import { SKU } from '@/utils/sku';
-import flattenCategories from '@/utils/categories';
+import { PromotionService } from './promotion.service';
 
 const sku = new SKU();
+const promotionService = new PromotionService();
 
 export class ProductService {
   async newProduct(data: InsertProduct): Promise<{ message: string }> {
@@ -70,7 +71,7 @@ export class ProductService {
 
     return { message: `Create ${result} Successfully` };
   }
-  async getAllProducts(): Promise<AllProductsResponse[]> {
+  async getAllProducts(user?: number): Promise<AllProductsResponse[]> {
     const products = await prisma.product.findMany({
       select: {
         id: true,
@@ -140,11 +141,10 @@ export class ProductService {
     const result = await Promise.all(
       products.map(async (p) => {
         const inputPrice = {
-          variants: null,
-          userCountOrder: 0,
-          productPromo: {
+          variants: p.productVariants,
+          user: user,
+          productInfo: {
             id: p.id,
-            name: p.name,
             basePrice: p.basePrice,
             brandId: p.brand.id,
             categoriesId: [
@@ -160,7 +160,7 @@ export class ProductService {
           },
         };
 
-        const { price } = await CalculatePrice(inputPrice);
+        const { price } = await promotionService.promotionRuleCheck(inputPrice);
 
         return {
           name: p.name,
@@ -193,7 +193,10 @@ export class ProductService {
 
     return result;
   }
-  async getOneProduct(slug: string): Promise<OneProductResponse | null> {
+  async getOneProduct(
+    slug: string,
+    user?: number,
+  ): Promise<OneProductResponse | null> {
     const product = await prisma.product.findUnique({
       where: { slug },
       select: {
@@ -302,10 +305,9 @@ export class ProductService {
       product.productVariants.map(async (v) => {
         const inputPrice = {
           variants: null,
-          userCountOrder: 0,
-          productPromo: {
-            id: product.id,
-            name: product.name,
+          user: user,
+          productInfo: {
+            id: v.id,
             basePrice: v.basePrice,
             brandId: product.brand.id,
             categoriesId: [
@@ -320,12 +322,11 @@ export class ProductService {
             ],
           },
         };
-        const { price } = await CalculatePrice(inputPrice);
+        const { price } = await promotionService.promotionRuleCheck(inputPrice);
 
         return {
           id: v.id,
           sku: v.sku,
-          basePrice: v.basePrice.toString(),
           price,
           stock: v.stock,
           inStock: v.stock > 0,
