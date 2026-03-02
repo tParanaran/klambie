@@ -6,8 +6,11 @@ interface IBackgroundModal {
   classBackground: string;
 }
 
-export default function BackgroundModal(props: IBackgroundModal) {
-  const { setIsModal, classZIndex, classBackground } = props;
+export default function BackgroundModal({
+  setIsModal,
+  classZIndex,
+  classBackground,
+}: IBackgroundModal) {
   return (
     <div className={`fixed h-full w-full top-0 left-0 ${classZIndex}`}>
       <div

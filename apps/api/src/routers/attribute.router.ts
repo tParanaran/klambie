@@ -19,6 +19,7 @@ export class AttributeRouter {
     this.router.post('/brand', this.attribute.createNewBrand);
     this.router.patch('/brand/:slug', this.attribute.updateBrand);
     this.router.post('/tag', this.attribute.createNewTag);
+    this.router.get('/tag', this.attribute.fetchTag);
     this.router.post(`/attribute`, this.attribute.createNewAttribute);
     this.router.post(
       '/attribute-value',

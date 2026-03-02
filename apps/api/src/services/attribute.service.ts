@@ -1,5 +1,6 @@
 import { ProductHelper } from '@/helpers/product.helper';
 import { GenerateSlug } from '@/utils/slug';
+import { Tag } from 'generated/prisma/client';
 import { prisma } from 'lib/prisma';
 
 type DataInput = {
@@ -97,6 +98,10 @@ export class AttributeService {
 
     return `Update ${brand.value} brand details successfully`;
   }
+  async fetchTag(): Promise<Tag[]> {
+    const tag = await prisma.tag.findMany();
+    return tag;
+  }
   async createTag(input: DataInput): Promise<{ id: number }[]> {
     const result = await prisma.$transaction(async (tx) => {
       const attribute = await productHelper.findOrCreate(tx.tag, input.data);
@@ -157,5 +162,29 @@ export class AttributeService {
     });
 
     return result;
+  }
+  async getAllHierarchyIds(slug: string): Promise<number[]> {
+    const rootCategory = await prisma.category.findUnique({
+      where: { slug: slug },
+      include: { categoryHierarchies: true },
+    });
+
+    if (!rootCategory) return [];
+
+    let allIds = rootCategory.categoryHierarchies.map((ch) => ch.id);
+    let queue = [...allIds];
+
+    while (queue.length) {
+      const children = await prisma.categoryHierarchy.findMany({
+        where: { parentId: { in: queue } },
+        select: { id: true },
+      });
+
+      const childIds = children.map((c) => c.id);
+      allIds.push(...childIds);
+      queue = childIds;
+    }
+
+    return allIds;
   }
 }

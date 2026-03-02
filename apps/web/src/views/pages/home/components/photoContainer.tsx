@@ -8,8 +8,12 @@ interface IPhotoContainer {
   height: string;
 }
 
-export default function PhotoContainer(props: IPhotoContainer) {
-  const { src, alt, text, height } = props;
+export default function PhotoContainer({
+  src,
+  alt,
+  text,
+  height,
+}: IPhotoContainer) {
   return (
     <div className="relative w-full rounded-2xl bg-black" style={{ height }}>
       <div className="absolute h-full w-full bg-linear-to-t from-black/70 to-transparent rounded-2xl"></div>

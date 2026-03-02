@@ -6,7 +6,7 @@ type CategoryNode = {
   parent?: CategoryNode | null;
 };
 
-export default function flattenCategories(ch: CategoryNode): {
+export default function FlattenCategories(ch: CategoryNode): {
   categories: string[];
   categoriesId: number[];
 } {

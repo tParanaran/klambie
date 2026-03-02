@@ -13,12 +13,12 @@ interface IFieldForm {
       : (e: string | React.ChangeEvent<any>) => void;
   };
   values: string;
-  name: string;
-  label: string;
 }
 
-export default function PasswordFieldForm(prop: IFieldForm) {
-  const { handleChange, values, name, label } = prop;
+export default function PasswordFieldForm({
+  handleChange,
+  values,
+}: IFieldForm) {
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   return (

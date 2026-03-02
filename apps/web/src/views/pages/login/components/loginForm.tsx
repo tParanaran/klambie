@@ -62,8 +62,6 @@ export default function LoginForm() {
             <PasswordFieldForm
               handleChange={handleChange}
               values={values.password}
-              name={'password'}
-              label={'Password'}
             />
 
             <div className="mt-10">

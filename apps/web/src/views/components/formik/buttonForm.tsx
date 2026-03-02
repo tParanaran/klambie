@@ -5,8 +5,7 @@ interface IButtonForm {
   href: string;
 }
 
-export default function ButtonForm(props: IButtonForm) {
-  const { message, href } = props;
+export default function ButtonForm({ message, href }: IButtonForm) {
   return (
     <div>
       <button

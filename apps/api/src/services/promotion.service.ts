@@ -217,7 +217,12 @@ export class PromotionService {
     discountPercentage = bestPrice.equals(0)
       ? undefined
       : '-' +
-        bestDiscount.div(originalPrice).mul(100).toFixed(2).toString() +
+        bestDiscount
+          .div(originalPrice)
+          .mul(100)
+          .toFixed(1)
+          .replace(/\.0$/, '')
+          .toString() +
         '%';
 
     return {

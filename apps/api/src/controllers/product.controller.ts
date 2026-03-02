@@ -14,7 +14,8 @@ export class Product {
   }
   async fetchAllProducts(req: Request, res: Response, next: NextFunction) {
     try {
-      const result = await productService.getAllProducts(req.user?.id);
+      const { slug } = req.params;
+      const result = await productService.getAllProducts(slug, req.user?.id);
       res.status(200).send(result);
     } catch (error) {
       next(error);

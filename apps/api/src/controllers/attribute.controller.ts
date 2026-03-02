@@ -70,6 +70,15 @@ export class Attribute {
       next(error);
     }
   }
+  async fetchTag(req: Request, res: Response, next: NextFunction) {
+    try {
+      const result = await attributeService.fetchTag();
+
+      res.status(200).send(result);
+    } catch (error) {
+      next(error);
+    }
+  }
   async createNewCategory(req: Request, res: Response, next: NextFunction) {
     try {
       const result = await attributeService.generateCategoryHierarchy(req.body);

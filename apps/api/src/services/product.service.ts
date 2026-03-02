@@ -1,4 +1,3 @@
-import flattenCategories from '@/utils/categories';
 import {
   AllProductsResponse,
   InsertProduct,
@@ -8,9 +7,12 @@ import { prisma } from 'lib/prisma';
 import { GenerateSlug } from '@/utils/slug';
 import { SKU } from '@/utils/sku';
 import { PromotionService } from './promotion.service';
+import { AttributeService } from './attribute.service';
+import FlattenCategories from '@/utils/categories';
 
 const sku = new SKU();
 const promotionService = new PromotionService();
+const attributeService = new AttributeService();
 
 export class ProductService {
   async newProduct(data: InsertProduct): Promise<{ message: string }> {
@@ -71,8 +73,19 @@ export class ProductService {
 
     return { message: `Create ${result} Successfully` };
   }
-  async getAllProducts(user?: number): Promise<AllProductsResponse[]> {
+  async getAllProducts(
+    slug: string,
+    user?: number,
+  ): Promise<AllProductsResponse[]> {
+    const hierarchyId = await attributeService.getAllHierarchyIds(slug);
     const products = await prisma.product.findMany({
+      where: {
+        productCategories: {
+          some: {
+            categoryHierarchyId: { in: hierarchyId },
+          },
+        },
+      },
       select: {
         id: true,
         name: true,
@@ -150,7 +163,7 @@ export class ProductService {
             categoriesId: [
               ...new Set(
                 p.productCategories.flatMap(
-                  (pc) => flattenCategories(pc.categoryHierarchy).categoriesId,
+                  (pc) => FlattenCategories(pc.categoryHierarchy).categoriesId,
                 ),
               ),
             ],
@@ -179,7 +192,7 @@ export class ProductService {
           categories: [
             ...new Set(
               p.productCategories.flatMap(
-                (pc) => flattenCategories(pc.categoryHierarchy).categories,
+                (pc) => FlattenCategories(pc.categoryHierarchy).categories,
               ),
             ),
           ],
@@ -202,6 +215,7 @@ export class ProductService {
       select: {
         id: true,
         name: true,
+        sku: true,
         basePrice: true,
         brand: {
           select: {
@@ -264,6 +278,16 @@ export class ProductService {
             attributeValueId: true,
           },
         },
+        productAttributes: {
+          select: {
+            attribute: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+        },
         productVariants: {
           select: {
             id: true,
@@ -279,6 +303,12 @@ export class ProductService {
                     value: true,
                     id: true,
                     hexUrl: true,
+                    attribute: {
+                      select: {
+                        id: true,
+                        name: true,
+                      },
+                    },
                   },
                 },
               },
@@ -294,9 +324,11 @@ export class ProductService {
       productDetails,
       name,
       id,
+      sku,
       brand,
       images,
       productTags,
+      productAttributes,
       sizingGuide,
       productCategories,
     } = product;
@@ -313,7 +345,7 @@ export class ProductService {
             categoriesId: [
               ...new Set(
                 productCategories.flatMap(
-                  (pc) => flattenCategories(pc.categoryHierarchy).categoriesId,
+                  (pc) => FlattenCategories(pc.categoryHierarchy).categoriesId,
                 ),
               ),
             ],
@@ -334,6 +366,10 @@ export class ProductService {
             id: va.attributeValue.id,
             value: va.attributeValue.value,
             hexUrl: va.attributeValue.hexUrl,
+            attribute: {
+              id: va.attributeValue.attribute.id,
+              name: va.attributeValue.attribute.name,
+            },
           })),
         };
       }),
@@ -342,12 +378,15 @@ export class ProductService {
     const result: OneProductResponse = {
       id,
       name,
+      sku,
       productDetails,
+      slug,
+      attributes: productAttributes.map((atrr) => atrr.attribute),
       brand: brand.name,
       categories: [
         ...new Set(
           productCategories.flatMap(
-            (pc) => flattenCategories(pc.categoryHierarchy).categories,
+            (pc) => FlattenCategories(pc.categoryHierarchy).categories,
           ),
         ),
       ],

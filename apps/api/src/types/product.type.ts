@@ -2,28 +2,28 @@ import { AppliedPromotions } from './promotion.type';
 
 type ProductDetails = {
   description: string;
-  material: string | null;
-  feature: string | null;
+  material?: string | null;
+  feature?: string | null;
   weight: number;
-  length: number | null;
-  width: number | null;
-  height: number | null;
-  volume: number | null;
-  care: string | null;
+  length?: number | null;
+  width?: number | null;
+  height?: number | null;
+  volume?: number | null;
+  care?: string | null;
 };
 
 export type InsertProduct = {
   name: string;
   brandId: number;
   basePrice: number;
-  sizingGuideId: number | null;
+  sizingGuideId?: number | null;
   productDetails: ProductDetails;
   productAttributes: { attributeId: number; imageBased: boolean }[];
   productCategories: number[];
   productTags: number[];
   images: { url: string; attributeValueId: number | null }[];
   productVariants: {
-    barcode: string | null;
+    barcode?: string | null;
     basePrice: number;
     stock: number;
     attributeValueId: number[];
@@ -45,29 +45,38 @@ export type AllProductsResponse = {
   slug: string;
   brand: string;
   variants: (string | null)[];
-  categories: (string | undefined)[];
+  categories: string[];
   tags: string[];
   images: string[];
+};
+
+type Variant = {
+  id: number;
+  sku: string;
+  price: Price;
+  stock: number;
+  inStock: boolean;
+  attributes: {
+    id: number;
+    value: string;
+    hexUrl?: string | null;
+    attribute: {
+      id: number;
+      name: string;
+    };
+  }[];
 };
 
 export type OneProductResponse = {
   id: number;
   name: string;
+  slug: string;
+  sku: string;
   brand: string;
-  categories: (string | undefined)[];
+  categories: string[];
   tags: string[];
   productDetails: ProductDetails | null;
-  images: { attributeId: number | null; url: string }[];
-  variants: {
-    id: number;
-    sku: string;
-    price: Price;
-    stock: number;
-    inStock: boolean;
-    attributes: {
-      id: number;
-      value: string;
-      hexUrl: string | null;
-    }[];
-  }[];
+  images: { attributeId?: number | null; url: string }[];
+  attributes: { id: number; name: string }[];
+  variants: Variant[];
 };

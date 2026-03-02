@@ -16,9 +16,12 @@ interface IFieldForm {
   label: string;
 }
 
-export default function TextFieldForm(prop: IFieldForm) {
-  const { handleChange, values, name, label } = prop;
-
+export default function TextFieldForm({
+  handleChange,
+  values,
+  name,
+  label,
+}: IFieldForm) {
   return (
     <div className="flex flex-col mt-3 grow">
       <label htmlFor={name} className="ml-4">

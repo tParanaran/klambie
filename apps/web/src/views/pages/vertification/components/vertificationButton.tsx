@@ -5,7 +5,7 @@ import VertificationdModal from '@/views/components/vertificationModal';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-export default function VeritificationButton(prop: { token: string }) {
+export default function VeritificationButton({ token }: { token: string }) {
   const redirect = useRouter();
   const [message, setMessage] = useState<string>('');
 
@@ -16,7 +16,7 @@ export default function VeritificationButton(prop: { token: string }) {
     try {
       const { data } = await axiosInstance.get('/auth/verification', {
         headers: {
-          Authorization: `Bearer ${prop.token}`,
+          Authorization: `Bearer ${token}`,
         },
       });
       if (data.success) {
