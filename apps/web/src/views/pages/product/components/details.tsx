@@ -37,8 +37,8 @@ export default function Details({ details, sku }: IDetails) {
       </div>
 
       <Dropdown body={description} header="About the Product" />
-      {care ? <Dropdown body={material} header="Material" /> : null}
-      {material ? <Dropdown body={care} header="Care Label" /> : null}
+      {material ? <Dropdown body={material} header="Material" /> : null}
+      {care ? <Dropdown body={care} header="Care Label" /> : null}
       {feature ? (
         <div className="border-b border-gray-300 mb-10">
           <Dropdown body={feature} header="Feature and Benefit" />

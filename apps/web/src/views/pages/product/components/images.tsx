@@ -33,25 +33,27 @@ export default function Images({ images, selectedColorId }: IImages) {
       className="grid grid-cols-2 md:grid-cols-1 lg:grid-cols-2"
       onClick={() => setIsModal(true)}
     >
-      <div className="order-last md:order-first">
-        <Swiper
-          onSwiper={(swiper) => (swiperRef.current = swiper)}
-          loop={true}
-          modules={[Pagination]}
-        >
-          {withAttribute.map((image) => (
-            <SwiperSlide key={image.attributeId}>
-              <img
-                src={image.url}
-                className="object-cover w-full"
-                alt={`Product Image ${image.attributeId}`}
-                width={300}
-                height={400}
-              />
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </div>
+      {withAttribute.length > 0 ? (
+        <div className="order-last md:order-first">
+          <Swiper
+            onSwiper={(swiper) => (swiperRef.current = swiper)}
+            loop={true}
+            modules={[Pagination]}
+          >
+            {withAttribute.map((image) => (
+              <SwiperSlide key={image.attributeId}>
+                <img
+                  src={image.url}
+                  className="object-cover w-full"
+                  alt={`Product Image ${image.attributeId}`}
+                  width={300}
+                  height={400}
+                />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+      ) : null}
 
       {withoutAttribute.map((image, idx) => (
         <div key={idx}>

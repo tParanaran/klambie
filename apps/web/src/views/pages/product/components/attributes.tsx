@@ -28,9 +28,12 @@ export default function Attributes({
                 if (value.hexUrl) {
                   return (
                     <input
+                      key={value.value}
                       type="radio"
+                      id={value.value}
                       checked={isSelected}
-                      key={value.id}
+                      disabled={!value.inStock}
+                      aria-label={value.value}
                       onChange={() => handleSelect(attr.attributeId, value.id)}
                       title={value.value}
                       className="appearance-none p-5 sm:p-4 m-1 rounded-full hover:ring hover:ring-black/90 hover:ring-offset-1 hover:ring-offset-slate-100 checked:ring-1 checked:ring-black/90 checked:ring-offset-2 checked:ring-offset-slate-100"
@@ -40,19 +43,20 @@ export default function Attributes({
                 }
 
                 return (
-                  <div key={value.id} className="my-4">
+                  <div key={value.value} className="my-4">
                     <input
                       type="radio"
                       id={value.value}
                       className="hidden peer"
-                      name="Size"
+                      disabled={!value.inStock}
+                      name={attr.attributeName}
                       checked={isSelected}
                       aria-label={value.value}
                       onChange={() => handleSelect(attr.attributeId, value.id)}
                     />
                     <label
                       htmlFor={value.value}
-                      className="py-2 px-4 mb-2 rounded-md border hover:ring hover:ring-black/90 hover:ring-offset-1 hover:ring-offset-slate-100 peer-checked:ring-1 peer-checked:ring-black/90 peer-checked:ring-offset-2 peer-checked:ring-offset-slate-100"
+                      className={`py-2 px-4 mb-2 rounded-md border hover:ring hover:ring-black/90 hover:ring-offset-1 hover:ring-offset-slate-100 peer-checked:ring-1 peer-checked:ring-black/90 peer-checked:ring-offset-2 peer-checked:ring-offset-slate-100 ${value.inStock ? '' : 'bg-gray-100 text-gray-400 cursor-not-allowed opacity-70'}`}
                     >
                       {value.value}
                     </label>

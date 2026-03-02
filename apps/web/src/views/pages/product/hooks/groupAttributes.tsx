@@ -20,11 +20,18 @@ export function GetGroupedAttributes(variants: IVariant[]) {
 
       const group = map.get(attributeId)!;
 
-      if (!group.values.some((v) => v.id === attr.id)) {
+      const existingValue = group.values.find((v) => v.id === attr.id);
+
+      if (existingValue) {
+        if (variant.inStock) {
+          existingValue.inStock = true;
+        }
+      } else {
         group.values.push({
           id: attr.id,
           value: attr.value,
           hexUrl: attr.hexUrl,
+          inStock: variant.inStock,
         });
       }
     });

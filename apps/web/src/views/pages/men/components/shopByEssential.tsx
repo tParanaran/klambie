@@ -31,7 +31,7 @@ export default function ShopByEssenstials({ tags }: { tags: ITag[] }) {
       </h1>
       <div className="flex space-x-2 flex-wrap my-5">
         <Link
-          href={'/men'}
+          href={'/'}
           aria-label={`All Products`}
           className={`${antonFont.className} uppercase px-4 py-2 rounded-full text-base sm:text-lg hover:bg-black hover:border-black hover:text-[#ededed] mt-2 border`}
         >

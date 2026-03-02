@@ -73,5 +73,6 @@ export interface IGroupedAttribute {
     id: number;
     value: string;
     hexUrl?: string;
+    inStock: boolean;
   }[];
 }
