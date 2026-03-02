@@ -1,7 +1,9 @@
 import axiosInstance from '@/lib/axios';
 
-export async function getProducts(slug: string) {
-  const res = await axiosInstance.get(`/product/all/${slug}`);
+export async function getProducts(slug: string, tag: string) {
+  const res = await axiosInstance.get(`/product/all/${slug}`, {
+    params: { tag },
+  });
 
   if (!res) throw new Error('Product Not Found');
 

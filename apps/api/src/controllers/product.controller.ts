@@ -15,7 +15,12 @@ export class Product {
   async fetchAllProducts(req: Request, res: Response, next: NextFunction) {
     try {
       const { slug } = req.params;
-      const result = await productService.getAllProducts(slug, req.user?.id);
+      const tag = req.query.tag as string;
+      const result = await productService.getAllProducts(
+        slug,
+        tag,
+        req.user?.id,
+      );
       res.status(200).send(result);
     } catch (error) {
       next(error);
@@ -24,6 +29,7 @@ export class Product {
   async fetchSlugProduct(req: Request, res: Response, next: NextFunction) {
     try {
       const { slug } = req.params;
+
       const result = await productService.getOneProduct(slug, req.user?.id);
       res.status(200).send(result);
     } catch (error) {

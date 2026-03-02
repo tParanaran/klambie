@@ -75,14 +75,24 @@ export class ProductService {
   }
   async getAllProducts(
     slug: string,
+    tag: string,
     user?: number,
   ): Promise<AllProductsResponse[]> {
     const hierarchyId = await attributeService.getAllHierarchyIds(slug);
+    console.log(tag);
+
     const products = await prisma.product.findMany({
       where: {
         productCategories: {
           some: {
             categoryHierarchyId: { in: hierarchyId },
+          },
+        },
+        productTags: {
+          some: {
+            tag: {
+              slug: tag,
+            },
           },
         },
       },

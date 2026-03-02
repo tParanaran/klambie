@@ -2,18 +2,13 @@
 import { antonFont } from '@/utils/fonts';
 import { useCallback } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
+import { ITag } from '../types';
 import Link from 'next/link';
-
-interface ITag {
-  id: number;
-  name: string;
-  slug: string;
-}
 
 export default function ShopByEssenstials({ tags }: { tags: ITag[] }) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
-  const getParams = searchParams.get('shopBy')?.toString();
+  const getParams = searchParams.get('tag')?.toString();
 
   const createTagSearch = useCallback(
     (query: string, value: string) => {
@@ -31,9 +26,14 @@ export default function ShopByEssenstials({ tags }: { tags: ITag[] }) {
       </h1>
       <div className="flex space-x-2 flex-wrap my-5">
         <Link
-          href={'/'}
+          href={pathname}
           aria-label={`All Products`}
-          className={`${antonFont.className} uppercase px-4 py-2 rounded-full text-base sm:text-lg hover:bg-black hover:border-black hover:text-[#ededed] mt-2 border`}
+          scroll={false}
+          className={`${antonFont.className} uppercase px-4 py-2 rounded-full text-base sm:text-lg hover:bg-black hover:border-black hover:text-[#ededed] mt-2 ${
+            getParams === undefined
+              ? 'bg-orange-800 border-orange-800 text-[#ededed]'
+              : 'border'
+          }`}
         >
           All
         </Link>
@@ -41,7 +41,7 @@ export default function ShopByEssenstials({ tags }: { tags: ITag[] }) {
         {tags.map((tag, idx) => (
           <Link
             href={pathname + '?' + createTagSearch('tag', `${tag.slug}`)}
-            aria-label={`${tag} Tags Product`}
+            aria-label={`${tag} Product`}
             key={idx}
             scroll={false}
             className={`${
