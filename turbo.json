@@ -1,13 +1,20 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "globalDependencies": ["**/.env.*local"],
-  "pipeline": {
+  "tasks": {
+    "prisma": {
+      "outputs": ["prisma/generated/**"]
+    },
     "build": {
       "dependsOn": ["^build"],
       "outputs": [".next/**", "!.next/cache/**"]
     },
-    "lint": {},
-    "test": {},
+    "lint": {
+      "outputs": []
+    },
+    "test": {
+      "outputs": []
+    },
     "serve": {},
     "dev": {
       "cache": false,

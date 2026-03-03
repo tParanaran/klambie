@@ -1,6 +1,7 @@
+import './globals.css';
+import 'swiper/css/bundle';
 import type { Metadata } from 'next';
 import { Noto_Sans } from 'next/font/google';
-import './globals.css';
 import AuthProvider from '@/provider/authProvider';
 
 const notoSans = Noto_Sans({

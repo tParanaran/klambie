@@ -12,6 +12,9 @@ interface IDropdown {
 export default function Dropdown({ body, header }: IDropdown) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
+  const bodyLines = body?.split('\n');
+  const isDash = (line: string) => line.trim().startsWith('-');
+
   return (
     <div className="relative border-t border-gray-300">
       {isOpen ? (
@@ -46,15 +49,27 @@ export default function Dropdown({ body, header }: IDropdown) {
 
       {isOpen && (
         <div className="mb-5 w-full z-10 text-sm font-light transition-transform transition-discrete delay-700 duration-1000 ease-in-out">
-          {Array.isArray(body) ? (
-            <div>
-              {body.map((item, idx) => (
-                <p key={idx}>- {item}</p>
-              ))}
-            </div>
-          ) : (
-            body
-          )}
+          {bodyLines?.map((line, idx) => {
+            const trimmed = line.trim();
+
+            if (!trimmed) {
+              return <div key={idx} className="my-2" />;
+            }
+
+            if (isDash(line)) {
+              return (
+                <p key={idx} className="mb-1">
+                  {trimmed}
+                </p>
+              );
+            }
+
+            return (
+              <p key={idx} className="mb-2">
+                {trimmed}
+              </p>
+            );
+          })}
         </div>
       )}
     </div>

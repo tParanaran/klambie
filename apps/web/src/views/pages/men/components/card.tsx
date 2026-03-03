@@ -1,5 +1,5 @@
 'use client';
-import 'swiper/css';
+
 import { SwiperSlide, Swiper } from 'swiper/react';
 import { IoBagAddOutline } from 'react-icons/io5';
 import { IProducts } from '@/views/pages/product/types/product.types';
@@ -21,6 +21,7 @@ export default function ProductCard({ products }: { products: IProducts[] }) {
                   className="object-cover h-72 sm:h-80 lg:h-96 w-full"
                   width={300}
                   height={400}
+                  aria-placeholder="blur"
                 />
               </SwiperSlide>
             ))}

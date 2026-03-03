@@ -13,6 +13,7 @@ export default function LoginHero() {
         height={200}
         className="object-cover h-full w-full rounded-2xl"
         loading="lazy"
+        aria-placeholder="blur"
       />
       <div className="absolute h-full w-full bg-linear-to-b from-black to-transparent top-0 left-0 rounded-2xl backdrop-blur-xs"></div>
       <div className="absolute text-[#ededed] top-2 right-2 left-2 sm:top-5 sm:left-5 sm:right-5 lg:top-10 lg:left-10 overflow-hidden">

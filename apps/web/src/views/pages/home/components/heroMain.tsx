@@ -12,6 +12,7 @@ export default function HeroMain() {
         height={400}
         alt="Hero Picture"
         loading="lazy"
+        aria-placeholder="blur"
       />
       <ContactLink />
     </div>

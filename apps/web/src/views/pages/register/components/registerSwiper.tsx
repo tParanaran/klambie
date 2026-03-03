@@ -1,7 +1,5 @@
 'use client';
 
-import 'swiper/css';
-import 'swiper/css/pagination';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay } from 'swiper/modules';
 import { IoEarth, IoGlobe } from 'react-icons/io5';

@@ -1,5 +1,4 @@
 import { antonFont } from '@/utils/fonts';
-import styles from '@/app/page.module.css';
 import RegisterSwiper from './registerSwiper';
 
 export default function RegisterHero() {

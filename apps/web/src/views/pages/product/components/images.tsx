@@ -48,6 +48,7 @@ export default function Images({ images, selectedColorId }: IImages) {
                   alt={`Product Image ${image.attributeId}`}
                   width={300}
                   height={400}
+                  aria-placeholder="blur"
                 />
               </SwiperSlide>
             ))}
@@ -63,7 +64,7 @@ export default function Images({ images, selectedColorId }: IImages) {
             alt={`Product Image ${idx}`}
             width={300}
             height={400}
-            loading="lazy"
+            aria-placeholder="blur"
           />
         </div>
       ))}
