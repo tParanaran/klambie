@@ -1,8 +1,6 @@
-import { getProducts, getTags } from '@/api/product';
 import ShopByEssenstials from '../men/components/shopByEssential';
 import ProductCard from '../men/components/card';
-import { IProducts } from '../product/types/product.types';
-import { ITag } from '../men/types';
+import { IProducts, ITag } from '../product/types/product.types';
 
 export default async function WomenView({
   products,

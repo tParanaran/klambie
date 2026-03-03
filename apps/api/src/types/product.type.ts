@@ -46,7 +46,7 @@ export type AllProductsResponse = {
   brand: string;
   variants: (string | null)[];
   categories: string[];
-  tags: string[];
+  tags: { name: string; slug: string }[];
   images: string[];
 };
 
@@ -74,7 +74,7 @@ export type OneProductResponse = {
   sku: string;
   brand: string;
   categories: string[];
-  tags: string[];
+  tags: { name: string; slug: string }[];
   productDetails: ProductDetails | null;
   images: { attributeId?: number | null; url: string }[];
   attributes: { id: number; name: string }[];

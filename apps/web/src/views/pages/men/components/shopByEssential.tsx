@@ -2,8 +2,9 @@
 import { antonFont } from '@/utils/fonts';
 import { useCallback } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { ITag } from '../types';
+
 import Link from 'next/link';
+import { ITag } from '../../product/types/product.types';
 
 export default function ShopByEssenstials({ tags }: { tags: ITag[] }) {
   const searchParams = useSearchParams();

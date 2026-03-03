@@ -149,7 +149,7 @@ export class ProductService {
         productTags: {
           select: {
             tag: {
-              select: { name: true, id: true },
+              select: { name: true, slug: true, id: true },
             },
           },
         },
@@ -207,7 +207,11 @@ export class ProductService {
             ),
           ],
           tags: [
-            ...new Set(p.productTags.map((t) => t.tag.name).filter(Boolean)),
+            ...new Set(
+              p.productTags
+                .map((t) => ({ name: t.tag.name, slug: t.tag.slug }))
+                .filter(Boolean),
+            ),
           ],
           images: [...new Set(p.images.map((i) => i.url).filter(Boolean))],
         };
@@ -278,7 +282,7 @@ export class ProductService {
         productTags: {
           select: {
             tag: {
-              select: { name: true, id: true },
+              select: { name: true, id: true, slug: true },
             },
           },
         },
@@ -400,7 +404,13 @@ export class ProductService {
           ),
         ),
       ],
-      tags: [...new Set(productTags.map((t) => t.tag.name).filter(Boolean))],
+      tags: [
+        ...new Set(
+          productTags
+            .map((t) => ({ name: t.tag.name, slug: t.tag.slug }))
+            .filter(Boolean),
+        ),
+      ],
       images: images.map((i) => ({
         attributeId: i.attributeValueId,
         url: i.url,

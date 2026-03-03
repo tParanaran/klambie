@@ -29,7 +29,7 @@ export default function ProductView({ product }: { product: IProduct }) {
           <div className="relative">
             <Images images={product.images} selectedColorId={selectedColorId} />
             <div className="absolute top-3 left-3 z-10 text-sm sm:text-base">
-              <Tags tags={product.tags} />
+              <Tags tags={product.tags} categories={categories} />
             </div>
           </div>
         </div>

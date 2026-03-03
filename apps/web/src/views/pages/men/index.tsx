@@ -1,7 +1,6 @@
 import ProductCard from './components/card';
 import ShopByEssenstials from './components/shopByEssential';
-import { IProducts } from '../product/types/product.types';
-import { ITag } from './types';
+import { IProducts, ITag } from '../product/types/product.types';
 
 export default async function MenView({
   products,

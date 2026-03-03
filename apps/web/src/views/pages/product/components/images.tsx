@@ -13,8 +13,10 @@ interface IImages {
 export default function Images({ images, selectedColorId }: IImages) {
   const [isModal, setIsModal] = useState<boolean>(false);
   const swiperRef = useRef<SwiperTypes | null>(null);
-  const withAttribute = images.filter((item) => item.attributeId !== null);
-  const withoutAttribute = images.filter((item) => item.attributeId === null);
+  const withAttribute =
+    images.filter((item) => item.attributeId !== null) || [];
+  const withoutAttribute =
+    images.filter((item) => item.attributeId === null) || [];
 
   useEffect(() => {
     if (!selectedColorId || !swiperRef.current) return;

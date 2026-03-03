@@ -13,6 +13,12 @@ export interface IPrice {
   appliedPromotions?: IAppliedPromotions[];
 }
 
+export interface ITag {
+  id?: number;
+  name: string;
+  slug: string;
+}
+
 export interface IProducts {
   name: string;
   price: IPrice;
@@ -20,7 +26,7 @@ export interface IProducts {
   brand: string;
   variants: (string | null)[];
   categories: (string | undefined)[];
-  tags: string[];
+  tags: ITag[];
   images: string[];
 }
 
@@ -52,6 +58,7 @@ export interface IVariant {
     };
   }[];
 }
+
 export interface IProduct {
   id: number;
   name: string;
@@ -60,7 +67,7 @@ export interface IProduct {
   brand: string;
   attributes: { name: string; id: number }[];
   categories?: string[];
-  tags: string[];
+  tags: ITag[];
   productDetails: IProductDetails;
   images: { attributeId: number | null; url: string }[];
   variants: IVariant[];
