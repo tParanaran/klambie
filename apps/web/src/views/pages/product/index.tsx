@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { IProduct } from '@/views/pages/product/types/product.types';
 import Title from './components/title';
 import Images from './components/images';
@@ -10,8 +11,12 @@ import Attributes from './components/attributes';
 import UseSelectedVariant from './hooks/useSelectedVariant';
 import QuantityButton from './components/qtyButton';
 import ProductPrice from './components/price';
+import UseAddToCart from './hooks/useAddToCart';
+import Loading from '@/views/components/loading';
+import AddToCartModal from './components/addToCartModal';
 
 export default function ProductView({ product }: { product: IProduct }) {
+  const [quantity, setQuantity] = useState<number>(1);
   const { slug, categories, brand, name } = product;
   const {
     selectedAttributes,
@@ -20,6 +25,19 @@ export default function ProductView({ product }: { product: IProduct }) {
     groupedAttributes,
     handleSelect,
   } = UseSelectedVariant(product.variants);
+  const { errors, isLoading, handleAddToCart, showModal } = UseAddToCart({
+    selectedAttributes,
+    selectedVariant,
+    quantity,
+  });
+
+  useEffect(() => {
+    if (selectedVariant) {
+      setQuantity((prev) => Math.min(prev, selectedVariant.stock || 1));
+    } else {
+      setQuantity(1);
+    }
+  }, [selectedVariant]);
 
   return (
     <div>
@@ -57,18 +75,36 @@ export default function ProductView({ product }: { product: IProduct }) {
                   <QuantityButton
                     inStock={selectedVariant.inStock}
                     stock={selectedVariant.stock}
+                    quantity={quantity}
+                    onChange={setQuantity}
                   />
                   <div>
                     <ProductPrice price={selectedVariant.price} />
                   </div>
                 </>
               )}
-
-              <AddCartButton />
+              <div>
+                {' '}
+                <AddCartButton handleAddToCart={handleAddToCart} />
+                {errors.length > 0 && (
+                  <>
+                    {errors.map((err, e) => (
+                      <div
+                        key={e}
+                        className="text-orange-700 text-xs ml-4 mt-0.5"
+                      >
+                        {err}
+                      </div>
+                    ))}
+                  </>
+                )}
+              </div>
             </div>
           </div>
         </div>
       </div>
+      {isLoading && <Loading />}
+      {showModal && <AddToCartModal grandPrice={0} message={'Okay'} />}
     </div>
   );
 }
