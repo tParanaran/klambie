@@ -1,4 +1,4 @@
-import { CartResponse, InsertCart } from '@/types/cart.types';
+import { Adjustment, CartResponse, InsertCart } from '@/types/cart.types';
 import { prisma } from 'lib/prisma';
 
 export class CartService {
@@ -131,5 +131,103 @@ export class CartService {
     const total = cartItems.reduce((acc, item) => acc + item.quantity, 0);
 
     return { total };
+  }
+  async mergeCart(
+    userId: number,
+    sessionId: string,
+  ): Promise<{ adjustments: Adjustment[] }> {
+    if (!sessionId) return { adjustments: [] };
+
+    const adjustments: Adjustment[] = [];
+
+    await prisma.$transaction(async (tx) => {
+      const guestCart = await tx.cart.findUnique({
+        where: {
+          sessionId,
+        },
+        include: {
+          cartItems: true,
+        },
+      });
+
+      if (!guestCart) return;
+
+      const userCart = await tx.cart.findFirst({
+        where: {
+          userId,
+        },
+        include: {
+          cartItems: true,
+        },
+      });
+
+      if (!userCart) {
+        await prisma.cart.update({
+          where: { sessionId },
+          data: {
+            userId,
+            sessionId: null,
+          },
+        });
+        return;
+      }
+
+      for (const guestItems of guestCart.cartItems) {
+        const variant = await tx.productVariant.findUnique({
+          where: { id: guestItems.productVariantId },
+        });
+        if (!variant || variant.stock <= 0) {
+          adjustments.push({
+            productVariantId: guestItems.productVariantId,
+            requested: guestItems.quantity,
+            available: 0,
+            final: 0,
+            reason: 'out_of_stock',
+          });
+          continue;
+        }
+
+        const existingItem = userCart.cartItems.find(
+          (item) => item.productVariantId === guestItems.productVariantId,
+        );
+
+        const userQty = existingItem?.quantity || 0;
+        const requestQty = userQty + guestItems.quantity;
+        const finalQty = Math.min(requestQty, variant.stock);
+
+        if (requestQty > variant.stock) {
+          adjustments.push({
+            productVariantId: guestItems.productVariantId,
+            requested: requestQty,
+            available: variant.stock,
+            final: finalQty,
+            reason: 'stock_limit',
+          });
+        }
+
+        if (existingItem) {
+          await tx.cartItem.update({
+            where: { id: existingItem.id },
+            data: {
+              quantity: finalQty,
+            },
+          });
+        } else {
+          await tx.cartItem.create({
+            data: {
+              cartId: userCart.id,
+              productVariantId: guestItems.productVariantId,
+              quantity: finalQty,
+              unitPrice: guestItems.unitPrice,
+            },
+          });
+        }
+      }
+      await tx.cart.delete({
+        where: { id: guestCart.id },
+      });
+    });
+
+    return { adjustments };
   }
 }

@@ -10,7 +10,7 @@ type Login = {
 };
 
 export class LoginService {
-  async userEnter(data: Login): Promise<{ token: string }> {
+  async userEnter(data: Login): Promise<{ token: string; id: number }> {
     const { email, password } = data;
 
     const findUser = await prisma.user.findUnique({
@@ -59,6 +59,6 @@ export class LoginService {
 
     const token = sign(payload, SECRET_KEY as string, { expiresIn: '1d' });
 
-    return { token };
+    return { token, id: findUser.id };
   }
 }
