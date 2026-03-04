@@ -83,3 +83,11 @@ export interface IGroupedAttribute {
     inStock: boolean;
   }[];
 }
+
+export interface ICartItem {
+  productVariantId: number;
+  quantity: number;
+  unitPrice: string;
+  currentPrice?: number;
+  priceChanged?: boolean;
+}

@@ -1,14 +1,15 @@
 'use client';
 import { getCookie } from 'cookies-next';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import { useAuthStore } from '@/store/authStore';
 import { Notify } from '@/lib/notify';
 import { useRouter } from 'next/navigation';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 type Token = {
   email: string;
-  username: string;
+  id: number;
   name: string;
   role: number;
   iat: number;
@@ -23,6 +24,7 @@ export default function AuthProvider({
   const { onAuthSuccess, clearAuth } = useAuthStore();
   const redirect = useRouter();
   const access_token = getCookie('access_token') || '';
+  const [queryClient] = useState(() => new QueryClient());
 
   const checkLogin = async () => {
     const token: Token = jwtDecode(access_token as string);
@@ -36,7 +38,7 @@ export default function AuthProvider({
         email: token.email,
         name: token.name,
         role: token.role,
-        username: token.username,
+        id: token.id,
       });
     }
   };
@@ -48,5 +50,7 @@ export default function AuthProvider({
       }
     }
   }, []);
-  return <>{children}</>;
+  return (
+    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+  );
 }

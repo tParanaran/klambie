@@ -52,7 +52,7 @@ export class LoginService {
 
     const payload = {
       email,
-      username: findUser.username,
+      id: findUser.id,
       name: findUser.profile?.name,
       role: findUser.role.id,
     };

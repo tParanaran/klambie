@@ -13,10 +13,11 @@ import QuantityButton from './components/qtyButton';
 import ProductPrice from './components/price';
 import UseAddToCart from './hooks/useAddToCart';
 import Loading from '@/views/components/loading';
-import AddToCartModal from './components/addToCartModal';
+import { IoInformation, IoWarning } from 'react-icons/io5';
 
 export default function ProductView({ product }: { product: IProduct }) {
   const [quantity, setQuantity] = useState<number>(1);
+  const [message, setMessage] = useState<string | null>(null);
   const { slug, categories, brand, name } = product;
   const {
     selectedAttributes,
@@ -25,7 +26,7 @@ export default function ProductView({ product }: { product: IProduct }) {
     groupedAttributes,
     handleSelect,
   } = UseSelectedVariant(product.variants);
-  const { errors, isLoading, handleAddToCart, showModal } = UseAddToCart({
+  const { errors, isLoading, handleAddToCart, success } = UseAddToCart({
     selectedAttributes,
     selectedVariant,
     quantity,
@@ -38,6 +39,14 @@ export default function ProductView({ product }: { product: IProduct }) {
       setQuantity(1);
     }
   }, [selectedVariant]);
+
+  useEffect(() => {
+    if (success) {
+      setMessage(success);
+      const timer = setTimeout(() => setMessage(null), 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [success]);
 
   return (
     <div>
@@ -85,18 +94,27 @@ export default function ProductView({ product }: { product: IProduct }) {
               )}
               <div>
                 {' '}
-                <AddCartButton handleAddToCart={handleAddToCart} />
+                <AddCartButton
+                  handleAddToCart={handleAddToCart}
+                  errors={errors}
+                />
                 {errors.length > 0 && (
                   <>
                     {errors.map((err, e) => (
                       <div
                         key={e}
-                        className="text-orange-700 text-xs ml-4 mt-0.5"
+                        className="text-orange-700 text-sm ml-4 mt-1 flex"
                       >
-                        {err}
+                        <IoWarning className="mr-1 text-lg" /> {err}
                       </div>
                     ))}
                   </>
+                )}
+                {message && (
+                  <p className="text-green-700 text-sm ml-4 mt-1 flex">
+                    {' '}
+                    <IoInformation className="mr-1 text-lg" /> {message}
+                  </p>
                 )}
               </div>
             </div>
@@ -104,7 +122,6 @@ export default function ProductView({ product }: { product: IProduct }) {
         </div>
       </div>
       {isLoading && <Loading />}
-      {showModal && <AddToCartModal grandPrice={0} message={'Okay'} />}
     </div>
   );
 }

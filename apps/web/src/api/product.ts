@@ -25,3 +25,11 @@ export async function getTags() {
 
   return res.data;
 }
+
+export async function fetchCart() {
+  const res = await axiosInstance.get('/cart/fetch');
+
+  if (!res) throw new Error('Failed to fetch cart');
+
+  return res.data;
+}

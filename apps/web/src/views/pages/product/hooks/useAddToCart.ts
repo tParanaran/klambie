@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { AddToCartSchema } from '../schema';
 import { ValidationError } from 'yup';
 import { IVariant } from '../types/product.types';
+import UseCart from './useCart';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 interface IAddToCart {
   quantity: number;
@@ -15,9 +17,20 @@ export default function UseAddToCart({
   selectedVariant,
 }: IAddToCart) {
   const [errors, setErrors] = useState<string[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [showModal, setShowModal] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [success, setSuccess] = useState<string>('');
+  const { addToCart } = UseCart();
+  const queryClient = useQueryClient();
 
+  const mutation = useMutation({
+    mutationFn: addToCart,
+    onSuccess: (response) => {
+      queryClient.invalidateQueries({ queryKey: ['cart'] });
+      queryClient.setQueryData(['cartLastAdded'], response.addQuantity ?? 0);
+
+      console.log('TQYGHJQDBJQDHBK', response.addQuantity);
+    },
+  });
   const handleAddToCart = async () => {
     setIsLoading(true);
     try {
@@ -26,17 +39,22 @@ export default function UseAddToCart({
         { abortEarly: false },
       );
 
-      console.log({ variantId: selectedVariant!.id, quantity });
+      const cart = {
+        productVariantId: selectedVariant!.id,
+        unitPrice: selectedVariant!.price.finalPrice,
+        quantity: quantity,
+      };
 
-      // const result = await  //addToCart(selectedVariant.id,quantity,selectedVariant.stock,);
+      const result = await mutation.mutateAsync(cart);
 
-      // if (!result.success) {
-      //   setErrors([result.message!]);
-      //   return;
-      // }
+      if (!result.success) {
+        setErrors([result.message!]);
+        return;
+      }
 
       setErrors([]);
-      setShowModal(true);
+      setSuccess('');
+      setTimeout(() => setSuccess(result.message!), 0);
     } catch (err: any) {
       if (!(err instanceof ValidationError)) return;
 
@@ -51,5 +69,5 @@ export default function UseAddToCart({
     setErrors([]);
   }, [selectedVariant, quantity, selectedAttributes]);
 
-  return { handleAddToCart, errors, isLoading, showModal };
+  return { handleAddToCart, errors, isLoading, success };
 }

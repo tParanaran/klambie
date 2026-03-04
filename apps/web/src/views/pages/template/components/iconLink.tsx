@@ -3,6 +3,7 @@ import { useProfileStore } from '@/store/profileStore';
 import { useAuthStore } from '@/store/authStore';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import CartBadge from '../../product/components/badge';
 
 export default function IconLink() {
   const { isOpen } = useProfileStore();
@@ -26,8 +27,8 @@ export default function IconLink() {
         <Link href={'/cart'} aria-label="Cart">
           <IoBagHandle />
         </Link>
-        <div className="absolute top-0 -right-2 text-xs px-1 text-[#ededed] rounded-full bg-orange-700">
-          1
+        <div className="absolute -top-4 -right-2">
+          <CartBadge />
         </div>
       </div>
       <button

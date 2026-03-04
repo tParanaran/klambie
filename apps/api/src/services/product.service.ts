@@ -79,7 +79,6 @@ export class ProductService {
     user?: number,
   ): Promise<AllProductsResponse[]> {
     const hierarchyId = await attributeService.getAllHierarchyIds(slug);
-    console.log(tag);
 
     const products = await prisma.product.findMany({
       where: {

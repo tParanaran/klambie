@@ -16,8 +16,6 @@ export default async function Department({
   const { slug } = await params;
   const { tag } = await searchParams;
 
-  console.log(tag);
-
   const products = await getProducts(slug, tag);
   const tags = await getTags();
 

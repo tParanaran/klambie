@@ -1,7 +1,7 @@
 import Decimal from 'decimal.js';
 import { PromotionRule } from 'generated/prisma/client';
 
-type Product = {
+export type Product = {
   id: number;
   basePrice: Decimal;
   brandId: number;
@@ -9,10 +9,10 @@ type Product = {
   tagsId: number[];
 };
 
-type VariantPrice = {
+export type VariantPrice = {
   basePrice: Decimal;
   stock: number;
-  productVariantAttributes: {
+  productVariantAttributes?: {
     attributeValue: {
       hexUrl: string | null;
     };
