@@ -1,16 +1,12 @@
 'use client';
 
-import { fetchCart } from '@/api/product';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
+import { useCartQuery } from '../hooks/useCartQuery';
 
 export default function CartBadge() {
   const queryClient = useQueryClient();
-  const { data } = useQuery({
-    queryKey: ['cart'],
-    queryFn: fetchCart,
-    staleTime: 1000 * 60,
-  });
+  const { data } = useCartQuery();
 
   const total = data?.total ?? null;
 
@@ -51,7 +47,7 @@ export default function CartBadge() {
       ) : null}
       {showFloating && (
         <span
-          className="absolute right-0 top-4 text-orange-800 font-semibold"
+          className="absolute right-0 top-9 text-orange-600 font-semibold text-sm"
           style={{
             ...style,
             transition: 'all 0.8s ease-out',

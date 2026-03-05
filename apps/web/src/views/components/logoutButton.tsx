@@ -3,16 +3,19 @@ import { useAuthStore } from '@/store/authStore';
 import { useProfileStore } from '@/store/profileStore';
 import { useRouter } from 'next/navigation';
 import { IoPower } from 'react-icons/io5';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function LogoutButton({ className }: { className: string }) {
   const redirect = useRouter();
   const { clearAuth } = useAuthStore();
   const { isClose } = useProfileStore();
+  const queryClient = useQueryClient();
 
   const LogoutHandler = async () => {
     await clearAuth();
     isClose();
-    redirect.push('/');
+    queryClient.removeQueries({ queryKey: ['cart'] });
+    redirect.push('/login');
   };
 
   return (
