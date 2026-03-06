@@ -1,16 +1,20 @@
 import axios from 'axios';
-import { getCookie } from 'cookies-next';
+import { getCookie } from 'cookies-next/client';
 
-const axiosInstance = axios.create({
+const axiosInstanceClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASE_API_URL || 'http://localhost:8000',
   withCredentials: true,
 });
 
-axiosInstance.interceptors.request.use(
+axiosInstanceClient.interceptors.request.use(
   async (config) => {
     const token = getCookie('access_token');
+    const sessionId = getCookie('sessionId');
     if (token) {
       config.headers.Authorization = 'Bearer ' + token;
+    } else {
+      config.headers = config.headers || {};
+      config.headers.Cookie = `sessionId=${sessionId}`;
     }
 
     return config;
@@ -20,4 +24,4 @@ axiosInstance.interceptors.request.use(
   },
 );
 
-export default axiosInstance;
+export default axiosInstanceClient;

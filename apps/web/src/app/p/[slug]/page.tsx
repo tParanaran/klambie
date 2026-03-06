@@ -1,4 +1,4 @@
-import { getOneProduct } from '@/api/product';
+import axiosInstanceServer from '@/lib/axios/server';
 import ProductView from '@/views/pages/product';
 import { notFound } from 'next/navigation';
 
@@ -8,9 +8,9 @@ export default async function Product({
   params: { slug: string };
 }) {
   const { slug } = await params;
-  const product = await getOneProduct(slug);
+  const { data } = await axiosInstanceServer.get(`/product/${slug}`);
 
-  if (!product) return notFound();
+  if (!data) return notFound();
 
-  return <ProductView product={product} />;
+  return <ProductView product={data} />;
 }

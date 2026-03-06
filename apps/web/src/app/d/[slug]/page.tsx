@@ -1,4 +1,4 @@
-import { getProducts, getTags } from '@/api/product';
+import axiosInstanceServer from '@/lib/axios/server';
 import GroomityView from '@/views/pages/groomity';
 import HomeView from '@/views/pages/home';
 import KidsView from '@/views/pages/kids';
@@ -15,16 +15,17 @@ export default async function Department({
 }) {
   const { slug } = await params;
   const { tag } = await searchParams;
+  const { data } = await axiosInstanceServer.get(`/product/all/${slug}`, {
+    params: { tag },
+  });
+  const tags = await axiosInstanceServer.get('/attribute/tag');
 
-  const products = await getProducts(slug, tag);
-  const tags = await getTags();
-
-  if (slug === 'men') return <MenView products={products} tags={tags} />;
-  if (slug === 'women') return <WomenView products={products} tags={tags} />;
-  if (slug === 'kids') return <KidsView products={products} tags={tags} />;
-  if (slug === 'sports') return <SportsView products={products} tags={tags} />;
+  if (slug === 'men') return <MenView products={data} tags={tags.data} />;
+  if (slug === 'women') return <WomenView products={data} tags={tags.data} />;
+  if (slug === 'kids') return <KidsView products={data} tags={tags.data} />;
+  if (slug === 'sports') return <SportsView products={data} tags={tags.data} />;
   if (slug === 'groomity')
-    return <GroomityView products={products} tags={tags} />;
+    return <GroomityView products={data} tags={tags.data} />;
 
   return <HomeView />;
 }
