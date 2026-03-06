@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 interface ITitle {
   slug: string;
-  categories?: string[];
+  categories: string[];
   brand: string;
   name: string;
 }

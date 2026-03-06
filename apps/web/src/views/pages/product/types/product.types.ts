@@ -1,4 +1,4 @@
-export interface IAppliedPromotions {
+export interface IAppliedPromotion {
   name: string;
   badge: string;
   discount: string;
@@ -7,10 +7,8 @@ export interface IAppliedPromotions {
 export interface IPrice {
   originalPrice: string;
   finalPrice: string;
-  discountApplied?: string;
-  discountPercentage?: string;
-  hasDiscount: boolean;
-  appliedPromotions?: IAppliedPromotions[];
+  discountApplied: string;
+  discountPercentage: string;
 }
 
 export interface ITag {
@@ -21,11 +19,13 @@ export interface ITag {
 
 export interface IProducts {
   name: string;
+  appliedPromotion?: IAppliedPromotion[];
+  hasDiscount: boolean;
   price: IPrice;
   slug: string;
   brand: string;
-  variants: (string | null)[];
-  categories: (string | undefined)[];
+  variants: string[];
+  categories: string[];
   tags: ITag[];
   images: string[];
 }
@@ -46,7 +46,9 @@ export interface IVariant {
   id: number;
   sku: string;
   price: IPrice;
-  stock: number;
+  appliedPromotion?: IAppliedPromotion[];
+  hasDiscount: boolean;
+  availableStock: number;
   inStock: boolean;
   attributes: {
     id: number;
@@ -66,7 +68,7 @@ export interface IProduct {
   slug: string;
   brand: string;
   attributes: { name: string; id: number }[];
-  categories?: string[];
+  categories: string[];
   tags: ITag[];
   productDetails: IProductDetails;
   images: { attributeId: number | null; url: string }[];

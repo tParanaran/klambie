@@ -1,20 +1,29 @@
+import Rupiah from '@/utils/rupiah';
 import { IPrice } from '@/views/pages/product/types/product.types';
 
-export default function ProductPrice({ price }: { price: IPrice }) {
-  const { hasDiscount, finalPrice, originalPrice, discountPercentage } = price;
+interface IProductPrice {
+  price: IPrice;
+  hasDiscount: boolean;
+}
+
+export default function ProductPrice({ price, hasDiscount }: IProductPrice) {
+  const { finalPrice, originalPrice, discountPercentage } = price;
+
   return (
     <>
       <p className="font-semibold text-orange-700">
-        {hasDiscount ? finalPrice : originalPrice}
+        {hasDiscount ? Rupiah(finalPrice) : Rupiah(originalPrice)}
       </p>
 
       {hasDiscount ? (
-        <p className="font-semibold opacity-50 line-through">{originalPrice}</p>
+        <p className="font-semibold opacity-50 line-through">
+          {Rupiah(originalPrice)}
+        </p>
       ) : null}
 
       {hasDiscount ? (
         <p className="text-light text-[#ededed] bg-red-700 rounded-md py-0.5 px-1 w-fit">
-          {discountPercentage}
+          -{discountPercentage}%
         </p>
       ) : null}
     </>

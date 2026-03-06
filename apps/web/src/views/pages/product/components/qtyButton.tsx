@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 interface IQuantityButton {
   quantity: number;
   stock: number;
@@ -19,8 +17,8 @@ export default function QuantityButton({
   };
 
   return (
-    <div className="my-5">
-      <div className="bg-black/10 flex w-fit items-center rounded-full">
+    <div>
+      <div className="bg-black/10 flex w-fit items-center rounded-full my-1">
         <button
           disabled={quantity <= 1}
           className="py-2 px-4 rounded-l-full disabled:opacity-50 disabled:cursor-not-allowed"
@@ -40,9 +38,9 @@ export default function QuantityButton({
         </button>
       </div>
       {!inStock ? (
-        <p className="text-sm my-2 text-orange-700">Out of Stock</p>
+        <p className="text-sm text-orange-700">Out of Stock</p>
       ) : (
-        <p className="text-sm my-2 opacity-50">Stock: {stock}</p>
+        <p className="text-sm opacity-50">Stock: {stock}</p>
       )}
     </div>
   );

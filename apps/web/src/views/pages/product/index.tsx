@@ -34,7 +34,9 @@ export default function ProductView({ product }: { product: IProduct }) {
 
   useEffect(() => {
     if (selectedVariant) {
-      setQuantity((prev) => Math.min(prev, selectedVariant.stock || 1));
+      setQuantity((prev) =>
+        Math.min(prev, selectedVariant.availableStock || 1),
+      );
     } else {
       setQuantity(1);
     }
@@ -83,12 +85,15 @@ export default function ProductView({ product }: { product: IProduct }) {
                   {' '}
                   <QuantityButton
                     inStock={selectedVariant.inStock}
-                    stock={selectedVariant.stock}
+                    stock={selectedVariant.availableStock}
                     quantity={quantity}
                     onChange={setQuantity}
                   />
                   <div>
-                    <ProductPrice price={selectedVariant.price} />
+                    <ProductPrice
+                      price={selectedVariant.price}
+                      hasDiscount={selectedVariant.hasDiscount}
+                    />
                   </div>
                 </>
               )}

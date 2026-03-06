@@ -1,10 +1,10 @@
 'use client';
+import { useState } from 'react';
+import { ICartItems } from '../types';
 import Link from 'next/link';
 import QuantityButton from '../../product/components/qtyButton';
-import { ICartItems } from '../types';
 import CartPrice from './price';
-import DeleteButton from './delButton';
-import { useState } from 'react';
+import DeleteButton from './deleleButton';
 
 interface ICartItem {
   cartItems: ICartItems[];

@@ -10,7 +10,7 @@ export default function Tags({
   categories,
 }: {
   tags: ITag[];
-  categories?: string[];
+  categories: string[];
 }) {
   const searchParams = useSearchParams();
   const pathname = usePathname();

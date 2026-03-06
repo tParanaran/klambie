@@ -1,12 +1,19 @@
 'use client';
 
+import axiosInstanceClient from '@/lib/axios/client';
+import { useAuthStore } from '@/store/authStore';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import { useCartQuery } from '../hooks/useCartQuery';
 
 export default function CartBadge() {
+  const user = useAuthStore((state) => state.user);
   const queryClient = useQueryClient();
-  const { data } = useCartQuery();
+  const { data } = useQuery({
+    queryKey: ['cart', user?.id ?? 'guest'],
+    queryFn: () =>
+      axiosInstanceClient.get('/shop-cart/count').then((res) => res.data),
+    enabled: true,
+  });
 
   const total = data?.total ?? null;
 

@@ -1,4 +1,3 @@
-import { Parse } from '@/utils/parse';
 import { useEffect, useMemo, useState } from 'react';
 import { IVariant } from '../types/product.types';
 import { GetGroupedAttributes } from './groupAttributes';
@@ -36,14 +35,14 @@ export default function UseSelectedVariant(variants: IVariant[]) {
 
     if (inStockVariants.length === 0) return;
     const prices = inStockVariants
-      .map((v) => Parse(v.price.finalPrice))
+      .map((v) => Number(v.price.finalPrice))
       .filter((p): p is number => p != null);
 
     const minPrice = prices.length > 0 ? Math.min(...prices) : null;
 
     const cheapestVariants =
       minPrice !== null
-        ? inStockVariants.filter((v) => Parse(v.price.finalPrice) === minPrice)
+        ? inStockVariants.filter((v) => Number(v.price.finalPrice) === minPrice)
         : [];
 
     const defaultVariant =

@@ -27,8 +27,6 @@ export default function UseAddToCart({
     onSuccess: (response) => {
       queryClient.invalidateQueries({ queryKey: ['cart'] });
       queryClient.setQueryData(['cartLastAdded'], response.addQuantity ?? 0);
-
-      console.log('TQYGHJQDBJQDHBK', response.addQuantity);
     },
   });
   const handleAddToCart = async () => {
