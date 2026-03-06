@@ -18,6 +18,7 @@ export class CartRouter {
     this.router.post('/add', IsUserLogin, this.cart.addCart);
     this.router.get('/count', IsUserLogin, this.cart.count);
     this.router.get('/get', IsUserLogin, this.cart.fetchCart);
+    this.router.delete('/delete/:productId', IsUserLogin, this.cart.delete);
   }
 
   getRouter(): Router {

@@ -38,4 +38,17 @@ export class Cart {
       next(error);
     }
   }
+  async delete(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { productId } = req.params;
+      const result = await cartService.deleteCart(
+        Number(productId),
+        req.cookies.sessionId,
+        req.user?.id,
+      );
+      res.status(200).send(result);
+    } catch (error) {
+      next(error);
+    }
+  }
 }

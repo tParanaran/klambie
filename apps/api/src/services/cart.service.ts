@@ -341,7 +341,7 @@ export class CartService {
             (p) => p.productVariantId === promoInput.product.id,
           );
 
-          if (!product) return;
+          if (!product) return null;
 
           const price = new Decimal(product.productVariant.basePrice);
           const quantity = new Decimal(promoInput.product.quantity);
@@ -412,6 +412,10 @@ export class CartService {
       new Decimal(0),
     );
 
+    if (cartItems.length === 0) {
+      return null;
+    }
+
     return {
       cartItems,
       totalPrice: {
@@ -420,5 +424,47 @@ export class CartService {
         grandTotal,
       },
     };
+  }
+  async deleteCart(
+    productId: number,
+    sessionId: string,
+    userId?: number,
+  ): Promise<void> {
+    if (!sessionId && !userId) return;
+
+    let cart;
+
+    if (userId) {
+      cart = await prisma.cart.findUnique({
+        where: { userId: userId },
+      });
+    } else {
+      cart = await prisma.cart.findFirst({
+        where: { sessionId: sessionId },
+      });
+    }
+
+    if (!cart) return;
+
+    await prisma.cartItem.delete({
+      where: {
+        cartId_productVariantId: {
+          cartId: cart.id,
+          productVariantId: productId,
+        },
+      },
+    });
+
+    const emptyCart = await prisma.cartItem.findMany({
+      where: {
+        cartId: cart.id,
+      },
+    });
+
+    if (emptyCart.length === 0) {
+      await prisma.cart.delete({
+        where: { id: cart.id },
+      });
+    }
   }
 }

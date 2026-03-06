@@ -5,6 +5,8 @@ import EmptyCart from '@/views/pages/cart/components/empty';
 export default async function Cart() {
   const { data } = await axiosInstanceServer.get('/shop-cart/get');
 
+  console.log(data);
+
   if (!data) return <EmptyCart />;
 
   return <CartView carts={data} />;
