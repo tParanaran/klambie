@@ -12,7 +12,7 @@ import Link from 'next/link';
 import TextFieldForm from '@/views/components/formik/textFieldForm';
 import PasswordFieldForm from '@/views/components/formik/passwordFieldForm';
 import ButtonForm from '@/views/components/formik/buttonForm';
-import axiosInstance from '@/lib/axios';
+import axiosInstanceClient from '@/lib/axios/client';
 
 export default function LoginForm() {
   const { onAuthSuccess } = useAuthStore();
@@ -21,7 +21,7 @@ export default function LoginForm() {
 
   const LoginHandler = async (values: ILogin) => {
     try {
-      const { data } = await axiosInstance.post('/auth/login', values);
+      const { data } = await axiosInstanceClient.post('/auth/login', values);
 
       if (data.success) {
         await AuthHandler(onAuthSuccess);

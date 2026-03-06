@@ -1,6 +1,6 @@
 'use client';
 
-import axiosInstance from '@/lib/axios';
+import axiosInstanceClient from '@/lib/axios/client';
 import VertificationdModal from '@/views/components/vertificationModal';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -14,7 +14,7 @@ export default function VeritificationButton({ token }: { token: string }) {
 
   const verifyUser = async () => {
     try {
-      const { data } = await axiosInstance.get('/auth/verification', {
+      const { data } = await axiosInstanceClient.get('/auth/verification', {
         headers: {
           Authorization: `Bearer ${token}`,
         },

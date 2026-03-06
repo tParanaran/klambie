@@ -6,9 +6,9 @@ import { useState } from 'react';
 import { ResendSchema } from './schemas/resend.schema';
 import TextFieldForm from '@/views/components/formik/textFieldForm';
 import ButtonForm from '@/views/components/formik/buttonForm';
-import axiosInstance from '@/lib/axios';
 import DOMPurify from 'dompurify';
 import VertificationdModal from '@/views/components/vertificationModal';
+import axiosInstanceClient from '@/lib/axios/client';
 
 interface IResend {
   email: string;
@@ -21,7 +21,7 @@ export default function ResendEmailForm() {
 
   const ResendHandler = async (values: IResend) => {
     try {
-      const { data } = await axiosInstance.post('/auth/resend', values);
+      const { data } = await axiosInstanceClient.post('/auth/resend', values);
       if (data) {
         setHtml(DOMPurify.sanitize(data.message));
         setIsSuccess(data.success);

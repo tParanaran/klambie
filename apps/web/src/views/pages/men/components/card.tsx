@@ -35,7 +35,7 @@ export default function ProductCard({ products }: { products: IProducts[] }) {
             </div>
             <div className="absolute bottom-1 left-1 right-1 z-10">
               <div className="flex flex-wrap space-x-1 text-xs">
-                <Tags tags={item.tags} />
+                <Tags tags={item.tags} categories={item.categories} />
               </div>
             </div>
             {/* <div className="absolute top-1 left-1 z-10">
@@ -65,7 +65,10 @@ export default function ProductCard({ products }: { products: IProducts[] }) {
               <p className="font-bold">{item.brand}</p>
               <p className="font-light">{item.name}</p>
               <div className="flex items-center space-x-2 flex-wrap">
-                <ProductPrice price={item.price} />
+                <ProductPrice
+                  price={item.price}
+                  hasDiscount={item.hasDiscount}
+                />
               </div>
             </div>
           </Link>

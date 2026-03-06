@@ -9,9 +9,9 @@ import Link from 'next/link';
 import TextFieldForm from '@/views/components/formik/textFieldForm';
 import PasswordFieldForm from '@/views/components/formik/passwordFieldForm';
 import ButtonForm from '@/views/components/formik/buttonForm';
-import axiosInstance from '@/lib/axios';
 import DOMPurify from 'dompurify';
 import VertificationdModal from '@/views/components/vertificationModal';
+import axiosInstanceClient from '@/lib/axios/client';
 
 export default function RegisterForm({ refferal }: IRefferal) {
   const [message, setMessage] = useState<string>('');
@@ -20,7 +20,7 @@ export default function RegisterForm({ refferal }: IRefferal) {
 
   const RegisterHandler = async (values: IRegister) => {
     try {
-      const { data } = await axiosInstance.post('/auth/register', values);
+      const { data } = await axiosInstanceClient.post('/auth/register', values);
       if (data) {
         setHtml(DOMPurify.sanitize(data.message));
         setIsSuccess(data.success);
