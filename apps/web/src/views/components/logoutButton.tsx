@@ -3,19 +3,27 @@ import { useAuthStore } from '@/store/authStore';
 import { useProfileStore } from '@/store/profileStore';
 import { useRouter } from 'next/navigation';
 import { IoPower } from 'react-icons/io5';
-import { useQueryClient } from '@tanstack/react-query';
+import { Notify } from '@/lib/notify';
+import axiosInstanceClient from '@/lib/axios/client';
 
 export default function LogoutButton({ className }: { className: string }) {
   const redirect = useRouter();
   const { clearAuth } = useAuthStore();
   const { isClose } = useProfileStore();
-  const queryClient = useQueryClient();
 
   const LogoutHandler = async () => {
-    await clearAuth();
-    isClose();
-    queryClient.removeQueries({ queryKey: ['cart'] });
-    redirect.push('/login');
+    try {
+      const { data } = await axiosInstanceClient.post('/auth/logout');
+
+      if (data.success) {
+        clearAuth();
+        isClose();
+        redirect.push('/login');
+        Notify(data.message);
+      }
+    } catch (error) {
+      Notify((error as Error).message);
+    }
   };
 
   return (
