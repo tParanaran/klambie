@@ -1,4 +1,5 @@
-import { AppliedPromotions } from './promotion.type';
+import Decimal from 'decimal.js';
+import { AppliedPromotion } from './promotion.type';
 
 type ProductDetails = {
   description: string;
@@ -31,30 +32,39 @@ export type InsertProduct = {
 };
 
 export type Price = {
-  originalPrice: string;
-  finalPrice: string;
-  discountApplied?: string;
-  discountPercentage?: string;
+  originalPrice: Decimal;
+  finalPrice: Decimal;
+  discountApplied: Decimal;
+  discountPercentage: Decimal;
+};
+
+export type PromoResult = {
+  productVariantId: number;
+  appliedPromotion?: AppliedPromotion[];
   hasDiscount: boolean;
-  appliedPromotions?: AppliedPromotions[];
+  price: Price;
 };
 
 export type AllProductsResponse = {
   name: string;
+  appliedPromotion?: AppliedPromotion[];
+  hasDiscount: boolean;
   price: Price;
   slug: string;
   brand: string;
-  variants: (string | null)[];
+  variants: string[];
   categories: string[];
   tags: { name: string; slug: string }[];
   images: string[];
 };
 
-type Variant = {
+export type VariantProduct = {
   id: number;
   sku: string;
   price: Price;
-  stock: number;
+  appliedPromotion?: AppliedPromotion[];
+  hasDiscount: boolean;
+  availableStock: number;
   inStock: boolean;
   attributes: {
     id: number;
@@ -78,5 +88,5 @@ export type OneProductResponse = {
   productDetails: ProductDetails | null;
   images: { attributeId?: number | null; url: string }[];
   attributes: { id: number; name: string }[];
-  variants: Variant[];
+  variants: VariantProduct[];
 };

@@ -45,13 +45,21 @@ export class AuthUser {
         req.cookies.sessionId,
       );
 
-      console.log(adjustments);
-
       return res
         .status(200)
         .cookie('access_token', result.token)
         .clearCookie('sessionId')
         .send({ success: true });
+    } catch (error) {
+      next(error);
+    }
+  }
+  async Logout(req: Request, res: Response, next: NextFunction) {
+    try {
+      return res
+        .clearCookie('access_token')
+        .status(200)
+        .json({ success: true, message: 'Logout successful' });
     } catch (error) {
       next(error);
     }

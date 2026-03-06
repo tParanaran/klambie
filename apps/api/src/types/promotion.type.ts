@@ -4,12 +4,13 @@ import { PromotionRule } from 'generated/prisma/client';
 export type Product = {
   id: number;
   basePrice: Decimal;
+  quantity: number;
   brandId: number;
   categoriesId: number[];
   tagsId: number[];
 };
 
-export type VariantPrice = {
+export type Variant = {
   basePrice: Decimal;
   stock: number;
   productVariantAttributes?: {
@@ -19,13 +20,13 @@ export type VariantPrice = {
   }[];
 };
 
-export type PriceInput = {
-  productInfo: Product;
+export type PromoInput = {
+  product: Product;
   user?: number;
-  variants: VariantPrice[] | null;
+  variants?: Variant[];
 };
 
-export type GetPromotion = {
+export type PromoRule = {
   type: 'PERCENTAGE' | 'FIXED_AMOUNT';
   applyTo: 'PRODUCT' | 'BRAND' | 'CATEGORY' | 'ORDER' | 'TAG';
   name: string;
@@ -38,8 +39,8 @@ export type GetPromotion = {
   promotionAssignments: { targetId: number }[];
 };
 
-export type AppliedPromotions = {
+export type AppliedPromotion = {
   name: string;
   badge: string;
-  discount: string;
+  discount: Decimal;
 };

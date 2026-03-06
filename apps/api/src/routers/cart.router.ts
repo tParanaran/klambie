@@ -1,9 +1,5 @@
 import { Cart } from '@/controllers/cart.controller';
-import {
-  AdminGuard,
-  IsUserLogin,
-  VerificationToken,
-} from '@/middlewares/auth.middlleware';
+import { IsUserLogin } from '@/middlewares/auth.middlleware';
 
 import { Router } from 'express';
 
@@ -20,7 +16,8 @@ export class CartRouter {
 
   private initializeRoutes(): void {
     this.router.post('/add', IsUserLogin, this.cart.addCart);
-    this.router.get('/fetch', IsUserLogin, this.cart.fetchCart);
+    this.router.get('/count', IsUserLogin, this.cart.count);
+    this.router.get('/get', IsUserLogin, this.cart.fetchCart);
   }
 
   getRouter(): Router {

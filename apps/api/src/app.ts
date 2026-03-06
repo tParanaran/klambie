@@ -76,7 +76,7 @@ export default class App {
     this.app.use('/api/product', productRouter.getRouter());
     this.app.use('/api/attribute', attributeRouter.getRouter());
     this.app.use('/api/promotion', promotionRouter.getRouter());
-    this.app.use('/api/cart', cartRouter.getRouter());
+    this.app.use('/api/shop-cart', cartRouter.getRouter());
 
     this.app.use(ErrorMiddleware);
   }

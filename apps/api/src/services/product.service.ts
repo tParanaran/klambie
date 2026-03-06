@@ -2,6 +2,7 @@ import {
   AllProductsResponse,
   InsertProduct,
   OneProductResponse,
+  VariantProduct,
 } from '@/types/product.type';
 import { prisma } from 'lib/prisma';
 import { GenerateSlug } from '@/utils/slug';
@@ -160,14 +161,15 @@ export class ProductService {
       },
     });
 
-    const result = await Promise.all(
+    const result: AllProductsResponse[] = await Promise.all(
       products.map(async (p) => {
-        const inputPrice = {
+        const promoInput = {
           variants: p.productVariants,
           user: user,
-          productInfo: {
+          product: {
             id: p.id,
             basePrice: p.basePrice,
+            quantity: 1, // Default
             brandId: p.brand.id,
             categoriesId: [
               ...new Set(
@@ -182,19 +184,22 @@ export class ProductService {
           },
         };
 
-        const { price } = await promotionService.promotionRuleCheck(inputPrice);
+        const { hasDiscount, appliedPromotion, price } =
+          await promotionService.promotionRuleCheck(promoInput);
 
         return {
           name: p.name,
           slug: p.slug,
           price,
+          hasDiscount,
+          appliedPromotion,
           brand: p.brand.name,
           variants: [
             ...new Set(
               p.productVariants.flatMap((v) =>
                 v.productVariantAttributes
                   .map((a) => a.attributeValue.hexUrl)
-                  .filter(Boolean),
+                  .filter((url): url is string => !!url),
               ),
             ),
           ],
@@ -346,14 +351,14 @@ export class ProductService {
       productCategories,
     } = product;
 
-    const variants = await Promise.all(
+    const variants: VariantProduct[] = await Promise.all(
       product.productVariants.map(async (v) => {
-        const inputPrice = {
-          variants: null,
+        const promoInput = {
           user: user,
-          productInfo: {
+          product: {
             id: v.id,
             basePrice: v.basePrice,
+            quantity: 1,
             brandId: product.brand.id,
             categoriesId: [
               ...new Set(
@@ -367,14 +372,19 @@ export class ProductService {
             ],
           },
         };
-        const { price } = await promotionService.promotionRuleCheck(inputPrice);
+        const { hasDiscount, appliedPromotion, price } =
+          await promotionService.promotionRuleCheck(promoInput);
+
+        const availableStock = v.stock - v.reservedStock;
 
         return {
           id: v.id,
           sku: v.sku,
           price,
-          stock: v.stock,
-          inStock: v.stock > 0,
+          hasDiscount,
+          appliedPromotion,
+          availableStock,
+          inStock: availableStock > 0,
           attributes: v.productVariantAttributes.map((va) => ({
             id: va.attributeValue.id,
             value: va.attributeValue.value,

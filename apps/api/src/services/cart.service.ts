@@ -1,16 +1,27 @@
-import { Adjustment, CartResponse, InsertCart } from '@/types/cart.types';
+import {
+  Adjustment,
+  CartItems,
+  CartItemsResponse,
+  AddCart,
+  InsertCart,
+} from '@/types/cart.types';
+import FlattenCategories from '@/utils/categories';
 import { prisma } from 'lib/prisma';
+import { PromotionService } from './promotion.service';
+import Decimal from 'decimal.js';
+
+const promotionService = new PromotionService();
 
 export class CartService {
   async addOrUpdateCart(
     data: InsertCart,
+    sessionId: string,
     userId?: number,
-    sessionId?: string,
-  ): Promise<CartResponse> {
+  ): Promise<AddCart> {
     const { productVariantId, quantity, unitPrice } = data;
 
     if (!userId && !sessionId)
-      throw new Error('Cannot add to cart, please login first');
+      throw new Error('Cannot add to cart no session provided');
 
     const variant = await prisma.productVariant.findUnique({
       where: { id: productVariantId },
@@ -98,33 +109,28 @@ export class CartService {
 
     return newCart;
   }
-  async getCart(
+  async getTotalCart(
+    sessionId: string,
     userId?: number,
-    sessionId?: string,
-  ): Promise<{ total: number }> {
-    const cart = await prisma.cart.findFirst({
-      where: {
-        sessionId: sessionId ?? undefined,
-        userId: userId ?? undefined,
-      },
-    });
+  ): Promise<{ total: number } | null> {
+    if (!sessionId && !userId) return null;
+    let cart;
 
-    if (!cart) {
-      return {
-        total: 0,
-      };
+    if (userId) {
+      cart = await prisma.cart.findFirst({
+        where: { userId },
+      });
+    } else {
+      cart = await prisma.cart.findFirst({
+        where: { sessionId },
+      });
     }
+
+    if (!cart) return null;
 
     const cartItems = await prisma.cartItem.findMany({
       where: {
         cartId: cart.id,
-      },
-      include: {
-        productVariant: {
-          include: {
-            product: true,
-          },
-        },
       },
     });
 
@@ -152,7 +158,7 @@ export class CartService {
 
       if (!guestCart) return;
 
-      const userCart = await tx.cart.findFirst({
+      const userCart = await tx.cart.findUnique({
         where: {
           userId,
         },
@@ -229,5 +235,190 @@ export class CartService {
     });
 
     return { adjustments };
+  }
+  async getCart(
+    sessionId: string,
+    userId?: number,
+  ): Promise<CartItemsResponse | null> {
+    if (!sessionId && !userId) return null;
+
+    let cart;
+
+    if (userId) {
+      cart = await prisma.cart.findUnique({
+        where: { userId: userId },
+      });
+    } else {
+      cart = await prisma.cart.findFirst({
+        where: { sessionId: sessionId },
+      });
+    }
+
+    if (!cart) return null;
+
+    const carts = await prisma.cartItem.findMany({
+      where: {
+        cartId: cart.id,
+      },
+      include: {
+        productVariant: {
+          include: {
+            productVariantAttributes: {
+              include: {
+                attributeValue: {
+                  include: {
+                    attribute: true,
+                  },
+                },
+              },
+            },
+            product: {
+              include: {
+                productTags: true,
+                images: true,
+                brand: true,
+                productCategories: {
+                  select: {
+                    categoryHierarchy: {
+                      select: {
+                        category: { select: { id: true } },
+                        parent: {
+                          select: {
+                            category: { select: { id: true } },
+                            parent: {
+                              select: {
+                                category: { select: { id: true } },
+                                parent: {
+                                  select: {
+                                    category: { select: { id: true } },
+                                  },
+                                },
+                              },
+                            },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    const promoInputs = carts.map((item) => ({
+      user: userId ? userId : 0,
+      product: {
+        id: item.productVariantId,
+        quantity: item.quantity,
+        basePrice: item.productVariant.basePrice,
+        brandId: item.productVariant.product.brandId,
+        categoriesId: [
+          ...new Set(
+            item.productVariant.product.productCategories.flatMap(
+              (pc) => FlattenCategories(pc.categoryHierarchy).categoriesId,
+            ),
+          ),
+        ],
+        tagsId: [
+          ...new Set(
+            item.productVariant.product.productTags
+              .map((t) => t.tagId)
+              .filter(Boolean),
+          ),
+        ],
+      },
+    }));
+
+    const cartItems: CartItems[] = (
+      await Promise.all(
+        promoInputs.map(async (promoInput) => {
+          const promotionResult =
+            await promotionService.promotionRuleCheck(promoInput);
+          const product = carts.find(
+            (p) => p.productVariantId === promoInput.product.id,
+          );
+
+          if (!product) return;
+
+          const price = new Decimal(product.productVariant.basePrice);
+          const quantity = new Decimal(promoInput.product.quantity);
+
+          const subtotal = price.mul(quantity);
+
+          const discount = promotionResult.hasDiscount
+            ? new Decimal(promotionResult.price.discountApplied)
+            : new Decimal(0);
+
+          const totalPrice = subtotal.minus(discount);
+
+          const variantAttributeValueIds =
+            product.productVariant.productVariantAttributes.map(
+              (a) => a.attributeValueId,
+            );
+
+          const imageUrl =
+            product.productVariant.product.images.find(
+              (img) =>
+                img.attributeValueId !== null &&
+                variantAttributeValueIds.includes(img.attributeValueId),
+            )?.url ?? null;
+
+          return {
+            cartItemId: product.cartId,
+            productVariantId: product.productVariantId,
+            name: product.productVariant.product.name,
+            appliedPromotions: promotionResult.appliedPromotion,
+            hasDiscount: promotionResult.hasDiscount,
+            price: {
+              subtotal,
+              discount,
+              totalPrice,
+            },
+            sku: product.productVariant.sku,
+            image: imageUrl,
+            quantity: promoInput.product.quantity,
+            slug: product.productVariant.product.slug,
+            brand: product.productVariant.product.brand.name,
+            stockAvailable:
+              product.productVariant.stock -
+              product.productVariant.reservedStock,
+            attributes: product.productVariant.productVariantAttributes.map(
+              (a) => ({
+                attributeId: a.attributeValue.id,
+                attribute: a.attributeValue.attribute.name,
+                value: a.attributeValue.value,
+              }),
+            ),
+          };
+        }),
+      )
+    ).filter((i): i is CartItems => i !== null);
+
+    const subTotal = cartItems.reduce(
+      (sum, item) => sum.plus(item.price.subtotal),
+      new Decimal(0),
+    );
+
+    const discountTotal = cartItems.reduce(
+      (sum, item) => sum.plus(item.price.discount),
+      new Decimal(0),
+    );
+
+    const grandTotal = cartItems.reduce(
+      (sum, item) => sum.plus(item.price.totalPrice),
+      new Decimal(0),
+    );
+
+    return {
+      cartItems,
+      totalPrice: {
+        subTotal,
+        discountTotal,
+        grandTotal,
+      },
+    };
   }
 }

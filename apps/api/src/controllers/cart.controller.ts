@@ -8,8 +8,19 @@ export class Cart {
     try {
       const result = await cartService.addOrUpdateCart(
         req.body,
-        req.user?.id,
         req.cookies.sessionId,
+        req.user?.id,
+      );
+      res.status(200).send(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+  async count(req: Request, res: Response, next: NextFunction) {
+    try {
+      const result = await cartService.getTotalCart(
+        req.cookies.sessionId,
+        req.user?.id,
       );
       res.status(200).send(result);
     } catch (error) {
@@ -19,8 +30,8 @@ export class Cart {
   async fetchCart(req: Request, res: Response, next: NextFunction) {
     try {
       const result = await cartService.getCart(
-        req.user?.id,
         req.cookies.sessionId,
+        req.user?.id,
       );
       res.status(200).send(result);
     } catch (error) {

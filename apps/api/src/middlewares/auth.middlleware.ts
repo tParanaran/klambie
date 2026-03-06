@@ -29,16 +29,20 @@ async function IsUserLogin(req: Request, res: Response, next: NextFunction) {
   try {
     const token = req.header('Authorization')?.replace('Bearer ', '');
 
-    if (token) {
-      const user = verify(token, SECRET_KEY as string);
-      if (user) {
-        req.user = user as User;
-      }
+    if (!token) {
+      req.user = undefined;
+
+      return next();
     }
+
+    const user = verify(token, SECRET_KEY as string);
+
+    req.user = user as User;
 
     next();
   } catch (err) {
-    next();
+    req.user = undefined;
+    return next();
   }
 }
 

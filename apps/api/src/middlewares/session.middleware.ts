@@ -6,10 +6,10 @@ export default function SessionMiddleware(
   res: Response,
   next: NextFunction,
 ) {
-  const token = req.header('Authorization')?.replace('Bearer ', '');
+  let sessionId = req.cookies.sessionId;
 
-  if (!token && !req.cookies.sessionId) {
-    const sessionId = uuidv4();
+  if (!sessionId) {
+    sessionId = uuidv4();
     const isProduction = process.env.NODE_ENV === 'production';
 
     res.cookie('sessionId', sessionId, {

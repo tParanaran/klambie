@@ -30,6 +30,7 @@ export class AuthRouter {
       this.authUser.ResendVerification,
     );
     this.router.post('/login', LoginValidation, this.authUser.Login);
+    this.router.post('/logout', this.authUser.Logout);
   }
 
   getRouter(): Router {
