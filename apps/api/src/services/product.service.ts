@@ -1,8 +1,13 @@
 import {
-  AllProductsResponse,
+  Products,
+  Brand,
+  Category,
+  Images,
   InsertProduct,
-  OneProductResponse,
+  Product,
+  Tag,
   VariantProduct,
+  VariantImages,
 } from '@/types/product.type';
 import { prisma } from 'lib/prisma';
 import { GenerateSlug } from '@/utils/slug';
@@ -74,215 +79,50 @@ export class ProductService {
 
     return { message: `Create ${result} Successfully` };
   }
-  async getAllProducts(
-    slug: string,
-    tag: string,
-    user?: number,
-  ): Promise<AllProductsResponse[]> {
-    const hierarchyId = await attributeService.getAllHierarchyIds(slug);
-
-    const products = await prisma.product.findMany({
-      where: {
-        productCategories: {
-          some: {
-            categoryHierarchyId: { in: hierarchyId },
-          },
-        },
-        productTags: {
-          some: {
-            tag: {
-              slug: tag,
-            },
-          },
-        },
-      },
+  async getImages(slug: string): Promise<Images | null> {
+    const img = await prisma.product.findUnique({
+      where: { slug },
       select: {
-        id: true,
-        name: true,
-        basePrice: true,
-        slug: true,
+        images: true,
+      },
+    });
+
+    if (!img) return null;
+
+    const images = [...new Set(img.images.map((i) => i.url).filter(Boolean))];
+    const variantImages = img.images.map((i) => ({
+      attributeId: i.attributeValueId,
+      url: i.url,
+    }));
+
+    return { images, variantImages };
+  }
+  async getBrand(slugProduct: string): Promise<Brand | null> {
+    const brand = await prisma.product.findUnique({
+      where: { slug: slugProduct },
+      select: {
         brand: {
           select: {
             name: true,
+            slug: true,
             id: true,
-          },
-        },
-        productVariants: {
-          select: {
-            basePrice: true,
-            stock: true,
-            productVariantAttributes: {
-              select: {
-                attributeValue: {
-                  select: {
-                    hexUrl: true,
-                  },
-                },
-              },
-            },
-          },
-        },
-        productCategories: {
-          select: {
-            categoryHierarchy: {
-              select: {
-                category: { select: { name: true, id: true } },
-                parent: {
-                  select: {
-                    category: { select: { name: true, id: true } },
-                    parent: {
-                      select: {
-                        category: { select: { name: true, id: true } },
-                        parent: {
-                          select: {
-                            category: { select: { name: true, id: true } },
-                          },
-                        },
-                      },
-                    },
-                  },
-                },
-              },
-            },
-          },
-        },
-        productTags: {
-          select: {
-            tag: {
-              select: { name: true, slug: true, id: true },
-            },
-          },
-        },
-        images: {
-          select: {
-            url: true,
           },
         },
       },
     });
+    if (!brand) return null;
 
-    const result: AllProductsResponse[] = await Promise.all(
-      products.map(async (p) => {
-        const promoInput = {
-          variants: p.productVariants,
-          user: user,
-          product: {
-            id: p.id,
-            basePrice: p.basePrice,
-            quantity: 1, // Default
-            brandId: p.brand.id,
-            categoriesId: [
-              ...new Set(
-                p.productCategories.flatMap(
-                  (pc) => FlattenCategories(pc.categoryHierarchy).categoriesId,
-                ),
-              ),
-            ],
-            tagsId: [
-              ...new Set(p.productTags.map((t) => t.tag.id).filter(Boolean)),
-            ],
-          },
-        };
+    const { id, name, slug } = brand.brand;
 
-        const { hasDiscount, appliedPromotion, price } =
-          await promotionService.promotionRuleCheck(promoInput);
-
-        return {
-          name: p.name,
-          slug: p.slug,
-          price,
-          hasDiscount,
-          appliedPromotion,
-          brand: p.brand.name,
-          variants: [
-            ...new Set(
-              p.productVariants.flatMap((v) =>
-                v.productVariantAttributes
-                  .map((a) => a.attributeValue.hexUrl)
-                  .filter((url): url is string => !!url),
-              ),
-            ),
-          ],
-          categories: [
-            ...new Set(
-              p.productCategories.flatMap(
-                (pc) => FlattenCategories(pc.categoryHierarchy).categories,
-              ),
-            ),
-          ],
-          tags: [
-            ...new Set(
-              p.productTags
-                .map((t) => ({ name: t.tag.name, slug: t.tag.slug }))
-                .filter(Boolean),
-            ),
-          ],
-          images: [...new Set(p.images.map((i) => i.url).filter(Boolean))],
-        };
-      }),
-    );
-
-    return result;
+    return {
+      brandId: id,
+      brandName: { name, slug },
+    };
   }
-  async getOneProduct(
-    slug: string,
-    user?: number,
-  ): Promise<OneProductResponse | null> {
-    const product = await prisma.product.findUnique({
+  async getProductTag(slug: string): Promise<Tag | null> {
+    const tag = await prisma.product.findUnique({
       where: { slug },
       select: {
-        id: true,
-        name: true,
-        sku: true,
-        basePrice: true,
-        brand: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
-        productDetails: {
-          select: {
-            description: true,
-            length: true,
-            material: true,
-            feature: true,
-            weight: true,
-            width: true,
-            height: true,
-            volume: true,
-            care: true,
-          },
-        },
-        sizingGuide: {
-          select: {
-            guideData: true,
-          },
-        },
-        productCategories: {
-          select: {
-            categoryHierarchy: {
-              select: {
-                category: { select: { name: true, id: true } },
-                parent: {
-                  select: {
-                    category: { select: { name: true, id: true } },
-                    parent: {
-                      select: {
-                        category: { select: { name: true, id: true } },
-                        parent: {
-                          select: {
-                            category: { select: { name: true, id: true } },
-                          },
-                        },
-                      },
-                    },
-                  },
-                },
-              },
-            },
-          },
-        },
         productTags: {
           select: {
             tag: {
@@ -290,22 +130,91 @@ export class ProductService {
             },
           },
         },
-        images: {
+      },
+    });
+
+    if (!tag) return null;
+    const tagsId = [
+      ...new Set(tag.productTags.map((t) => t.tag.id).filter(Boolean)),
+    ];
+
+    const tagsName = [
+      ...new Set(
+        tag.productTags
+          .map((t) => ({ name: t.tag.name, slug: t.tag.slug }))
+          .filter(Boolean),
+      ),
+    ];
+
+    return { tagsId, tagsName };
+  }
+  async getProductCategory(slug: string): Promise<Category | null> {
+    const category = await prisma.product.findUnique({
+      where: { slug },
+      select: {
+        productCategories: {
           select: {
-            url: true,
-            attributeValueId: true,
-          },
-        },
-        productAttributes: {
-          select: {
-            attribute: {
+            categoryHierarchy: {
               select: {
-                id: true,
-                name: true,
+                category: { select: { name: true, id: true, slug: true } },
+                parent: {
+                  select: {
+                    category: { select: { name: true, id: true, slug: true } },
+                    parent: {
+                      select: {
+                        category: {
+                          select: { name: true, id: true, slug: true },
+                        },
+                        parent: {
+                          select: {
+                            category: {
+                              select: { name: true, id: true, slug: true },
+                            },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
               },
             },
           },
         },
+      },
+    });
+
+    if (!category) return null;
+    const categoriesId = [
+      ...new Set(
+        category.productCategories.flatMap(
+          (pc) => FlattenCategories(pc.categoryHierarchy).categoriesId,
+        ),
+      ),
+    ];
+    const categoriesName = [
+      ...new Set(
+        category.productCategories.flatMap(
+          (pc) => FlattenCategories(pc.categoryHierarchy).categories,
+        ),
+      ),
+    ];
+
+    return { categoriesId, categoriesName };
+  }
+  async getProductVariant(
+    slug: string,
+    user?: number,
+  ): Promise<{
+    variants: VariantProduct[];
+    hexUrl: string[];
+    tag: Tag | null;
+    category: Category | null;
+    brand: Brand | null;
+    img: Images | null;
+  } | null> {
+    const product = await prisma.product.findUnique({
+      where: { slug },
+      select: {
         productVariants: {
           select: {
             id: true,
@@ -335,21 +244,24 @@ export class ProductService {
         },
       },
     });
-
     if (!product) return null;
 
-    const {
-      productDetails,
-      name,
-      id,
-      sku,
-      brand,
-      images,
-      productTags,
-      productAttributes,
-      sizingGuide,
-      productCategories,
-    } = product;
+    const [category, tag, brand, img] = await Promise.all([
+      this.getProductCategory(slug),
+      this.getProductTag(slug),
+      this.getBrand(slug),
+      this.getImages(slug),
+    ]);
+
+    const hexUrl = [
+      ...new Set(
+        product.productVariants.flatMap((v) =>
+          v.productVariantAttributes
+            .map((a) => a.attributeValue.hexUrl)
+            .filter((url): url is string => !!url),
+        ),
+      ),
+    ];
 
     const variants: VariantProduct[] = await Promise.all(
       product.productVariants.map(async (v) => {
@@ -359,17 +271,9 @@ export class ProductService {
             id: v.id,
             basePrice: v.basePrice,
             quantity: 1,
-            brandId: product.brand.id,
-            categoriesId: [
-              ...new Set(
-                productCategories.flatMap(
-                  (pc) => FlattenCategories(pc.categoryHierarchy).categoriesId,
-                ),
-              ),
-            ],
-            tagsId: [
-              ...new Set(productTags.map((t) => t.tag.id).filter(Boolean)),
-            ],
+            brandId: brand?.brandId,
+            categoriesId: category?.categoriesId,
+            tagsId: tag?.tagsId,
           },
         };
         const { hasDiscount, appliedPromotion, price } =
@@ -397,34 +301,149 @@ export class ProductService {
         };
       }),
     );
+    return { variants, hexUrl, tag, category, brand, img };
+  }
+  async getAllProducts(
+    slug: string,
+    tag: string,
+    user?: number,
+  ): Promise<Products[] | null> {
+    const hierarchyId = await attributeService.getAllHierarchyIds(slug);
 
-    const result: OneProductResponse = {
+    const products = await prisma.product.findMany({
+      where: {
+        productCategories: {
+          some: {
+            categoryHierarchyId: { in: hierarchyId },
+          },
+        },
+        productTags: {
+          some: {
+            tag: {
+              slug: tag,
+            },
+          },
+        },
+      },
+      select: {
+        id: true,
+        name: true,
+        basePrice: true,
+        slug: true,
+        productVariants: {
+          select: {
+            basePrice: true,
+            stock: true,
+            reservedStock: true,
+          },
+        },
+      },
+    });
+
+    if (!products) return null;
+
+    const result: Products[] = await Promise.all(
+      products.map(async (p) => {
+        const [product] = await Promise.all([
+          this.getProductVariant(p.slug, user),
+        ]);
+
+        const promoInput = {
+          variants: p.productVariants,
+          user: user,
+          product: {
+            id: p.id,
+            basePrice: p.basePrice,
+            quantity: 1, // Default
+            brandId: product?.brand?.brandId,
+            categoriesId: product?.category?.categoriesId,
+            tagsId: product?.tag?.tagsId,
+          },
+        };
+
+        const { hasDiscount, appliedPromotion, price } =
+          await promotionService.promotionRuleCheck(promoInput);
+
+        return {
+          name: p.name,
+          slug: p.slug,
+          price,
+          hasDiscount,
+          appliedPromotion,
+          brand: product?.brand?.brandName ?? {
+            name: 'No Brand',
+            slug: 'no-brand',
+          },
+          hexUrl: product?.hexUrl,
+          categories: product?.category?.categoriesName,
+          tags: product?.tag?.tagsName,
+          images: product?.img?.images,
+        };
+      }),
+    );
+
+    return result;
+  }
+  async getOneProduct(slug: string, user?: number): Promise<Product | null> {
+    const product = await prisma.product.findUnique({
+      where: { slug },
+      select: {
+        id: true,
+        name: true,
+        sku: true,
+        productDetails: {
+          select: {
+            description: true,
+            length: true,
+            material: true,
+            feature: true,
+            weight: true,
+            width: true,
+            height: true,
+            volume: true,
+            care: true,
+          },
+        },
+        sizingGuide: {
+          select: {
+            guideData: true,
+          },
+        },
+        productAttributes: {
+          select: {
+            attribute: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!product) return null;
+
+    const [products] = await Promise.all([this.getProductVariant(slug, user)]);
+
+    const { productDetails, name, id, sku, productAttributes, sizingGuide } =
+      product;
+
+    const result: Product = {
       id,
       name,
       sku,
       productDetails,
       slug,
       attributes: productAttributes.map((atrr) => atrr.attribute),
-      brand: brand.name,
-      categories: [
-        ...new Set(
-          productCategories.flatMap(
-            (pc) => FlattenCategories(pc.categoryHierarchy).categories,
-          ),
-        ),
-      ],
-      tags: [
-        ...new Set(
-          productTags
-            .map((t) => ({ name: t.tag.name, slug: t.tag.slug }))
-            .filter(Boolean),
-        ),
-      ],
-      images: images.map((i) => ({
-        attributeId: i.attributeValueId,
-        url: i.url,
-      })),
-      variants,
+      brand: products?.brand?.brandName ?? {
+        name: 'No Brand',
+        slug: 'no-brand',
+      },
+      categories: products?.category?.categoriesName,
+      tags: products?.tag?.tagsName,
+      images: products?.img?.variantImages,
+      variants: products?.variants,
     };
 
     return result;

@@ -89,7 +89,9 @@ export class PromotionService {
     // ----------------------------------
 
     if (variants && variants.length > 0) {
-      const availableVariants = variants.filter((v) => v.stock > 0);
+      const availableVariants = variants.filter(
+        (v) => v.stock - v.reservedStock > 0,
+      );
 
       if (availableVariants.length > 0) {
         const cheapest = availableVariants.reduce((prev, current) =>

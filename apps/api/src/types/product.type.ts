@@ -1,6 +1,31 @@
 import Decimal from 'decimal.js';
 import { AppliedPromotion } from './promotion.type';
 
+export type Category = {
+  categoriesId: number[];
+  categoriesName: { name: string; slug: string }[];
+};
+
+export type Tag = {
+  tagsId: number[];
+  tagsName: { name: string; slug: string }[];
+};
+
+export type Brand = {
+  brandId: number;
+  brandName: { name: string; slug: string };
+};
+
+export type VariantImages = {
+  url: string;
+  attributeId: number | null;
+};
+
+export type Images = {
+  images: string[];
+  variantImages: VariantImages[];
+};
+
 type ProductDetails = {
   description: string;
   material?: string | null;
@@ -45,17 +70,17 @@ export type PromoResult = {
   price: Price;
 };
 
-export type AllProductsResponse = {
+export type Products = {
   name: string;
   appliedPromotion?: AppliedPromotion[];
   hasDiscount: boolean;
   price: Price;
   slug: string;
-  brand: string;
-  variants: string[];
-  categories: string[];
-  tags: { name: string; slug: string }[];
-  images: string[];
+  brand: { name: string; slug: string };
+  categories?: { name: string; slug: string }[];
+  tags?: { name: string; slug: string }[];
+  images?: string[];
+  hexUrl?: string[];
 };
 
 export type VariantProduct = {
@@ -77,16 +102,16 @@ export type VariantProduct = {
   }[];
 };
 
-export type OneProductResponse = {
+export type Product = {
   id: number;
   name: string;
   slug: string;
   sku: string;
-  brand: string;
-  categories: string[];
-  tags: { name: string; slug: string }[];
+  brand: { name: string; slug: string };
+  categories?: { name: string; slug: string }[];
+  tags?: { name: string; slug: string }[];
   productDetails: ProductDetails | null;
-  images: { attributeId?: number | null; url: string }[];
+  images?: { attributeId?: number | null; url: string }[];
   attributes: { id: number; name: string }[];
-  variants: VariantProduct[];
+  variants?: VariantProduct[];
 };

@@ -40,6 +40,7 @@ export type CartItems = {
   image: string;
   quantity: number;
   stockAvailable: number;
+  inStock: boolean;
   attributes: {
     attributeId: number;
     attribute: string;

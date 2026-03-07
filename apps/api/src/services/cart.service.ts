@@ -366,6 +366,8 @@ export class CartService {
                 variantAttributeValueIds.includes(img.attributeValueId),
             )?.url ?? null;
 
+          const stockAvailable =
+            product.productVariant.stock - product.productVariant.reservedStock;
           return {
             cartItemId: product.cartId,
             productVariantId: product.productVariantId,
@@ -378,13 +380,14 @@ export class CartService {
               totalPrice,
             },
             sku: product.productVariant.sku,
-            image: imageUrl,
+            image: imageUrl
+              ? imageUrl
+              : product.productVariant.product.images[0].url,
             quantity: promoInput.product.quantity,
             slug: product.productVariant.product.slug,
             brand: product.productVariant.product.brand.name,
-            stockAvailable:
-              product.productVariant.stock -
-              product.productVariant.reservedStock,
+            stockAvailable,
+            inStock: stockAvailable > 0,
             attributes: product.productVariant.productVariantAttributes.map(
               (a) => ({
                 attributeId: a.attributeValue.id,

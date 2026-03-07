@@ -5,19 +5,15 @@ export type Product = {
   id: number;
   basePrice: Decimal;
   quantity: number;
-  brandId: number;
-  categoriesId: number[];
-  tagsId: number[];
+  brandId?: number;
+  categoriesId?: number[];
+  tagsId?: number[];
 };
 
 export type Variant = {
   basePrice: Decimal;
   stock: number;
-  productVariantAttributes?: {
-    attributeValue: {
-      hexUrl: string | null;
-    };
-  }[];
+  reservedStock: number;
 };
 
 export type PromoInput = {
