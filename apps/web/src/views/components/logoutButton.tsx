@@ -22,7 +22,7 @@ export default function LogoutButton({ className }: { className: string }) {
         Notify(data.message);
       }
     } catch (error) {
-      Notify((error as Error).message);
+      Notify(error instanceof Error ? error.message : 'Something went wrong');
     }
   };
 

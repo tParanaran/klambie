@@ -18,7 +18,7 @@ export default function DeleteButton({ variantId }: { variantId: number }) {
     try {
       await axiosInstanceClient.delete(`/shop-cart/delete/${variantId}`);
     } catch (error) {
-      Notify((error as Error).message);
+      Notify(error instanceof Error ? error.message : 'Something went wrong');
     } finally {
       setIsLoading(false);
     }

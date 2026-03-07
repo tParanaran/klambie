@@ -29,6 +29,7 @@ export function GetGroupedAttributes(variants: IVariant[]) {
       } else {
         group.values.push({
           id: attr.id,
+          variantId: variant.id,
           value: attr.value,
           hexUrl: attr.hexUrl,
           inStock: variant.inStock,

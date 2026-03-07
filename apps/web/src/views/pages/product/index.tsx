@@ -8,10 +8,10 @@ import Details from './components/details';
 import AddCartButton from './components/cartButton';
 import Tags from './components/tags';
 import Attributes from './components/attributes';
-import UseSelectedVariant from './hooks/useSelectedVariant';
+import useSelectedVariant from './hooks/useSelectedVariant';
+import useAddToCart from './hooks/useAddToCart';
 import QuantityButton from './components/qtyButton';
 import ProductPrice from './components/price';
-import UseAddToCart from './hooks/useAddToCart';
 import Loading from '@/views/components/loading';
 import { IoInformation, IoWarning } from 'react-icons/io5';
 
@@ -25,8 +25,8 @@ export default function ProductView({ product }: { product: IProduct }) {
     selectedColorId,
     groupedAttributes,
     handleSelect,
-  } = UseSelectedVariant(product.variants);
-  const { errors, isLoading, handleAddToCart, success } = UseAddToCart({
+  } = useSelectedVariant(product.variants);
+  const { errors, isLoading, handleAddToCart, success } = useAddToCart({
     selectedAttributes,
     selectedVariant,
     quantity,
@@ -82,20 +82,23 @@ export default function ProductView({ product }: { product: IProduct }) {
               />
               {selectedVariant && (
                 <>
-                  {' '}
-                  <QuantityButton
-                    inStock={selectedVariant.inStock}
-                    stock={selectedVariant.availableStock}
-                    quantity={quantity}
-                    onChange={setQuantity}
-                  />
-                  {!selectedVariant.inStock ? (
-                    <p className="text-sm text-orange-700">Out of Stock</p>
-                  ) : (
-                    <p className="text-sm opacity-50">
-                      Stock: {selectedVariant.availableStock}
-                    </p>
-                  )}
+                  <div>
+                    {' '}
+                    <h4>Quantity</h4>
+                    <QuantityButton
+                      inStock={selectedVariant.inStock}
+                      stock={selectedVariant.availableStock}
+                      quantity={quantity}
+                      onChange={setQuantity}
+                    />
+                    {!selectedVariant.inStock ? (
+                      <p className="text-sm text-orange-700">Out of Stock</p>
+                    ) : (
+                      <p className="text-sm opacity-50">
+                        Stock: {selectedVariant.availableStock}
+                      </p>
+                    )}
+                  </div>
                   <div>
                     <ProductPrice
                       price={selectedVariant.price}

@@ -1,42 +1,27 @@
 'use client';
-import { ICartItems } from '../types';
+import { ICartItem, ICartItems } from '../types';
+import { useState } from 'react';
 import Link from 'next/link';
 import CartPrice from './price';
 import DeleteButton from './deleleButton';
-import AddNewQty from './qtyButton';
-import VariantsButton from './variants';
-import { useEffect, useState } from 'react';
+import VariantsButton from './variantsbutton';
+import ShowVariants from './showVariant';
+import useVariants from '../hooks/useVariants';
+import useCartQuantities from '../hooks/useQuantity';
+import QuantityButton from '../../product/components/qtyButton';
+import ConfirmButton from './confirmButton';
+import useSelect from '../hooks/useSelect';
 
-interface ICartItem {
+interface ICart {
   cartItems: ICartItems[];
 }
 
-export default function CartItems({ cartItems }: ICartItem) {
-  const [selectedItems, setSelectedItems] = useState<number[]>(
-    cartItems.map((item) => item.productVariantId),
-  );
-
-  const toggleItem = (id: number) => {
-    setSelectedItems((prev) =>
-      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id],
-    );
-  };
-
-  const toggleSelectAll = () => {
-    if (selectedItems.length === cartItems.length) {
-      setSelectedItems([]);
-    } else {
-      setSelectedItems(cartItems.map((item) => item.productVariantId));
-    }
-  };
-
-  useEffect(() => {
-    setSelectedItems((prevSelected) =>
-      cartItems
-        .map((item) => item.productVariantId)
-        .filter((id) => prevSelected.includes(id)),
-    );
-  }, [cartItems]);
+export default function CartItems({ cartItems }: ICart) {
+  const [cartItem, setCartItem] = useState<ICartItem>();
+  const { variants, showVariants, setShowVariants, variantHandler } =
+    useVariants();
+  const { selectedItems, toggleItem, toggleSelectAll } = useSelect(cartItems);
+  const { quantities, updateQuantity } = useCartQuantities(cartItems);
 
   return (
     <div>
@@ -65,7 +50,7 @@ export default function CartItems({ cartItems }: ICartItem) {
           key={i}
           className="relative bg-black/10 rounded-2xl h-fit my-1 p-2 gap-2 flex"
         >
-          <div className="absolute bottom-1/3 right-2">
+          <div className="absolute bottom-2 right-2">
             <DeleteButton variantId={item.productVariantId} />
           </div>
           <div className="flex space-x-2 items-center">
@@ -96,14 +81,32 @@ export default function CartItems({ cartItems }: ICartItem) {
                 <p>SKU : {item.sku}</p>
               </div>
             </Link>
-            <div className="flex text-xs space-x-2">
+            <div
+              className="flex text-xs space-x-2 flex-wrap"
+              onClick={() =>
+                setCartItem({
+                  variantId: item.productVariantId,
+                  attributes: item.attributes.map((attr) => ({
+                    attributeId: attr.attributeId,
+                    attributeValueId: attr.attributeValueId,
+                  })),
+                })
+              }
+            >
               <VariantsButton
                 attribute={item.attributes.map((attr) => attr.value).join(', ')}
-              />
-              <AddNewQty
+                onClick={variantHandler}
+                slug={item.slug}
+                name={item.name}
                 quantity={item.quantity}
-                inStock={item.inStock}
+              />
+              <QuantityButton
+                quantity={quantities[item.productVariantId]}
                 stock={item.stockAvailable}
+                inStock={item.inStock}
+                onChange={(newQty) =>
+                  updateQuantity(item.productVariantId, newQty)
+                }
               />
             </div>
 
@@ -113,6 +116,20 @@ export default function CartItems({ cartItems }: ICartItem) {
           </div>
         </div>
       ))}
+      {showVariants && variants && (
+        <ShowVariants
+          variants={variants.variants}
+          variantImages={variants.variantImages}
+          name={variants.name}
+          onClose={setShowVariants}
+          quantities={quantities}
+          updateQuantity={updateQuantity}
+          cartItemVariant={cartItem}
+        >
+          {' '}
+          <ConfirmButton />
+        </ShowVariants>
+      )}
     </div>
   );
 }

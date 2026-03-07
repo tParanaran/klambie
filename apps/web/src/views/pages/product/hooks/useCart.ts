@@ -2,7 +2,7 @@ import { Parse } from '@/utils/parse';
 import { ICartItem } from '../types/product.types';
 import axiosInstanceClient from '@/lib/axios/client';
 
-export default function UseCart() {
+export default function useCart() {
   const addToCart = async (cartItem: ICartItem) => {
     try {
       const response = await axiosInstanceClient.post('/shop-cart/add', {

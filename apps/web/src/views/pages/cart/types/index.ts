@@ -22,6 +22,7 @@ export interface ICartItems {
   inStock: boolean;
   attributes: {
     attributeId: number;
+    attributeValueId: number;
     attribute: string;
     value: string;
   }[];
@@ -31,6 +32,11 @@ export interface ITotalPrice {
   subTotal: string;
   discountTotal: string;
   grandTotal: string;
+}
+
+export interface ICartItem {
+  variantId: number;
+  attributes: { attributeId: number; attributeValueId: number }[];
 }
 
 export interface ICartItemsResponse {

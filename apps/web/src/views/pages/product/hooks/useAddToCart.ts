@@ -11,7 +11,7 @@ interface IAddToCart {
   selectedVariant: IVariant | null | undefined;
 }
 
-export default function UseAddToCart({
+export default function useAddToCart({
   quantity,
   selectedAttributes,
   selectedVariant,

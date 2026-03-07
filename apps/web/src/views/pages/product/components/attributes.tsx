@@ -19,9 +19,9 @@ export default function Attributes({
           (v) => v.id === selectedValueId,
         )?.value;
         return (
-          <div key={attr.attributeId} className="my-3">
+          <div key={attr.attributeId} className="my-2">
             <h4>{attr.attributeName}</h4>
-            <div className="flex space-x-2">
+            <div className="flex space-x-2 flex-wrap">
               {attr.values.map((value) => {
                 const isSelected = selectedValueId === value.id;
 
@@ -36,14 +36,14 @@ export default function Attributes({
                       aria-label={value.value}
                       onChange={() => handleSelect(attr.attributeId, value.id)}
                       title={value.value}
-                      className="appearance-none p-5 sm:p-4 m-1 rounded-full hover:ring hover:ring-black/90 hover:ring-offset-1 hover:ring-offset-slate-100 checked:ring-1 checked:ring-black/90 checked:ring-offset-2 checked:ring-offset-slate-100"
+                      className="appearance-none p-3 sm:p-4 m-1 rounded-full hover:ring hover:ring-black/90 hover:ring-offset-1 hover:ring-offset-slate-100 checked:ring-1 checked:ring-black/90 checked:ring-offset-2 checked:ring-offset-slate-100"
                       style={{ backgroundColor: value.hexUrl }}
                     />
                   );
                 }
 
                 return (
-                  <div key={value.value} className="my-4">
+                  <div key={value.value} className="my-3">
                     <input
                       type="radio"
                       id={value.value}

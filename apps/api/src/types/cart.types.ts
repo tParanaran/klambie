@@ -43,6 +43,7 @@ export type CartItems = {
   inStock: boolean;
   attributes: {
     attributeId: number;
+    attributeValueId: number;
     attribute: string;
     value: string;
   }[];

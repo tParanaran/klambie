@@ -390,7 +390,8 @@ export class CartService {
             inStock: stockAvailable > 0,
             attributes: product.productVariant.productVariantAttributes.map(
               (a) => ({
-                attributeId: a.attributeValue.id,
+                attributeId: a.attributeValue.attribute.id,
+                attributeValueId: a.attributeValueId,
                 attribute: a.attributeValue.attribute.name,
                 value: a.attributeValue.value,
               }),
