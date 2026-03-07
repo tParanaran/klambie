@@ -10,7 +10,7 @@ export default function Tags({
   categories,
 }: {
   tags: ITag[];
-  categories: string[];
+  categories: { name: string; slug: string }[];
 }) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -31,7 +31,7 @@ export default function Tags({
           href={
             categories !== undefined
               ? '/d/' +
-                categories[0].toLowerCase() +
+                categories[0].name.toLowerCase() +
                 '?' +
                 createTagSearch('tag', `${tag.slug}`)
               : pathname + '?' + createTagSearch('tag', `${tag.slug}`)

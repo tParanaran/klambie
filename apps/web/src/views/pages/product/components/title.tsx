@@ -2,8 +2,8 @@ import Link from 'next/link';
 
 interface ITitle {
   slug: string;
-  categories: string[];
-  brand: string;
+  categories: { name: string; slug: string }[];
+  brand: { name: string; slug: string };
   name: string;
 }
 
@@ -19,13 +19,13 @@ export default function Title({ title }: { title: ITitle }) {
             href={'/'}
             className="px-3 py-1 rounded-full mt-1 bg-orange-800 text-[#ededed] flex items-center hover:bg-orange-700"
           >
-            {category}
+            {category.name}
           </Link>
         ))}
       </div>
 
       <Link href={`/p/${slug}`} aria-label={name}>
-        <h1 className="font-bold lg:text-lg">{brand}</h1>
+        <h1 className="font-bold lg:text-lg">{brand.name}</h1>
         <h1 className="font-light lg:text-lg">{name}</h1>
       </Link>
     </>

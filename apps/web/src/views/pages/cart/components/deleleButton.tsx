@@ -35,7 +35,7 @@ export default function DeleteButton({ variantId }: { variantId: number }) {
   return (
     <>
       <button
-        className="text-[#ededed] font-bold text-xl p-2 rounded-full bg-black/60 hover:scale-125"
+        className="text-[#ededed] font-bold text-lg p-0.5 rounded-full bg-black/60 hover:scale-125"
         aria-label="Remove products"
         onClick={() => mutation.mutateAsync(variantId)}
       >

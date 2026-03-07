@@ -23,9 +23,9 @@ export interface IProducts {
   hasDiscount: boolean;
   price: IPrice;
   slug: string;
-  brand: string;
-  variants: string[];
-  categories: string[];
+  brand: { name: string; slug: string };
+  hexUrl: string[];
+  categories: { name: string; slug: string }[];
   tags: ITag[];
   images: string[];
 }
@@ -66,9 +66,9 @@ export interface IProduct {
   name: string;
   sku: string;
   slug: string;
-  brand: string;
+  brand: { name: string; slug: string };
   attributes: { name: string; id: number }[];
-  categories: string[];
+  categories: { name: string; slug: string }[];
   tags: ITag[];
   productDetails: IProductDetails;
   images: { attributeId: number | null; url: string }[];

@@ -1,5 +1,5 @@
 import Decimal from 'decimal.js';
-import { Price, PromoResult } from '@/types/product.type';
+import { PromoResult } from '@/types/product.type';
 import { Prisma, Promotion } from 'generated/prisma/client';
 import { prisma } from 'lib/prisma';
 import {
@@ -124,27 +124,25 @@ export class PromotionService {
           return false;
       }
 
-      const targetIds = [
-        ...new Set(
-          p.promotionAssignments.map((t) => t.targetId).filter(Boolean),
-        ),
-      ];
-      if (p.applyTo === 'PRODUCT' && targetIds.includes(product.id))
-        return true;
-      if (p.applyTo === 'BRAND' && targetIds.includes(product.brandId))
-        return true;
-      if (
-        p.applyTo === 'CATEGORY' &&
-        targetIds.some((id) => product.categoriesId.includes(Number(id)))
-      )
-        return true;
-      if (
-        p.applyTo === 'TAG' &&
-        targetIds.some((id) => product.tagsId.includes(Number(id)))
-      )
-        return true;
+      const targetSet = new Set(
+        p.promotionAssignments.map((t) => t.targetId).filter(Boolean),
+      );
 
-      return false;
+      if (p.applyTo === 'PRODUCT') {
+        return targetSet.has(product.id);
+      }
+
+      if (p.applyTo === 'BRAND') {
+        return targetSet.has(product?.brandId ?? 24);
+      }
+
+      if (p.applyTo === 'CATEGORY') {
+        return product?.categoriesId?.some((id) => targetSet.has(id));
+      }
+
+      if (p.applyTo === 'TAG') {
+        return product?.tagsId?.some((id) => targetSet.has(id));
+      }
     });
 
     let discountPercentage = new Decimal(0);

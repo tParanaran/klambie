@@ -89,6 +89,13 @@ export default function ProductView({ product }: { product: IProduct }) {
                     quantity={quantity}
                     onChange={setQuantity}
                   />
+                  {!selectedVariant.inStock ? (
+                    <p className="text-sm text-orange-700">Out of Stock</p>
+                  ) : (
+                    <p className="text-sm opacity-50">
+                      Stock: {selectedVariant.availableStock}
+                    </p>
+                  )}
                   <div>
                     <ProductPrice
                       price={selectedVariant.price}

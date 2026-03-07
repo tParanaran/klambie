@@ -1,15 +1,18 @@
+'use client';
 import Rupiah from '@/utils/rupiah';
 import { ITotalPrice } from '../types';
 import GrandPrice from './grand';
+import { useCartQuery } from '../../product/hooks/useCartQuery';
 
 export default function CartSummary({ price }: { price: ITotalPrice }) {
+  const total = useCartQuery();
   const { discountTotal, subTotal } = price;
 
   return (
     <>
       <div className="flex justify-between flex-wrap">
         <h1 className="font-semibold">
-          Subtotal <span className="text-sm"> product(s)</span>
+          Subtotal <span className="text-sm">{total} product(s)</span>
         </h1>
         <p>{Rupiah(subTotal)}</p>
       </div>

@@ -45,7 +45,7 @@ export default function ProductCard({ products }: { products: IProducts[] }) {
           <Link href={`/p/${item.slug}`}>
             <div className="flex space-x-1 my-3 flex-wrap">
               {' '}
-              {item.variants.map((color, c) => (
+              {item.hexUrl.map((color, c) => (
                 <span
                   key={c}
                   style={{ backgroundColor: `${color}` }}
@@ -58,11 +58,11 @@ export default function ProductCard({ products }: { products: IProducts[] }) {
               <h1 className="text-light text-xs uppercase mb-1 opacity-70">
                 {item.categories
                   .map((category) => {
-                    return category;
+                    return category.name;
                   })
                   .join(', ')}
               </h1>
-              <p className="font-bold">{item.brand}</p>
+              <p className="font-bold">{item.brand.name}</p>
               <p className="font-light">{item.name}</p>
               <div className="flex items-center space-x-2 flex-wrap">
                 <ProductPrice
