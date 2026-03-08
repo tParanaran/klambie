@@ -10,7 +10,7 @@ export default function CheckoutButton() {
       onClick={() => console.log('Next Feature')}
       disabled={false}
       loading={false}
-      className="bg-orange-700"
+      className="bg-orange-800"
     >
       Checkout
     </Button>

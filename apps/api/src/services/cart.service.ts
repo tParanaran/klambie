@@ -417,13 +417,12 @@ export class CartService {
   }
   async addUpdateQty(
     productId: number,
-    data: { quantity: number },
+    quantity: number,
     sessionId: string,
     userId?: number,
   ): Promise<{ message: string; success: boolean }> {
     const availableStock = await this.checkAvailableStock(productId);
     const cart = await this.getCart(sessionId, userId);
-    const { quantity } = data;
 
     if (!cart) {
       return {
@@ -446,7 +445,7 @@ export class CartService {
       };
     }
 
-    await prisma.cartItem.update({
+    const result = await prisma.cartItem.update({
       where: {
         cartId_productVariantId: {
           cartId: cart.cart.id,
@@ -454,9 +453,16 @@ export class CartService {
         },
       },
       data: {
-        quantity: quantity,
+        quantity,
       },
     });
+
+    if (!result) {
+      return {
+        message: 'Something go wrong',
+        success: false,
+      };
+    }
 
     return {
       message: 'Quantity updated successfully.',

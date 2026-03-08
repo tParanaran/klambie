@@ -50,14 +50,15 @@ export default function useAddToCart({
         return;
       }
 
-      setErrors([]);
       setSuccess('');
       setTimeout(() => setSuccess(result.message!), 0);
     } catch (err: any) {
-      if (!(err instanceof ValidationError)) return;
-
-      const uniqueErrors = Array.from(new Set(err.errors));
-      setErrors(uniqueErrors);
+      if (err instanceof ValidationError) {
+        const uniqueErrors = [...new Set(err.errors)];
+        setErrors(uniqueErrors);
+      } else {
+        setErrors(['Something went wrong']);
+      }
     } finally {
       setIsLoading(false);
     }

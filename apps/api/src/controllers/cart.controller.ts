@@ -54,9 +54,11 @@ export class Cart {
   async updateQty(req: Request, res: Response, next: NextFunction) {
     try {
       const { productId } = req.params;
+      const quantity = req.body.data?.quantity;
+
       const result = await cartService.addUpdateQty(
         Number(productId),
-        req.body,
+        quantity,
         req.cookies.sessionId,
         req.user?.id,
       );

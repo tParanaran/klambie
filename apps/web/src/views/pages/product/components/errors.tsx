@@ -5,8 +5,8 @@ export default function ErrorsMessage({
   errors,
   success,
 }: {
-  errors: string[];
-  success: string;
+  errors?: string[];
+  success?: string;
 }) {
   const [message, setMessage] = useState<string | null>(null);
 
@@ -19,9 +19,9 @@ export default function ErrorsMessage({
   }, [success]);
   return (
     <div>
-      {errors.length > 0 && (
+      {errors && (
         <>
-          {errors.map((err, e) => (
+          {errors?.map((err, e) => (
             <div key={e} className="text-orange-700 text-sm ml-4 mt-1 flex">
               <IoWarning className="mr-1 text-lg" /> {err}
             </div>

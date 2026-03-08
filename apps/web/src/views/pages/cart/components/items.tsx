@@ -1,6 +1,6 @@
 'use client';
 import { ICartItems, IVariantAttribute } from '../types';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import CartPrice from './price';
 import DeleteButton from './deleleButton';
@@ -12,6 +12,7 @@ import QuantityButton from '../../product/components/qtyButton';
 import useSelect from '../hooks/useSelect';
 import useSelectedVariant from '../../product/hooks/useSelectedVariant';
 import Button from '@/views/components/button';
+import ErrorsMessage from '../../product/components/errors';
 
 interface ICart {
   cartItems: ICartItems[];
@@ -22,7 +23,8 @@ export default function CartItems({ cartItems }: ICart) {
   const [cartItem, setCartItem] = useState<IVariantAttribute>();
   const { variants, showVariants, setShowVariants, variantHandler } =
     useVariants();
-  const { quantities, updateQuantity } = useCartQuantities(cartItems);
+  const { quantities, updateQuantity, messages, isLoading } =
+    useCartQuantities(cartItems);
   const {
     selectedAttributes,
     selectedVariant,
@@ -109,6 +111,7 @@ export default function CartItems({ cartItems }: ICart) {
                 quantity={item.quantity}
               />
               <QuantityButton
+                loading={isLoading}
                 quantity={quantities[item.productVariantId]}
                 stock={item.stockAvailable}
                 inStock={item.inStock}
@@ -116,10 +119,15 @@ export default function CartItems({ cartItems }: ICart) {
                   updateQuantity(item.productVariantId, newQty)
                 }
               />
-            </div>
-
+            </div>{' '}
             <div className="flex flex-wrap space-x-2 items-center text-sm">
               <CartPrice price={item.price} hasDiscount={item.hasDiscount} />
+            </div>
+            <div className="-ml-5 -mt-1">
+              <ErrorsMessage
+                errors={messages[item.productVariantId]?.errors}
+                success={messages[item.productVariantId]?.success}
+              />
             </div>
           </div>
         </div>

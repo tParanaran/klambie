@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { body, validationResult } from 'express-validator';
 
 export const QtyValidation = [
-  body('quantity')
+  body('data.quantity')
     .notEmpty()
     .withMessage('Quantity is required')
     .isInt({ min: 1 })
