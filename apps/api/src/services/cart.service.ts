@@ -420,7 +420,7 @@ export class CartService {
     quantity: number,
     sessionId: string,
     userId?: number,
-  ): Promise<{ message: string; success: boolean }> {
+  ): Promise<{ message: string; success: boolean; addQuantity?: number }> {
     const availableStock = await this.checkAvailableStock(productId);
     const cart = await this.getCart(sessionId, userId);
 
@@ -466,6 +466,9 @@ export class CartService {
 
     return {
       message: 'Quantity updated successfully.',
+      addQuantity:
+        quantity -
+        cart.cartItems.find((c) => c.productVariantId === productId)?.quantity!,
       success: true,
     };
   }

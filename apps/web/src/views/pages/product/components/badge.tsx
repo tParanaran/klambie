@@ -18,8 +18,10 @@ export default function CartBadge() {
     opacity: 1,
   });
 
+  console.log(lastAdded);
+
   useEffect(() => {
-    if (lastAdded && lastAdded > 0) {
+    if (lastAdded) {
       setShowFloating(true);
       setStyle({ transform: 'translateY(0)', opacity: 1 });
 
@@ -50,7 +52,7 @@ export default function CartBadge() {
             transition: 'all 0.8s ease-out',
           }}
         >
-          +{lastAdded}
+          {lastAdded && lastAdded < 0 ? `${lastAdded}` : `+${lastAdded}`}
         </span>
       )}
     </>

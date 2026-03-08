@@ -3,7 +3,7 @@ import { ICartItems } from '../types';
 import { useDebounce } from './useDebounce';
 import axiosInstanceClient from '@/lib/axios/client';
 import { ValidationError } from 'yup';
-import { useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 
 export default function useCartQuantities(cartItems?: ICartItems[]) {
@@ -54,6 +54,7 @@ export default function useCartQuantities(cartItems?: ICartItems[]) {
       }));
       if (isSuccess) {
         queryClient.invalidateQueries({ queryKey: ['cart'] });
+        queryClient.setQueryData(['cartLastAdded'], data.addQuantity ?? 0);
         router.refresh();
       }
     } catch (err: any) {
