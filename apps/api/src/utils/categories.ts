@@ -19,17 +19,21 @@ export default function FlattenCategories(ch: CategoryNode): {
     current = current.parent;
   }
 
+  const seenNames = new Set<string>();
+
   return chain.reduce(
     (acc, node) => {
-      if (node.category?.name && node.category?.slug) {
-        acc.categories.push({
-          name: node.category.name,
-          slug: node.category.slug,
-        });
+      const name = node.category?.name;
+      const slug = node.category?.slug;
+      const id = node.category?.id;
+
+      if (name && slug && !seenNames.has(name)) {
+        acc.categories.push({ name, slug });
+        seenNames.add(name);
       }
 
-      if (node.category?.id !== undefined) {
-        acc.categoriesId.push(node.category.id);
+      if (id !== undefined) {
+        acc.categoriesId.push(id);
       }
 
       return acc;

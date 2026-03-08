@@ -29,7 +29,7 @@ export class Cart {
   }
   async fetchCart(req: Request, res: Response, next: NextFunction) {
     try {
-      const result = await cartService.getCart(
+      const result = await cartService.getCartItems(
         req.cookies.sessionId,
         req.user?.id,
       );
@@ -43,6 +43,20 @@ export class Cart {
       const { productId } = req.params;
       const result = await cartService.deleteCart(
         Number(productId),
+        req.cookies.sessionId,
+        req.user?.id,
+      );
+      res.status(200).send(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+  async updateQty(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { productId } = req.params;
+      const result = await cartService.addUpdateQty(
+        Number(productId),
+        req.body,
         req.cookies.sessionId,
         req.user?.id,
       );

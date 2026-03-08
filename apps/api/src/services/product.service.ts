@@ -7,7 +7,6 @@ import {
   Product,
   Tag,
   VariantProduct,
-  VariantImages,
 } from '@/types/product.type';
 import { prisma } from 'lib/prisma';
 import { GenerateSlug } from '@/utils/slug';
@@ -191,13 +190,14 @@ export class ProductService {
         ),
       ),
     ];
-    const categoriesName = [
-      ...new Set(
-        category.productCategories.flatMap(
-          (pc) => FlattenCategories(pc.categoryHierarchy).categories,
-        ),
-      ),
-    ];
+    const categories = category.productCategories.flatMap(
+      (pc) => FlattenCategories(pc.categoryHierarchy).categories,
+    );
+
+    const categoriesName = categories.filter(
+      (cat, index, self) =>
+        index === self.findIndex((c) => c.name === cat.name),
+    );
 
     return { categoriesId, categoriesName };
   }
