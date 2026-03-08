@@ -19,13 +19,13 @@ export default function useVariants() {
   const variantHandler = async (
     slug: string,
     name: string,
-    quantity: number,
+    quantity?: number,
   ) => {
     try {
       const { data } = await axiosInstanceClient.get(
         `/product/variants/${slug}`,
       );
-      setVariants({ ...data, name, quantity });
+      setVariants({ ...data, name, quantity: quantity ?? 1 });
       setShowVariants(true);
     } catch (error) {
       Notify(error instanceof Error ? error.message : 'Something went wrong');

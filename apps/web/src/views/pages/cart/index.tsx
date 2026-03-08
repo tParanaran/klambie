@@ -3,8 +3,8 @@ import { ICartItemsResponse } from './types';
 import Loading from '@/views/components/loading';
 import CartItems from './components/items';
 import CartSummary from './components/summary';
-import CheckoutButton from './components/checkoutButton';
 import AddVouchers from './components/vouchers';
+import CheckoutButton from './components/checkoutButton';
 
 export default async function CartView({
   carts,

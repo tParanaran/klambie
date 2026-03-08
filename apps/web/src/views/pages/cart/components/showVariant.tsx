@@ -1,44 +1,42 @@
-import { useState } from 'react';
 import Attributes from '../../product/components/attributes';
 import ProductPrice from '../../product/components/price';
 import QuantityButton from '../../product/components/qtyButton';
 import ImageSwiper from '../../product/components/swiper';
-import UseSelectedVariant from '../../product/hooks/useSelectedVariant';
-import { IImages, IVariant } from '../../product/types/product.types';
-import ConfirmButton from './confirmButton';
-import { ICartItem } from '../types';
+import {
+  IGroupedAttribute,
+  IImages,
+  IVariant,
+} from '../../product/types/product.types';
 
 interface IShowVariant {
-  variants: IVariant[];
   variantImages: IImages[];
   name: string;
-  onClose: (a: boolean) => void;
+  children: React.ReactNode;
+  groupedAttributes: IGroupedAttribute[];
+  selectedVariant: IVariant | null | undefined;
+  selectedColorId: number | undefined;
+  selectedAttributes: Record<number, number>;
   quantities: {
     [key: number]: number;
   };
+  onClose: (a: boolean) => void;
+  handleSelect: (attributeId: number, valueId: number) => void;
   updateQuantity: (variantId: number, newQty: number) => void;
-  cartItemVariant?: ICartItem;
-  children: React.ReactNode;
 }
 
 export default function ShowVariants({
-  variants,
   variantImages,
   name,
-  onClose,
-  quantities,
-  updateQuantity,
-  cartItemVariant,
   children,
+  quantities,
+  groupedAttributes,
+  selectedVariant,
+  selectedColorId,
+  selectedAttributes,
+  onClose,
+  handleSelect,
+  updateQuantity,
 }: IShowVariant) {
-  const {
-    selectedAttributes,
-    selectedVariant,
-    selectedColorId,
-    groupedAttributes,
-    handleSelect,
-  } = UseSelectedVariant(variants, cartItemVariant);
-
   const withAttribute = variantImages.filter(
     (item) => item.attributeId !== null,
   );
@@ -86,10 +84,8 @@ export default function ShowVariants({
             <QuantityButton
               inStock={selectedVariant.inStock}
               stock={selectedVariant.availableStock}
-              quantity={quantities[cartItemVariant?.variantId || 0]}
-              onChange={(newQty) =>
-                updateQuantity(cartItemVariant?.variantId || 1, newQty)
-              }
+              quantity={quantities[selectedVariant.id] ?? 1}
+              onChange={(newQty) => updateQuantity(selectedVariant.id, newQty)}
             />
             {!selectedVariant.inStock ? (
               <p className="text-sm text-orange-700">Out of Stock</p>

@@ -1,4 +1,4 @@
-import LinkButton from '@/views/components/linkButton';
+import LinkButton from '@/views/components/link';
 import { IoBagHandleOutline } from 'react-icons/io5';
 
 export default function EmptyCart() {

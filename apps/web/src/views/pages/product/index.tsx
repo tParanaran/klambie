@@ -5,7 +5,6 @@ import { IProduct } from '@/views/pages/product/types/product.types';
 import Title from './components/title';
 import Images from './components/images';
 import Details from './components/details';
-import AddCartButton from './components/cartButton';
 import Tags from './components/tags';
 import Attributes from './components/attributes';
 import useSelectedVariant from './hooks/useSelectedVariant';
@@ -13,11 +12,11 @@ import useAddToCart from './hooks/useAddToCart';
 import QuantityButton from './components/qtyButton';
 import ProductPrice from './components/price';
 import Loading from '@/views/components/loading';
-import { IoInformation, IoWarning } from 'react-icons/io5';
+import ErrorsMessage from './components/errors';
+import Button from '@/views/components/button';
 
 export default function ProductView({ product }: { product: IProduct }) {
   const [quantity, setQuantity] = useState<number>(1);
-  const [message, setMessage] = useState<string | null>(null);
   const { slug, categories, brand, name } = product;
   const {
     selectedAttributes,
@@ -41,14 +40,6 @@ export default function ProductView({ product }: { product: IProduct }) {
       setQuantity(1);
     }
   }, [selectedVariant]);
-
-  useEffect(() => {
-    if (success) {
-      setMessage(success);
-      const timer = setTimeout(() => setMessage(null), 2000);
-      return () => clearTimeout(timer);
-    }
-  }, [success]);
 
   return (
     <div>
@@ -109,28 +100,25 @@ export default function ProductView({ product }: { product: IProduct }) {
               )}
               <div>
                 {' '}
-                <AddCartButton
-                  handleAddToCart={handleAddToCart}
-                  errors={errors}
-                />
-                {errors.length > 0 && (
-                  <>
-                    {errors.map((err, e) => (
-                      <div
-                        key={e}
-                        className="text-orange-700 text-sm ml-4 mt-1 flex"
-                      >
-                        <IoWarning className="mr-1 text-lg" /> {err}
-                      </div>
-                    ))}
-                  </>
-                )}
-                {message && (
-                  <p className="text-green-700 text-sm ml-4 mt-1 flex">
-                    {' '}
-                    <IoInformation className="mr-1 text-lg" /> {message}
-                  </p>
-                )}
+                <div className="flex space-x-2">
+                  <Button
+                    onClick={handleAddToCart}
+                    disabled={errors.length > 0}
+                    loading={isLoading}
+                    className="bg-orange-800"
+                  >
+                    Add to Cart{' '}
+                  </Button>
+                  <Button
+                    onClick={() => console.log('Next Feature')}
+                    disabled={false}
+                    loading={isLoading}
+                    className="bg-orange-700"
+                  >
+                    Buy Now{' '}
+                  </Button>
+                </div>
+                <ErrorsMessage errors={errors} success={success} />
               </div>
             </div>
           </div>

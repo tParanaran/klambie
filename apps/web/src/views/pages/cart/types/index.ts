@@ -34,7 +34,7 @@ export interface ITotalPrice {
   grandTotal: string;
 }
 
-export interface ICartItem {
+export interface IVariantAttribute {
   variantId: number;
   attributes: { attributeId: number; attributeValueId: number }[];
 }

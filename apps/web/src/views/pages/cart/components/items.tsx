@@ -1,5 +1,5 @@
 'use client';
-import { ICartItem, ICartItems } from '../types';
+import { ICartItems, IVariantAttribute } from '../types';
 import { useState } from 'react';
 import Link from 'next/link';
 import CartPrice from './price';
@@ -9,19 +9,27 @@ import ShowVariants from './showVariant';
 import useVariants from '../hooks/useVariants';
 import useCartQuantities from '../hooks/useQuantity';
 import QuantityButton from '../../product/components/qtyButton';
-import ConfirmButton from './confirmButton';
 import useSelect from '../hooks/useSelect';
+import useSelectedVariant from '../../product/hooks/useSelectedVariant';
+import Button from '@/views/components/button';
 
 interface ICart {
   cartItems: ICartItems[];
 }
 
 export default function CartItems({ cartItems }: ICart) {
-  const [cartItem, setCartItem] = useState<ICartItem>();
+  const { selectedItems, toggleItem, toggleSelectAll } = useSelect(cartItems);
+  const [cartItem, setCartItem] = useState<IVariantAttribute>();
   const { variants, showVariants, setShowVariants, variantHandler } =
     useVariants();
-  const { selectedItems, toggleItem, toggleSelectAll } = useSelect(cartItems);
   const { quantities, updateQuantity } = useCartQuantities(cartItems);
+  const {
+    selectedAttributes,
+    selectedVariant,
+    selectedColorId,
+    groupedAttributes,
+    handleSelect,
+  } = useSelectedVariant(variants?.variants ?? [], cartItem);
 
   return (
     <div>
@@ -50,7 +58,7 @@ export default function CartItems({ cartItems }: ICart) {
           key={i}
           className="relative bg-black/10 rounded-2xl h-fit my-1 p-2 gap-2 flex"
         >
-          <div className="absolute bottom-2 right-2">
+          <div className="absolute top-1/2 right-2">
             <DeleteButton variantId={item.productVariantId} />
           </div>
           <div className="flex space-x-2 items-center">
@@ -82,7 +90,7 @@ export default function CartItems({ cartItems }: ICart) {
               </div>
             </Link>
             <div
-              className="flex text-xs space-x-2 flex-wrap"
+              className="flex text-xs space-x-2 flex-wrap mr-7"
               onClick={() =>
                 setCartItem({
                   variantId: item.productVariantId,
@@ -118,16 +126,26 @@ export default function CartItems({ cartItems }: ICart) {
       ))}
       {showVariants && variants && (
         <ShowVariants
-          variants={variants.variants}
           variantImages={variants.variantImages}
           name={variants.name}
-          onClose={setShowVariants}
           quantities={quantities}
+          groupedAttributes={groupedAttributes}
+          selectedVariant={selectedVariant}
+          selectedColorId={selectedColorId}
+          selectedAttributes={selectedAttributes}
+          onClose={setShowVariants}
+          handleSelect={handleSelect}
           updateQuantity={updateQuantity}
-          cartItemVariant={cartItem}
         >
           {' '}
-          <ConfirmButton />
+          <Button
+            onClick={() => console.log('Next Feature')}
+            disabled={false}
+            loading={false}
+            className="bg-orange-700"
+          >
+            Confirm
+          </Button>
         </ShowVariants>
       )}
     </div>
