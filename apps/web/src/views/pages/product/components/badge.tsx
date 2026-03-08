@@ -18,17 +18,24 @@ export default function CartBadge() {
     opacity: 1,
   });
 
-  console.log(lastAdded);
-
   useEffect(() => {
-    if (lastAdded) {
-      setShowFloating(true);
-      setStyle({ transform: 'translateY(0)', opacity: 1 });
+    if (lastAdded !== 0) {
+      const isAdd = lastAdded && lastAdded > 0;
 
-      setTimeout(
-        () => setStyle({ transform: 'translateY(-20px)', opacity: 0 }),
-        50,
-      );
+      setShowFloating(true);
+
+      setStyle({
+        transform: isAdd ? 'translateY(0px)' : 'translateY(-12px)',
+        opacity: 1,
+      });
+
+      setTimeout(() => {
+        setStyle({
+          transform: isAdd ? 'translateY(-20px)' : 'translateY(20px)',
+          opacity: 0,
+        });
+      }, 100);
+
       setTimeout(() => {
         setShowFloating(false);
         queryClient.setQueryData(['cartLastAdded'], 0);
