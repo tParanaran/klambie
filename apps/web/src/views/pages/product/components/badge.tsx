@@ -1,15 +1,16 @@
 'use client';
 
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useCartQuery } from '../hooks/useCartQuery';
 
 export default function CartBadge() {
+  const isFirstRender = useRef<boolean>(true);
   const queryClient = useQueryClient();
   const total = useCartQuery();
   const { data: lastAdded } = useQuery({
     queryKey: ['cartLastAdded'],
-    queryFn: () => queryClient.getQueryData<number>(['cartLastAdded']) ?? null,
+    queryFn: () => queryClient.getQueryData<number>(['cartLastAdded']) ?? 0,
   });
 
   const [showFloating, setShowFloating] = useState<boolean>(false);
@@ -19,6 +20,11 @@ export default function CartBadge() {
   });
 
   useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+
     if (lastAdded !== 0) {
       const isAdd = lastAdded && lastAdded > 0;
 

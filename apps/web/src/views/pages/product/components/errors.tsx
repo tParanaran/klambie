@@ -8,12 +8,12 @@ export default function ErrorsMessage({
   errors?: string[];
   success?: string;
 }) {
-  const [message, setMessage] = useState<string | null>(null);
+  const [message, setMessage] = useState<string>();
 
   useEffect(() => {
     if (success) {
       setMessage(success);
-      const timer = setTimeout(() => setMessage(null), 2000);
+      const timer = setTimeout(() => setMessage(''), 3000);
       return () => clearTimeout(timer);
     }
   }, [success]);
@@ -22,14 +22,17 @@ export default function ErrorsMessage({
       {errors && (
         <>
           {errors?.map((err, e) => (
-            <div key={e} className="text-orange-700 text-sm ml-4 mt-1 flex">
+            <div
+              key={e}
+              className="text-white text-xs mt-1 flex bg-red-800 rounded-full px-2 py-0.5 w-fit animate-pulse"
+            >
               <IoWarning className="mr-1 text-lg" /> {err}
             </div>
           ))}
         </>
       )}
       {message && (
-        <p className="text-green-700 text-sm ml-4 mt-1 flex">
+        <p className="bg-emerald-600 text-white text-xs mt-1 flex rounded-full px-2 py-0.5 w-fit animate-pulse">
           {' '}
           <IoInformation className="mr-1 text-lg" /> {message}
         </p>

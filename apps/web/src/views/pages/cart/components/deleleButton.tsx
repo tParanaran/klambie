@@ -6,7 +6,7 @@ import Loading from '@/views/components/loading';
 import { useState } from 'react';
 import { IoClose } from 'react-icons/io5';
 import { useRouter } from 'next/navigation';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function DeleteButton({ variantId }: { variantId: number }) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -16,7 +16,17 @@ export default function DeleteButton({ variantId }: { variantId: number }) {
   const DeleteCartHandler = async (variantId: number) => {
     setIsLoading(true);
     try {
-      await axiosInstanceClient.delete(`/shop-cart/delete/${variantId}`);
+      const { data } = await axiosInstanceClient.delete(
+        `/shop-cart/delete/${variantId}`,
+      );
+
+      if (data) {
+        router.refresh();
+        queryClient.invalidateQueries({ queryKey: ['cart'] });
+        queryClient.setQueryData(['cartLastAdded'], (old: number = 0) => {
+          return old - data.deleteItems || 0;
+        });
+      }
     } catch (error) {
       Notify(error instanceof Error ? error.message : 'Something went wrong');
     } finally {
@@ -24,20 +34,12 @@ export default function DeleteButton({ variantId }: { variantId: number }) {
     }
   };
 
-  const mutation = useMutation({
-    mutationFn: DeleteCartHandler,
-    onSuccess: () => {
-      router.refresh();
-      queryClient.invalidateQueries({ queryKey: ['cart'] });
-    },
-  });
-
   return (
     <>
       <button
         className="text-[#ededed] font-bold text-lg p-0.5 rounded-full bg-black/60 hover:scale-125"
         aria-label="Remove products"
-        onClick={() => mutation.mutateAsync(variantId)}
+        onClick={() => DeleteCartHandler(variantId)}
       >
         <IoClose />
       </button>

@@ -13,6 +13,7 @@ import useSelect from '../hooks/useSelect';
 import useSelectedVariant from '../../product/hooks/useSelectedVariant';
 import Button from '@/views/components/button';
 import ErrorsMessage from '../../product/components/errors';
+import useChangeVariant from '../hooks/useChange';
 
 interface ICart {
   cartItems: ICartItems[];
@@ -23,8 +24,8 @@ export default function CartItems({ cartItems }: ICart) {
   const [cartItem, setCartItem] = useState<IVariantAttribute>();
   const { variants, showVariants, setShowVariants, variantHandler } =
     useVariants();
-  const { quantities, updateQuantity, messages, isLoading } =
-    useCartQuantities(cartItems);
+  const { quantities, updateQuantity, messages, setMessages } =
+    useCartQuantities(cartItems, cartItem);
   const {
     selectedAttributes,
     selectedVariant,
@@ -32,6 +33,27 @@ export default function CartItems({ cartItems }: ICart) {
     groupedAttributes,
     handleSelect,
   } = useSelectedVariant(variants?.variants ?? [], cartItem);
+  const { confirmHandler } = useChangeVariant(
+    selectedVariant,
+    cartItem,
+    selectedAttributes,
+    quantities,
+    updateQuantity,
+    setMessages,
+    setShowVariants,
+  );
+
+  useEffect(() => {
+    if (selectedVariant) {
+      updateQuantity(
+        selectedVariant.id,
+        Math.min(
+          quantities[cartItem?.variantId!],
+          selectedVariant.availableStock || 1,
+        ),
+      );
+    }
+  }, [selectedVariant]);
 
   return (
     <div>
@@ -58,7 +80,7 @@ export default function CartItems({ cartItems }: ICart) {
       {cartItems.map((item, i) => (
         <div
           key={i}
-          className="relative bg-black/10 rounded-2xl h-fit my-1 p-2 gap-2 flex"
+          className="relative bg-black/10 rounded-2xl  min-h-37.5 my-1 p-2 gap-2 flex"
         >
           <div className="absolute top-1/2 right-2">
             <DeleteButton variantId={item.productVariantId} />
@@ -110,8 +132,8 @@ export default function CartItems({ cartItems }: ICart) {
                 name={item.name}
                 quantity={item.quantity}
               />
+
               <QuantityButton
-                loading={isLoading}
                 quantity={quantities[item.productVariantId]}
                 stock={item.stockAvailable}
                 inStock={item.inStock}
@@ -123,10 +145,10 @@ export default function CartItems({ cartItems }: ICart) {
             <div className="flex flex-wrap space-x-2 items-center text-sm">
               <CartPrice price={item.price} hasDiscount={item.hasDiscount} />
             </div>
-            <div className="-ml-5 -mt-1">
+            <div className="-ml-5  min-h-6">
               <ErrorsMessage
-                errors={messages[item.productVariantId]?.errors}
-                success={messages[item.productVariantId]?.success}
+                errors={messages[item.productVariantId]?.errors ?? []}
+                success={messages[item.productVariantId]?.success ?? ''}
               />
             </div>
           </div>
@@ -146,12 +168,7 @@ export default function CartItems({ cartItems }: ICart) {
           updateQuantity={updateQuantity}
         >
           {' '}
-          <Button
-            onClick={() => console.log('Next Feature')}
-            disabled={false}
-            loading={false}
-            className="bg-orange-700"
-          >
+          <Button onClick={confirmHandler} className="bg-orange-700">
             Confirm
           </Button>
         </ShowVariants>

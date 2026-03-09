@@ -67,4 +67,22 @@ export class Cart {
       next(error);
     }
   }
+  async changeVariant(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { productId } = req.params;
+      const newProductId = req.body.data?.newProductId;
+      const quantity = req.body.data?.quantity;
+
+      const result = await cartService.changeVariant(
+        Number(productId),
+        newProductId,
+        quantity,
+        req.cookies.sessionId,
+        req.user?.id,
+      );
+      res.status(200).send(result);
+    } catch (error) {
+      next(error);
+    }
+  }
 }

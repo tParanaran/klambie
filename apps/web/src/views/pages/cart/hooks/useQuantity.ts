@@ -1,31 +1,37 @@
 import { useState, useEffect, useRef } from 'react';
-import { ICartItems } from '../types';
+import { ICartItems, IVariantAttribute } from '../types';
 import { useDebounce } from './useDebounce';
 import axiosInstanceClient from '@/lib/axios/client';
 import { ValidationError } from 'yup';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 
-export default function useCartQuantities(cartItems?: ICartItems[]) {
+export default function useCartQuantities(
+  cartItems?: ICartItems[],
+  cartItem?: IVariantAttribute,
+) {
   const [quantities, setQuantities] = useState<Record<number, number>>({});
   const [messages, setMessages] = useState<
     Record<number, { success?: string; errors?: string[] }>
   >({});
-  const messageTimers = useRef<Record<number, NodeJS.Timeout>>({});
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const prevSynced = useRef<Record<number, number>>({});
   const queryClient = useQueryClient();
   const router = useRouter();
 
   useEffect(() => {
     const initial: Record<number, number> = {};
+
     cartItems?.forEach((item) => {
-      initial[item.productVariantId] = item.quantity ?? 1;
+      const qty = item.quantity ?? 1;
+      initial[item.productVariantId] = qty;
+
+      prevSynced.current[item.productVariantId] = qty;
     });
+
     setQuantities(initial);
   }, [cartItems]);
 
-  const debouncedQuantities = useDebounce(quantities, 500);
+  const debouncedQuantities = useDebounce(quantities, 1000);
 
   const updateQuantity = (variantId: number, newQty: number) => {
     setQuantities((prev) => ({
@@ -36,7 +42,6 @@ export default function useCartQuantities(cartItems?: ICartItems[]) {
 
   // Function to sync one quantity to backend
   const syncQuantity = async (variantId: number, newQty: number) => {
-    setIsLoading(true);
     try {
       const { data } = await axiosInstanceClient.patch(
         `/shop-cart/update-qty/${variantId}`,
@@ -46,12 +51,23 @@ export default function useCartQuantities(cartItems?: ICartItems[]) {
       const isSuccess = data.success;
       const text = data.message;
 
-      setMessages((prev) => ({
+      (setMessages((prev) => ({
         ...prev,
         [variantId]: isSuccess
-          ? { success: text, errors: [] }
-          : { success: '', errors: [text] },
-      }));
+          ? { success: '', errors: [] }
+          : { success: '', errors: [] },
+      })),
+        setTimeout(
+          () =>
+            setMessages((prev) => ({
+              ...prev,
+              [variantId]: isSuccess
+                ? { success: text, errors: [] }
+                : { success: '', errors: [text] },
+            })),
+          0,
+        ));
+
       if (isSuccess) {
         queryClient.invalidateQueries({ queryKey: ['cart'] });
         queryClient.setQueryData(['cartLastAdded'], data.addQuantity ?? 0);
@@ -74,24 +90,7 @@ export default function useCartQuantities(cartItems?: ICartItems[]) {
         ...prev,
         [variantId]: prevSynced.current[variantId] ?? 1,
       }));
-    } finally {
-      setIsLoading(false);
     }
-
-    // Clear previous timer if exists
-    if (messageTimers.current[variantId])
-      clearTimeout(messageTimers.current[variantId]);
-
-    // Auto-hide messages
-    messageTimers.current[variantId] = setTimeout(() => {
-      setMessages((prev) => ({
-        ...prev,
-        [variantId]: { success: '', errors: [] },
-      }));
-      delete messageTimers.current[variantId];
-    }, 3000);
-
-    // mark as synced
     prevSynced.current[variantId] = newQty;
   };
 
@@ -99,17 +98,17 @@ export default function useCartQuantities(cartItems?: ICartItems[]) {
   useEffect(() => {
     Object.entries(debouncedQuantities).forEach(([variantId, newQty]) => {
       const id = Number(variantId);
-      if (prevSynced.current[id] !== newQty) {
+
+      if (prevSynced.current[id] !== newQty && cartItem?.variantId === id) {
         syncQuantity(id, newQty);
       }
     });
-  }, [debouncedQuantities]);
+  }, [debouncedQuantities, cartItem]);
 
   return {
     quantities,
-    updateQuantity,
-    setQuantities,
-    isLoading,
     messages,
+    setMessages,
+    updateQuantity,
   };
 }

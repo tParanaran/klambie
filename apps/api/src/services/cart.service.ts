@@ -387,14 +387,14 @@ export class CartService {
     productId: number,
     sessionId: string,
     userId?: number,
-  ): Promise<void> {
+  ): Promise<{ deleteItems: number }> {
     const cart = await this.getCart(sessionId, userId);
 
-    if (!cart) return;
+    if (!cart) return { deleteItems: 0 };
 
-    const { id } = cart.cart;
+    const id = cart.cart.id;
 
-    await prisma.cartItem.delete({
+    const result = await prisma.cartItem.delete({
       where: {
         cartId_productVariantId: {
           cartId: id,
@@ -402,7 +402,6 @@ export class CartService {
         },
       },
     });
-
     const emptyCart = await prisma.cartItem.findMany({
       where: {
         cartId: id,
@@ -414,6 +413,8 @@ export class CartService {
         where: { id: id },
       });
     }
+
+    return { deleteItems: result.quantity };
   }
   async addUpdateQty(
     productId: number,
@@ -469,6 +470,65 @@ export class CartService {
       addQuantity:
         quantity -
         cart.cartItems.find((c) => c.productVariantId === productId)?.quantity!,
+      success: true,
+    };
+  }
+  async changeVariant(
+    productId: number,
+    newProductId: number,
+    quantity: number,
+    sessionId: string,
+    userId?: number,
+  ): Promise<{ message: string; success: boolean; addQuantity?: number }> {
+    const availableStock = await this.checkAvailableStock(newProductId);
+    const cart = await this.getCart(sessionId, userId);
+
+    if (!cart) {
+      return {
+        message: 'Item not found in cart',
+        success: false,
+      };
+    }
+    if (availableStock <= 0) {
+      return {
+        message: 'This item is out of stock',
+        success: false,
+      };
+    }
+
+    if (quantity > availableStock) {
+      return {
+        message: `Stock limited reached. Only ${availableStock} items are available.`,
+        success: false,
+      };
+    }
+
+    const existingItems = cart.cartItems.find(
+      (c) => c.productVariantId === productId,
+    );
+
+    if (!existingItems)
+      return {
+        message: 'Item not found in cart',
+        success: false,
+      };
+
+    await prisma.cartItem.update({
+      where: {
+        cartId_productVariantId: {
+          cartId: cart.cart.id,
+          productVariantId: productId,
+        },
+      },
+      data: {
+        productVariantId: newProductId,
+        quantity: quantity,
+      },
+    });
+
+    return {
+      message: `Change variant successfully. ${quantity} item(s) changed to your cart.`,
+      addQuantity: quantity - existingItems.quantity,
       success: true,
     };
   }

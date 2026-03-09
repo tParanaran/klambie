@@ -118,6 +118,10 @@ export default function ProductCard({ products }: { products: IProducts[] }) {
           updateQuantity={updateQuantity}
           onClose={setShowVariants}
         >
+          <div className="absolute right-5 bottom-18">
+            <ErrorsMessage errors={errors} success={success} />
+          </div>
+
           <div className="flex space-x-2">
             <Button
               onClick={handleAddToCart}
@@ -136,7 +140,6 @@ export default function ProductCard({ products }: { products: IProducts[] }) {
               Buy Now{' '}
             </Button>
           </div>
-          <ErrorsMessage errors={errors} success={success} />
         </ShowVariants>
       )}
       {isLoading && <Loading />}

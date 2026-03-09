@@ -28,6 +28,11 @@ export class CartRouter {
       QtyValidation,
       this.cart.updateQty,
     );
+    this.router.patch(
+      '/change/:productId',
+      IsUserLogin,
+      this.cart.changeVariant,
+    );
   }
 
   getRouter(): Router {
