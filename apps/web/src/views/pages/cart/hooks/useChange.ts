@@ -4,32 +4,43 @@ import { useRouter } from 'next/navigation';
 import { IVariant } from '../../product/types/product.types';
 import { IVariantAttribute } from '../types';
 import { AddToCartSchema } from '../../product/schema';
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, RefObject, SetStateAction } from 'react';
 import { ValidationError } from 'yup';
+import { IErrorsMessageHandle } from '../../product/components/errors';
 
-type Message = {
-  success?: string;
-  errors?: string[];
-};
+interface IUseChange {
+  selectedVariant: IVariant | null | undefined;
+  cartItemVariant: IVariantAttribute | undefined;
+  selectedAttributes: Record<number, number>;
+  quantities: Record<number, number>;
+  errorsModalRef?: RefObject<IErrorsMessageHandle>;
+  errorsRefs?: React.MutableRefObject<
+    Record<number, IErrorsMessageHandle | null>
+  >;
+  updateQuantity: (variantId: number, newQty: number) => void;
+  setShowVariants: Dispatch<SetStateAction<boolean>>;
+}
 
-type Messages = Record<number, Message>;
-
-export default function useChangeVariant(
-  selectedVariant: IVariant | null | undefined,
-  cartItem: IVariantAttribute | undefined,
-  selectedAttributes: Record<number, number>,
-  quantities: Record<number, number>,
-  updateQuantity: (variantId: number, newQty: number) => void,
-  setMessages: Dispatch<SetStateAction<Messages>>,
-  setShowVariants: Dispatch<SetStateAction<boolean>>,
-) {
+export default function useChangeVariant({
+  selectedVariant,
+  cartItemVariant,
+  selectedAttributes,
+  quantities,
+  errorsModalRef,
+  errorsRefs,
+  updateQuantity,
+  setShowVariants,
+}: IUseChange) {
   const queryClient = useQueryClient();
   const router = useRouter();
 
   const confirmHandler = async () => {
-    if (selectedVariant && cartItem) {
-      if (selectedVariant.id === cartItem.variantId) {
-        updateQuantity(cartItem.variantId, quantities[cartItem.variantId]);
+    if (selectedVariant && cartItemVariant) {
+      if (selectedVariant.id === cartItemVariant.variantId) {
+        updateQuantity(
+          cartItemVariant.variantId,
+          quantities[cartItemVariant.variantId],
+        );
         setShowVariants(false);
       } else {
         try {
@@ -43,7 +54,7 @@ export default function useChangeVariant(
           );
 
           const { data } = await axiosInstanceClient.patch(
-            `/shop-cart/change/${cartItem.variantId}`,
+            `/shop-cart/change/${cartItemVariant.variantId}`,
             {
               data: {
                 newProductId: selectedVariant.id,
@@ -53,42 +64,26 @@ export default function useChangeVariant(
             },
           );
 
-          const isSuccess = data.success;
-          const text = data.message;
-
-          (setMessages((prev) => ({
-            ...prev,
-            [selectedVariant.id]: isSuccess
-              ? { success: '', errors: [] }
-              : { success: '', errors: [] },
-          })),
-            setTimeout(
-              () =>
-                setMessages((prev) => ({
-                  ...prev,
-                  [selectedVariant.id]: isSuccess
-                    ? { success: text, errors: [] }
-                    : { success: '', errors: [text] },
-                })),
-              0,
-            ));
-          if (isSuccess) {
-            queryClient.invalidateQueries({ queryKey: ['cart'] });
-            queryClient.setQueryData(['cartLastAdded'], data.addQuantity ?? 0);
-            setShowVariants(false);
-            router.refresh();
+          if (!data.success) {
+            errorsModalRef?.current?.showMessage({ errors: [data.message] });
+            return;
           }
+
+          queryClient.invalidateQueries({ queryKey: ['cart'] });
+          queryClient.setQueryData(['cartLastAdded'], data.addQuantity ?? 0);
+          errorsModalRef?.current?.showMessage({ success: data.message });
+          errorsRefs?.current[cartItemVariant.variantId]?.showMessage({
+            success: data.message,
+          });
+          setShowVariants(false);
+          router.refresh();
         } catch (err: any) {
-          setMessages((prev) => ({
-            ...prev,
-            [selectedVariant.id]: {
-              success: '',
-              errors:
-                err instanceof ValidationError
-                  ? [...new Set(err.errors)]
-                  : ['Something went wrong'],
-            },
-          }));
+          const messages =
+            err instanceof ValidationError
+              ? [...new Set(err.errors)]
+              : ['Something went wrong'];
+
+          errorsModalRef?.current?.showMessage({ errors: messages });
         }
       }
     }

@@ -12,13 +12,17 @@ import useCartQuantities from '../../cart/hooks/useQuantity';
 import useAddToCart from '../../product/hooks/useAddToCart';
 import useSelectedVariant from '../../product/hooks/useSelectedVariant';
 import Loading from '@/views/components/loading';
-import ErrorsMessage from '../../product/components/errors';
+import ErrorsMessage, {
+  IErrorsMessageHandle,
+} from '../../product/components/errors';
 import Button from '@/views/components/button';
+import { useRef } from 'react';
 
 export default function ProductCard({ products }: { products: IProducts[] }) {
+  const errorsProductRef = useRef<IErrorsMessageHandle | null>(null);
   const { variants, showVariants, setShowVariants, variantHandler } =
     useVariants();
-  const { quantities, updateQuantity } = useCartQuantities();
+  const { quantities, updateQuantity } = useCartQuantities({});
   const {
     selectedAttributes,
     selectedVariant,
@@ -27,10 +31,11 @@ export default function ProductCard({ products }: { products: IProducts[] }) {
     handleSelect,
   } = useSelectedVariant(variants?.variants ?? []);
   const quantity = selectedVariant ? (quantities[selectedVariant.id] ?? 1) : 1;
-  const { errors, isLoading, handleAddToCart, success } = useAddToCart({
+  const { isLoading, handleAddToCart } = useAddToCart({
     selectedAttributes,
     selectedVariant,
     quantity,
+    errorsProductRef,
   });
 
   return (
@@ -119,13 +124,13 @@ export default function ProductCard({ products }: { products: IProducts[] }) {
           onClose={setShowVariants}
         >
           <div className="absolute right-5 bottom-18">
-            <ErrorsMessage errors={errors} success={success} />
+            <ErrorsMessage ref={errorsProductRef} />
           </div>
 
           <div className="flex space-x-2">
             <Button
               onClick={handleAddToCart}
-              disabled={errors.length > 0}
+              disabled={isLoading}
               loading={isLoading}
               className="bg-orange-800"
             >

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { IProduct } from '@/views/pages/product/types/product.types';
 import Title from './components/title';
 import Images from './components/images';
@@ -12,10 +12,11 @@ import useAddToCart from './hooks/useAddToCart';
 import QuantityButton from './components/qtyButton';
 import ProductPrice from './components/price';
 import Loading from '@/views/components/loading';
-import ErrorsMessage from './components/errors';
+import ErrorsMessage, { IErrorsMessageHandle } from './components/errors';
 import Button from '@/views/components/button';
 
 export default function ProductView({ product }: { product: IProduct }) {
+  const errorsProductRef = useRef<IErrorsMessageHandle | null>(null);
   const [quantity, setQuantity] = useState<number>(1);
   const { slug, categories, brand, name } = product;
   const {
@@ -25,10 +26,11 @@ export default function ProductView({ product }: { product: IProduct }) {
     groupedAttributes,
     handleSelect,
   } = useSelectedVariant(product.variants);
-  const { errors, isLoading, handleAddToCart, success } = useAddToCart({
+  const { isLoading, handleAddToCart } = useAddToCart({
     selectedAttributes,
     selectedVariant,
     quantity,
+    errorsProductRef,
   });
 
   useEffect(() => {
@@ -103,7 +105,6 @@ export default function ProductView({ product }: { product: IProduct }) {
                 <div className="flex space-x-2">
                   <Button
                     onClick={handleAddToCart}
-                    disabled={errors.length > 0}
                     loading={isLoading}
                     className="bg-orange-800"
                   >
@@ -118,7 +119,7 @@ export default function ProductView({ product }: { product: IProduct }) {
                     Buy Now{' '}
                   </Button>
                 </div>
-                <ErrorsMessage errors={errors} success={success} />
+                <ErrorsMessage ref={errorsProductRef} />
               </div>
             </div>
           </div>

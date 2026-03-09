@@ -35,7 +35,10 @@ export class CartService {
     const { productVariantId, quantity, unitPrice } = data;
 
     if (!userId && !sessionId)
-      throw new Error('Cannot add to cart no session provided');
+      return {
+        success: false,
+        message: `Cannot add into your cart.`,
+      };
 
     const availableStock = await this.checkAvailableStock(productVariantId);
 
@@ -506,12 +509,22 @@ export class CartService {
     const existingItems = cart.cartItems.find(
       (c) => c.productVariantId === productId,
     );
+    const newItems = cart.cartItems.find(
+      (c) => c.productVariantId === newProductId,
+    );
 
     if (!existingItems)
       return {
         message: 'Item not found in cart',
         success: false,
       };
+
+    if (newItems) {
+      return {
+        message: 'This Item already exist in your cart',
+        success: false,
+      };
+    }
 
     await prisma.cartItem.update({
       where: {

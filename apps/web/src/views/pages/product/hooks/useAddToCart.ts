@@ -1,34 +1,28 @@
-import { useEffect, useState } from 'react';
+import { RefObject, useEffect, useState } from 'react';
 import { AddToCartSchema } from '../schema';
 import { ValidationError } from 'yup';
 import { IVariant } from '../types/product.types';
-import UseCart from './useCart';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
+import { IErrorsMessageHandle } from '../components/errors';
+import axiosInstanceClient from '@/lib/axios/client';
+import { Parse } from '@/utils/parse';
 
 interface IAddToCart {
   quantity: number;
   selectedAttributes: Record<number, number>;
   selectedVariant: IVariant | null | undefined;
+  errorsProductRef?: RefObject<IErrorsMessageHandle>;
 }
 
 export default function useAddToCart({
   quantity,
   selectedAttributes,
   selectedVariant,
+  errorsProductRef,
 }: IAddToCart) {
-  const [errors, setErrors] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [success, setSuccess] = useState<string>('');
-  const { addToCart } = UseCart();
   const queryClient = useQueryClient();
 
-  const mutation = useMutation({
-    mutationFn: addToCart,
-    onSuccess: (response) => {
-      queryClient.invalidateQueries({ queryKey: ['cart'] });
-      queryClient.setQueryData(['cartLastAdded'], response.addQuantity ?? 0);
-    },
-  });
   const handleAddToCart = async () => {
     setIsLoading(true);
     try {
@@ -37,36 +31,37 @@ export default function useAddToCart({
         { abortEarly: false },
       );
 
-      const cart = {
-        productVariantId: selectedVariant!.id,
-        unitPrice: selectedVariant!.price.finalPrice,
-        quantity: quantity,
-      };
+      if (selectedVariant) {
+        const { data } = await axiosInstanceClient.post('/shop-cart/add', {
+          productVariantId: selectedVariant.id,
+          quantity: quantity,
+          unitPrice: Parse(selectedVariant.price.finalPrice),
+        });
 
-      const result = await mutation.mutateAsync(cart);
+        if (!data.success) {
+          errorsProductRef?.current?.showMessage({ errors: [data.message] });
+          return;
+        }
 
-      if (!result.success) {
-        setErrors([result.message!]);
-        return;
+        queryClient.invalidateQueries({ queryKey: ['cart'] });
+        queryClient.setQueryData(['cartLastAdded'], data.addQuantity ?? 0);
+        errorsProductRef?.current?.showMessage({ success: data.message });
       }
-
-      setSuccess('');
-      setTimeout(() => setSuccess(result.message!), 0);
     } catch (err: any) {
-      if (err instanceof ValidationError) {
-        const uniqueErrors = [...new Set(err.errors)];
-        setErrors(uniqueErrors);
-      } else {
-        setErrors(['Something went wrong']);
-      }
+      const messages =
+        err instanceof ValidationError
+          ? [...new Set(err.errors)]
+          : ['Something went wrong'];
+
+      errorsProductRef?.current?.showMessage({ errors: messages });
     } finally {
       setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    setErrors([]);
+    errorsProductRef?.current?.showMessage({ errors: [] });
   }, [selectedVariant, quantity, selectedAttributes]);
 
-  return { handleAddToCart, errors, isLoading, success };
+  return { handleAddToCart, isLoading };
 }

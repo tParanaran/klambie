@@ -2,6 +2,14 @@ import { useEffect, useMemo, useState } from 'react';
 import { IVariant } from '../types/product.types';
 import { GetGroupedAttributes } from './groupAttributes';
 
+interface IUseSelected {
+  variants: IVariant[];
+  cartItemVariant?: {
+    variantId: number;
+    attributes: { attributeId: number; attributeValueId: number }[];
+  };
+}
+
 export default function useSelectedVariant(
   variants: IVariant[],
   cartItemVariant?: {
