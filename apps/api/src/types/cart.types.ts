@@ -27,8 +27,9 @@ export type Price = {
   discount: Decimal;
 };
 
+export type CartItemIds = { variantId: number; quantity: number };
+
 export type CartItems = {
-  cartItemId: number;
   productVariantId: number;
   slug: string;
   name: string;

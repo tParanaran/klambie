@@ -9,7 +9,7 @@ import ShowVariants from './showVariant';
 import useVariants from '../hooks/useVariants';
 import useCartQuantities from '../hooks/useQuantity';
 import QuantityButton from '../../product/components/qtyButton';
-import useSelect from '../hooks/useSelect';
+import { ICartItemIds } from '../hooks/useSelect';
 import useSelectedVariant from '../../product/hooks/useSelectedVariant';
 import Button from '@/views/components/button';
 import ErrorsMessage, {
@@ -19,12 +19,19 @@ import useChangeVariant from '../hooks/useChange';
 
 interface ICart {
   cartItems: ICartItems[];
+  selectedItems: ICartItemIds[];
+  toggleItem: (id: number, qty: number) => void;
+  toggleSelectAll: () => void;
 }
 
-export default function CartItems({ cartItems }: ICart) {
+export default function CartItems({
+  cartItems,
+  selectedItems,
+  toggleItem,
+  toggleSelectAll,
+}: ICart) {
   const errorsRefs = useRef<Record<number, IErrorsMessageHandle | null>>({});
   const errorsModalRef = useRef<IErrorsMessageHandle | null>(null);
-  const { selectedItems, toggleItem, toggleSelectAll } = useSelect(cartItems);
   const [cartItemVariant, setCartItemVariant] = useState<IVariantAttribute>();
   const { variants, showVariants, setShowVariants, variantHandler } =
     useVariants();
@@ -101,8 +108,12 @@ export default function CartItems({ cartItems }: ICart) {
               <div className="relative">
                 <input
                   type="checkbox"
-                  checked={selectedItems.includes(item.productVariantId)}
-                  onChange={() => toggleItem(item.productVariantId)}
+                  checked={selectedItems.some(
+                    (i) => i.variantId === item.productVariantId,
+                  )}
+                  onChange={() =>
+                    toggleItem(item.productVariantId, item.quantity)
+                  }
                   className="w-5 h-5 appearance-none rounded-2xl border 
               hover:ring hover:ring-black/90 hover:ring-offset-1 hover:ring-offset-slate-100 checked:ring-1 checked:ring-black/90 checked:ring-offset-2 checked:ring-offset-slate-100
              cursor-pointer bg-gray-100"

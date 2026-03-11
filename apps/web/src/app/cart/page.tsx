@@ -7,5 +7,5 @@ export default async function Cart() {
 
   if (!data) return <EmptyCart />;
 
-  return <CartView carts={data} />;
+  return <CartView cartItems={data} />;
 }

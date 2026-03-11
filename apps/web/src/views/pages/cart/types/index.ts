@@ -7,7 +7,6 @@ export interface IPrice {
 }
 
 export interface ICartItems {
-  cartItemId: number;
   productVariantId: number;
   slug: string;
   name: string;

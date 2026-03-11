@@ -1,28 +1,33 @@
 'use client';
-import Rupiah from '@/utils/rupiah';
+import { useCartQuery } from '../../product/hooks/useCartQuery';
 import { ITotalPrice } from '../types';
 import GrandPrice from './grand';
-import { useCartQuery } from '../../product/hooks/useCartQuery';
+import Rupiah from '@/utils/rupiah';
 
-export default function CartSummary({ price }: { price: ITotalPrice }) {
+export default function CartSummary({
+  totalPrice,
+  selectedCount,
+}: {
+  totalPrice: ITotalPrice;
+  selectedCount: number;
+}) {
   const total = useCartQuery();
-  const { discountTotal, subTotal } = price;
 
   return (
     <>
       <div className="flex justify-between flex-wrap">
         <h1 className="font-semibold">
-          Subtotal <span className="text-sm">{total} product(s)</span>
+          Subtotal <span className="text-sm">{selectedCount} product(s)</span>
         </h1>
-        <p>{Rupiah(subTotal)}</p>
+        {totalPrice && <p>{Rupiah(totalPrice.subTotal ?? 0)}</p>}
       </div>
 
-      {discountTotal ? (
+      {totalPrice && totalPrice.discountTotal ? (
         <div>
           <h1>Total Saving</h1>
           <div className="flex justify-between opacity-50 flex-wrap text-sm">
             <h1>Discount on Sale</h1>
-            <p>- {Rupiah(discountTotal)}</p>
+            <p>- {Rupiah(totalPrice.discountTotal ?? 0)}</p>
           </div>
         </div>
       ) : null}
@@ -49,7 +54,7 @@ export default function CartSummary({ price }: { price: ITotalPrice }) {
       </div>
       <div className="flex justify-between flex-wrap">
         <h1 className="font-semibold">Total</h1>
-        <GrandPrice price={price} />
+        {totalPrice && <GrandPrice price={totalPrice} />}
       </div>
     </>
   );

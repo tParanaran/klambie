@@ -4,6 +4,7 @@ import {
   CartItemsResponse,
   AddCart,
   InsertCart,
+  CartItemIds,
 } from '@/types/cart.types';
 import { prisma } from 'lib/prisma';
 import { PromotionService } from './promotion.service';
@@ -124,7 +125,11 @@ export class CartService {
   async getCart(
     sessionId: string,
     userId?: number,
-  ): Promise<{ cart: Cart; cartItems: CartItem[] } | null> {
+  ): Promise<{
+    cart: Cart;
+    cartItems: CartItem[];
+    cartItemIds: CartItemIds[];
+  } | null> {
     if (!sessionId && !userId) return null;
     let cart;
 
@@ -145,7 +150,12 @@ export class CartService {
     }
     if (!cart) return null;
 
-    return { cart: cart, cartItems: cart.cartItems };
+    const cartItemIds = cart.cartItems.map((item) => ({
+      variantId: item.productVariantId,
+      quantity: item.quantity,
+    }));
+
+    return { cart: cart, cartItems: cart.cartItems, cartItemIds };
   }
   async getTotalCart(
     sessionId: string,
@@ -258,19 +268,18 @@ export class CartService {
 
     return { adjustments };
   }
-  async getCartItems(
+  async calculatePrice(
+    cartItemIds: CartItemIds[],
     sessionId: string,
     userId?: number,
   ): Promise<CartItemsResponse | null> {
-    const cart = await this.getCart(sessionId, userId);
-
-    if (!cart) return null;
+    if (!sessionId) return null;
 
     const cartItems: CartItems[] = (
       await Promise.all(
-        cart.cartItems.map(async (item) => {
+        cartItemIds.map(async (item) => {
           const variant = await prisma.productVariant.findUnique({
-            where: { id: item.productVariantId },
+            where: { id: item.variantId },
             include: {
               product: true,
               productVariantAttributes: {
@@ -297,7 +306,7 @@ export class CartService {
           const promoInput = {
             user: userId,
             product: {
-              id: item.productVariantId,
+              id: item.variantId,
               quantity: item.quantity,
               basePrice: variant.basePrice,
               brandId: brand?.brandId,
@@ -330,8 +339,7 @@ export class CartService {
             )?.url ?? null;
 
           return {
-            cartItemId: item.cartId,
-            productVariantId: item.productVariantId,
+            productVariantId: item.variantId,
             name: variant.product.name,
             appliedPromotions: promoCheckResult.appliedPromotion,
             hasDiscount: promoCheckResult.hasDiscount,
@@ -385,6 +393,24 @@ export class CartService {
         grandTotal,
       },
     };
+  }
+  async getCartItems(
+    sessionId: string,
+    userId?: number,
+  ): Promise<CartItems[] | null> {
+    const cart = await this.getCart(sessionId, userId);
+
+    if (!cart) return null;
+
+    const { cartItemIds } = cart;
+
+    const result = await this.calculatePrice(cartItemIds, sessionId, userId);
+
+    if (!result) return null;
+
+    const { cartItems } = result;
+
+    return cartItems;
   }
   async deleteCart(
     productId: number,

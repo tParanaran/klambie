@@ -85,4 +85,18 @@ export class Cart {
       next(error);
     }
   }
+  async selectItems(req: Request, res: Response, next: NextFunction) {
+    try {
+      const cartItemIds = req.body?.cartItemIds;
+
+      const result = await cartService.calculatePrice(
+        cartItemIds,
+        req.cookies.sessionId,
+        req.user?.id,
+      );
+      res.status(200).send(result?.totalPrice);
+    } catch (error) {
+      next(error);
+    }
+  }
 }

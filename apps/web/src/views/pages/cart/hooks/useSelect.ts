@@ -1,32 +1,91 @@
 import { useEffect, useState } from 'react';
-import { ICartItems } from '../types';
+import { ICartItems, ITotalPrice } from '../types';
+import { useDebounce } from './useDebounce';
+import axiosInstanceClient from '@/lib/axios/client';
+import { Notify } from '@/lib/notify';
 
-export default function useSelect(cartItems: ICartItems[]) {
-  const [selectedItems, setSelectedItems] = useState<number[]>(
-    cartItems.map((item) => item.productVariantId),
+export interface ICartItemIds {
+  variantId: number;
+  quantity: number;
+}
+
+export default function useSelect({ cartItems }: { cartItems: ICartItems[] }) {
+  const [selectedItems, setSelectedItems] = useState<ICartItemIds[]>(
+    cartItems.map((item) => ({
+      variantId: item.productVariantId,
+      quantity: item.quantity,
+    })),
   );
 
-  const toggleItem = (id: number) => {
-    setSelectedItems((prev) =>
-      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id],
-    );
+  const [totalPrice, setTotalPrice] = useState<ITotalPrice>({
+    subTotal: '0',
+    discountTotal: '0',
+    grandTotal: '0',
+  });
+
+  const toggleItem = (id: number, qty: number) => {
+    setSelectedItems((prev) => {
+      const exists = prev.some((item) => item.variantId === id);
+
+      if (exists) {
+        return prev.filter((item) => item.variantId !== id);
+      } else {
+        return [...prev, { variantId: id, quantity: qty }];
+      }
+    });
   };
 
   const toggleSelectAll = () => {
     if (selectedItems.length === cartItems.length) {
       setSelectedItems([]);
     } else {
-      setSelectedItems(cartItems.map((item) => item.productVariantId));
+      setSelectedItems(
+        cartItems.map((item) => ({
+          variantId: item.productVariantId,
+          quantity: item.quantity,
+        })),
+      );
     }
   };
 
   useEffect(() => {
     setSelectedItems((prevSelected) =>
       cartItems
-        .map((item) => item.productVariantId)
-        .filter((id) => prevSelected.includes(id)),
+        .map((item) => ({
+          variantId: item.productVariantId,
+          quantity: item.quantity,
+        }))
+        .filter((item) =>
+          prevSelected.some((prev) => prev.variantId === item.variantId),
+        ),
     );
   }, [cartItems]);
 
-  return { toggleItem, toggleSelectAll, selectedItems };
+  const debouncedQuantities = useDebounce(selectedItems, 700);
+
+  useEffect(() => {
+    if (debouncedQuantities.length === 0) {
+      return setTotalPrice({
+        subTotal: '0',
+        discountTotal: '0',
+        grandTotal: '0',
+      });
+    }
+
+    const fetchTotal = async () => {
+      try {
+        const res = await axiosInstanceClient.post('/shop-cart/select', {
+          cartItemIds: debouncedQuantities,
+        });
+
+        setTotalPrice({ ...res.data });
+      } catch (err) {
+        Notify('Failed to calculate total price');
+      }
+    };
+
+    fetchTotal();
+  }, [debouncedQuantities]);
+
+  return { toggleItem, toggleSelectAll, selectedItems, totalPrice };
 }
