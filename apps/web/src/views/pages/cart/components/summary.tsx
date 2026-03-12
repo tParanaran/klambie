@@ -8,7 +8,7 @@ export default function CartSummary({
   totalPrice,
   selectedCount,
 }: {
-  totalPrice: ITotalPrice;
+  totalPrice: ITotalPrice | null;
   selectedCount: number;
 }) {
   const total = useCartQuery();
@@ -19,15 +19,15 @@ export default function CartSummary({
         <h1 className="font-semibold">
           Subtotal <span className="text-sm">{selectedCount} product(s)</span>
         </h1>
-        {totalPrice && <p>{Rupiah(totalPrice.subTotal ?? 0)}</p>}
+        <p>{Rupiah(totalPrice?.subTotal ?? '0')}</p>
       </div>
 
-      {totalPrice && totalPrice.discountTotal ? (
+      {totalPrice?.discountTotal ? (
         <div>
           <h1>Total Saving</h1>
           <div className="flex justify-between opacity-50 flex-wrap text-sm">
             <h1>Discount on Sale</h1>
-            <p>- {Rupiah(totalPrice.discountTotal ?? 0)}</p>
+            <p>- {Rupiah(totalPrice.discountTotal ?? '0')}</p>
           </div>
         </div>
       ) : null}
@@ -54,7 +54,7 @@ export default function CartSummary({
       </div>
       <div className="flex justify-between flex-wrap">
         <h1 className="font-semibold">Total</h1>
-        {totalPrice && <GrandPrice price={totalPrice} />}
+        <GrandPrice price={totalPrice} />
       </div>
     </>
   );

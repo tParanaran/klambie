@@ -1,7 +1,5 @@
 'use client';
-import { Suspense } from 'react';
 import { ICartItems } from './types';
-import Loading from '@/views/components/loading';
 import CartItems from './components/items';
 import CartSummary from './components/summary';
 import AddVouchers from './components/vouchers';
@@ -20,7 +18,6 @@ export default function CartView({ cartItems }: { cartItems: ICartItems[] }) {
 
   return (
     <div className="pb-[5%]">
-      {/* <Suspense key={} fallback={<Loading />}> */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[2fr_1fr] gap-0 md:gap-5">
         <CartItems
           cartItems={cartItems}
@@ -40,13 +37,12 @@ export default function CartView({ cartItems }: { cartItems: ICartItems[] }) {
                   totalPrice={totalPrice}
                   selectedCount={selectedCount}
                 />
-                <CheckoutButton />
+                <CheckoutButton totalPrice={totalPrice} />
               </div>
             </div>
           </div>
         </div>
       </div>
-      {/* </Suspense> */}
     </div>
   );
 }

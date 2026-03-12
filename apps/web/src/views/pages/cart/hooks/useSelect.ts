@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { ICartItems, ITotalPrice } from '../types';
 import { useDebounce } from './useDebounce';
-import axiosInstanceClient from '@/lib/axios/client';
 import { Notify } from '@/lib/notify';
+import axiosInstanceClient from '@/lib/axios/client';
 
 export interface ICartItemIds {
   variantId: number;
@@ -17,11 +17,7 @@ export default function useSelect({ cartItems }: { cartItems: ICartItems[] }) {
     })),
   );
 
-  const [totalPrice, setTotalPrice] = useState<ITotalPrice>({
-    subTotal: '0',
-    discountTotal: '0',
-    grandTotal: '0',
-  });
+  const [totalPrice, setTotalPrice] = useState<ITotalPrice | null>(null);
 
   const toggleItem = (id: number, qty: number) => {
     setSelectedItems((prev) => {
@@ -65,11 +61,7 @@ export default function useSelect({ cartItems }: { cartItems: ICartItems[] }) {
 
   useEffect(() => {
     if (debouncedQuantities.length === 0) {
-      return setTotalPrice({
-        subTotal: '0',
-        discountTotal: '0',
-        grandTotal: '0',
-      });
+      return setTotalPrice(null);
     }
 
     const fetchTotal = async () => {

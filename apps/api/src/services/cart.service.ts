@@ -273,7 +273,7 @@ export class CartService {
     sessionId: string,
     userId?: number,
   ): Promise<CartItemsResponse | null> {
-    if (!sessionId) return null;
+    if (!sessionId && !userId) return null;
 
     const cartItems: CartItems[] = (
       await Promise.all(
