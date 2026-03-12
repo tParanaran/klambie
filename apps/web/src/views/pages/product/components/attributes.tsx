@@ -36,7 +36,7 @@ export default function Attributes({
                       aria-label={value.value}
                       onChange={() => handleSelect(attr.attributeId, value.id)}
                       title={value.value}
-                      className="appearance-none p-3 sm:p-4 m-1 rounded-full hover:ring hover:ring-black/90 hover:ring-offset-1 hover:ring-offset-slate-100 checked:ring-1 checked:ring-black/90 checked:ring-offset-2 checked:ring-offset-slate-100"
+                      className="appearance-none p-4 m-1 rounded-full hover:ring hover:ring-black/90 hover:ring-offset-1 hover:ring-offset-slate-100 checked:ring-1 checked:ring-black/90 checked:ring-offset-2 checked:ring-offset-slate-100"
                       style={{ backgroundColor: value.hexUrl }}
                     />
                   );

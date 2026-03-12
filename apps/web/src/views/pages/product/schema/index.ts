@@ -3,7 +3,7 @@ import { boolean, number, object } from 'yup';
 export const AddToCartSchema = object({
   selectedAttributes: object().required(),
   selectedVariant: object({
-    id: number().required(),
+    id: number().required('Selected variant is required'),
     inStock: boolean().oneOf([true], 'This product is out of stock.'),
     stock: number().moreThan(0, 'This product is out of stock.'),
   })

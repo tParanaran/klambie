@@ -2,6 +2,7 @@
 
 import { SwiperSlide, Swiper } from 'swiper/react';
 import { IoBagAddOutline } from 'react-icons/io5';
+import { useRef } from 'react';
 import { IProducts } from '@/views/pages/product/types/product.types';
 import Link from 'next/link';
 import Tags from '@/views/pages/product/components/tags';
@@ -15,8 +16,8 @@ import Loading from '@/views/components/loading';
 import ErrorsMessage, {
   IErrorsMessageHandle,
 } from '../../product/components/errors';
-import Button from '@/views/components/button';
-import { useRef } from 'react';
+
+import AddToCartButton from '../../product/components/addButton';
 
 export default function ProductCard({ products }: { products: IProducts[] }) {
   const errorsProductRef = useRef<IErrorsMessageHandle | null>(null);
@@ -29,7 +30,7 @@ export default function ProductCard({ products }: { products: IProducts[] }) {
     selectedColorId,
     groupedAttributes,
     handleSelect,
-  } = useSelectedVariant(variants?.variants ?? []);
+  } = useSelectedVariant({ variants: variants?.variants ?? [], isModal: true });
   const quantity = selectedVariant ? (quantities[selectedVariant.id] ?? 1) : 1;
   const { isLoading, handleAddToCart } = useAddToCart({
     selectedAttributes,
@@ -59,7 +60,7 @@ export default function ProductCard({ products }: { products: IProducts[] }) {
               <div className="absolute top-1 right-1 z-10">
                 <button
                   className="rounded-full text-3xl p-2 bg-black/60 font-bold text-[#ededed] uppercase w-full hover:bg-black disabled:opacity-50 disabled:cursor-not-allowed"
-                  aria-label="Add to cart modal"
+                  aria-label="Add to bag modal"
                   onClick={() => {
                     (variantHandler(item.slug, item.name),
                       updateQuantity(1, 1));
@@ -114,6 +115,7 @@ export default function ProductCard({ products }: { products: IProducts[] }) {
         <ShowVariants
           variantImages={variants.variantImages}
           name={variants.name}
+          className={'bottom-1'}
           quantities={quantities}
           groupedAttributes={groupedAttributes}
           selectedVariant={selectedVariant}
@@ -127,24 +129,10 @@ export default function ProductCard({ products }: { products: IProducts[] }) {
             <ErrorsMessage ref={errorsProductRef} />
           </div>
 
-          <div className="flex space-x-2">
-            <Button
-              onClick={handleAddToCart}
-              disabled={isLoading}
-              loading={isLoading}
-              className="bg-orange-800"
-            >
-              Add to Cart{' '}
-            </Button>
-            <Button
-              onClick={() => console.log('Next Feature')}
-              disabled={false}
-              loading={isLoading}
-              className="bg-orange-700"
-            >
-              Buy Now{' '}
-            </Button>
-          </div>
+          <AddToCartButton
+            isLoading={isLoading}
+            handleAddToCart={handleAddToCart}
+          />
         </ShowVariants>
       )}
       {isLoading && <Loading />}

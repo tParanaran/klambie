@@ -10,6 +10,7 @@ import {
 
 interface IShowVariant {
   variantImages: IImages[];
+  className: string;
   name: string;
   children: React.ReactNode;
   groupedAttributes: IGroupedAttribute[];
@@ -26,6 +27,7 @@ interface IShowVariant {
 
 export default function ShowVariants({
   variantImages,
+  className,
   name,
   children,
   quantities,
@@ -42,12 +44,14 @@ export default function ShowVariants({
   );
 
   return (
-    <div className="fixed h-full w-full top-0 left-0 z-10">
+    <div className="fixed h-full w-full top-0 left-0 z-30">
       <div
         className="absolute h-full w-full"
         onClick={() => onClose(false)}
       ></div>
-      <div className="fixed lg:w-1/3 text-sm text-[#ededed] z-40 bottom-0 left-0 right-0 sm:left-10 sm:right-10 lg:left-1/3 bg-black/80 backdrop-blur-lg p-5 rounded-2xl max-h-[70vh] overflow-y-auto">
+      <div
+        className={`fixed lg:max-w-xl mx-auto text-sm text-[#ededed] z-40 left-3 right-3 sm:left-10 sm:right-10 md:left-1/5 md:right-1/5 lg:left-1/4 lg:right-1/4 bg-black/80 backdrop-blur-lg p-3 sm:p-5 rounded-2xl max-h-[70vh] overflow-y-auto ${className}`}
+      >
         <div className="flex justify-between h-fit">
           <div className="w-[80%]">
             <h1 className="mb-2 text-sm md:text-lg">{name}</h1>
@@ -60,14 +64,14 @@ export default function ShowVariants({
               </div>
             )}
           </div>
-          <div className="w-28">
+          <div className="w-24 ml-1">
             {' '}
             <ImageSwiper
               images={
                 withAttribute.length > 0 ? withAttribute : [variantImages[0]]
               }
               selectedColorId={selectedColorId}
-              className={'rounded-full w-24 h-24 object-cover'}
+              className="rounded-full w-24 h-24 object-cover overflow-hidden"
             />
           </div>
         </div>

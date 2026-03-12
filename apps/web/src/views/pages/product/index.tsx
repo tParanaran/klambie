@@ -13,11 +13,13 @@ import QuantityButton from './components/qtyButton';
 import ProductPrice from './components/price';
 import Loading from '@/views/components/loading';
 import ErrorsMessage, { IErrorsMessageHandle } from './components/errors';
-import Button from '@/views/components/button';
+import AddToCartButton from './components/addButton';
+import ShowVariants from '../cart/components/showVariant';
 
 export default function ProductView({ product }: { product: IProduct }) {
   const errorsProductRef = useRef<IErrorsMessageHandle | null>(null);
   const [quantity, setQuantity] = useState<number>(1);
+  const [showVariant, setShowVariant] = useState<boolean>(false);
   const { slug, categories, brand, name } = product;
   const {
     selectedAttributes,
@@ -25,7 +27,7 @@ export default function ProductView({ product }: { product: IProduct }) {
     selectedColorId,
     groupedAttributes,
     handleSelect,
-  } = useSelectedVariant(product.variants);
+  } = useSelectedVariant({ variants: product.variants, isModal: showVariant });
   const { isLoading, handleAddToCart } = useAddToCart({
     selectedAttributes,
     selectedVariant,
@@ -42,6 +44,27 @@ export default function ProductView({ product }: { product: IProduct }) {
       setQuantity(1);
     }
   }, [selectedVariant]);
+
+  const inStockVariants = product.variants.filter((v) => v.inStock);
+  const prices = inStockVariants
+    .map((v) => Number(v.price.finalPrice))
+    .filter((p): p is number => p != null);
+  const minPrice = prices.length > 0 ? Math.min(...prices) : null;
+
+  const cheapestVariants =
+    minPrice !== null
+      ? inStockVariants.filter((v) => Number(v.price.finalPrice) === minPrice)
+      : [];
+
+  const handleCartClick = async () => {
+    if (!selectedVariant) {
+      setShowVariant(true);
+      return;
+    }
+
+    await handleAddToCart();
+    setShowVariant(false);
+  };
 
   return (
     <div>
@@ -67,64 +90,86 @@ export default function ProductView({ product }: { product: IProduct }) {
         <div className="px-0 lg:px-4 order-2 md:row-span-2">
           <div className="md:sticky md:top-24">
             <Title title={{ slug, categories, brand, name }} />
-            <div className="space-y-5 mt-10">
+            <div className="flex space-x-1 mt-2">
+              {cheapestVariants[0].price && !selectedVariant && (
+                <p className="font-semibold text-orange-700">From</p>
+              )}
+              <ProductPrice
+                price={selectedVariant?.price || cheapestVariants[0].price}
+                hasDiscount={
+                  selectedVariant?.hasDiscount ||
+                  cheapestVariants[0].hasDiscount
+                }
+              />
+            </div>
+            <div className="space-y-5 mt-5 lg:mt-10">
               <Attributes
                 handleSelect={handleSelect}
                 selectedAttributes={selectedAttributes}
                 groupedAttributes={groupedAttributes}
               />
-              {selectedVariant && (
-                <>
-                  <div>
-                    {' '}
-                    <h4>Quantity</h4>
-                    <QuantityButton
-                      inStock={selectedVariant.inStock}
-                      stock={selectedVariant.availableStock}
-                      quantity={quantity}
-                      onChange={setQuantity}
-                    />
-                    {!selectedVariant.inStock ? (
-                      <p className="text-sm text-orange-700">Out of Stock</p>
-                    ) : (
-                      <p className="text-sm opacity-50">
-                        Stock: {selectedVariant.availableStock}
-                      </p>
-                    )}
-                  </div>
-                  <div>
-                    <ProductPrice
-                      price={selectedVariant.price}
-                      hasDiscount={selectedVariant.hasDiscount}
-                    />
-                  </div>
-                </>
-              )}
-              <div>
+
+              <div className="hidden md:block">
                 {' '}
-                <div className="flex space-x-2">
-                  <Button
-                    onClick={handleAddToCart}
-                    loading={isLoading}
-                    className="bg-orange-800"
-                  >
-                    Add to Cart{' '}
-                  </Button>
-                  <Button
-                    onClick={() => console.log('Next Feature')}
-                    disabled={false}
-                    loading={isLoading}
-                    className="bg-orange-700"
-                  >
-                    Buy Now{' '}
-                  </Button>
-                </div>
+                <h4>Quantity</h4>
+                <QuantityButton
+                  inStock={
+                    selectedVariant?.inStock || inStockVariants[0].inStock
+                  }
+                  stock={
+                    selectedVariant?.availableStock ||
+                    inStockVariants[0].availableStock
+                  }
+                  quantity={quantity}
+                  onChange={setQuantity}
+                />
+                {selectedVariant && !selectedVariant.inStock && (
+                  <p className="text-sm text-orange-700">Out of Stock</p>
+                )}
+                {selectedVariant && selectedVariant.availableStock ? (
+                  <p className="text-sm opacity-50">
+                    Stock: {selectedVariant.availableStock}
+                  </p>
+                ) : null}
+              </div>
+              <div className="fixed md:absolute z-40 md:z-0 right-3 sm:right-10 md:right-0 bottom-14 sm:bottom-15 md:-bottom-12">
                 <ErrorsMessage ref={errorsProductRef} />
+              </div>
+              <div className="hidden md:block mt-14">
+                <AddToCartButton
+                  isLoading={isLoading}
+                  handleAddToCart={handleAddToCart}
+                />
               </div>
             </div>
           </div>
         </div>
       </div>
+      <div className="fixed md:hidden z-40 bottom-0 left-0 right-0 text-[#ededed] bg-black/80 backdrop-blur-lg px-3 sm:px-10 py-4 max-h-[70vh] overflow-y-auto text-sm sm:text-md">
+        <AddToCartButton
+          isLoading={isLoading}
+          handleAddToCart={handleCartClick}
+        />
+      </div>
+
+      {showVariant && (
+        <ShowVariants
+          variantImages={product.images}
+          name={product.name}
+          groupedAttributes={groupedAttributes}
+          selectedVariant={selectedVariant}
+          selectedColorId={selectedColorId}
+          selectedAttributes={selectedAttributes}
+          quantities={{
+            [selectedVariant?.id || inStockVariants[0].id]: quantity,
+          }}
+          onClose={() => setShowVariant(false)}
+          handleSelect={handleSelect}
+          updateQuantity={(_, newQty) => setQuantity(newQty)}
+          className={'bottom-18 sm:bottom-20 md:bottom-1'}
+          children={undefined}
+        ></ShowVariants>
+      )}
       {isLoading && <Loading />}
     </div>
   );

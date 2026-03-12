@@ -8,15 +8,14 @@ interface IUseSelected {
     variantId: number;
     attributes: { attributeId: number; attributeValueId: number }[];
   };
+  isModal?: boolean;
 }
 
-export default function useSelectedVariant(
-  variants: IVariant[],
-  cartItemVariant?: {
-    variantId: number;
-    attributes: { attributeId: number; attributeValueId: number }[];
-  },
-) {
+export default function useSelectedVariant({
+  variants,
+  cartItemVariant,
+  isModal,
+}: IUseSelected) {
   const [selectedAttributes, setSelectedAttributes] = useState<
     Record<number, number>
   >({});
@@ -58,7 +57,7 @@ export default function useSelectedVariant(
     }
 
     // Default by cheapest price
-    if (!defaultVariant) {
+    if (!defaultVariant && isModal) {
       const prices = inStockVariants
         .map((v) => Number(v.price.finalPrice))
         .filter((p): p is number => p != null);
@@ -76,12 +75,12 @@ export default function useSelectedVariant(
 
     // Initialize selected attributes
     const initialAttributes: Record<number, number> = {};
-    defaultVariant.attributes.forEach((attr) => {
+    defaultVariant?.attributes.forEach((attr) => {
       initialAttributes[attr.attribute.id] = attr.id;
     });
 
     setSelectedAttributes(initialAttributes);
-  }, [variants, cartItemVariant]);
+  }, [variants, cartItemVariant, isModal]);
 
   const colorAttributeId = useMemo(() => {
     return groupedAttributes.find(
