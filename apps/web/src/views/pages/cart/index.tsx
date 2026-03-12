@@ -5,9 +5,10 @@ import CartSummary from './components/summary';
 import AddVouchers from './components/vouchers';
 import CheckoutButton from './components/checkoutButton';
 import useSelect from './hooks/useSelect';
+import NavbarCheckout from './components/navbar';
 
 export default function CartView({ cartItems }: { cartItems: ICartItems[] }) {
-  const { selectedItems, toggleItem, toggleSelectAll, totalPrice } = useSelect({
+  const { selectedItems, totalPrice, toggleItem, toggleSelectAll } = useSelect({
     cartItems,
   });
 
@@ -17,8 +18,8 @@ export default function CartView({ cartItems }: { cartItems: ICartItems[] }) {
   );
 
   return (
-    <div className="pb-[5%]">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[2fr_1fr] gap-0 md:gap-5">
+    <>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[2fr_1fr] gap-0 md:gap-5 pb-[5%]">
         <CartItems
           cartItems={cartItems}
           selectedItems={selectedItems}
@@ -43,6 +44,13 @@ export default function CartView({ cartItems }: { cartItems: ICartItems[] }) {
           </div>
         </div>
       </div>
-    </div>
+
+      <NavbarCheckout
+        toggleSelectAll={toggleSelectAll}
+        isSelectedItem={selectedItems.length === cartItems.length}
+        totalPrice={totalPrice}
+        selectedCount={selectedCount}
+      />
+    </>
   );
 }

@@ -1,7 +1,6 @@
 'use client';
 import { useCartQuery } from '../../product/hooks/useCartQuery';
 import { ITotalPrice } from '../types';
-import GrandPrice from './grand';
 import Rupiah from '@/utils/rupiah';
 
 export default function CartSummary({
@@ -54,7 +53,16 @@ export default function CartSummary({
       </div>
       <div className="flex justify-between flex-wrap">
         <h1 className="font-semibold">Total</h1>
-        <GrandPrice price={totalPrice} />
+        <div className="text-orange-700 text-end">
+          <p className="my-auto font-semibold">
+            {Rupiah(totalPrice?.grandTotal ?? '0')}
+          </p>
+          {totalPrice?.discountTotal ? (
+            <p className="text-xs">
+              Saved {Rupiah(totalPrice.discountTotal ?? '0')}
+            </p>
+          ) : null}
+        </div>
       </div>
     </>
   );

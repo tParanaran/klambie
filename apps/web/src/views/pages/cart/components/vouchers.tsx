@@ -14,11 +14,11 @@ export default function AddVouchers() {
       onClick={VouchersHandler}
       aria-label="Add Voucher Modal"
     >
-      <div className="flex justify-between items-center w-full text-xl">
+      <div className="flex justify-between items-center w-full text-lg">
         {' '}
-        <div className="flex space-x-1 items-center">
+        <div className="flex space-x-1 items-center py-1">
           {' '}
-          <span className="inline-block animate-bounce">
+          <span className="inline-block">
             {' '}
             <IoTicketOutline />
           </span>
@@ -34,7 +34,7 @@ export default function AddVouchers() {
                 transform: translateX(0);
               }
               100% {
-                transform: translateX(10px);
+                transform: translateX(-10px);
               }
             }
           `}</style>
