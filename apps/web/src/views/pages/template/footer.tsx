@@ -8,7 +8,7 @@ export default function Footer() {
     <div className="bg-black">
       <div className="bg-black/90">
         <Container>
-          <footer className="py-[10%] text-[#ededed] grid grid-cols-1 md:grid-cols-2 gap-10">
+          <footer className="pt-[10%] pb-28 md:py-[10%] text-[#ededed] grid grid-cols-1 md:grid-cols-2 gap-10">
             <div>
               <div>
                 <Logo />

@@ -114,6 +114,14 @@
     background: whitesmoke;
   }
 
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollbar-hide {
+    scrollbar-width: none;
+  }
+
   .swiper-pagination-bullet-active {
     background-color: var(--color-orange-800) !important;
   }

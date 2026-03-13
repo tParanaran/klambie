@@ -1,13 +1,17 @@
 'use client';
 import { ICartItems } from './types';
+import { useCartQuery } from '../product/hooks/useCartQuery';
 import CartItems from './components/items';
 import CartSummary from './components/summary';
 import AddVouchers from './components/vouchers';
 import CheckoutButton from './components/checkoutButton';
 import useSelect from './hooks/useSelect';
 import NavbarCheckout from './components/navbar';
+import DeliveryAddress from './components/delivery';
+import NavbarMobile from '../template/navbarMobile';
 
 export default function CartView({ cartItems }: { cartItems: ICartItems[] }) {
+  const total = useCartQuery();
   const { selectedItems, totalPrice, toggleItem, toggleSelectAll } = useSelect({
     cartItems,
   });
@@ -20,12 +24,16 @@ export default function CartView({ cartItems }: { cartItems: ICartItems[] }) {
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[2fr_1fr] gap-0 md:gap-5 pb-[5%]">
-        <CartItems
-          cartItems={cartItems}
-          selectedItems={selectedItems}
-          toggleItem={toggleItem}
-          toggleSelectAll={toggleSelectAll}
-        />
+        <div>
+          <h1 className="font-bold mb-2 hidden md:block">My Bag ({total})</h1>
+          <DeliveryAddress />
+          <CartItems
+            cartItems={cartItems}
+            selectedItems={selectedItems}
+            toggleItem={toggleItem}
+            toggleSelectAll={toggleSelectAll}
+          />
+        </div>
         {/* Sticky Display */}
         <div>
           <div className="hidden md:block md:sticky md:top-24 md:right-0 z-0">

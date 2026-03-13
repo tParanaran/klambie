@@ -1,10 +1,11 @@
 import { IoGrid, IoReceiptOutline } from 'react-icons/io5';
 import { useAuthStore } from '@/store/authStore';
 import Link from 'next/link';
-import ProfileButton from './profileButton';
-import LogoutButton from '@/views/components/logoutButton';
+import AccountButton from './accountButton';
+import LogoutButton from './logoutButton';
+import WishlistButton from './wishlistButton';
 
-export default function ProfileMenu({ isScroll }: { isScroll: boolean }) {
+export default function AccountMenu({ isScroll }: { isScroll: boolean }) {
   const { user } = useAuthStore();
 
   return (
@@ -24,7 +25,10 @@ export default function ProfileMenu({ isScroll }: { isScroll: boolean }) {
               <p>Dashboard</p>
             </Link>
           ) : null}
-          <ProfileButton className="flex items-center px-2 sm:px-5 py-1.5 hover:bg-orange-800 overflow-hidden" />
+          <AccountButton
+            className="flex items-center px-2 sm:px-5 py-1.5 hover:bg-orange-800 overflow-hidden"
+            iconClass="mr-2 text-lg"
+          />
           <Link
             href={'/account/order'}
             className="hover:bg-orange-800 px-2 sm:px-5 py-1.5 flex items-center overflow-hidden"
@@ -32,7 +36,19 @@ export default function ProfileMenu({ isScroll }: { isScroll: boolean }) {
             <IoReceiptOutline className="mr-2 text-lg" />
             <p>Order</p>
           </Link>
-          <LogoutButton className="hover:bg-orange-800 px-2 sm:px-5 py-1.5 text-semibold w-full text-left flex items-center overflow-hidden" />
+
+          <WishlistButton
+            className={
+              'hover:bg-orange-800 px-2 sm:px-5 py-1.5 flex items-center overflow-hidden'
+            }
+            iconClass={'mr-2 text-lg'}
+          />
+
+          <LogoutButton
+            className="hover:bg-orange-800 px-2 sm:px-5 py-1.5 text-semibold w-full text-left flex items-center overflow-hidden"
+            name="Logout"
+            iconClass={'mr-2 text-lg'}
+          />
         </div>
       </div>
     </div>

@@ -1,20 +1,27 @@
-import { useRouter } from 'next/navigation';
-import { IoChevronBackOutline, IoShareSocial } from 'react-icons/io5';
-import ShareButton from './shareButton';
+import BagButton from '../../template/components/bagButton';
+import AddToCartButton from './addButton';
 
-export default function NavbarProduct({ brand }: { brand: string }) {
-  const router = useRouter();
+interface INavbarAddToCart {
+  handleCartClick: () => Promise<void>;
+  isLoading: boolean;
+}
 
+export default function NavbarAddToCart({
+  handleCartClick,
+  isLoading,
+}: INavbarAddToCart) {
   return (
-    <nav
-      className="
-        sticky top-0 left-0 right-0 py-4 flex justify-between z-20 bg-inherit md:hidden"
-    >
-      <button onClick={() => router.back()} aria-label="Go back">
-        <IoChevronBackOutline className="text-2xl hover:scale-125" />
-      </button>
-      <h1 className="font-semibold text-lg">{brand}</h1>
-      <ShareButton />
-    </nav>
+    <div className="fixed md:hidden z-40 bottom-0 left-0 right-0 text-[#ededed] bg-black/80 backdrop-blur-lg px-3 sm:px-10 py-4 max-h-[70vh] overflow-y-auto text-sm sm:text-md">
+      <div className="flex items-center space-x-4">
+        <BagButton />
+        <div className="flex-2">
+          {' '}
+          <AddToCartButton
+            isLoading={isLoading}
+            handleAddToCart={handleCartClick}
+          />{' '}
+        </div>
+      </div>
+    </div>
   );
 }

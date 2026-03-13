@@ -15,9 +15,9 @@ import Loading from '@/views/components/loading';
 import ErrorsMessage, { IErrorsMessageHandle } from './components/errors';
 import AddToCartButton from './components/addButton';
 import ShowVariants from '../cart/components/showVariant';
-import BagIcon from '@/views/components/bagIcon';
-import NavbarProduct from './components/navbar';
 import ShareButton from './components/shareButton';
+import BagButton from '../template/components/bagButton';
+import NavbarAddToCart from './components/navbar';
 
 export default function ProductView({ product }: { product: IProduct }) {
   const errorsProductRef = useRef<IErrorsMessageHandle | null>(null);
@@ -62,7 +62,6 @@ export default function ProductView({ product }: { product: IProduct }) {
 
   return (
     <>
-      <NavbarProduct brand={product.brand.name} />
       <div className="grid grid-cols-1 md:grid-cols-[1.2fr_1fr] lg:grid-cols-[1.5fr_1fr] pb-[5%] gap-4">
         <div>
           {/* Left Menu Desktop Mode */}
@@ -143,19 +142,10 @@ export default function ProductView({ product }: { product: IProduct }) {
           </div>
         </div>
       </div>
-      <div className="fixed md:hidden z-40 bottom-0 left-0 right-0 text-[#ededed] bg-black/80 backdrop-blur-lg px-3 sm:px-10 py-4 max-h-[70vh] overflow-y-auto text-sm sm:text-md">
-        <div className="flex items-center space-x-4">
-          <BagIcon />
-          <div className="flex-2">
-            {' '}
-            <AddToCartButton
-              isLoading={isLoading}
-              handleAddToCart={handleCartClick}
-            />{' '}
-          </div>
-        </div>
-      </div>
-
+      <NavbarAddToCart
+        isLoading={isLoading}
+        handleCartClick={handleCartClick}
+      />
       {showVariant && (
         <ShowVariants
           variantImages={product.images}

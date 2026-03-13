@@ -2,7 +2,8 @@ import { IoSearch, IoPerson, IoBagHandle } from 'react-icons/io5';
 import { useProfileStore } from '@/store/profileStore';
 import { useAuthStore } from '@/store/authStore';
 import { useRouter } from 'next/navigation';
-import BagIcon from '@/views/components/bagIcon';
+import NoticationButton from './notificationButton';
+import BagButton from './bagButton';
 
 export default function IconLink() {
   const { isOpen } = useProfileStore();
@@ -18,13 +19,14 @@ export default function IconLink() {
   };
 
   return (
-    <div className="flex space-x-2 text-2xl">
+    <div className="flex space-x-3 text-2xl">
       <button aria-label="Search" className="hover:scale-125">
         <IoSearch />
       </button>
-      <BagIcon />
+      <BagButton />
+      <NoticationButton />
       <button
-        aria-label="Profile"
+        aria-label="Account"
         onClick={ProfileHandler}
         className="hover:scale-125"
       >

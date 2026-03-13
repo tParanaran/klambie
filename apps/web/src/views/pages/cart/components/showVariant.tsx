@@ -63,7 +63,7 @@ export default function ShowVariants({
           onClick={() => onClose(false)}
         ></div>
         <div
-          className={`fixed lg:max-w-xl mx-auto text-sm text-[#ededed] z-40 left-3 right-3 sm:left-10 sm:right-10 md:left-1/5 md:right-1/5 lg:left-1/4 lg:right-1/4 bg-black/80 backdrop-blur-lg p-3 sm:p-5 rounded-2xl max-h-[70vh] overflow-y-auto ${className}`}
+          className={`fixed lg:max-w-xl mx-auto text-sm text-[#ededed] z-40 left-3 right-3 sm:left-10 sm:right-10 md:left-1/5 md:right-1/5 lg:left-1/4 lg:right-1/4 bg-black/80 backdrop-blur-lg p-3 sm:p-5 rounded-2xl max-h-[75vh] overflow-y-auto  scrollbar-hide ${className}`}
         >
           <div className="flex justify-between h-fit">
             <div className="w-[80%]">

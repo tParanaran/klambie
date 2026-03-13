@@ -6,9 +6,9 @@ import Logo from './components/logo';
 import IconLink from './components/iconLink';
 import MobileButton from './components/mobileButton';
 import MobileMenu from './components/mobileMenu';
-import ProfileMenu from './components/profileMenu';
 import NavLink from './components/navLink';
 import BackgroundModal from '@/views/components/backgoundModal';
+import AccountMenu from './components/accountMenu';
 
 export default function NavbarBottom() {
   const [isScroll, setIsScroll] = useState<boolean>(false);
@@ -16,22 +16,15 @@ export default function NavbarBottom() {
   const [categories, setCategories] = useState<string[]>([]);
   const { isClose, isNavbar } = useNavbarStore();
   const profile = useProfileStore();
-  //   const searchStore = useSearchStore();
 
   const changeNavbar = () => {
-    if (window.scrollY >= 30) {
-      setIsScroll(true);
-    } else {
-      setIsScroll(false);
-    }
+    const scrolled = window.scrollY >= 20;
+    setIsScroll((prev) => (prev !== scrolled ? scrolled : prev));
   };
 
   useEffect(() => {
-    // searchStore.isSearchHandleClose();
-    window.addEventListener('scroll', changeNavbar);
-    return () => {
-      window.removeEventListener('scroll', changeNavbar);
-    };
+    window.addEventListener('scroll', changeNavbar, { passive: true });
+    return () => window.removeEventListener('scroll', changeNavbar);
   }, []);
 
   return (
@@ -61,20 +54,6 @@ export default function NavbarBottom() {
           </nav>
         </div>
       </div>
-      {/* {searchStore.isSearch && (
-        <>
-          <SearchModal
-            isScroll={isScroll}
-            categories={categories}
-            brands={brands}
-          />{' '}
-          <BackgroundModal
-            setIsModal={searchStore.isSearchHandleClose}
-            classZIndex="z-20"
-            classBackground="bg-none"
-          />
-        </>
-      )} */}
       {isNavbar && (
         <>
           {' '}
@@ -88,7 +67,7 @@ export default function NavbarBottom() {
       )}
       {profile.isProfile && (
         <>
-          <ProfileMenu isScroll={isScroll} />
+          <AccountMenu isScroll={isScroll} />
           <BackgroundModal
             setIsModal={profile.isClose}
             classZIndex="z-20"

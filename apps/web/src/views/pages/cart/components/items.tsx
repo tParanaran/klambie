@@ -17,6 +17,8 @@ import ErrorsMessage, {
 } from '../../product/components/errors';
 import useChangeVariant from '../hooks/useChange';
 import SelectAllToggle from './selectAll';
+import Image from 'next/image';
+import ShippingDetails from './shipping';
 
 interface ICart {
   cartItems: ICartItems[];
@@ -76,22 +78,22 @@ export default function CartItems({
 
   return (
     <div>
-      <div className="flex space-x-2 items-center ml-2 mb-2">
-        <SelectAllToggle
-          toggleSelectAll={toggleSelectAll}
-          isSelectedItem={selectedItems.length === cartItems.length}
-        />
-        <span className="text-lg font-bold">
-          <h1>Cart Items</h1>
-        </span>
-        <span>
-          {' '}
-          <p className="font-semibold opacity-50 text-sm">
-            ({selectedItems.length + '/' + cartItems.length} Items selected)
+      <div className="flex space-x-3 items-center ml-2 mb-2">
+        <div className="hidden md:block">
+          <SelectAllToggle
+            toggleSelectAll={toggleSelectAll}
+            isSelectedItem={selectedItems.length === cartItems.length}
+          />
+        </div>
+        <div className="flex space-x-2 items-center">
+          <Image src="/icon.svg" alt="Klambie" height={20} width={20} />
+          <p className="font-semibold text-sm">
+            KLAMBIE ({selectedItems.length + '/' + cartItems.length} Items
+            selected)
           </p>
-        </span>
+        </div>
       </div>
-
+      <ShippingDetails />
       {cartItems.map((item, i) => {
         if (!errorsRefs.current[item.productVariantId]) {
           errorsRefs.current[item.productVariantId] = null;
@@ -114,7 +116,7 @@ export default function CartItems({
                   onChange={() =>
                     toggleItem(item.productVariantId, item.quantity)
                   }
-                  className="w-5 h-5 appearance-none rounded-2xl border 
+                  className="w-4 h-4 appearance-none rounded-2xl border 
               hover:ring hover:ring-black/90 hover:ring-offset-1 hover:ring-offset-slate-100 checked:ring-1 checked:ring-black/90 checked:ring-offset-2 checked:ring-offset-slate-100
              cursor-pointer bg-gray-100"
                 />

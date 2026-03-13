@@ -1,8 +1,8 @@
-import Link from 'next/link';
 import { IoBagHandle } from 'react-icons/io5';
-import CartBadge from '../pages/product/components/badge';
+import Link from 'next/link';
+import CartBadge from '../../product/components/badge';
 
-export default function BagIcon() {
+export default function BagButton() {
   return (
     <div className="relative">
       <Link href={'/cart'} aria-label="Cart">

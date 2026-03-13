@@ -6,7 +6,15 @@ import { IoPower } from 'react-icons/io5';
 import { Notify } from '@/lib/notify';
 import axiosInstanceClient from '@/lib/axios/client';
 
-export default function LogoutButton({ className }: { className: string }) {
+export default function LogoutButton({
+  className,
+  iconClass,
+  name,
+}: {
+  className?: string;
+  iconClass: string;
+  name?: string;
+}) {
   const redirect = useRouter();
   const { clearAuth } = useAuthStore();
   const { isClose } = useProfileStore();
@@ -28,7 +36,7 @@ export default function LogoutButton({ className }: { className: string }) {
 
   return (
     <button className={className} onClick={LogoutHandler} aria-label="Logout">
-      <IoPower className="mr-2 text-lg" /> Log out
+      <IoPower className={iconClass} /> {name}
     </button>
   );
 }

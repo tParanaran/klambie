@@ -115,7 +115,7 @@ export default function ProductCard({ products }: { products: IProducts[] }) {
         <ShowVariants
           variantImages={variants.variantImages}
           name={variants.name}
-          className={'bottom-1'}
+          className={'md:bottom-1 bottom-19'}
           quantities={quantities}
           groupedAttributes={groupedAttributes}
           selectedVariant={selectedVariant}
