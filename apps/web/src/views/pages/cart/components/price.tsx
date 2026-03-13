@@ -25,8 +25,8 @@ export default function CartPrice({
       )}
 
       {hasDiscount ? (
-        <p className="text-light text-[#ededed] bg-red-700 rounded-md py-0.5 px-1 w-fit">
-          -{Rupiah(discount)}
+        <p className="text-light text-xs text-[#ededed] bg-red-800 rounded-md py-1 px-2 w-fit">
+          Saved {Rupiah(discount)}
         </p>
       ) : null}
     </>

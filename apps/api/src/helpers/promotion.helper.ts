@@ -27,8 +27,8 @@ export class PromotionHelper {
       name: promo.name,
       badge:
         promo.type === 'PERCENTAGE'
-          ? `${promo.value}% OFF`
-          : `${promo.value} OFF`,
+          ? `${promo.value}%`
+          : `${promo.value.dividedBy(1000)}k`,
       discount,
     };
 

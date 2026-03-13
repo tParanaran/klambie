@@ -99,85 +99,97 @@ export default function CartItems({
           errorsRefs.current[item.productVariantId] = null;
         }
         return (
-          <div
-            key={i}
-            className="relative bg-black/10 rounded-2xl  min-h-37.5 my-1 p-2 gap-2 flex"
-          >
-            <div className="absolute top-1/2 right-2">
-              <DeleteButton variantId={item.productVariantId} />
-            </div>
-            <div className="flex space-x-2 items-center">
-              <div className="relative">
-                <input
-                  type="checkbox"
-                  checked={selectedItems.some(
-                    (i) => i.variantId === item.productVariantId,
-                  )}
-                  onChange={() =>
-                    toggleItem(item.productVariantId, item.quantity)
-                  }
-                  className="w-4 h-4 appearance-none rounded-2xl border 
+          <div key={i}>
+            <div className="relative bg-black/10 rounded-2xl  min-h-37.5 mt-2 p-2 gap-2 flex">
+              <div className="absolute top-1/2 right-2">
+                <DeleteButton variantId={item.productVariantId} />
+              </div>
+              <div className="flex space-x-2 items-center">
+                <div className="relative">
+                  <input
+                    type="checkbox"
+                    checked={selectedItems.some(
+                      (i) => i.variantId === item.productVariantId,
+                    )}
+                    onChange={() =>
+                      toggleItem(item.productVariantId, item.quantity)
+                    }
+                    className="w-4 h-4 appearance-none rounded-2xl border 
               hover:ring hover:ring-black/90 hover:ring-offset-1 hover:ring-offset-slate-100 checked:ring-1 checked:ring-black/90 checked:ring-offset-2 checked:ring-offset-slate-100
              cursor-pointer bg-gray-100"
-                />
-              </div>
-              <img
-                src={item.image}
-                width={50}
-                height={50}
-                alt={item.name}
-                className="object-cover h-26 w-26 rounded-full"
-                aria-placeholder="blur"
-              />
-            </div>
-            <div className="text-sm flex-1/2">
-              <Link href={`/p/${item.slug}`} aria-label={item.name}>
-                <h1 className="font-semibold">{item.brand}</h1>
-                <h1 className="font-semibold">{item.name}</h1>
-                <div className="opacity-50 text-xs text-light">
-                  <p>SKU : {item.sku}</p>
+                  />
                 </div>
-              </Link>
-              <div
-                className="flex text-xs space-x-2 flex-wrap mr-7"
-                onClick={() =>
-                  setCartItemVariant({
-                    variantId: item.productVariantId,
-                    attributes: item.attributes.map((attr) => ({
-                      attributeId: attr.attributeId,
-                      attributeValueId: attr.attributeValueId,
-                    })),
-                  })
-                }
-              >
-                <VariantsButton
-                  attribute={item.attributes
-                    .map((attr) => attr.value)
-                    .join(', ')}
-                  onClick={variantHandler}
-                  slug={item.slug}
-                  name={item.name}
-                  quantity={item.quantity}
+                <img
+                  src={item.image}
+                  width={50}
+                  height={50}
+                  alt={item.name}
+                  className="object-cover h-26 w-26 rounded-full"
+                  aria-placeholder="blur"
                 />
-
-                <QuantityButton
-                  quantity={quantities[item.productVariantId]}
-                  stock={item.stockAvailable}
-                  inStock={item.inStock}
-                  onChange={(newQty) =>
-                    updateQuantity(item.productVariantId, newQty)
-                  }
-                />
-              </div>{' '}
-              <div className="flex flex-wrap space-x-2 items-center text-sm">
-                <CartPrice price={item.price} hasDiscount={item.hasDiscount} />
+                <div className="absolute flex flex-wrap top-0 left-0 max-w-full gap-0.5">
+                  <div
+                    className="text-xs text-[#ededed] bg-red-700 rounded-tl-xl rounded-br-xl py-1 px-2"
+                    title={item.appliedPromotions[0].badge}
+                  >
+                    {item.appliedPromotions
+                      .map((promo) => promo.badge)
+                      .join(' + ')}
+                  </div>
+                </div>
               </div>
-              <div className="-ml-5  min-h-6">
-                <ErrorsMessage
-                  ref={(ref) => {
-                    errorsRefs.current[item.productVariantId] = ref;
-                  }}
-                />
+              <div className="text-sm flex-1/2">
+                <Link href={`/p/${item.slug}`} aria-label={item.name}>
+                  <h1 className="font-semibold">{item.brand}</h1>
+                  <h1 className="font-semibold">{item.name}</h1>
+                  <div className="opacity-50 text-xs text-light">
+                    <p>SKU : {item.sku}</p>
+                  </div>
+                </Link>
+                <div
+                  className="flex text-xs space-x-2 flex-wrap mr-7"
+                  onClick={() =>
+                    setCartItemVariant({
+                      variantId: item.productVariantId,
+                      attributes: item.attributes.map((attr) => ({
+                        attributeId: attr.attributeId,
+                        attributeValueId: attr.attributeValueId,
+                      })),
+                    })
+                  }
+                >
+                  <VariantsButton
+                    attribute={item.attributes
+                      .map((attr) => attr.value)
+                      .join(', ')}
+                    onClick={variantHandler}
+                    slug={item.slug}
+                    name={item.name}
+                    quantity={item.quantity}
+                  />
+
+                  <QuantityButton
+                    quantity={quantities[item.productVariantId]}
+                    stock={item.stockAvailable}
+                    inStock={item.inStock}
+                    onChange={(newQty) =>
+                      updateQuantity(item.productVariantId, newQty)
+                    }
+                  />
+                </div>{' '}
+                <div className="flex flex-wrap space-x-2 items-center text-sm">
+                  <CartPrice
+                    price={item.price}
+                    hasDiscount={item.hasDiscount}
+                  />
+                </div>
+                <div className="-ml-5  min-h-6">
+                  <ErrorsMessage
+                    ref={(ref) => {
+                      errorsRefs.current[item.productVariantId] = ref;
+                    }}
+                  />
+                </div>
               </div>
             </div>
           </div>

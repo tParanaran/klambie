@@ -27,7 +27,7 @@ export default function NavbarCheckout({
   return (
     <>
       <div className="fixed md:hidden z-20 bottom-0 left-0 right-0 text-[#ededed] bg-black/80 backdrop-blur-lg px-3 sm:px-10 py-3 max-h-[70vh] overflow-y-auto text-sm sm:text-md">
-        <div className="bg-green-700 absolute left-0 right-0 top-0 px-3 sm:px-10 py-1">
+        <div className="bg-green-700/50 backdrop-blur-lg absolute left-0 right-0 top-0 px-3 sm:px-10 py-0.5">
           {totalPrice?.discountTotal ? (
             <p className="text-sm py-1 flex items-center">
               <IoTicketOutline className="mr-2 text-lg" /> Saved{' '}
