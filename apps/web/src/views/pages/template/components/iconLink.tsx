@@ -24,7 +24,6 @@ export default function IconLink() {
         <IoSearch />
       </button>
       <BagButton />
-      <NoticationButton />
       <button
         aria-label="Account"
         onClick={ProfileHandler}
@@ -32,6 +31,7 @@ export default function IconLink() {
       >
         <IoPerson />
       </button>
+      <NoticationButton />
     </div>
   );
 }

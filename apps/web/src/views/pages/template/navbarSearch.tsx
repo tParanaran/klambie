@@ -4,9 +4,11 @@ import LinkButton from '@/views/components/link';
 import NavbarTopContainer from '@/views/components/navbarTopContainer';
 import LogoutButton from './components/logoutButton';
 import NoticationButton from './components/notificationButton';
+import { usePathname } from 'next/navigation';
 
 export default function NavbarSearch() {
   const { user } = useAuthStore();
+  const pathname = usePathname();
 
   return (
     <NavbarTopContainer>
@@ -15,7 +17,10 @@ export default function NavbarSearch() {
           <SearchBar />
         </div>
         {!user?.id ? (
-          <LinkButton linkName={'Login'} linkHref={'/login'} />
+          <LinkButton
+            linkName={pathname === '/login' ? 'Register' : 'Login'}
+            linkHref={pathname === '/login' ? '/register' : '/login'}
+          />
         ) : (
           <h1 className="px-2 sm:px-5 py-2 font-semibold text-orange-800">
             Hi, {user?.name.split(' ')[0]}

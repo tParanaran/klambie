@@ -1,6 +1,6 @@
 'use client';
 import { useNavbarStore } from '@/store/navbarStore';
-import { IoMenu } from 'react-icons/io5';
+import { BiCategory } from 'react-icons/bi';
 
 export default function MobileButton() {
   const { isOpen } = useNavbarStore();
@@ -12,7 +12,7 @@ export default function MobileButton() {
       aria-label="Open Menu"
       onClick={isOpen}
     >
-      <IoMenu />
+      <BiCategory />
     </button>
   );
 }

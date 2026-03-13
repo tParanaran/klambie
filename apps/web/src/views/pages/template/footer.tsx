@@ -40,16 +40,18 @@ export default function Footer() {
                 </div>
               </div>
             </div>
-            <div className="flex lg:justify-end space-x-4 sm:space-x-20 md:space-x-10 lg:space-x-24 font-light text-sm flex-wrap">
-              <div className="flex flex-col space-y-5 mt-5">
+            <div className="flex lg:justify-end space-x-5 sm:space-x-20 md:space-x-10 lg:space-x-24 font-light text-sm flex-wrap">
+              <div className="flex flex-col space-y-4 mt-5">
                 <h1 className="opacity-50">Quick Links</h1>
-                <Link href="/shop">Shop</Link>
+                <Link href="/d/men">Men</Link>
+                <Link href="/d/women">Women</Link>
+                <Link href="/d/kids">Kids</Link>
+                <Link href="/d/sports">Sports</Link>
+                <Link href="/d/groomity">Groomity</Link>
                 <Link href="/register">Register</Link>
                 <Link href="/login">Login</Link>
-                <Link href="/question">FAQ</Link>
-                <Link href="/contact">Contact us</Link>
               </div>
-              <div className="flex flex-col space-y-5 mt-5">
+              <div className="flex flex-col space-y-4 mt-5">
                 <h1 className="opacity-50">Social</h1>
                 <a
                   href="https://www.facebook.com/"
@@ -80,8 +82,10 @@ export default function Footer() {
                   Linkedin
                 </a>
               </div>
-              <div className="flex flex-col space-y-5 mt-5">
+              <div className="flex flex-col space-y-4 mt-5">
                 <h1 className="opacity-50">Legal</h1>
+                <Link href="/question">FAQ</Link>
+                <Link href="/contact">Contact us</Link>
                 <Link href="/">Term of service</Link>
                 <Link href="/">Privacy policy</Link>
                 <Link href="/">Cookie policy</Link>

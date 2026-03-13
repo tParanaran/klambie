@@ -8,6 +8,10 @@ import WishlistButton from './wishlistButton';
 export default function AccountMenu({ isScroll }: { isScroll: boolean }) {
   const { user } = useAuthStore();
 
+  const className =
+    'flex items-center px-2 sm:px-5 py-1.5 hover:bg-orange-800 w-full overflow-hidden';
+  const iconClass = 'mr-2 text-lg';
+
   return (
     <div
       className={`fixed z-30 mt-1 -0.5 sm:mt-1.5 left-3 right-3 sm:left-10 sm:right-10  lg:max-w-7xl lg:mx-auto
@@ -17,37 +21,21 @@ export default function AccountMenu({ isScroll }: { isScroll: boolean }) {
         <div className="h-fit w-full bg-black/70 backdrop-blur-lg py-3 sm:py-5 text-sm rounded-2xl">
           <h1 className="px-2 sm:px-5 py-2 font-semibold">Hi, {user?.name}</h1>
           {user?.role !== 6969 ? (
-            <Link
-              href={'/dashboard'}
-              className="hover:bg-orange-800 px-2 sm:px-5 py-1.5 flex items-center overflow-hidden"
-            >
-              <IoGrid className="mr-2 text-lg" />
+            <Link href={'/dashboard'} className={className}>
+              <IoGrid className={iconClass} />
               <p>Dashboard</p>
             </Link>
           ) : null}
-          <AccountButton
-            className="flex items-center px-2 sm:px-5 py-1.5 hover:bg-orange-800 overflow-hidden"
-            iconClass="mr-2 text-lg"
-          />
-          <Link
-            href={'/account/order'}
-            className="hover:bg-orange-800 px-2 sm:px-5 py-1.5 flex items-center overflow-hidden"
-          >
+          <AccountButton className={className} iconClass={iconClass} />
+          <Link href={'/order'} className={className}>
             <IoReceiptOutline className="mr-2 text-lg" />
             <p>Order</p>
           </Link>
-
-          <WishlistButton
-            className={
-              'hover:bg-orange-800 px-2 sm:px-5 py-1.5 flex items-center overflow-hidden'
-            }
-            iconClass={'mr-2 text-lg'}
-          />
-
+          <WishlistButton className={className} iconClass={iconClass} />
           <LogoutButton
-            className="hover:bg-orange-800 px-2 sm:px-5 py-1.5 text-semibold w-full text-left flex items-center overflow-hidden"
+            className={className}
             name="Logout"
-            iconClass={'mr-2 text-lg'}
+            iconClass={iconClass}
           />
         </div>
       </div>
