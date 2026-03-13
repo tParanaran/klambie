@@ -2,8 +2,7 @@ import { IoSearch, IoPerson, IoBagHandle } from 'react-icons/io5';
 import { useProfileStore } from '@/store/profileStore';
 import { useAuthStore } from '@/store/authStore';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-import CartBadge from '../../product/components/badge';
+import BagIcon from '@/views/components/bagIcon';
 
 export default function IconLink() {
   const { isOpen } = useProfileStore();
@@ -23,14 +22,7 @@ export default function IconLink() {
       <button aria-label="Search" className="hover:scale-125">
         <IoSearch />
       </button>
-      <div className="relative hover:scale-125">
-        <Link href={'/cart'} aria-label="Cart">
-          <IoBagHandle />
-        </Link>
-        <div className="absolute -top-4 -right-2">
-          <CartBadge />
-        </div>
-      </div>
+      <BagIcon />
       <button
         aria-label="Profile"
         onClick={ProfileHandler}

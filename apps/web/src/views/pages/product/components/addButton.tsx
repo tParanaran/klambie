@@ -11,8 +11,8 @@ export default function AddToCartButton({
   isLoading,
 }: IAddToCartButton) {
   return (
-    <div className="flex space-x-2 items-center justify-between">
-      <IoHeartOutline className="text-2xl" />
+    <div className="flex space-x-4 items-center justify-between">
+      <IoHeartOutline className="text-2xl hover:scale-125" />
       <div className="flex-2">
         <div className="flex space-x-2">
           <Button
@@ -26,7 +26,7 @@ export default function AddToCartButton({
             onClick={() => console.log('Next Feature')}
             disabled={false}
             loading={isLoading}
-            className="border border-orange-800 text-orange-800 hover:text-white"
+            className="border border-orange-800 text-orange-800 hover:text-[#ededed]"
           >
             Buy Now{' '}
           </Button>

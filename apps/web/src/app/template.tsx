@@ -20,7 +20,9 @@ export default function Template({ children }: { children: React.ReactNode }) {
       {' '}
       <ToastContainer />
       {mounted && <BannerAnimation />}
-      <Navbar />
+      <div className="hidden md:block">
+        <Navbar />
+      </div>
       <Container>{children}</Container>
       {mounted && <ContactAnimation />}
       <Footer />

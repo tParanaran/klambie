@@ -40,7 +40,7 @@ export default function Tags({
           aria-label={tag.name}
           className={`${
             t % 2 === 0
-              ? 'bg-orange-800/80 text-white'
+              ? 'bg-orange-800/80 text-[#ededed]'
               : 'bg-gray-200/80 text-orange-700'
           } rounded-full py-1 px-2 w-fit flex items-center mb-1 font-semibold`}
         >

@@ -19,6 +19,15 @@ export default function useSelectedVariant({
   const [selectedAttributes, setSelectedAttributes] = useState<
     Record<number, number>
   >({});
+  const inStockVariants = variants.filter((v) => v.inStock);
+  const prices = inStockVariants
+    .map((v) => Number(v.price.finalPrice))
+    .filter((p): p is number => p != null);
+  const minPrice = prices.length > 0 ? Math.min(...prices) : null;
+  const cheapestVariants =
+    minPrice !== null
+      ? inStockVariants.filter((v) => Number(v.price.finalPrice) === minPrice)
+      : [];
 
   const groupedAttributes = useMemo(() => {
     return [...GetGroupedAttributes(variants)].reverse();
@@ -44,7 +53,6 @@ export default function useSelectedVariant({
   useEffect(() => {
     if (!variants || variants.length === 0) return;
 
-    const inStockVariants = variants.filter((v) => v.inStock);
     if (inStockVariants.length === 0) return;
 
     let defaultVariant: (typeof variants)[0] | undefined;
@@ -58,17 +66,6 @@ export default function useSelectedVariant({
 
     // Default by cheapest price
     if (!defaultVariant && isModal) {
-      const prices = inStockVariants
-        .map((v) => Number(v.price.finalPrice))
-        .filter((p): p is number => p != null);
-      const minPrice = prices.length > 0 ? Math.min(...prices) : null;
-
-      const cheapestVariants =
-        minPrice !== null
-          ? inStockVariants.filter(
-              (v) => Number(v.price.finalPrice) === minPrice,
-            )
-          : [];
       defaultVariant =
         cheapestVariants.length > 0 ? cheapestVariants[0] : inStockVariants[0];
     }
@@ -93,6 +90,8 @@ export default function useSelectedVariant({
     : undefined;
 
   return {
+    inStockVariants,
+    cheapestVariants,
     selectedAttributes,
     selectedVariant,
     groupedAttributes,

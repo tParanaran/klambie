@@ -15,6 +15,9 @@ import Loading from '@/views/components/loading';
 import ErrorsMessage, { IErrorsMessageHandle } from './components/errors';
 import AddToCartButton from './components/addButton';
 import ShowVariants from '../cart/components/showVariant';
+import BagIcon from '@/views/components/bagIcon';
+import NavbarProduct from './components/navbar';
+import ShareButton from './components/shareButton';
 
 export default function ProductView({ product }: { product: IProduct }) {
   const errorsProductRef = useRef<IErrorsMessageHandle | null>(null);
@@ -22,6 +25,8 @@ export default function ProductView({ product }: { product: IProduct }) {
   const [showVariant, setShowVariant] = useState<boolean>(false);
   const { slug, categories, brand, name } = product;
   const {
+    inStockVariants,
+    cheapestVariants,
     selectedAttributes,
     selectedVariant,
     selectedColorId,
@@ -45,17 +50,6 @@ export default function ProductView({ product }: { product: IProduct }) {
     }
   }, [selectedVariant]);
 
-  const inStockVariants = product.variants.filter((v) => v.inStock);
-  const prices = inStockVariants
-    .map((v) => Number(v.price.finalPrice))
-    .filter((p): p is number => p != null);
-  const minPrice = prices.length > 0 ? Math.min(...prices) : null;
-
-  const cheapestVariants =
-    minPrice !== null
-      ? inStockVariants.filter((v) => Number(v.price.finalPrice) === minPrice)
-      : [];
-
   const handleCartClick = async () => {
     if (!selectedVariant) {
       setShowVariant(true);
@@ -67,7 +61,8 @@ export default function ProductView({ product }: { product: IProduct }) {
   };
 
   return (
-    <div>
+    <>
+      <NavbarProduct brand={product.brand.name} />
       <div className="grid grid-cols-1 md:grid-cols-[1.2fr_1fr] lg:grid-cols-[1.5fr_1fr] pb-[5%] gap-4">
         <div>
           {/* Left Menu Desktop Mode */}
@@ -75,6 +70,9 @@ export default function ProductView({ product }: { product: IProduct }) {
             <Images images={product.images} selectedColorId={selectedColorId} />
             <div className="absolute top-3 left-3 z-10 text-sm sm:text-base">
               <Tags tags={product.tags} categories={categories} />
+            </div>
+            <div className="hidden md:block absolute top-3 right-3 z-10">
+              <ShareButton />
             </div>
           </div>
         </div>
@@ -146,10 +144,16 @@ export default function ProductView({ product }: { product: IProduct }) {
         </div>
       </div>
       <div className="fixed md:hidden z-40 bottom-0 left-0 right-0 text-[#ededed] bg-black/80 backdrop-blur-lg px-3 sm:px-10 py-4 max-h-[70vh] overflow-y-auto text-sm sm:text-md">
-        <AddToCartButton
-          isLoading={isLoading}
-          handleAddToCart={handleCartClick}
-        />
+        <div className="flex items-center space-x-4">
+          <BagIcon />
+          <div className="flex-2">
+            {' '}
+            <AddToCartButton
+              isLoading={isLoading}
+              handleAddToCart={handleCartClick}
+            />{' '}
+          </div>
+        </div>
       </div>
 
       {showVariant && (
@@ -171,6 +175,6 @@ export default function ProductView({ product }: { product: IProduct }) {
         ></ShowVariants>
       )}
       {isLoading && <Loading />}
-    </div>
+    </>
   );
 }

@@ -21,7 +21,7 @@ export default function RegisterSwiper() {
       <SwiperSlide>
         <div>
           <div className="flex items-center space-x-2 mb-2">
-            <div className="p-1.5 bg-black rounded-full text-white  text-2xl">
+            <div className="p-1.5 bg-black rounded-full text-[#ededed]  text-2xl">
               <IoGlobe />
             </div>
             <h1 className="font-semibold uppercase lg:text-lg">Mission</h1>
@@ -35,7 +35,7 @@ export default function RegisterSwiper() {
       <SwiperSlide>
         <div>
           <div className="flex items-center space-x-2 mb-2">
-            <div className="p-1.5 bg-black rounded-full text-2xl text-white ">
+            <div className="p-1.5 bg-black rounded-full text-2xl text-[#ededed] ">
               <IoEarth />
             </div>
             <h1 className="font-semibold uppercase lg:text-lg">
