@@ -26,7 +26,7 @@ export default function AnchoredModalContainer({
 
     const updatePosition = () => {
       const rect = anchorRef.current!.getBoundingClientRect();
-      const offset = window.scrollY === 0 ? 8 : 24;
+      const offset = window.scrollY === 0 ? -6 : 0;
 
       if (align === 'left') {
         setPosition({
@@ -88,9 +88,11 @@ export default function AnchoredModalContainer({
         right: align === 'right' ? position.right : undefined,
         transform: align === 'left' ? 'translateX(0)' : 'translateX(0)',
       }}
-      className="z-50 rounded-2xl dark:text-[#ededed] dark:bg-black/80 text-black bg-[#ededed]/80 backdrop-blur-lg shadow-lg animate-in fade-in zoom-in-95 duration-150"
+      className="z-50 rounded-2xl animate-in fade-in zoom-in-95 duration-150"
     >
-      {children}
+      <div className="dark:text-[#ededed] dark:bg-black/80 text-black bg-[#ededed]/80 backdrop-blur-lg shadow-lg mt-3.5 rounded-2xl">
+        {children}
+      </div>
     </div>,
     document.body,
   );

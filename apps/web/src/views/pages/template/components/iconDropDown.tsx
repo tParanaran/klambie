@@ -7,6 +7,7 @@ import NotificationContent from '../notification';
 import SearchForm from './searchBar';
 import SearchRecent from './searchRecent';
 import AnchorIconDropdown from './dropdown';
+import BagMenu from './bagMenu';
 
 export default function IconDropdown() {
   const { isClose, isProfile, isOpen } = useProfileStore();
@@ -39,7 +40,7 @@ export default function IconDropdown() {
         showModal={showSearch}
         ref={searchRef}
         Icon={IoSearch}
-        ariaLabel="Search Menu"
+        label="Search"
       >
         <div className="w-sm h-fit max-h-[75vh] overflow-y-auto scrollbar-hide p-5">
           <SearchForm showSearch={showSearch} />
@@ -47,14 +48,14 @@ export default function IconDropdown() {
         </div>
       </AnchorIconDropdown>
 
-      <BagButton />
+      <BagMenu />
 
       <AnchorIconDropdown
         HandlerModal={accountHandler}
         showModal={isProfile}
         ref={accountRef}
         Icon={IoPerson}
-        ariaLabel="Account Menu"
+        label="Account"
       >
         <AccountMenu />
       </AnchorIconDropdown>
@@ -64,7 +65,7 @@ export default function IconDropdown() {
         showModal={showNotification}
         ref={notificationRef}
         Icon={IoNotifications}
-        ariaLabel="Notification Menu"
+        label="Notification"
       >
         <div className="w-sm h-fit max-h-[75vh] overflow-y-auto scrollbar-hide">
           <NotificationContent />

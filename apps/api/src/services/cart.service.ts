@@ -397,7 +397,7 @@ export class CartService {
   async getCartItems(
     sessionId: string,
     userId?: number,
-  ): Promise<CartItems[] | null> {
+  ): Promise<CartItemsResponse | null> {
     const cart = await this.getCart(sessionId, userId);
 
     if (!cart) return null;
@@ -408,9 +408,9 @@ export class CartService {
 
     if (!result) return null;
 
-    const { cartItems } = result;
+    const { cartItems, totalPrice } = result;
 
-    return cartItems;
+    return { cartItems, totalPrice };
   }
   async deleteCart(
     productId: number,

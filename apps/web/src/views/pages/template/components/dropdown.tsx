@@ -3,7 +3,7 @@ import { RefObject } from 'react';
 import { IconType } from 'react-icons';
 
 interface IAnchorIcon {
-  ariaLabel: string;
+  label: string;
   showModal: boolean;
   ref: RefObject<HTMLButtonElement>;
   children: React.ReactNode;
@@ -12,7 +12,7 @@ interface IAnchorIcon {
 }
 
 export default function AnchorIconDropdown({
-  ariaLabel,
+  label,
   showModal,
   ref,
   children,
@@ -21,17 +21,18 @@ export default function AnchorIconDropdown({
 }: IAnchorIcon) {
   return (
     <div
-      className="relative"
+      className="relative py-2.5"
       onMouseEnter={HandlerModal}
       onMouseLeave={HandlerModal}
     >
       <button
         ref={ref}
-        aria-label={ariaLabel}
+        aria-label={label + 'Menu'}
         onClick={HandlerModal}
-        className="hover:scale-125"
+        className={`flex items-center justify-center flex-col ${showModal ? 'text-orange-800' : ''}`}
       >
-        <Icon className={`${showModal ? 'text-orange-800' : ''}`} />
+        <Icon className="hover:scale-125" />
+        <p className="text-xs">{label}</p>
       </button>{' '}
       <AnchoredModalContainer
         open={showModal}

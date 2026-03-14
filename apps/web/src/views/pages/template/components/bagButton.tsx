@@ -5,8 +5,9 @@ import CartBadge from '../../product/components/badge';
 export default function BagButton() {
   return (
     <div className="relative">
-      <Link href={'/cart'} aria-label="Cart">
+      <Link href={'/cart'} aria-label="Bag Menu">
         <IoBagHandle className="text-2xl hover:scale-125" />
+        <p className="text-xs">Bag</p>
         <div className="absolute -top-4 -right-2">
           <CartBadge />
         </div>{' '}

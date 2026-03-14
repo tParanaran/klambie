@@ -13,7 +13,7 @@ export default function MobileMenu() {
     <div className="relative" onMouseEnter={isOpen} onMouseLeave={isClose}>
       <button
         ref={menuRef}
-        className="text-2xl hover:bg-black rounded-md p-1 bg-black/90 text-[#ededed]"
+        className="text-[32px] hover:bg-black rounded-md p-1 bg-black/90 text-[#ededed]"
         type="button"
         aria-label="Open Menu"
         onClick={isOpen}

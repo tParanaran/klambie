@@ -9,7 +9,7 @@ export default async function Cart() {
 
   try {
     const { data } = await axiosInstanceServer.get('/shop-cart/get');
-    cartData = data;
+    cartData = data.cartItems;
   } catch (error) {
     Notify('Something go wrong');
     cartData = null;

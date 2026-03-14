@@ -29,7 +29,6 @@ export default function NavbarMobile() {
         </div>
         <div>
           <BagButton />
-          <p className="text-xs">Bag</p>
         </div>
 
         <IconLink
