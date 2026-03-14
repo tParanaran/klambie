@@ -6,6 +6,8 @@ import SelectAllToggle from './selectAll';
 import Rupiah from '@/utils/rupiah';
 import AddVouchers from './vouchers';
 import CartSummary from './summary';
+import NavbarBottomContainer from '@/views/components/navbarBottomContainer';
+import ModalContainer from '@/views/components/modalContainer';
 
 interface INavbarCheckout {
   toggleSelectAll: () => void;
@@ -26,7 +28,7 @@ export default function NavbarCheckout({
 
   return (
     <>
-      <div className="fixed md:hidden z-20 bottom-0 left-0 right-0 text-[#ededed] bg-black/80 backdrop-blur-lg px-3 sm:px-10 py-3 max-h-[70vh] overflow-y-auto text-sm sm:text-md">
+      <NavbarBottomContainer>
         <div className="bg-green-700/50 backdrop-blur-lg absolute left-0 right-0 top-0 px-3 sm:px-10 py-0.5">
           {totalPrice?.discountTotal ? (
             <p className="text-sm py-1 flex items-center">
@@ -69,32 +71,16 @@ export default function NavbarCheckout({
             </div>
           </div>
         </div>
-      </div>
+      </NavbarBottomContainer>
+
       {showPrice && (
-        <div
-          className={`fixed inset-0 z-10 transition-opacity duration-300 ${
-            showPrice
-              ? 'opacity-100 pointer-events-auto'
-              : 'opacity-0 pointer-events-none'
-          }`}
+        <ModalContainer
+          showModal={showPrice}
+          handlerModal={handleOpenPrice}
+          style="md:hidden bottom-28"
         >
-          <div
-            className="absolute h-full w-full"
-            onClick={handleOpenPrice}
-            role="button"
-            tabIndex={0}
-            aria-label="Close modal"
-          ></div>
-          <div
-            className={`fixed md:hidden text-[#ededed] text-sm sm:text-base bottom-25 sm:bottom-27 sm:left-10 sm:right-10 left-3 right-3 p-3 sm:p-5 bg-black/80 backdrop-blur-lg rounded-2xl max-h-[70vh] overflow-y-auto space-y-3 transform transition-transform duration-300 ease-out ${showPrice ? 'translate-y-0' : 'translate-y-full'}`}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <CartSummary
-              totalPrice={totalPrice}
-              selectedCount={selectedCount}
-            />
-          </div>
-        </div>
+          <CartSummary totalPrice={totalPrice} selectedCount={selectedCount} />
+        </ModalContainer>
       )}
     </>
   );

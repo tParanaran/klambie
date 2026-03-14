@@ -7,7 +7,7 @@ export default function NavLink({
   classLink,
 }: {
   classDiv: string;
-  classLink: string;
+  classLink?: string;
 }) {
   const { isClose } = useNavbarStore();
 

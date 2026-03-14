@@ -12,9 +12,9 @@ export default function CartPrice({
 
   return (
     <>
-      {hasDiscount ? (
+      {hasDiscount && (
         <p className="font-semibold text-orange-700">{Rupiah(totalPrice)}</p>
-      ) : null}
+      )}
 
       {hasDiscount ? (
         <p className="font-semibold opacity-50 line-through">
@@ -24,11 +24,11 @@ export default function CartPrice({
         <p className="font-semibold text-orange-700">{Rupiah(totalPrice)}</p>
       )}
 
-      {hasDiscount ? (
+      {hasDiscount && (
         <p className="text-light text-xs text-[#ededed] bg-red-800 rounded-md py-1 px-2 w-fit">
           Saved {Rupiah(discount)}
         </p>
-      ) : null}
+      )}
     </>
   );
 }

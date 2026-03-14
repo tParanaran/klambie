@@ -2,11 +2,15 @@
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 // import { useDebouncedCallback } from 'use-debounce';
 import { IoClose, IoSearch } from 'react-icons/io5';
-import { RefObject, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import searchSchema from '../schema';
 
-export default function SearchForm() {
+interface ISearchForm {
+  showSearch?: boolean;
+}
+
+export default function SearchForm({ showSearch }: ISearchForm) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -14,6 +18,10 @@ export default function SearchForm() {
   const [queryTerm, setQueryTerm] = useState<string>('');
 
   useEffect(() => {
+    if (showSearch) {
+      inputRef.current?.focus();
+    }
+
     const getParams = searchParams.get('search')?.toString();
     if (getParams === undefined) {
       setQueryTerm('');

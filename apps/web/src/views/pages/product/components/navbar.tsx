@@ -1,3 +1,4 @@
+import NavbarBottomContainer from '@/views/components/navbarBottomContainer';
 import BagButton from '../../template/components/bagButton';
 import AddToCartButton from './addButton';
 
@@ -11,17 +12,16 @@ export default function NavbarAddToCart({
   isLoading,
 }: INavbarAddToCart) {
   return (
-    <div className="fixed md:hidden z-40 bottom-0 left-0 right-0 text-[#ededed] bg-black/80 backdrop-blur-lg px-3 sm:px-10 py-4 max-h-[70vh] overflow-y-auto text-sm sm:text-md">
+    <NavbarBottomContainer>
       <div className="flex items-center space-x-4">
         <BagButton />
         <div className="flex-2">
-          {' '}
           <AddToCartButton
             isLoading={isLoading}
             handleAddToCart={handleCartClick}
-          />{' '}
+          />
         </div>
       </div>
-    </div>
+    </NavbarBottomContainer>
   );
 }

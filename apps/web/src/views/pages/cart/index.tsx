@@ -8,7 +8,6 @@ import CheckoutButton from './components/checkoutButton';
 import useSelect from './hooks/useSelect';
 import NavbarCheckout from './components/navbar';
 import DeliveryAddress from './components/delivery';
-import NavbarMobile from '../template/navbarMobile';
 
 export default function CartView({ cartItems }: { cartItems: ICartItems[] }) {
   const total = useCartQuery();

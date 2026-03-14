@@ -36,7 +36,7 @@ export default function CartItems({
   const errorsRefs = useRef<Record<number, IErrorsMessageHandle | null>>({});
   const errorsModalRef = useRef<IErrorsMessageHandle | null>(null);
   const [cartItemVariant, setCartItemVariant] = useState<IVariantAttribute>();
-  const { variants, showVariants, setShowVariants, variantHandler } =
+  const { variants, showVariants, showVariantsHandler, variantHandler } =
     useVariants();
   const { quantities, updateQuantity } = useCartQuantities({
     cartItems,
@@ -59,7 +59,7 @@ export default function CartItems({
     selectedAttributes,
     quantities,
     updateQuantity,
-    setShowVariants,
+    showVariantsHandler,
     errorsModalRef,
     errorsRefs,
   });
@@ -199,13 +199,14 @@ export default function CartItems({
         <ShowVariants
           variantImages={variants.variantImages}
           name={variants.name}
-          className={'bottom-25 sm:bottom-27 md:bottom-1'}
+          positionStyle={'bottom-28 md:bottom-1'}
           quantities={quantities}
           groupedAttributes={groupedAttributes}
           selectedVariant={selectedVariant}
           selectedColorId={selectedColorId}
           selectedAttributes={selectedAttributes}
-          onClose={setShowVariants}
+          showVariants={showVariants}
+          onClose={showVariantsHandler}
           handleSelect={handleSelect}
           updateQuantity={updateQuantity}
         >

@@ -21,7 +21,7 @@ import AddToCartButton from '../../product/components/addButton';
 
 export default function ProductCard({ products }: { products: IProducts[] }) {
   const errorsProductRef = useRef<IErrorsMessageHandle | null>(null);
-  const { variants, showVariants, setShowVariants, variantHandler } =
+  const { variants, showVariants, showVariantsHandler, variantHandler } =
     useVariants();
   const { quantities, updateQuantity } = useCartQuantities({});
   const {
@@ -115,7 +115,7 @@ export default function ProductCard({ products }: { products: IProducts[] }) {
         <ShowVariants
           variantImages={variants.variantImages}
           name={variants.name}
-          className={'md:bottom-1 bottom-19'}
+          positionStyle={'md:bottom-1 bottom-19'}
           quantities={quantities}
           groupedAttributes={groupedAttributes}
           selectedVariant={selectedVariant}
@@ -123,7 +123,8 @@ export default function ProductCard({ products }: { products: IProducts[] }) {
           selectedAttributes={selectedAttributes}
           handleSelect={handleSelect}
           updateQuantity={updateQuantity}
-          onClose={setShowVariants}
+          onClose={showVariantsHandler}
+          showVariants={showVariants}
         >
           <div className="absolute right-5 bottom-18">
             <ErrorsMessage ref={errorsProductRef} />

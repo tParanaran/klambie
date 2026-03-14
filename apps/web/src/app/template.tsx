@@ -33,10 +33,10 @@ export default function Template({ children }: { children: React.ReactNode }) {
       {cartNavbar && <NavbarCart />}
       {productNavbar && <NavbarProduct />}
       {!mobileNavbar && <NavbarSearch />}
-      <div className="hidden md:block">
+      <Container>
         <Navbar />
-      </div>
-      <Container>{children}</Container>
+        {children}
+      </Container>
       {mounted && <ContactAnimation />}
       {!mobileNavbar && <NavbarMobile />}
       <Footer />

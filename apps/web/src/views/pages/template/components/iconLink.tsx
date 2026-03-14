@@ -1,37 +1,25 @@
-import { IoSearch, IoPerson, IoBagHandle } from 'react-icons/io5';
-import { useProfileStore } from '@/store/profileStore';
-import { useAuthStore } from '@/store/authStore';
-import { useRouter } from 'next/navigation';
-import NoticationButton from './notificationButton';
-import BagButton from './bagButton';
+import Link from 'next/link';
+import { IconType } from 'react-icons';
 
-export default function IconLink() {
-  const { isOpen } = useProfileStore();
-  const { user } = useAuthStore();
-  const redirect = useRouter();
+interface IIconLink {
+  className?: string;
+  iconClass: string;
+  href: string;
+  name: string;
+  Icon: IconType;
+}
 
-  const ProfileHandler = () => {
-    if (user) {
-      isOpen();
-    } else {
-      redirect.push('/login');
-    }
-  };
-
+export default function IconLink({
+  className,
+  iconClass,
+  href,
+  name,
+  Icon,
+}: IIconLink) {
   return (
-    <div className="flex space-x-3 text-2xl">
-      <button aria-label="Search" className="hover:scale-125">
-        <IoSearch />
-      </button>
-      <BagButton />
-      <button
-        aria-label="Account"
-        onClick={ProfileHandler}
-        className="hover:scale-125"
-      >
-        <IoPerson />
-      </button>
-      <NoticationButton />
-    </div>
+    <Link href={href} className={className}>
+      <Icon className={iconClass} />
+      <p>{name}</p>{' '}
+    </Link>
   );
 }

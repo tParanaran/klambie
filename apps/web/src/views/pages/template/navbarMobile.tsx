@@ -1,16 +1,17 @@
 import { BiCategory } from 'react-icons/bi';
+import { IoHeartOutline, IoPerson } from 'react-icons/io5';
 import Link from 'next/link';
 import Image from 'next/image';
-import AccountButton from './components/accountButton';
-import WishlistButton from './components/wishlistButton';
 import BagButton from './components/bagButton';
+import NavbarBottomContainer from '@/views/components/navbarBottomContainer';
+import IconLink from './components/iconLink';
 
 export default function NavbarMobile() {
   const className = 'flex flex-col items-center justify-center text-xs';
   const iconClass = 'text-2xl transition-transform hover:scale-125';
 
   return (
-    <nav className="fixed md:hidden z-40 bottom-0 left-0 right-0 text-[#ededed] bg-black/80 backdrop-blur-lg px-3 sm:px-10 py-4 max-h-[70vh] overflow-y-auto text-sm sm:text-md">
+    <NavbarBottomContainer>
       <div className="flex items-center space-x-4 justify-between">
         <Link href={'/'} className={className}>
           <Image
@@ -30,9 +31,23 @@ export default function NavbarMobile() {
           <BagButton />
           <p className="text-xs">Bag</p>
         </div>
-        <WishlistButton className={className} iconClass={iconClass} />
-        <AccountButton className={className} iconClass={iconClass} />
+
+        <IconLink
+          className={className}
+          iconClass={iconClass}
+          href={'/wishlist'}
+          name={'Wishlist'}
+          Icon={IoHeartOutline}
+        />
+
+        <IconLink
+          className={className}
+          iconClass={iconClass}
+          href={'/account'}
+          name={'Account'}
+          Icon={IoPerson}
+        />
       </div>
-    </nav>
+    </NavbarBottomContainer>
   );
 }

@@ -16,7 +16,6 @@ import ErrorsMessage, { IErrorsMessageHandle } from './components/errors';
 import AddToCartButton from './components/addButton';
 import ShowVariants from '../cart/components/showVariant';
 import ShareButton from './components/shareButton';
-import BagButton from '../template/components/bagButton';
 import NavbarAddToCart from './components/navbar';
 
 export default function ProductView({ product }: { product: IProduct }) {
@@ -160,8 +159,9 @@ export default function ProductView({ product }: { product: IProduct }) {
           onClose={() => setShowVariant(false)}
           handleSelect={handleSelect}
           updateQuantity={(_, newQty) => setQuantity(newQty)}
-          className={'bottom-18 sm:bottom-20 md:bottom-1'}
+          positionStyle={'bottom-19 md:bottom-1'}
           children={undefined}
+          showVariants={showVariant}
         ></ShowVariants>
       )}
       {isLoading && <Loading />}

@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { IVariant } from '../../product/types/product.types';
 import { IVariantAttribute } from '../types';
 import { AddToCartSchema } from '../../product/schema';
-import { Dispatch, RefObject, SetStateAction } from 'react';
+import { RefObject } from 'react';
 import { ValidationError } from 'yup';
 import { IErrorsMessageHandle } from '../../product/components/errors';
 
@@ -18,7 +18,7 @@ interface IUseChange {
     Record<number, IErrorsMessageHandle | null>
   >;
   updateQuantity: (variantId: number, newQty: number) => void;
-  setShowVariants: Dispatch<SetStateAction<boolean>>;
+  showVariantsHandler: () => void;
 }
 
 export default function useChangeVariant({
@@ -29,7 +29,7 @@ export default function useChangeVariant({
   errorsModalRef,
   errorsRefs,
   updateQuantity,
-  setShowVariants,
+  showVariantsHandler,
 }: IUseChange) {
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -41,7 +41,7 @@ export default function useChangeVariant({
           cartItemVariant.variantId,
           quantities[cartItemVariant.variantId],
         );
-        setShowVariants(false);
+        showVariantsHandler();
       } else {
         try {
           await AddToCartSchema.validate(
@@ -75,7 +75,7 @@ export default function useChangeVariant({
           errorsRefs?.current[cartItemVariant.variantId]?.showMessage({
             success: data.message,
           });
-          setShowVariants(false);
+          showVariantsHandler();
           router.refresh();
         } catch (err: any) {
           const messages =

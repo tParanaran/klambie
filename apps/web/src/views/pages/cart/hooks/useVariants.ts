@@ -31,10 +31,15 @@ export default function useVariants() {
       Notify(error instanceof Error ? error.message : 'Something went wrong');
     }
   };
+
+  const showVariantsHandler = () => {
+    setShowVariants(!showVariants);
+  };
+
   return {
-    variantHandler,
     variants,
     showVariants,
-    setShowVariants,
+    showVariantsHandler,
+    variantHandler,
   };
 }
