@@ -31,7 +31,7 @@ export default function AnchorIconDropdown({
         ref={ref}
         aria-label={label + 'Menu'}
         onClick={HandlerModal}
-        className={`flex items-center justify-center flex-col ${showModal ? 'text-orange-800' : ''}`}
+        className={`flex items-center justify-center flex-col ${showModal ? 'text-orange-800 dark:text-orange-600' : ''}`}
       >
         {Icon ? <Icon className="text-2xl hover:scale-125" /> : null}
         <p className={Icon ? '' : 'py-2'}>{label}</p>

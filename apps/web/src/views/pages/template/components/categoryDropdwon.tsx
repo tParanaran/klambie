@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { NavItem } from '@/utils/navLink';
 import { IoChevronDown, IoChevronForward } from 'react-icons/io5';
+import Link from 'next/link';
 
 interface IDropdownCategory {
   item: NavItem;
@@ -72,17 +73,18 @@ export default function DropdownCategory({
           )}
         </button>
       )}
+
       {level > 0 && (
         <button
           onClick={handleClick}
-          className={`w-full transition-colors duration-200 px-3 py-4 md:py-2 flex justify-between ${isOpen ? 'text-orange-800 font-semibold bg-none' : ''}`}
+          className={`w-full transition-colors duration-200 p-3 md:py-2 flex justify-between ${isOpen ? 'bg-orange-800 text-[#ededed] font-bold' : ''}`}
           aria-expanded={isOpen}
           aria-controls={`submenu-${level}-${index}`}
         >
-          {item.name}
+          <p className="ml-2">{item.name}</p>
           {hasSub && (
             <IoChevronForward
-              className={`text-xl ml-3 transition-transform duration-300 transform ${isOpen ? 'rotate-180' : 'rotate-0'}`}
+              className={`text-xl transition-transform duration-300 transform ${isOpen ? 'rotate-180' : 'rotate-0'}`}
             />
           )}
         </button>
@@ -99,6 +101,14 @@ export default function DropdownCategory({
           }}
           className="flex flex-col rounded-b-lg bg-black/5 dark:bg-white/10"
         >
+          <Link
+            href={`/d/${item.name}`}
+            className="w-full transition-colors duration-200 p-3 md:py-2 text-left"
+          >
+            <p className="ml-2 text-orange-800 dark:text-orange-600">
+              Show All
+            </p>
+          </Link>
           {item.subcategories!.map((subItem, subIndex) => (
             <DropdownCategory
               key={subIndex}

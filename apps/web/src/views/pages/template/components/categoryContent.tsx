@@ -72,7 +72,7 @@ export default function CategoryContent({
           {/* Side panel */}
           <div
             ref={sideModalRef}
-            className={`fixed h-fit z-50 transform transition-transform duration-300 ease-out translate-x-0 ${isMobile ? 'pt-16 bg-white sm:bg-transparent sm:right-10 top-0 w-full h-full sm:w-[45%] px-3 sm:px-0' : 'w-xs top-3 right-3 '}`}
+            className={`fixed h-fit z-50 transform transition-transform duration-300 ease-out translate-x-0 ${isMobile ? 'pt-16 bg-[#ededed] dark:bg-black sm:bg-transparent!  sm:right-10 top-0 w-full h-full sm:w-[45%] px-3 sm:px-0' : 'w-xs top-3 right-3 '}`}
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex py-3 justify-between items-center">
@@ -88,7 +88,7 @@ export default function CategoryContent({
                     `/c/${slug || slugModal}/${sideModalItem.name}`,
                   )
                 }
-                className={`font-semibold rounded-lg hover:bg-orange-800 hover:text-[#ededed] bg-black/10 dark:bg-white/10 text-orange-800 ${isMobile ? 'py-4 px-8 text-base' : 'px-4 py-2 text-sm'}`}
+                className={`font-semibold rounded-lg hover:bg-orange-800 hover:text-[#ededed] bg-black/10 dark:bg-white/10 text-orange-800 dark:text-orange-600 ${isMobile ? 'py-3 px-8 text-base' : 'px-4 py-2 text-sm'}`}
               >
                 <p>Show All</p>
               </button>
@@ -100,7 +100,7 @@ export default function CategoryContent({
                       `/c/${slug || slugModal}/${sideModalItem.name}/${subItem.name}`,
                     )
                   }
-                  className={`px-4 py-2 rounded-lg hover:bg-orange-800 hover:text-[#ededed] bg-black/10 dark:bg-white/10 ${isMobile ? 'py-4 px-8 text-base' : 'px-4 py-2 text-sm'}`}
+                  className={`px-4 py-2 rounded-lg hover:bg-orange-800 hover:text-[#ededed] bg-black/10 dark:bg-white/10 ${isMobile ? 'py-3 px-8 text-base' : 'px-4 py-2 text-sm'}`}
                 >
                   {subItem.name}
                 </button>

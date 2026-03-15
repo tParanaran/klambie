@@ -49,7 +49,7 @@ export default function BagMenu() {
         ref={menuRef}
         type="button"
         aria-label="Bag Menu"
-        className={`flex items-center justify-center flex-col ${showMenu ? 'text-orange-800' : ''}`}
+        className={`flex items-center justify-center flex-col ${showMenu ? 'text-orange-800 dark:text-orange-600' : ''}`}
       >
         <BagButton isMobile={false} />
       </button>
@@ -122,7 +122,7 @@ export default function BagMenu() {
                 ))}
               </div>
               <div className="p-3">
-                <div className="flex justify-between flex-wrap mb-3 font-semibold">
+                <div className="flex justify-between flex-wrap mb-3 font-semibold text-sm">
                   <h1>
                     Subtotal <span>{total} product(s)</span>
                   </h1>

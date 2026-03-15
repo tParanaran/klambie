@@ -50,7 +50,7 @@ export default function NavbarSearch() {
             linkHref={pathname === '/login' ? '/register' : '/login'}
           />
         ) : (
-          <h1 className="px-2 sm:px-5 py-2 font-semibold text-orange-800">
+          <h1 className="px-2 sm:px-5 py-2 font-semibold text-orange-800 dark:text-orange-600">
             Hi, {user?.name.split(' ')[0]}
           </h1>
         )}

@@ -53,7 +53,7 @@ export default function NavbarCheckout({
             aria-expanded={showPrice}
           >
             <div>
-              <p className="font-semibold text-orange-700">
+              <p className="font-semibold dark:text-orange-600 text-orange-800 text-base">
                 {Rupiah(totalPrice?.grandTotal || '0')}
               </p>
               <p className="text-sm underline flex items-center">

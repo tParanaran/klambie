@@ -19,7 +19,7 @@ export default function VertificationdModal({ html }: { html: string }) {
               </Link>
               <Link
                 href={'/'}
-                className="py-2 sm:py-3 px-4 text-orange-800 font-semibold uppercase"
+                className="py-2 sm:py-3 px-4 text-orange-800 dark:text-orange-600 font-semibold uppercase"
               >
                 Return to Site
               </Link>

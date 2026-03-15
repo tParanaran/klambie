@@ -1,5 +1,5 @@
 import { navLinks } from '@/utils/navLink';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import React from 'react';
 import AnchorIconDropdown from './dropdown';
 import Link from 'next/link';
@@ -32,6 +32,17 @@ export default function CategoryLinks() {
     }));
   };
 
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 1024 && dropdowns) {
+        setDropdowns(initialDropdownState);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [dropdowns]);
+
   return (
     <div className="flex space-x-8 font-semibold">
       {navLinks.map((cat, c) => {
@@ -49,7 +60,7 @@ export default function CategoryLinks() {
                 <h1 className="font-semibold text-lg">{cat.name}</h1>
                 <Link
                   href={`/d/${cat.name}`}
-                  className="text-sm text-orange-800"
+                  className="text-sm text-orange-800 dark:text-orange-600"
                 >
                   Show All
                 </Link>

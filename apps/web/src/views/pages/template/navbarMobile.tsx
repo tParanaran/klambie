@@ -12,17 +12,18 @@ import CategoryContent from './components/categoryContent';
 import { navLinks } from '@/utils/navLink';
 
 export default function NavbarMobile() {
-  const menuRef = useRef<HTMLButtonElement>(null);
-  const [showMenu, setShowMenu] = useState<boolean>(false);
+  const categoryRef = useRef<HTMLButtonElement>(null);
+  const [showCategory, setShowCategory] = useState<boolean>(false);
   const className = 'flex flex-col items-center justify-center text-xs';
   const iconClass = 'text-2xl transition-transform hover:scale-125';
 
   const showMenuHandler = () => {
-    setShowMenu(!showMenu);
+    setShowCategory(!showCategory);
   };
 
+  // No Scroll behavior
   useEffect(() => {
-    if (!showMenu) return;
+    if (!showCategory) return;
 
     const originalStyle = window.getComputedStyle(document.body).overflow;
     document.body.style.overflow = 'hidden';
@@ -30,25 +31,27 @@ export default function NavbarMobile() {
     return () => {
       document.body.style.overflow = originalStyle;
     };
-  }, [showMenu]);
+  }, [showCategory]);
 
+  // Scroll to behavior
   useEffect(() => {
-    if (showMenu && menuRef.current) {
+    if (showCategory && categoryRef.current) {
       const navbarHeight = 64;
       window.scrollTo({ top: navbarHeight, behavior: 'smooth' });
     }
-  }, [showMenu]);
+  }, [showCategory]);
 
+  // Auto close modal when resize
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth > 768 && showMenu) {
-        setShowMenu(false);
+      if (window.innerWidth > 768 && showCategory) {
+        setShowCategory(false);
       }
     };
 
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, [showMenu]);
+  }, [showCategory]);
 
   return (
     <NavbarBottomContainer>
@@ -68,19 +71,19 @@ export default function NavbarMobile() {
           <button
             className={className}
             onClick={showMenuHandler}
-            ref={menuRef}
+            ref={categoryRef}
             aria-label="Open category"
           >
             <BiCategory className={iconClass} />
             <p>Categories</p>
           </button>
           <AnchoredModalContainer
-            open={showMenu}
-            anchorRef={menuRef}
-            align=""
+            open={showCategory}
+            anchorRef={categoryRef}
+            align="default"
             zIndex="z-10"
           >
-            <div className="w-screen h-screen overflow-y-auto scrollbar-hide">
+            <div className="w-screen h-screen overflow-y-auto scrollbar-hide max-h-[90vh]">
               <CategoryContent navLinks={navLinks} isMobile={true} />
             </div>
           </AnchoredModalContainer>

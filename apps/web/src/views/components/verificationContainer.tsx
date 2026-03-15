@@ -17,7 +17,7 @@ export default function VerificationContainer({
         <p>
           Need help?{' '}
           <Link
-            className="text-orange-800"
+            className="text-orange-800 dark:text-orange-600"
             href={'/contact'}
             aria-label="Contact us"
           >
