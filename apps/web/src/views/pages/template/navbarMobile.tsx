@@ -6,7 +6,7 @@ import Image from 'next/image';
 import BagButton from './components/bagButton';
 import NavbarBottomContainer from '@/views/components/navbarBottomContainer';
 import IconLink from './components/iconLink';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import AnchoredModalContainer from '@/views/components/anchoredModalContainer';
 import CategoryContent from './components/categoryContent';
 import { navLinks } from '@/utils/navLink';
@@ -21,6 +21,35 @@ export default function NavbarMobile() {
     setShowMenu(!showMenu);
   };
 
+  useEffect(() => {
+    if (!showMenu) return;
+
+    const originalStyle = window.getComputedStyle(document.body).overflow;
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.body.style.overflow = originalStyle;
+    };
+  }, [showMenu]);
+
+  useEffect(() => {
+    if (showMenu && menuRef.current) {
+      const navbarHeight = 64;
+      window.scrollTo({ top: navbarHeight, behavior: 'smooth' });
+    }
+  }, [showMenu]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 768 && showMenu) {
+        setShowMenu(false);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [showMenu]);
+
   return (
     <NavbarBottomContainer>
       <div className="flex items-center space-x-4 justify-between">
@@ -34,6 +63,7 @@ export default function NavbarMobile() {
           />
           <p>Klambie</p>
         </Link>
+
         <div className="relative">
           <button
             className={className}
@@ -50,8 +80,8 @@ export default function NavbarMobile() {
             align=""
             zIndex="z-10"
           >
-            <div className="p-3 w-screen h-screen overflow-y-auto scrollbar-hide">
-              <CategoryContent navLinks={navLinks} />
+            <div className="w-screen h-screen overflow-y-auto scrollbar-hide">
+              <CategoryContent navLinks={navLinks} isMobile={true} />
             </div>
           </AnchoredModalContainer>
         </div>

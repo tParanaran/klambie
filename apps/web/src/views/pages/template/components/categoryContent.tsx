@@ -15,6 +15,7 @@ export default function CategoryContent({
   level,
   navLinks,
   slug,
+  isMobile = false,
 }: ICategoryContent) {
   const router = useRouter();
   const [openIndex, setOpenIndex] = useState<(number | null)[]>([]);
@@ -47,7 +48,10 @@ export default function CategoryContent({
 
   return (
     <>
-      <div ref={dropdownRef} className="flex flex-col gap-2 w-2xs">
+      <div
+        ref={dropdownRef}
+        className={`flex flex-col gap-2  ${isMobile ? 'w-auto sm:w-[16rem] mt-16 ml-3 mr-3 sm:ml-10' : 'w-2xs'}`}
+      >
         {navLinks?.map((item, i) => (
           <DropdownCategory
             key={i}
@@ -68,7 +72,7 @@ export default function CategoryContent({
           {/* Side panel */}
           <div
             ref={sideModalRef}
-            className="fixed top-3 right-3 h-fit w-xs z-50 transform transition-transform duration-300 ease-out translate-x-0"
+            className={`fixed h-fit z-50 transform transition-transform duration-300 ease-out translate-x-0 ${isMobile ? 'pt-16 bg-white sm:bg-transparent sm:right-10 top-0 w-full h-full sm:w-[45%] px-3 sm:px-0' : 'w-xs top-3 right-3 '}`}
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex py-3 justify-between items-center">
@@ -77,14 +81,14 @@ export default function CategoryContent({
                 <IoClose className="text-2xl hover:scale-125" />
               </button>
             </div>
-            <div className="flex flex-wrap gap-2 text-sm">
+            <div className="flex flex-wrap gap-2">
               <button
                 onClick={() =>
                   handleNavigate(
                     `/c/${slug || slugModal}/${sideModalItem.name}`,
                   )
                 }
-                className="px-4 py-2 font-semibold rounded-lg hover:bg-orange-800 hover:text-[#ededed] bg-black/10 dark:bg-white/10 text-orange-800"
+                className={`font-semibold rounded-lg hover:bg-orange-800 hover:text-[#ededed] bg-black/10 dark:bg-white/10 text-orange-800 ${isMobile ? 'py-4 px-8 text-base' : 'px-4 py-2 text-sm'}`}
               >
                 <p>Show All</p>
               </button>
@@ -96,7 +100,7 @@ export default function CategoryContent({
                       `/c/${slug || slugModal}/${sideModalItem.name}/${subItem.name}`,
                     )
                   }
-                  className="px-4 py-2 rounded-lg hover:bg-orange-800 hover:text-[#ededed] bg-black/10 dark:bg-white/10"
+                  className={`px-4 py-2 rounded-lg hover:bg-orange-800 hover:text-[#ededed] bg-black/10 dark:bg-white/10 ${isMobile ? 'py-4 px-8 text-base' : 'px-4 py-2 text-sm'}`}
                 >
                   {subItem.name}
                 </button>

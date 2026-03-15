@@ -67,7 +67,7 @@ export default function DropdownCategory({
           {item.name}
           {hasSub && (
             <IoChevronDown
-              className={`text-xl ml-2 transition-transform duration-300 transform ${isOpen ? 'rotate-180' : 'rotate-0'}`}
+              className={`text-xl ml-3 transition-transform duration-300 transform ${isOpen ? 'rotate-180' : 'rotate-0'}`}
             />
           )}
         </button>
@@ -75,14 +75,14 @@ export default function DropdownCategory({
       {level > 0 && (
         <button
           onClick={handleClick}
-          className={`w-full transition-colors duration-200 px-3 py-2 flex justify-between ${isOpen ? 'text-orange-800 font-semibold bg-none' : ''}`}
+          className={`w-full transition-colors duration-200 px-3 py-4 md:py-2 flex justify-between ${isOpen ? 'text-orange-800 font-semibold bg-none' : ''}`}
           aria-expanded={isOpen}
           aria-controls={`submenu-${level}-${index}`}
         >
           {item.name}
           {hasSub && (
             <IoChevronForward
-              className={`text-xl transition-transform duration-300 transform ${isOpen ? 'rotate-180' : 'rotate-0'}`}
+              className={`text-xl ml-3 transition-transform duration-300 transform ${isOpen ? 'rotate-180' : 'rotate-0'}`}
             />
           )}
         </button>
