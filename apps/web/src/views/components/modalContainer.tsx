@@ -27,7 +27,7 @@ export default function ModalContainer({
         aria-label="Close modal"
       ></div>
       <div
-        className={`fixed text-sm sm:left-10 sm:right-10 left-3 right-3 p-3 sm:p-5 dark:text-[#ededed] dark:bg-black/80 text-black bg-[#ededed]/80 backdrop-blur-lg rounded-2xl max-h-[75vh] overflow-y-auto space-y-3 transform transition-transform duration-300 ease-out scrollbar-hide ${style} ${showModal ? 'translate-y-0' : 'translate-y-full'}`}
+        className={`fixed text-sm sm:left-10 sm:right-10 left-3 right-3 p-3 sm:p-5 dark:text-[#ededed] dark:bg-black/80 text-black shadow-xs-lg bg-[#ededed]/80 backdrop-blur-lg rounded-2xl max-h-[75vh] overflow-y-auto space-y-3 transform transition-transform duration-300 ease-out scrollbar-hide ${style} ${showModal ? 'translate-y-0' : 'translate-y-full'}`}
         onClick={(e) => e.stopPropagation()}
       >
         {children}

@@ -51,16 +51,6 @@ export default function IconDropdown() {
       <BagMenu />
 
       <AnchorIconDropdown
-        HandlerModal={accountHandler}
-        showModal={isProfile}
-        ref={accountRef}
-        Icon={IoPerson}
-        label="Account"
-      >
-        <AccountMenu />
-      </AnchorIconDropdown>
-
-      <AnchorIconDropdown
         HandlerModal={notificationHandler}
         showModal={showNotification}
         ref={notificationRef}
@@ -70,6 +60,16 @@ export default function IconDropdown() {
         <div className="w-sm h-fit max-h-[75vh] overflow-y-auto scrollbar-hide">
           <NotificationContent />
         </div>
+      </AnchorIconDropdown>
+
+      <AnchorIconDropdown
+        HandlerModal={accountHandler}
+        showModal={isProfile}
+        ref={accountRef}
+        Icon={IoPerson}
+        label="Account"
+      >
+        <AccountMenu />
       </AnchorIconDropdown>
     </div>
   );

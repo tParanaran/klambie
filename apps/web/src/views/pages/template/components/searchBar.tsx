@@ -74,7 +74,7 @@ export default function SearchForm({ showSearch }: ISearchForm) {
                     ref={inputRef}
                     type="text"
                     name="search"
-                    className={`appearance-none border-none w-full rounded-full py-2.5 px-2 leading-tight focus:outline-none ${
+                    className={`appearance-none border-none w-full rounded-full py-2.5 px-2 leading-tight focus:outline-none placeholder:text-sm ${
                       touched.search && errors.search
                         ? 'placeholder-red-500 text-red-500'
                         : 'text-zinc-500'
