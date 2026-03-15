@@ -60,7 +60,7 @@ export default function DropdownCategory({
       {level === 0 && (
         <button
           onClick={handleClick}
-          className={`w-full uppercase bg-black/15 dark:bg-white/5 font-semibold h-18 text-left transition-colors duration-200 p-3 flex items-center text-lg ${isOpen ? 'rounded-t-lg' : ' rounded-lg'}`}
+          className={`w-full uppercase bg-black/15 dark:bg-white/5 font-semibold h-18 text-left transition-colors duration-200 p-3 flex items-center ${isOpen ? ' rounded-t-lg' : ' rounded-lg'}`}
           aria-expanded={isOpen}
           aria-controls={`submenu-${level}-${index}`}
         >

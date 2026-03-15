@@ -1,8 +1,8 @@
 import { NavItem } from '@/utils/navLink';
 import { useEffect, useRef, useState } from 'react';
-import DropdownCategory from './categoryDropdwon';
 import { IoClose } from 'react-icons/io5';
 import { useRouter } from 'next/navigation';
+import DropdownCategory from './categoryDropdwon';
 
 interface ICategoryContent {
   slug?: string;
@@ -47,7 +47,7 @@ export default function CategoryContent({
 
   return (
     <>
-      <div ref={dropdownRef} className={`flex flex-col gap-2 w-2xs`}>
+      <div ref={dropdownRef} className="flex flex-col gap-2 w-2xs">
         {navLinks?.map((item, i) => (
           <DropdownCategory
             key={i}

@@ -46,7 +46,7 @@ export default function CategoryLinks() {
           >
             <div className="p-2 w-2xl max-h-[75vh] min-h-96 h-fit overflow-y-auto scrollbar-hide">
               <div className="flex p-3 space-x-3 items-center">
-                <h1 className="font-semibold text-xl">{cat.name}</h1>
+                <h1 className="font-semibold text-lg">{cat.name}</h1>
                 <Link
                   href={`/d/${cat.name}`}
                   className="text-sm text-orange-800"
