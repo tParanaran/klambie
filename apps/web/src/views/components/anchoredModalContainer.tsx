@@ -22,10 +22,13 @@ export default function AnchoredModalContainer({
   const [position, setPosition] = useState({ top: 0, left: 0, right: 0 });
 
   useEffect(() => {
-    if (!open || !anchorRef.current) return;
+    if (!open) return;
 
     const updatePosition = () => {
-      const rect = anchorRef.current!.getBoundingClientRect();
+      const anchorEl = anchorRef.current;
+      if (!anchorEl) return;
+
+      const rect = anchorEl.getBoundingClientRect();
       const offset = window.scrollY === 0 ? -6 : 0;
 
       if (align === 'left') {
@@ -40,21 +43,38 @@ export default function AnchoredModalContainer({
           left: 0,
           right: window.innerWidth - rect.right,
         });
+      } else if (align === 'center') {
+        const modalWidth = ref.current?.offsetWidth || 0;
+        let centerLeft = rect.left + rect.width / 2 - modalWidth / 2;
+
+        centerLeft = Math.max(
+          0,
+          Math.min(centerLeft, window.innerWidth - modalWidth),
+        );
+
+        setPosition({
+          top: rect.bottom + offset,
+          left: centerLeft,
+          right: 0,
+        });
       }
     };
 
-    updatePosition();
+    const handle = requestAnimationFrame(updatePosition);
 
     window.addEventListener('scroll', updatePosition, true);
     window.addEventListener('resize', updatePosition);
 
     return () => {
+      cancelAnimationFrame(handle);
       window.removeEventListener('scroll', updatePosition, true);
       window.removeEventListener('resize', updatePosition);
     };
   }, [open, anchorRef, align]);
 
   useEffect(() => {
+    if (!open) return;
+
     function handleClick(e: MouseEvent) {
       if (ref.current && !ref.current.contains(e.target as Node)) {
         onClose();
@@ -84,9 +104,10 @@ export default function AnchoredModalContainer({
       style={{
         position: 'fixed',
         top: position.top,
-        left: align === 'left' ? position.left : undefined,
+        left:
+          align === 'left' || align === 'center' ? position.left : undefined,
         right: align === 'right' ? position.right : undefined,
-        transform: align === 'left' ? 'translateX(0)' : 'translateX(0)',
+        transform: 'translateX(0)',
       }}
       className="z-50 rounded-2xl animate-in fade-in zoom-in-95 duration-150"
     >

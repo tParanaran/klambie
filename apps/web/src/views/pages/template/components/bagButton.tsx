@@ -7,7 +7,7 @@ export default function BagButton({ isMobile = true }: { isMobile?: boolean }) {
     <>
       <IoBagHandle className="text-2xl hover:scale-125" />
       <p className="text-xs">Bag</p>
-      <div className="absolute -top-4 -right-2">
+      <div className="absolute -top-1 -right-2">
         <CartBadge />
       </div>
     </>

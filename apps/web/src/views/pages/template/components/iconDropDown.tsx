@@ -1,7 +1,5 @@
 import { IoSearch, IoPerson, IoNotifications } from 'react-icons/io5';
-import { useProfileStore } from '@/store/profileStore';
 import { useRef, useState } from 'react';
-import BagButton from './bagButton';
 import AccountMenu from './accountMenu';
 import NotificationContent from '../notification';
 import SearchForm from './searchBar';
@@ -9,41 +7,43 @@ import SearchRecent from './searchRecent';
 import AnchorIconDropdown from './dropdown';
 import BagMenu from './bagMenu';
 
+interface IDropdown {
+  search: boolean;
+  notification: boolean;
+  account: boolean;
+}
+
 export default function IconDropdown() {
-  const { isClose, isProfile, isOpen } = useProfileStore();
-  const accountRef = useRef<HTMLButtonElement>(null);
-  const [showNotification, setShowNotification] = useState<boolean>(false);
-  const notificationRef = useRef<HTMLButtonElement>(null);
-  const [showSearch, setShowSearch] = useState<boolean>(false);
-  const searchRef = useRef<HTMLButtonElement>(null);
+  const [dropdowns, setDropdowns] = useState<IDropdown>({
+    search: false,
+    notification: false,
+    account: false,
+  });
 
-  const notificationHandler = () => {
-    setShowNotification(!showNotification);
+  const dropdownRefs = {
+    search: useRef<HTMLButtonElement>(null),
+    notification: useRef<HTMLButtonElement>(null),
+    account: useRef<HTMLButtonElement>(null),
   };
 
-  const searchHandler = () => {
-    setShowSearch(!showSearch);
-  };
-
-  const accountHandler = () => {
-    if (isProfile) {
-      isClose();
-    } else {
-      isOpen();
-    }
+  const toggleDropdown = (name: keyof typeof dropdowns) => {
+    setDropdowns((prev) => ({
+      ...prev,
+      [name]: !prev[name],
+    }));
   };
 
   return (
-    <div className="flex space-x-3 text-2xl">
+    <div className="flex space-x-3 text-xs">
       <AnchorIconDropdown
-        HandlerModal={searchHandler}
-        showModal={showSearch}
-        ref={searchRef}
+        HandlerModal={() => toggleDropdown('search')}
+        showModal={dropdowns.search}
+        ref={dropdownRefs.search}
         Icon={IoSearch}
         label="Search"
       >
-        <div className="w-sm h-fit max-h-[75vh] overflow-y-auto scrollbar-hide p-5">
-          <SearchForm showSearch={showSearch} />
+        <div className="w-sm h-fit max-h-[75vh] overflow-y-auto scrollbar-hide p-3">
+          <SearchForm showSearch={dropdowns.search} />
           <SearchRecent />
         </div>
       </AnchorIconDropdown>
@@ -51,9 +51,9 @@ export default function IconDropdown() {
       <BagMenu />
 
       <AnchorIconDropdown
-        HandlerModal={notificationHandler}
-        showModal={showNotification}
-        ref={notificationRef}
+        HandlerModal={() => toggleDropdown('notification')}
+        showModal={dropdowns.notification}
+        ref={dropdownRefs.notification}
         Icon={IoNotifications}
         label="Notification"
       >
@@ -63,9 +63,9 @@ export default function IconDropdown() {
       </AnchorIconDropdown>
 
       <AnchorIconDropdown
-        HandlerModal={accountHandler}
-        showModal={isProfile}
-        ref={accountRef}
+        HandlerModal={() => toggleDropdown('account')}
+        showModal={dropdowns.account}
+        ref={dropdownRefs.account}
         Icon={IoPerson}
         label="Account"
       >

@@ -1,7 +1,112 @@
-export const navLink = [
-  { id: 1, name: 'Men', href: '/d/men' },
-  { id: 2, name: 'Women', href: '/d/women' },
-  { id: 3, name: 'Kids', href: '/d/kids' },
-  { id: 4, name: 'Sports', href: '/d/sports' },
-  { id: 5, name: 'Groomity', href: '/d/groomity' },
+export interface NavItem {
+  name: string;
+  subcategories?: NavItem[];
+}
+
+export const navLinks: NavItem[] = [
+  {
+    name: 'Men',
+    subcategories: [
+      {
+        name: 'Clothing',
+        subcategories: [
+          { name: 'Shirts' },
+          { name: 'Pants' },
+          { name: 'Jackets' },
+        ],
+      },
+      {
+        name: 'Footwear',
+        subcategories: [
+          { name: 'Sneakers' },
+          { name: 'Boots' },
+          { name: 'Sandals' },
+        ],
+      },
+    ],
+  },
+  {
+    name: 'Women',
+    subcategories: [
+      {
+        name: 'Clothing',
+        subcategories: [
+          { name: 'Dresses' },
+          { name: 'Tops' },
+          { name: 'Skirts' },
+        ],
+      },
+      {
+        name: 'Accessories',
+        subcategories: [
+          { name: 'Bags' },
+          { name: 'Jewelry' },
+          { name: 'Hats' },
+        ],
+      },
+    ],
+  },
+  {
+    name: 'Kids',
+    subcategories: [
+      {
+        name: 'Clothing',
+        subcategories: [
+          { name: 'Shirts' },
+          { name: 'Pants' },
+          { name: 'Jackets' },
+        ],
+      },
+      {
+        name: 'Footwear',
+        subcategories: [
+          { name: 'Sneakers' },
+          { name: 'Boots' },
+          { name: 'Sandals' },
+        ],
+      },
+    ],
+  },
+  {
+    name: 'Sports',
+    subcategories: [
+      {
+        name: 'Clothing',
+        subcategories: [
+          { name: 'Shirts' },
+          { name: 'Pants' },
+          { name: 'Jackets' },
+        ],
+      },
+      {
+        name: 'Footwear',
+        subcategories: [
+          { name: 'Sneakers' },
+          { name: 'Boots' },
+          { name: 'Sandals' },
+        ],
+      },
+    ],
+  },
+  {
+    name: 'Groomity',
+    subcategories: [
+      {
+        name: 'Clothing',
+        subcategories: [
+          { name: 'Dresses' },
+          { name: 'Tops' },
+          { name: 'Skirts' },
+        ],
+      },
+      {
+        name: 'Accessories',
+        subcategories: [
+          { name: 'Bags' },
+          { name: 'Jewelry' },
+          { name: 'Hats' },
+        ],
+      },
+    ],
+  },
 ];

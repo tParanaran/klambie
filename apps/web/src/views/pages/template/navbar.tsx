@@ -1,8 +1,8 @@
 import IconDropdown from './components/iconDropDown';
 import Logo from './components/logo';
-import MobileMenu from './components/mobileMenu';
-import NavLink from './components/navLink';
 import useScrolled from './hooks/useScrolled';
+import CategoryMenu from './components/categoryMenu';
+import CategoryLinks from './components/categoryLinks';
 
 export default function NavbarBottom() {
   const isScroll = useScrolled();
@@ -13,13 +13,13 @@ export default function NavbarBottom() {
     >
       <div className="flex justify-between items-center space-x-5">
         <div className="flex space-x-2 relative">
-          <div className="lg:hidden">
-            <MobileMenu />
+          <div className="hidden md:block lg:hidden">
+            <CategoryMenu />
           </div>
           <Logo />
         </div>
         <div className="hidden lg:block">
-          <NavLink classDiv="space-x-10" />
+          <CategoryLinks />
         </div>
         <IconDropdown />
       </div>

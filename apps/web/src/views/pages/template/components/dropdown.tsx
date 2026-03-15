@@ -7,7 +7,8 @@ interface IAnchorIcon {
   showModal: boolean;
   ref: RefObject<HTMLButtonElement>;
   children: React.ReactNode;
-  Icon: IconType;
+  align?: string;
+  Icon?: IconType;
   HandlerModal: () => void;
 }
 
@@ -16,6 +17,7 @@ export default function AnchorIconDropdown({
   showModal,
   ref,
   children,
+  align,
   Icon,
   HandlerModal,
 }: IAnchorIcon) {
@@ -31,13 +33,14 @@ export default function AnchorIconDropdown({
         onClick={HandlerModal}
         className={`flex items-center justify-center flex-col ${showModal ? 'text-orange-800' : ''}`}
       >
-        <Icon className="hover:scale-125" />
-        <p className="text-xs">{label}</p>
+        {Icon ? <Icon className="text-2xl hover:scale-125" /> : null}
+        <p className={Icon ? '' : 'py-2'}>{label}</p>
       </button>{' '}
       <AnchoredModalContainer
         open={showModal}
         onClose={HandlerModal}
         anchorRef={ref}
+        align={align}
       >
         {children}
       </AnchoredModalContainer>

@@ -1,6 +1,5 @@
 'use client';
 import { useAuthStore } from '@/store/authStore';
-import { useProfileStore } from '@/store/profileStore';
 import { useRouter } from 'next/navigation';
 import { IoPower } from 'react-icons/io5';
 import { Notify } from '@/lib/notify';
@@ -17,7 +16,6 @@ export default function LogoutButton({
 }) {
   const redirect = useRouter();
   const { clearAuth } = useAuthStore();
-  const { isClose } = useProfileStore();
 
   const LogoutHandler = async () => {
     try {
@@ -25,7 +23,6 @@ export default function LogoutButton({
 
       if (data.success) {
         clearAuth();
-        isClose();
         redirect.push('/login');
         Notify(data.message);
       }

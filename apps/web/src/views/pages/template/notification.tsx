@@ -6,7 +6,7 @@ export default function NotificationContent() {
   const { user } = useAuthStore();
 
   return (
-    <div className="p-3 sm:p-5">
+    <div className="p-3">
       <div className="space-y-5 w-full mx-auto text-center my-20">
         <div className="text-6xl p-10 sm:text-8xl sm:p-14 rounded-full bg-black/10 w-fit mx-auto">
           <IoNotificationsOutline />
