@@ -10,7 +10,7 @@ export default function AddVouchers() {
 
   return (
     <button
-      className="md:bg-black/10 rounded-xl md:p-3 w-full flex justify-start overflow-hidden"
+      className="md:bg-black/10 dark:bg-white/10 rounded-xl md:p-3 w-full flex justify-start overflow-hidden"
       onClick={VouchersHandler}
       aria-label="Add Voucher Modal"
     >

@@ -34,7 +34,7 @@ export default function TextFieldForm({
         onChange={handleChange}
         values={values}
         placeholder={`Type your ${label.toLowerCase()} here`}
-        className="appearance-none bg-black/10 rounded-full py-3 px-4 leading-tight focus:outline-none focus:bg-background focus:border focus:border-gray-300 placeholder:text-sm"
+        className="appearance-none bg-black/10 dark:bg-white/10 rounded-full py-3 px-4 leading-tight focus:outline-none focus:bg-background focus:border focus:border-gray-300 placeholder:text-sm"
       />
       <ErrorForm name={name} />
     </div>

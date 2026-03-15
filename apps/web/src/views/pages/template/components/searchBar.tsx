@@ -64,7 +64,7 @@ export default function SearchForm({ showSearch }: ISearchForm) {
               props;
             return (
               <Form onSubmit={handleSubmit}>
-                <div className="relative flex items-center bg-black/10 rounded-full">
+                <div className="relative flex items-center bg-black/10 dark:bg-white/10 rounded-full">
                   <label htmlFor="search">
                     {' '}
                     <IoSearch className="text-2xl w-fit ml-2" />

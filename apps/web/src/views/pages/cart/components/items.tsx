@@ -100,7 +100,7 @@ export default function CartItems({
         }
         return (
           <div key={i}>
-            <div className="relative bg-black/10 rounded-2xl  min-h-37.5 mt-2 p-2 gap-2 flex">
+            <div className="relative bg-black/10 dark:bg-white/10 rounded-2xl  min-h-37.5 mt-2 p-2 gap-2 flex">
               <div className="absolute top-1/2 right-2">
                 <DeleteButton variantId={item.productVariantId} />
               </div>
@@ -221,7 +221,7 @@ export default function CartItems({
               />
             )}
           </div>
-          <Button onClick={confirmHandler} className="bg-orange-700">
+          <Button onClick={confirmHandler} className="bg-orange-800">
             Confirm
           </Button>
         </ShowVariants>

@@ -56,11 +56,11 @@ export default function DropdownCategory({
   };
 
   return (
-    <div className="relative lg:bg-black/5 lg:rounded-lg">
+    <div className="relative lg:bg-black/5 lg:dark:bg-white/10 lg:rounded-lg">
       {level === 0 && (
         <button
           onClick={handleClick}
-          className={`w-full uppercase bg-black/10 font-semibold h-18 text-left transition-colors duration-200 p-3 flex items-center text-lg ${isOpen ? 'rounded-t-lg' : ' rounded-lg'}`}
+          className={`w-full uppercase bg-black/15 dark:bg-white/5 font-semibold h-18 text-left transition-colors duration-200 p-3 flex items-center text-lg ${isOpen ? 'rounded-t-lg' : ' rounded-lg'}`}
           aria-expanded={isOpen}
           aria-controls={`submenu-${level}-${index}`}
         >
@@ -97,7 +97,7 @@ export default function DropdownCategory({
             overflow: 'hidden',
             transition: 'max-height 0.3s ease',
           }}
-          className="flex flex-col rounded-b-lg bg-black/5"
+          className="flex flex-col rounded-b-lg bg-black/5 dark:bg-white/10"
         >
           {item.subcategories!.map((subItem, subIndex) => (
             <DropdownCategory

@@ -6,7 +6,7 @@ export default function DeliveryAddress() {
   const { user } = useAuthStore();
   return (
     <Link href={'/login'}>
-      <div className="flex bg-black/10 rounded-xl px-2 md:px-3 py-5 mb-5 space-x-2">
+      <div className="flex bg-black/10 dark:bg-white/10 rounded-xl px-2 md:px-3 py-5 mb-5 space-x-2">
         <IoLocationOutline className="text-2xl" />
         <div>
           <p className="font-semibold">Delivery Address</p>

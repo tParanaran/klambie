@@ -99,14 +99,14 @@ export default function BagMenu() {
                           </Link>
                         </div>{' '}
                         <div className="flex space-x-1">
-                          <div className="py-1 px-2 rounded-full w-fit items-center bg-black/10 h-fit my-1">
+                          <div className="py-1 px-2 rounded-full w-fit items-center bg-black/10 dark:bg-white/10 h-fit my-1">
                             <p className="text-xs">
                               {item.attributes
                                 .map((attr) => attr.value)
                                 .join(', ')}
                             </p>
                           </div>
-                          <div className="py-1 px-2 rounded-full w-fit items-center bg-black/10 h-fit my-1">
+                          <div className="py-1 px-2 rounded-full w-fit items-center bg-black/10 dark:bg-white/10 h-fit my-1">
                             <p className="text-xs">{item.quantity + ' Qty'}</p>
                           </div>
                         </div>

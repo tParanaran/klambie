@@ -8,7 +8,7 @@ export default function NotificationContent() {
   return (
     <div className="p-3">
       <div className="space-y-5 w-full mx-auto text-center my-20">
-        <div className="text-6xl p-10 sm:text-8xl sm:p-14 rounded-full bg-black/10 w-fit mx-auto">
+        <div className="text-6xl p-10 sm:text-8xl sm:p-14 rounded-full bg-black/10 dark:bg-white/10 w-fit mx-auto">
           <IoNotificationsOutline />
         </div>
         <div>

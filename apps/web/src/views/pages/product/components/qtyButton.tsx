@@ -19,7 +19,7 @@ export default function QuantityButton({
   };
 
   return (
-    <div className="bg-black/10 flex w-fit items-center rounded-full my-1">
+    <div className="bg-black/10 dark:bg-white/10 flex w-fit items-center rounded-full my-1">
       <button
         disabled={quantity <= 1}
         className="py-2 px-4 rounded-l-full disabled:opacity-50 disabled:cursor-not-allowed"

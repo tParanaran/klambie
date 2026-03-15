@@ -84,7 +84,7 @@ export default function CategoryContent({
                     `/c/${slug || slugModal}/${sideModalItem.name}`,
                   )
                 }
-                className="px-4 py-2 font-semibold rounded-lg hover:bg-orange-800 hover:text-white bg-black/10 text-orange-800"
+                className="px-4 py-2 font-semibold rounded-lg hover:bg-orange-800 hover:text-[#ededed] bg-black/10 dark:bg-white/10 text-orange-800"
               >
                 <p>Show All</p>
               </button>
@@ -96,7 +96,7 @@ export default function CategoryContent({
                       `/c/${slug || slugModal}/${sideModalItem.name}/${subItem.name}`,
                     )
                   }
-                  className="px-4 py-2 rounded-lg hover:bg-orange-800 hover:text-white bg-black/10"
+                  className="px-4 py-2 rounded-lg hover:bg-orange-800 hover:text-[#ededed] bg-black/10 dark:bg-white/10"
                 >
                   {subItem.name}
                 </button>
