@@ -35,7 +35,7 @@ export default function DropdownCategory({
 
   const handleClick = () => {
     if (level === 0) {
-      setSlugModal(item.name);
+      setSlugModal(item.slug);
     }
     if (level === 1 && hasSub) {
       setSideModalItem(item);
@@ -102,7 +102,7 @@ export default function DropdownCategory({
           className="flex flex-col rounded-b-lg bg-black/5 dark:bg-white/10"
         >
           <Link
-            href={`/d/${item.name}`}
+            href={`/d/${item.slug}`}
             className="w-full transition-colors duration-200 p-3 md:py-2 text-left"
           >
             <p className="ml-2 text-orange-800 dark:text-orange-600">
@@ -111,7 +111,7 @@ export default function DropdownCategory({
           </Link>
           {item.subcategories!.map((subItem, subIndex) => (
             <DropdownCategory
-              key={subIndex}
+              key={subItem.slug}
               item={subItem}
               level={level + 1}
               index={subIndex}

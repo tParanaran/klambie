@@ -18,7 +18,7 @@ export default function AnchoredModalContainer({
   anchorRef,
   children,
   align = 'right',
-  zIndex = 'z-10',
+  zIndex = 'z-30',
 }: IAnchoredModal) {
   const ref = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState({ top: 0, left: 0, right: 0 });
@@ -32,6 +32,7 @@ export default function AnchoredModalContainer({
       if (!anchorEl) return;
 
       const rect = anchorEl.getBoundingClientRect();
+      const offset = window.scrollY === 0 ? -6 : 0;
       const modalWidth = ref.current?.offsetWidth || 0;
       const modalHeight = ref.current?.offsetHeight || 0;
 
@@ -39,11 +40,11 @@ export default function AnchoredModalContainer({
 
       switch (align) {
         case 'left':
-          newPos = { top: rect.bottom, left: rect.left, right: 0 };
+          newPos = { top: rect.bottom + offset, left: rect.left, right: 0 };
           break;
         case 'right':
           newPos = {
-            top: rect.bottom,
+            top: rect.bottom + offset,
             left: 0,
             right: window.innerWidth - rect.right,
           };
@@ -54,11 +55,11 @@ export default function AnchoredModalContainer({
             0,
             Math.min(centerLeft, window.innerWidth - modalWidth),
           );
-          newPos = { top: rect.bottom, left: centerLeft, right: 0 };
+          newPos = { top: rect.bottom + offset, left: centerLeft, right: 0 };
           break;
         case 'bottom':
           newPos = {
-            top: rect.top - modalHeight,
+            top: rect.top - modalHeight - offset,
             left: rect.left,
             right: 0,
           };

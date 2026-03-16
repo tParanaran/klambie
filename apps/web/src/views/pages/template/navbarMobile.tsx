@@ -57,6 +57,7 @@ export default function NavbarMobile() {
             anchorRef={categoryRef}
             onClose={showMenuHandler}
             align="default"
+            zIndex="20"
           >
             <div className="w-screen h-screen overflow-y-auto scrollbar-hide max-h-[93vh]">
               <CategoryContent navLinks={navLinks} isMobile={true} />

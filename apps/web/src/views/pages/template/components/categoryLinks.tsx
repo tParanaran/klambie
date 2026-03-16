@@ -59,7 +59,7 @@ export default function CategoryLinks() {
               <div className="flex p-3 space-x-3 items-center">
                 <h1 className="font-semibold text-lg">{cat.name}</h1>
                 <Link
-                  href={`/d/${cat.name}`}
+                  href={`/d/${cat.slug}`}
                   className="text-sm text-orange-800 dark:text-orange-600"
                 >
                   Show All
@@ -69,7 +69,7 @@ export default function CategoryLinks() {
                 <CategoryContent
                   navLinks={cat.subcategories}
                   level={1}
-                  slug={cat.name}
+                  slug={cat.slug}
                 />
               </div>
             </div>

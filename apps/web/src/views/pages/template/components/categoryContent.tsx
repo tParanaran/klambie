@@ -1,9 +1,10 @@
 import { NavItem } from '@/utils/navLink';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { IoClose } from 'react-icons/io5';
-import { useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import DropdownCategory from './categoryDropdwon';
 import useHandleClickOutside from '../hooks/useHandleClickOutside';
+import Link from 'next/link';
 
 interface ICategoryContent {
   slug?: string;
@@ -18,7 +19,7 @@ export default function CategoryContent({
   slug,
   isMobile = false,
 }: ICategoryContent) {
-  const router = useRouter();
+  const pathname = usePathname();
   const [openIndex, setOpenIndex] = useState<(number | null)[]>([]);
   const [sideModalItem, setSideModalItem] = useState<NavItem | null>(null);
   const [slugModal, setSlugModal] = useState<string | null>(null);
@@ -32,11 +33,10 @@ export default function CategoryContent({
     handleClickOutside,
   });
 
-  const handleNavigate = (path: string) => {
+  useEffect(() => {
     setSideModalItem(null);
     setOpenIndex([]);
-    router.push(path);
-  };
+  }, [pathname]);
 
   return (
     <>
@@ -46,7 +46,7 @@ export default function CategoryContent({
       >
         {navLinks?.map((item, i) => (
           <DropdownCategory
-            key={i}
+            key={item.slug}
             item={item}
             level={level}
             index={i}
@@ -65,7 +65,6 @@ export default function CategoryContent({
           <div
             ref={modalRef}
             className={`fixed h-fit z-30 transform transition-transform duration-300 ease-out translate-x-0 ${isMobile ? 'pt-16 bg-[#ededed] dark:bg-black sm:bg-transparent!  sm:right-10 top-0 w-full h-full sm:w-[45%] px-3 sm:px-0' : 'w-xs top-3 right-3 '}`}
-            onClick={(e) => e.stopPropagation()}
           >
             <div className="flex py-3 justify-between items-center">
               <h2 className="font-semibold">{sideModalItem.name}</h2>
@@ -74,28 +73,20 @@ export default function CategoryContent({
               </button>
             </div>
             <div className="flex flex-wrap gap-2">
-              <button
-                onClick={() =>
-                  handleNavigate(
-                    `/c/${slug || slugModal}/${sideModalItem.name}`,
-                  )
-                }
+              <Link
+                href={`/c/${slug || slugModal}/${sideModalItem.slug}`}
                 className={`font-semibold rounded-lg hover:bg-orange-800 hover:text-[#ededed] bg-black/10 dark:bg-white/10 text-orange-800 dark:text-orange-600 ${isMobile ? 'py-3 px-8 text-base' : 'px-4 py-2 text-sm'}`}
               >
                 <p>Show All</p>
-              </button>
+              </Link>
               {sideModalItem.subcategories?.map((subItem, i) => (
-                <button
+                <Link
+                  href={`/c/${slug || slugModal}/${sideModalItem.slug}/${subItem.slug}`}
                   key={i}
-                  onClick={() =>
-                    handleNavigate(
-                      `/c/${slug || slugModal}/${sideModalItem.name}/${subItem.name}`,
-                    )
-                  }
                   className={`px-4 py-2 rounded-lg hover:bg-orange-800 hover:text-[#ededed] bg-black/10 dark:bg-white/10 ${isMobile ? 'py-3 px-8 text-base' : 'px-4 py-2 text-sm'}`}
                 >
                   {subItem.name}
-                </button>
+                </Link>
               ))}
             </div>
           </div>

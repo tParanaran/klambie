@@ -11,7 +11,7 @@ export default async function HomeView() {
           <div className="row-span-2 hidden sm:block">
             <HeroMain />
           </div>
-          <div className="block sm:hidden">
+          <div className="block sm:hidden z-0">
             <HeroSwiper />
           </div>
           <div>
