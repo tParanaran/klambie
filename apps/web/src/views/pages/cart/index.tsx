@@ -35,7 +35,7 @@ export default function CartView({ cartItems }: { cartItems: ICartItems[] }) {
         </div>
         {/* Sticky Display */}
         <div>
-          <div className="hidden md:block md:sticky md:top-24 md:right-0 z-0">
+          <div className="hidden md:block md:sticky md:top-24 md:right-0">
             <h1 className="font-bold mb-2">Voucher</h1>
             <AddVouchers />
             <h1 className="font-bold mb-2 mt-5">Orders Summary</h1>

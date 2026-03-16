@@ -19,10 +19,6 @@ export default function BagMenu() {
   const [price, setPrice] = useState<ITotalPrice | null>(null);
   const total = useCartQuery();
 
-  const showMenuHandler = () => {
-    setShowMenu(!showMenu);
-  };
-
   const fetchCart = async () => {
     try {
       const { data } = await axiosInstanceClient.get('/shop-cart/get');
@@ -39,15 +35,27 @@ export default function BagMenu() {
     fetchCart();
   }, [showMenu, total]);
 
+  const showMenuHandler = () => {
+    setShowMenu(!showMenu);
+  };
+
+  const handleMouseEnter = () => {
+    if (!showMenu) showMenuHandler();
+  };
+
+  const handleMouseLeave = () => {
+    if (showMenu) showMenuHandler();
+  };
+
   return (
     <div
       className="relative py-2.5"
-      onMouseEnter={showMenuHandler}
-      onMouseLeave={showMenuHandler}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       <button
         ref={menuRef}
-        type="button"
+        role="button"
         aria-label="Bag Menu"
         className={`flex items-center justify-center flex-col ${showMenu ? 'text-orange-800 dark:text-orange-600' : ''}`}
       >

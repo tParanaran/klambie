@@ -128,7 +128,7 @@ export default function ProductView({ product }: { product: IProduct }) {
                   </p>
                 ) : null}
               </div>
-              <div className="fixed md:absolute z-40 md:z-0 right-3 sm:right-10 md:right-0 bottom-14 sm:bottom-15 md:-bottom-12">
+              <div className="fixed md:absolute z-30 md:z-0 right-3 sm:right-10 md:right-0 bottom-14 sm:bottom-15 md:-bottom-12">
                 <ErrorsMessage ref={errorsProductRef} />
               </div>
               <div className="hidden md:block mt-14">

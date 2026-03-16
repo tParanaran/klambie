@@ -5,7 +5,7 @@ import { createPortal } from 'react-dom';
 
 interface IAnchoredModal {
   open: boolean;
-  onClose?: () => void;
+  onClose: () => void;
   anchorRef: React.RefObject<HTMLElement>;
   children: React.ReactNode;
   align?: string;
@@ -18,33 +18,20 @@ export default function AnchoredModalContainer({
   anchorRef,
   children,
   align = 'right',
-  zIndex = 'z-40',
+  zIndex = 'z-10',
 }: IAnchoredModal) {
   const ref = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState({ top: 0, left: 0, right: 0 });
-  const [internalOpen, setInternalOpen] = useState<boolean>(open);
 
+  // Auto position for anchor modal
   useEffect(() => {
-    setInternalOpen(open);
-  }, [open]);
-
-  const handleClose = () => {
-    if (onClose) {
-      onClose();
-    } else {
-      setInternalOpen(false);
-    }
-  };
-
-  useEffect(() => {
-    if (!internalOpen) return;
+    if (!open) return;
 
     const updatePosition = () => {
       const anchorEl = anchorRef.current;
       if (!anchorEl) return;
 
       const rect = anchorEl.getBoundingClientRect();
-      const offset = window.scrollY === 0 ? -6 : 0;
       const modalWidth = ref.current?.offsetWidth || 0;
       const modalHeight = ref.current?.offsetHeight || 0;
 
@@ -52,11 +39,11 @@ export default function AnchoredModalContainer({
 
       switch (align) {
         case 'left':
-          newPos = { top: rect.bottom + offset, left: rect.left, right: 0 };
+          newPos = { top: rect.bottom, left: rect.left, right: 0 };
           break;
         case 'right':
           newPos = {
-            top: rect.bottom + offset,
+            top: rect.bottom,
             left: 0,
             right: window.innerWidth - rect.right,
           };
@@ -67,11 +54,11 @@ export default function AnchoredModalContainer({
             0,
             Math.min(centerLeft, window.innerWidth - modalWidth),
           );
-          newPos = { top: rect.bottom + offset, left: centerLeft, right: 0 };
+          newPos = { top: rect.bottom, left: centerLeft, right: 0 };
           break;
         case 'bottom':
           newPos = {
-            top: rect.top - modalHeight - offset,
+            top: rect.top - modalHeight,
             left: rect.left,
             right: 0,
           };
@@ -90,31 +77,33 @@ export default function AnchoredModalContainer({
       window.removeEventListener('scroll', updatePosition, true);
       window.removeEventListener('resize', updatePosition);
     };
-  }, [internalOpen, anchorRef, align]);
+  }, [open, anchorRef, align]);
 
+  // Auto close modal
   useEffect(() => {
-    if (!internalOpen) return;
+    if (!open) return;
 
-    function handleClick(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) {
-        handleClose();
+    function handleClick(e: PointerEvent) {
+      const target = e.target as Node;
+
+      if (
+        ref.current &&
+        !ref.current.contains(target) &&
+        anchorRef.current &&
+        !anchorRef.current.contains(target)
+      ) {
+        onClose();
       }
     }
 
-    function handleEscape(e: KeyboardEvent) {
-      if (e.key === 'Escape') handleClose();
-    }
-
-    document.addEventListener('mousedown', handleClick);
-    document.addEventListener('keydown', handleEscape);
+    document.addEventListener('pointerdown', handleClick);
 
     return () => {
-      document.removeEventListener('mousedown', handleClick);
-      document.removeEventListener('keydown', handleEscape);
+      document.removeEventListener('pointerdown', handleClick);
     };
-  }, [internalOpen]);
+  }, [open, anchorRef, onClose]);
 
-  if (!internalOpen) return null;
+  if (!open) return null;
 
   return createPortal(
     <div

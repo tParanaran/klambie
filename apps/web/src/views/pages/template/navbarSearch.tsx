@@ -7,41 +7,57 @@ import LinkButton from '@/views/components/link';
 import NavbarTopContainer from '@/views/components/navbarTopContainer';
 import LogoutButton from './components/logoutButton';
 import SearchRecent from './components/searchRecent';
+import AnchorIconDropdown from './components/dropdown';
+import NotificationContent from './notification';
+import useMobileBehavior from './hooks/useMobile';
+import useHandleClickOutside from './hooks/useHandleClickOutside';
+import useDetectIsMobile from './hooks/useDetectIsMobile';
+
+interface IDropdown {
+  search: boolean;
+  notification: boolean;
+}
 
 export default function NavbarSearch() {
+  const notificationRef = useRef<HTMLButtonElement>(null);
   const pathname = usePathname();
   const { user } = useAuthStore();
-  const [showSearch, setShowSearch] = useState<boolean>(false);
-  const searchRef = useRef<HTMLDivElement>(null);
-  const recentRef = useRef<HTMLDivElement>(null);
+  const [dropdowns, setDropdowns] = useState<IDropdown>({
+    search: false,
+    notification: false,
+  });
+  const { isMobile } = useDetectIsMobile({});
 
-  const handlerFocus = () => {
-    setShowSearch(!showSearch);
+  const toggleDropdown = (name: keyof typeof dropdowns) => {
+    setDropdowns((prev) => ({
+      ...prev,
+      [name]: !prev[name],
+    }));
   };
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as Node;
-      if (
-        searchRef.current &&
-        recentRef.current &&
-        !searchRef.current.contains(target) &&
-        !recentRef.current.contains(target)
-      ) {
-        setShowSearch(false);
-      }
-    };
+  const handleClickOutside = () => {
+    toggleDropdown('search');
+  };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
+  const { dropdownRef, modalRef } = useHandleClickOutside({
+    handleClickOutside,
+  });
+
+  useMobileBehavior({
+    setShow: () => toggleDropdown('notification'),
+    show: dropdowns.notification,
+    ref: notificationRef,
+    isMobile: isMobile,
+  });
 
   return (
     <NavbarTopContainer>
       <div className="flex justify-between space-x-3 items-center">
-        <div className="flex-2" ref={searchRef} onFocus={handlerFocus}>
+        <div
+          className="flex-2"
+          ref={modalRef}
+          onFocus={() => toggleDropdown('search')}
+        >
           <SearchBar />
         </div>
         {!user?.id ? (
@@ -54,11 +70,24 @@ export default function NavbarSearch() {
             Hi, {user?.name.split(' ')[0]}
           </h1>
         )}
-        <IoNotifications className="text-2xl hover:scale-125" />
+        <AnchorIconDropdown
+          HandlerModal={() => toggleDropdown('notification')}
+          showModal={dropdowns.notification}
+          ref={notificationRef}
+          Icon={IoNotifications}
+          align={isMobile ? 'default' : 'right'}
+          zIndex={isMobile ? 'z-10' : 'z-30'}
+        >
+          <div
+            className={`overflow-y-auto scrollbar-hide p-3 ${isMobile ? 'w-screen h-screen mt-16 max-h-[93vh]' : 'w-sm h-fit max-h-[75vh]'}`}
+          >
+            <NotificationContent />
+          </div>
+        </AnchorIconDropdown>
         {user?.id && <LogoutButton iconClass={'text-2xl hover:scale-125'} />}
       </div>
-      {showSearch && (
-        <div ref={recentRef}>
+      {dropdowns.search && (
+        <div ref={dropdownRef}>
           <SearchRecent />
         </div>
       )}

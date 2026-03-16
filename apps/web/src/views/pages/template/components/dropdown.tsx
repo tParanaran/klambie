@@ -3,11 +3,12 @@ import { RefObject } from 'react';
 import { IconType } from 'react-icons';
 
 interface IAnchorIcon {
-  label: string;
+  label?: string;
   showModal: boolean;
   ref: RefObject<HTMLButtonElement>;
   children: React.ReactNode;
   align?: string;
+  zIndex?: string;
   Icon?: IconType;
   HandlerModal: () => void;
 }
@@ -18,14 +19,23 @@ export default function AnchorIconDropdown({
   ref,
   children,
   align,
+  zIndex,
   Icon,
   HandlerModal,
 }: IAnchorIcon) {
+  const handleMouseEnter = () => {
+    if (!showModal) HandlerModal();
+  };
+
+  const handleMouseLeave = () => {
+    if (showModal) HandlerModal();
+  };
+
   return (
     <div
       className="relative py-2.5"
-      onMouseEnter={HandlerModal}
-      onMouseLeave={HandlerModal}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       <button
         ref={ref}
@@ -41,6 +51,7 @@ export default function AnchorIconDropdown({
         onClose={HandlerModal}
         anchorRef={ref}
         align={align}
+        zIndex={zIndex}
       >
         {children}
       </AnchoredModalContainer>

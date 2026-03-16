@@ -98,13 +98,15 @@ export default function ProductCard({ products }: { products: IProducts[] }) {
                     })
                     .join(', ')}
                 </h1>
-                <p className="font-bold">{item.brand.name}</p>
-                <p className="font-light">{item.name}</p>
-                <div className="flex items-center space-x-2 flex-wrap">
-                  <ProductPrice
-                    price={item.price}
-                    hasDiscount={item.hasDiscount}
-                  />
+                <div className="text-sm sm:text-base">
+                  <p className="font-bold">{item.brand.name}</p>
+                  <p className="font-light">{item.name}</p>
+                  <div className="flex items-center space-x-2 flex-wrap">
+                    <ProductPrice
+                      price={item.price}
+                      hasDiscount={item.hasDiscount}
+                    />
+                  </div>
                 </div>
               </div>
             </Link>

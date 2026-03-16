@@ -21,16 +21,16 @@ export default function ShopByEssenstials({ tags }: { tags: ITag[] }) {
   );
 
   return (
-    <main className="my-5">
-      <h1 className={`${antonFont.className} text-2xl uppercase`}>
+    <main className="my-3">
+      <h1 className={`${antonFont.className} text-xl sm:text-2xl uppercase`}>
         Shop By Essentials
       </h1>
-      <div className="flex space-x-2 flex-wrap my-5">
+      <div className="flex space-x-2 flex-wrap my-2">
         <Link
           href={pathname}
           aria-label={`All Products`}
           scroll={false}
-          className={`${antonFont.className} uppercase px-4 py-2 rounded-full text-base sm:text-lg hover:bg-black hover:border-black hover:text-[#ededed] mt-2 ${
+          className={`${antonFont.className} uppercase px-4 py-1.5 rounded-full text-base sm:text-lg hover:bg-black hover:border-black hover:text-[#ededed] mt-2 ${
             getParams === undefined
               ? 'bg-orange-800 border-orange-800 text-[#ededed]'
               : 'border'
@@ -47,7 +47,7 @@ export default function ShopByEssenstials({ tags }: { tags: ITag[] }) {
             scroll={false}
             className={`${
               antonFont.className
-            } uppercase px-4 py-2 rounded-full text-base sm:text-lg hover:bg-black hover:border-black hover:text-[#ededed] mt-2 ${
+            } uppercase px-4 py-1.5 rounded-full text-base sm:text-lg hover:bg-black hover:border-black hover:text-[#ededed] mt-2 ${
               getParams === tag.slug
                 ? 'bg-orange-800 border-orange-800 text-[#ededed]'
                 : 'border'

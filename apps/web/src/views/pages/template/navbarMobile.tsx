@@ -6,10 +6,11 @@ import Image from 'next/image';
 import BagButton from './components/bagButton';
 import NavbarBottomContainer from '@/views/components/navbarBottomContainer';
 import IconLink from './components/iconLink';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import AnchoredModalContainer from '@/views/components/anchoredModalContainer';
 import CategoryContent from './components/categoryContent';
 import { navLinks } from '@/utils/navLink';
+import useMobileBehavior from './hooks/useMobile';
 
 export default function NavbarMobile() {
   const categoryRef = useRef<HTMLButtonElement>(null);
@@ -21,37 +22,11 @@ export default function NavbarMobile() {
     setShowCategory(!showCategory);
   };
 
-  // No Scroll behavior
-  useEffect(() => {
-    if (!showCategory) return;
-
-    const originalStyle = window.getComputedStyle(document.body).overflow;
-    document.body.style.overflow = 'hidden';
-
-    return () => {
-      document.body.style.overflow = originalStyle;
-    };
-  }, [showCategory]);
-
-  // Scroll to behavior
-  useEffect(() => {
-    if (showCategory && categoryRef.current) {
-      const navbarHeight = 64;
-      window.scrollTo({ top: navbarHeight, behavior: 'smooth' });
-    }
-  }, [showCategory]);
-
-  // Auto close modal when resize
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth > 768 && showCategory) {
-        setShowCategory(false);
-      }
-    };
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, [showCategory]);
+  useMobileBehavior({
+    setShow: setShowCategory,
+    ref: categoryRef,
+    show: showCategory,
+  });
 
   return (
     <NavbarBottomContainer>
@@ -80,10 +55,10 @@ export default function NavbarMobile() {
           <AnchoredModalContainer
             open={showCategory}
             anchorRef={categoryRef}
+            onClose={showMenuHandler}
             align="default"
-            zIndex="z-10"
           >
-            <div className="w-screen h-screen overflow-y-auto scrollbar-hide max-h-[90vh]">
+            <div className="w-screen h-screen overflow-y-auto scrollbar-hide max-h-[93vh]">
               <CategoryContent navLinks={navLinks} isMobile={true} />
             </div>
           </AnchoredModalContainer>

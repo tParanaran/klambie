@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { IoClose } from 'react-icons/io5';
 import { useRouter } from 'next/navigation';
 import DropdownCategory from './categoryDropdwon';
+import useHandleClickOutside from '../hooks/useHandleClickOutside';
 
 interface ICategoryContent {
   slug?: string;
@@ -21,24 +22,15 @@ export default function CategoryContent({
   const [openIndex, setOpenIndex] = useState<(number | null)[]>([]);
   const [sideModalItem, setSideModalItem] = useState<NavItem | null>(null);
   const [slugModal, setSlugModal] = useState<string | null>(null);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-  const sideModalRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node) &&
-        sideModalRef.current &&
-        !sideModalRef.current.contains(event.target as Node)
-      ) {
-        setOpenIndex([]);
-        setSideModalItem(null);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+  const handleClickOutside = () => {
+    setOpenIndex([]);
+    setSideModalItem(null);
+  };
+
+  const { dropdownRef, modalRef } = useHandleClickOutside({
+    handleClickOutside,
+  });
 
   const handleNavigate = (path: string) => {
     setSideModalItem(null);
@@ -71,8 +63,8 @@ export default function CategoryContent({
         <>
           {/* Side panel */}
           <div
-            ref={sideModalRef}
-            className={`fixed h-fit z-50 transform transition-transform duration-300 ease-out translate-x-0 ${isMobile ? 'pt-16 bg-[#ededed] dark:bg-black sm:bg-transparent!  sm:right-10 top-0 w-full h-full sm:w-[45%] px-3 sm:px-0' : 'w-xs top-3 right-3 '}`}
+            ref={modalRef}
+            className={`fixed h-fit z-30 transform transition-transform duration-300 ease-out translate-x-0 ${isMobile ? 'pt-16 bg-[#ededed] dark:bg-black sm:bg-transparent!  sm:right-10 top-0 w-full h-full sm:w-[45%] px-3 sm:px-0' : 'w-xs top-3 right-3 '}`}
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex py-3 justify-between items-center">
