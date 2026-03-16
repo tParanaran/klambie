@@ -7,6 +7,7 @@ import {
   Product,
   Tag,
   VariantProduct,
+  Filters,
 } from '@/types/product.type';
 import { prisma } from 'lib/prisma';
 import { GenerateSlug } from '@/utils/slug';
@@ -304,17 +305,26 @@ export class ProductService {
     return { variants, hexUrl, tag, category, brand, img };
   }
   async getAllProducts(
-    slug: string,
+    slugs: string[],
     tag: string,
     user?: number,
-  ): Promise<Products[] | null> {
-    const hierarchyId = await attributeService.getAllHierarchyIds(slug);
+    includeDescendants = true,
+  ): Promise<{ products: Products[]; filters: Filters[] } | null> {
+    const hierarchyId = await attributeService.getAllHierarchyIds(slugs);
+    if (!hierarchyId) return null;
 
-    const products = await prisma.product.findMany({
+    let hierarchyIds: number[] = [hierarchyId];
+
+    if (includeDescendants) {
+      hierarchyIds =
+        await attributeService.getAllDescendantHierarchyIds(hierarchyId);
+    }
+
+    const data = await prisma.product.findMany({
       where: {
         productCategories: {
           some: {
-            categoryHierarchyId: { in: hierarchyId },
+            categoryHierarchyId: { in: hierarchyIds },
           },
         },
         productTags: {
@@ -340,10 +350,10 @@ export class ProductService {
       },
     });
 
-    if (!products) return null;
+    if (!data) return null;
 
-    const result: Products[] = await Promise.all(
-      products.map(async (p) => {
+    const products: Products[] = await Promise.all(
+      data.map(async (p) => {
         const [product] = await Promise.all([
           this.getProductVariant(p.slug, user),
         ]);
@@ -382,7 +392,9 @@ export class ProductService {
       }),
     );
 
-    return result;
+    const filters = await attributeService.getCategoryFilters(hierarchyId);
+
+    return { products, filters };
   }
   async getOneProduct(slug: string, user?: number): Promise<Product | null> {
     const product = await prisma.product.findUnique({

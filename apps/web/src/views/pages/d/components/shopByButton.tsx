@@ -2,9 +2,8 @@
 import { antonFont } from '@/utils/fonts';
 import { useCallback } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
-
-import Link from 'next/link';
 import { ITag } from '../../p/types/product.types';
+import Link from 'next/link';
 
 export default function ShopByButton({ tags }: { tags: ITag[] }) {
   const searchParams = useSearchParams();
@@ -39,7 +38,7 @@ export default function ShopByButton({ tags }: { tags: ITag[] }) {
           All
         </Link>
 
-        {tags.map((tag, idx) => (
+        {tags?.map((tag, idx) => (
           <Link
             href={pathname + '?' + createTagSearch('tag', `${tag.slug}`)}
             aria-label={`${tag} Product`}

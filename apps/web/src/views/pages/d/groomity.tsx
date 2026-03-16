@@ -1,16 +1,16 @@
-import { IProducts, ITag } from '../p/types/product.types';
+import ErrorMessage from '@/views/components/error';
 import ShopByCard from './components/shopByCard';
+import IDepartementView from './types';
 
 export default async function GroomityView({
   products,
   tags,
-}: {
-  products: IProducts[];
-  tags: ITag[];
-}) {
+  error,
+}: IDepartementView) {
   return (
     <div>
       <ShopByCard products={products} tags={tags} />
+      {error && <ErrorMessage error={error} />}
     </div>
   );
 }

@@ -1,4 +1,3 @@
-import { Notify } from '@/lib/notify';
 import axiosInstanceServer from '@/lib/axios/server';
 import MenView from '@/views/pages/d/men';
 import WomenView from '@/views/pages/d/women';
@@ -19,24 +18,35 @@ export default async function Department({
 
   let products = null;
   let tags = null;
+  let error;
 
   try {
-    const { data } = await axiosInstanceServer.get(`/product/all/${slug}`, {
-      params: { tag },
+    const { data } = await axiosInstanceServer.post(`/product/all`, {
+      tag,
+      slugs: [slug],
     });
     const res = await axiosInstanceServer.get('/attribute/tag');
-    products = data;
+    products = data.products;
     tags = res.data;
-  } catch (error) {
-    Notify('Something go wrong');
+  } catch (error: any) {
+    products = null;
+    tags = null;
+    error = error.message || 'Something went wrong while fetching data.';
   }
+  const viewProps = { products, tags, error };
 
-  if (slug === 'men') return <MenView products={products} tags={tags} />;
-  if (slug === 'women') return <WomenView products={products} tags={tags} />;
-  if (slug === 'kids') return <KidsView products={products} tags={tags} />;
-  if (slug === 'sports') return <SportsView products={products} tags={tags} />;
-  if (slug === 'groomity')
-    return <GroomityView products={products} tags={tags} />;
-
-  return <HomeView />;
+  switch (slug) {
+    case 'men':
+      return <MenView {...viewProps} />;
+    case 'women':
+      return <WomenView {...viewProps} />;
+    case 'kids':
+      return <KidsView {...viewProps} />;
+    case 'sports':
+      return <SportsView {...viewProps} />;
+    case 'groomity':
+      return <GroomityView {...viewProps} />;
+    default:
+      return <HomeView />;
+  }
 }

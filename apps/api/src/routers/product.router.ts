@@ -18,7 +18,7 @@ export class ProductRouter {
   }
 
   private initializeRoutes(): void {
-    this.router.get('/all/:slug', IsUserLogin, this.product.fetchAllProducts);
+    this.router.post('/all', IsUserLogin, this.product.fetchAllProducts);
     this.router.get('/:slug', IsUserLogin, this.product.fetchSlugProduct);
     this.router.get('/variants/:slug', IsUserLogin, this.product.fetchVariants);
     this.router.post('/new', this.product.createProduct);

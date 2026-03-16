@@ -33,10 +33,10 @@ export class Product {
   }
   async fetchAllProducts(req: Request, res: Response, next: NextFunction) {
     try {
-      const { slug } = req.params;
-      const tag = req.query.tag as string;
+      const tag = req.body.tag;
+      const slugs = req.body.slugs;
       const result = await productService.getAllProducts(
-        slug,
+        slugs,
         tag,
         req.user?.id,
       );

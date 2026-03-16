@@ -163,28 +163,72 @@ export class AttributeService {
 
     return result;
   }
-  async getAllHierarchyIds(slug: string): Promise<number[]> {
-    const rootCategory = await prisma.category.findUnique({
-      where: { slug: slug },
-      include: { categoryHierarchies: true },
+  async getAllHierarchyIds(slugs: string[]): Promise<number | null> {
+    if (!slugs.length) return null;
+
+    let currentHierarchies = await prisma.categoryHierarchy.findMany({
+      where: { category: { slug: slugs[0] }, parentId: null },
+      select: { id: true },
     });
 
-    if (!rootCategory) return [];
+    if (!currentHierarchies.length) return null;
 
-    let allIds = rootCategory.categoryHierarchies.map((ch) => ch.id);
-    let queue = [...allIds];
-
-    while (queue.length) {
-      const children = await prisma.categoryHierarchy.findMany({
-        where: { parentId: { in: queue } },
+    for (let i = 1; i < slugs.length; i++) {
+      const nextSlug = slugs[i];
+      currentHierarchies = await prisma.categoryHierarchy.findMany({
+        where: {
+          parentId: { in: currentHierarchies.map((h) => h.id) },
+          category: { slug: nextSlug },
+        },
         select: { id: true },
       });
 
-      const childIds = children.map((c) => c.id);
-      allIds.push(...childIds);
-      queue = childIds;
+      if (!currentHierarchies.length) return null;
     }
 
-    return allIds;
+    return currentHierarchies[0]?.id ?? null;
+  }
+  async getAllDescendantHierarchyIds(parentId: number): Promise<number[]> {
+    const parent = await prisma.categoryHierarchy.findUnique({
+      where: { id: parentId },
+      select: { path: true },
+    });
+
+    if (!parent) return [];
+
+    const descendants = await prisma.categoryHierarchy.findMany({
+      where: { path: { startsWith: parent.path + '.' } },
+      select: { id: true },
+    });
+
+    return descendants.map((d) => d.id);
+  }
+  async getCategoryFilters(categoryId: number) {
+    const parent = await prisma.categoryHierarchy.findUnique({
+      where: { id: categoryId },
+      select: { path: true, level: true },
+    });
+
+    if (!parent) throw new Error('Category not found');
+
+    const descendants = await prisma.categoryHierarchy.findMany({
+      where: {
+        path: {
+          startsWith: parent.path + '.',
+        },
+      },
+      select: {
+        id: true,
+        level: true,
+        category: {
+          select: {
+            name: true,
+            slug: true,
+          },
+        },
+      },
+    });
+
+    return descendants;
   }
 }

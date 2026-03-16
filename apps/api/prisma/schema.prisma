@@ -260,12 +260,14 @@ model CategoryHierarchy {
   parentId          Int?
   categoryId        Int
   level             Int // 1 = department, 2 collection, 3 = category, 4 = subcategory
+  path              String              @db.VarChar(255)
   parent            CategoryHierarchy?  @relation("CategoryParent", fields: [parentId], references: [id])
   children          CategoryHierarchy[] @relation("CategoryParent")
   category          Category            @relation(fields: [categoryId], references: [id])
   productCategories ProductCategory[]
 
   @@index([parentId])
+  @@index([path])
   @@map("category_hierarchy")
 }
 

@@ -31,13 +31,13 @@ export default function CartBadge() {
       setShowFloating(true);
 
       setStyle({
-        transform: isAdd ? 'translateY(0px)' : 'translateY(-12px)',
+        transform: isAdd ? 'translateY(0px)' : 'translateY(-10px)',
         opacity: 1,
       });
 
       setTimeout(() => {
         setStyle({
-          transform: isAdd ? 'translateY(-20px)' : 'translateY(20px)',
+          transform: isAdd ? 'translateY(-40px)' : 'translateY(40px)',
           opacity: 0,
         });
       }, 100);

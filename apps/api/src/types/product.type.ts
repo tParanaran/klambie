@@ -115,3 +115,11 @@ export type Product = {
   attributes: { id: number; name: string }[];
   variants?: VariantProduct[];
 };
+
+export type Filters = {
+  id: number;
+  category: {
+    name: string;
+    slug: string;
+  };
+};

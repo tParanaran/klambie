@@ -1,5 +1,4 @@
 import axiosInstanceServer from '@/lib/axios/server';
-import { Notify } from '@/lib/notify';
 import ProductView from '@/views/pages/p';
 import { notFound } from 'next/navigation';
 
@@ -16,7 +15,6 @@ export default async function Product({
     const { data } = await axiosInstanceServer.get(`/product/${slug}`);
     product = data;
   } catch (error) {
-    Notify('Something go wrong');
     product = null;
   }
 
