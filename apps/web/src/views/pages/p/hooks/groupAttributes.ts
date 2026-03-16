@@ -1,7 +1,7 @@
 import {
   IGroupedAttribute,
   IVariant,
-} from '@/views/pages/product/types/product.types';
+} from '@/views/pages/p/types/product.types';
 
 export function GetGroupedAttributes(variants: IVariant[]) {
   const map = new Map<number, IGroupedAttribute>();

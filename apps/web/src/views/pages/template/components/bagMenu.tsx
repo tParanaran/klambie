@@ -10,7 +10,7 @@ import Link from 'next/link';
 import CartPrice from '../../cart/components/price';
 import Rupiah from '@/utils/rupiah';
 import LinkButton from '@/views/components/link';
-import { useCartQuery } from '../../product/hooks/useCartQuery';
+import { useCartQuery } from '../../p/hooks/useCartQuery';
 
 export default function BagMenu() {
   const [showMenu, setShowMenu] = useState<boolean>(false);

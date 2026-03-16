@@ -4,9 +4,9 @@ import { useCallback } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 
 import Link from 'next/link';
-import { ITag } from '../../product/types/product.types';
+import { ITag } from '../../p/types/product.types';
 
-export default function ShopByEssenstials({ tags }: { tags: ITag[] }) {
+export default function ShopByButton({ tags }: { tags: ITag[] }) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const getParams = searchParams.get('tag')?.toString();

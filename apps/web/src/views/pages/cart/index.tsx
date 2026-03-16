@@ -1,6 +1,6 @@
 'use client';
 import { ICartItems } from './types';
-import { useCartQuery } from '../product/hooks/useCartQuery';
+import { useCartQuery } from '../p/hooks/useCartQuery';
 import CartItems from './components/items';
 import CartSummary from './components/summary';
 import AddVouchers from './components/vouchers';

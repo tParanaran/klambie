@@ -1,6 +1,6 @@
 import { IoBagHandle } from 'react-icons/io5';
 import Link from 'next/link';
-import CartBadge from '../../product/components/badge';
+import CartBadge from '../../p/components/badge';
 
 export default function BagButton({ isMobile = true }: { isMobile?: boolean }) {
   const content = (

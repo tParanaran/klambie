@@ -1,5 +1,5 @@
 import Rupiah from '@/utils/rupiah';
-import { IPrice } from '@/views/pages/product/types/product.types';
+import { IPrice } from '@/views/pages/p/types/product.types';
 
 interface IProductPrice {
   price: IPrice;

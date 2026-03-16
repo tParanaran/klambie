@@ -8,13 +8,11 @@ import VariantsButton from './variantsbutton';
 import ShowVariants from './showVariant';
 import useVariants from '../hooks/useVariants';
 import useCartQuantities from '../hooks/useQuantity';
-import QuantityButton from '../../product/components/qtyButton';
+import QuantityButton from '../../p/components/qtyButton';
 import { ICartItemIds } from '../hooks/useSelect';
-import useSelectedVariant from '../../product/hooks/useSelectedVariant';
+import useSelectedVariant from '../../p/hooks/useSelectedVariant';
 import Button from '@/views/components/button';
-import ErrorsMessage, {
-  IErrorsMessageHandle,
-} from '../../product/components/errors';
+import ErrorsMessage, { IErrorsMessageHandle } from '../../p/components/errors';
 import useChangeVariant from '../hooks/useChange';
 import SelectAllToggle from './selectAll';
 import Image from 'next/image';

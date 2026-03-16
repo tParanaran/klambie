@@ -1,10 +1,11 @@
+import { Notify } from '@/lib/notify';
 import axiosInstanceServer from '@/lib/axios/server';
-import GroomityView from '@/views/pages/groomity';
+import MenView from '@/views/pages/d/men';
+import WomenView from '@/views/pages/d/women';
+import KidsView from '@/views/pages/d/kids';
+import SportsView from '@/views/pages/d/sports';
+import GroomityView from '@/views/pages/d/groomity';
 import HomeView from '@/views/pages/home';
-import KidsView from '@/views/pages/kids';
-import MenView from '@/views/pages/men';
-import SportsView from '@/views/pages/sports';
-import WomenView from '@/views/pages/women';
 
 export default async function Department({
   params,
@@ -15,17 +16,27 @@ export default async function Department({
 }) {
   const { slug } = await params;
   const { tag } = await searchParams;
-  const { data } = await axiosInstanceServer.get(`/product/all/${slug}`, {
-    params: { tag },
-  });
-  const tags = await axiosInstanceServer.get('/attribute/tag');
 
-  if (slug === 'men') return <MenView products={data} tags={tags.data} />;
-  if (slug === 'women') return <WomenView products={data} tags={tags.data} />;
-  if (slug === 'kids') return <KidsView products={data} tags={tags.data} />;
-  if (slug === 'sports') return <SportsView products={data} tags={tags.data} />;
+  let products = null;
+  let tags = null;
+
+  try {
+    const { data } = await axiosInstanceServer.get(`/product/all/${slug}`, {
+      params: { tag },
+    });
+    const res = await axiosInstanceServer.get('/attribute/tag');
+    products = data;
+    tags = res.data;
+  } catch (error) {
+    Notify('Something go wrong');
+  }
+
+  if (slug === 'men') return <MenView products={products} tags={tags} />;
+  if (slug === 'women') return <WomenView products={products} tags={tags} />;
+  if (slug === 'kids') return <KidsView products={products} tags={tags} />;
+  if (slug === 'sports') return <SportsView products={products} tags={tags} />;
   if (slug === 'groomity')
-    return <GroomityView products={data} tags={tags.data} />;
+    return <GroomityView products={products} tags={tags} />;
 
   return <HomeView />;
 }

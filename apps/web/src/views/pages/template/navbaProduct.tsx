@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import ShareButton from '../product/components/shareButton';
+import ShareButton from '../p/components/shareButton';
 import GoBackButton from './components/goBackButton';
 import NavbarTopContainer from '@/views/components/navbarTopContainer';
 import useHandleClickOutside from './hooks/useHandleClickOutside';

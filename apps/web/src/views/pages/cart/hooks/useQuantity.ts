@@ -5,7 +5,7 @@ import axiosInstanceClient from '@/lib/axios/client';
 import { ValidationError } from 'yup';
 import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { IErrorsMessageHandle } from '../../product/components/errors';
+import { IErrorsMessageHandle } from '../../p/components/errors';
 
 interface IUseCart {
   cartItems?: ICartItems[];

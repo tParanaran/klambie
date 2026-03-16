@@ -1,12 +1,12 @@
 import axiosInstanceClient from '@/lib/axios/client';
 import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { IVariant } from '../../product/types/product.types';
+import { IVariant } from '../../p/types/product.types';
 import { IVariantAttribute } from '../types';
-import { AddToCartSchema } from '../../product/schema';
+import { AddToCartSchema } from '../../p/schema';
 import { RefObject } from 'react';
 import { ValidationError } from 'yup';
-import { IErrorsMessageHandle } from '../../product/components/errors';
+import { IErrorsMessageHandle } from '../../p/components/errors';
 
 interface IUseChange {
   selectedVariant: IVariant | null | undefined;

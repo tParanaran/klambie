@@ -3,21 +3,19 @@
 import { SwiperSlide, Swiper } from 'swiper/react';
 import { IoBagAddOutline } from 'react-icons/io5';
 import { useRef } from 'react';
-import { IProducts } from '@/views/pages/product/types/product.types';
+import { IProducts } from '@/views/pages/p/types/product.types';
 import Link from 'next/link';
-import Tags from '@/views/pages/product/components/tags';
-import ProductPrice from '../../product/components/price';
+import Tags from '@/views/pages/p/components/tags';
+import ProductPrice from '../../p/components/price';
 import useVariants from '../../cart/hooks/useVariants';
 import ShowVariants from '../../cart/components/showVariant';
 import useCartQuantities from '../../cart/hooks/useQuantity';
-import useAddToCart from '../../product/hooks/useAddToCart';
-import useSelectedVariant from '../../product/hooks/useSelectedVariant';
+import useAddToCart from '../../p/hooks/useAddToCart';
+import useSelectedVariant from '../../p/hooks/useSelectedVariant';
 import Loading from '@/views/components/loading';
-import ErrorsMessage, {
-  IErrorsMessageHandle,
-} from '../../product/components/errors';
+import ErrorsMessage, { IErrorsMessageHandle } from '../../p/components/errors';
 
-import AddToCartButton from '../../product/components/addButton';
+import AddToCartButton from '../../p/components/addButton';
 
 export default function ProductCard({ products }: { products: IProducts[] }) {
   const errorsProductRef = useRef<IErrorsMessageHandle | null>(null);

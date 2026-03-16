@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { IImages, IVariant } from '../../product/types/product.types';
+import { IImages, IVariant } from '../../p/types/product.types';
 import axiosInstanceClient from '@/lib/axios/client';
 import { Notify } from '@/lib/notify';
 import { number } from 'yup';

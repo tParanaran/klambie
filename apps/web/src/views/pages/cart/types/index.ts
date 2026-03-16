@@ -1,4 +1,4 @@
-import { IAppliedPromotion } from '../../product/types/product.types';
+import { IAppliedPromotion } from '../../p/types/product.types';
 
 export interface IPrice {
   subtotal: string;

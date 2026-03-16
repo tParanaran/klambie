@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { IProduct } from '@/views/pages/product/types/product.types';
+import { IProduct } from '@/views/pages/p/types/product.types';
 import Title from './components/title';
 import Images from './components/images';
 import Details from './components/details';

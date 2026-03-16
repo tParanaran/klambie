@@ -1,5 +1,5 @@
 'use client';
-import { useCartQuery } from '../../product/hooks/useCartQuery';
+import { useCartQuery } from '../../p/hooks/useCartQuery';
 import { ITotalPrice } from '../types';
 import Rupiah from '@/utils/rupiah';
 

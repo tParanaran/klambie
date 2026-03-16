@@ -1,14 +1,14 @@
 import { useState } from 'react';
-import Attributes from '../../product/components/attributes';
-import ProductPrice from '../../product/components/price';
-import QuantityButton from '../../product/components/qtyButton';
-import ImageSwiper from '../../product/components/swiper';
+import Attributes from '../../p/components/attributes';
+import ProductPrice from '../../p/components/price';
+import QuantityButton from '../../p/components/qtyButton';
+import ImageSwiper from '../../p/components/swiper';
 import {
   IGroupedAttribute,
   IImages,
   IVariant,
-} from '../../product/types/product.types';
-import ShowImages from '../../product/components/imagesModal';
+} from '../../p/types/product.types';
+import ShowImages from '../../p/components/imagesModal';
 import ModalContainer from '@/views/components/modalContainer';
 
 interface IShowVariant {
