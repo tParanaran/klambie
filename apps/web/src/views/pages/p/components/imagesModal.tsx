@@ -28,7 +28,7 @@ export default function ShowImages({
 
   return (
     <div
-      className="fixed z-50 top-0 left-0 w-full h-full bg-[#1b1a1e]/80 backdrop-blur-lg flex justify-center items-center"
+      className="fixed z-50 top-0 left-0 w-full h-full bg-[#1b1a1e]/80 backdrop-blur-xl flex justify-center items-center"
       onClick={showImagesHandler}
     >
       <div

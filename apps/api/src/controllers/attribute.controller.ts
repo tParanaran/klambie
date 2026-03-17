@@ -85,4 +85,13 @@ export class Attribute {
       next(error);
     }
   }
+  async getCategoryTree(req: Request, res: Response, next: NextFunction) {
+    try {
+      const result = await attributeService.getAllCategoryTree();
+
+      res.status(200).send(result);
+    } catch (error) {
+      next(error);
+    }
+  }
 }

@@ -16,6 +16,7 @@ export class AttributeRouter {
 
   private initializeRoutes(): void {
     this.router.post('/category', this.attribute.createNewCategory);
+    this.router.get('/tree', this.attribute.getCategoryTree);
     this.router.post('/brand', this.attribute.createNewBrand);
     this.router.patch('/brand/:slug', this.attribute.updateBrand);
     this.router.post('/tag', this.attribute.createNewTag);

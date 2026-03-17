@@ -1,12 +1,12 @@
-import { navLinks } from '@/utils/navLink';
 import { useEffect, useState } from 'react';
 import React from 'react';
 import AnchorIconDropdown from './dropdown';
 import Link from 'next/link';
 import CategoryContent from './categoryContent';
+import { categories } from '@/utils/navLink';
 
 export default function CategoryLinks() {
-  const initialDropdownState = navLinks.reduce(
+  const initialDropdownState = categories.reduce(
     (acc, item) => {
       acc[item.name] = false;
       return acc;
@@ -17,7 +17,7 @@ export default function CategoryLinks() {
   const [dropdowns, setDropdowns] =
     useState<Record<string, boolean>>(initialDropdownState);
 
-  const dropdownRefs = navLinks.reduce(
+  const dropdownRefs = categories.reduce(
     (acc, item) => {
       acc[item.name] = React.createRef<HTMLButtonElement>();
       return acc;
@@ -45,7 +45,7 @@ export default function CategoryLinks() {
 
   return (
     <div className="flex space-x-8 font-semibold">
-      {navLinks.map((cat, c) => {
+      {categories.map((cat, c) => {
         return (
           <AnchorIconDropdown
             key={cat.name}

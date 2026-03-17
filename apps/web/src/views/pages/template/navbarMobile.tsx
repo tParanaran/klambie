@@ -9,8 +9,8 @@ import IconLink from './components/iconLink';
 import { useRef, useState } from 'react';
 import AnchoredModalContainer from '@/views/components/anchoredModalContainer';
 import CategoryContent from './components/categoryContent';
-import { navLinks } from '@/utils/navLink';
 import useMobileBehavior from './hooks/useMobile';
+import { categories } from '@/utils/navLink';
 
 export default function NavbarMobile() {
   const categoryRef = useRef<HTMLButtonElement>(null);
@@ -59,8 +59,8 @@ export default function NavbarMobile() {
             align="default"
             zIndex="20"
           >
-            <div className="w-screen h-screen overflow-y-auto scrollbar-hide max-h-[93vh]">
-              <CategoryContent navLinks={navLinks} isMobile={true} />
+            <div className="w-screen h-screen overflow-y-auto scrollbar-hide max-h-[92vh] sm:max-h-[95vh] pb-[10%]">
+              <CategoryContent navLinks={categories} isMobile={true} />
             </div>
           </AnchoredModalContainer>
         </div>

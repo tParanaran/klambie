@@ -121,7 +121,7 @@ export default function AnchoredModalContainer({
       }}
       className={`rounded-2xl animate-in fade-in zoom-in-95 duration-150 ${zIndex}`}
     >
-      <div className="dark:text-[#ededed] dark:bg-[#1b1a1e]/80 text-black bg-[#ededed]/80 backdrop-blur-lg shadow-xs mt-3.5 rounded-2xl">
+      <div className="dark:text-[#ededed] dark:bg-[#1b1a1e]/80 text-black bg-[#ededed]/80 backdrop-blur-xl shadow-xs mt-3.5 rounded-2xl">
         {children}
       </div>
     </div>,

@@ -67,7 +67,7 @@ export default function ProductView({ product }: { product: IProduct }) {
           <div className="relative">
             <Images images={product.images} selectedColorId={selectedColorId} />
             <div className="absolute top-3 left-3 z-10 text-sm">
-              <Tags tags={product.tags} categories={categories} />
+              <Tags tags={product.tags} />
             </div>
             <div className="hidden md:block absolute top-3 right-3 z-10 text-black">
               <ShareButton />

@@ -1,23 +1,11 @@
 'use client';
 import { antonFont } from '@/utils/fonts';
-import { useCallback } from 'react';
-import { usePathname, useSearchParams } from 'next/navigation';
 import { ITag } from '../../p/types/product.types';
+import { useQueryParams } from '../../c/hooks/useQueryParams';
 import Link from 'next/link';
 
 export default function ShopByButton({ tags }: { tags: ITag[] }) {
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
-  const getParams = searchParams.get('tag')?.toString();
-
-  const createTagSearch = useCallback(
-    (query: string, value: string) => {
-      const params = new URLSearchParams();
-      params.set(query, value);
-      return params.toString();
-    },
-    [searchParams],
-  );
+  const { pathname, createParams, getParams } = useQueryParams();
 
   return (
     <main className="my-3">
@@ -30,7 +18,7 @@ export default function ShopByButton({ tags }: { tags: ITag[] }) {
           aria-label={`All Products`}
           scroll={false}
           className={`${antonFont.className} uppercase px-4 py-1.5 rounded-full text-base sm:text-lg hover:bg-black hover:border-black hover:text-[#ededed] mt-2 ${
-            getParams === undefined
+            getParams('tag') === undefined
               ? 'bg-orange-800 border-orange-800 text-[#ededed]'
               : 'border'
           }`}
@@ -40,14 +28,14 @@ export default function ShopByButton({ tags }: { tags: ITag[] }) {
 
         {tags?.map((tag, idx) => (
           <Link
-            href={pathname + '?' + createTagSearch('tag', `${tag.slug}`)}
+            href={createParams('tag', tag.slug, { append: false })}
             aria-label={`${tag} Product`}
             key={idx}
             scroll={false}
             className={`${
               antonFont.className
             } uppercase px-4 py-1.5 rounded-full text-base sm:text-lg hover:bg-black hover:border-black hover:text-[#ededed] mt-2 ${
-              getParams === tag.slug
+              getParams('tag') === tag.slug
                 ? 'bg-orange-800 border-orange-800 text-[#ededed]'
                 : 'border'
             }`}

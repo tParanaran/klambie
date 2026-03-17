@@ -2,8 +2,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { BiCategory } from 'react-icons/bi';
 import AnchoredModalContainer from '@/views/components/anchoredModalContainer';
-import { navLinks } from '@/utils/navLink';
 import CategoryContent from './categoryContent';
+import { categories } from '@/utils/navLink';
 
 export default function CategoryMenu() {
   const menuRef = useRef<HTMLButtonElement>(null);
@@ -49,7 +49,7 @@ export default function CategoryMenu() {
         align="left"
       >
         <div className="p-3 w-2xl max-h-[75vh] overflow-y-auto scrollbar-hide">
-          <CategoryContent navLinks={navLinks} />
+          <CategoryContent navLinks={categories} />
         </div>
       </AnchoredModalContainer>
     </div>

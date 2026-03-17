@@ -263,4 +263,37 @@ export class AttributeService {
 
     return root.subcategories;
   }
+  async getAllCategoryTree() {
+    const categories = await prisma.categoryHierarchy.findMany({
+      select: {
+        id: true,
+        path: true,
+        level: true,
+        category: { select: { name: true, slug: true } },
+      },
+      orderBy: { path: 'asc' },
+    });
+
+    const pathMap = new Map<string, any>();
+    const roots: any[] = [];
+
+    for (const item of categories) {
+      const node = {
+        id: item.id,
+        name: item.category.name,
+        slug: item.category.slug,
+        subcategories: [],
+      };
+      pathMap.set(item.path, node);
+
+      const parentPath = item.path.split('.').slice(0, -1).join('.');
+      if (parentPath && pathMap.has(parentPath)) {
+        pathMap.get(parentPath).subcategories.push(node);
+      } else {
+        roots.push(node);
+      }
+    }
+
+    return roots;
+  }
 }

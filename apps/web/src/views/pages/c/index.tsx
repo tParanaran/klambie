@@ -16,7 +16,7 @@ export default function CategoryView({
       <SideNavbar filters={filters} />
 
       {products?.length > 0 ? (
-        <div className="flex-1 grid md:grid-cols-2 lg:grid-cols-3 gap-2 h-screen">
+        <div className="flex-1 grid grid-cols-2 lg:grid-cols-3 gap-2">
           <ProductCard products={products} />
         </div>
       ) : (

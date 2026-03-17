@@ -46,12 +46,14 @@ export class ProductService {
               categoryHierarchyId: id,
             })),
           },
-          ...(productTags && productTags.length > 0 && {productTags: {
-            create: productTags.map((id: number) => ({
-             tagId: id,
-           })),
-          },
-        }),
+          ...(productTags &&
+            productTags.length > 0 && {
+              productTags: {
+                create: productTags.map((id: number) => ({
+                  tagId: id,
+                })),
+              },
+            }),
           images: {
             create: images,
           },
@@ -328,15 +330,15 @@ export class ProductService {
             categoryHierarchyId: { in: hierarchyIds },
           },
         },
-       ...(tag && {
-      productTags: {
-        some: {
-          tag: {
-            slug: tag,
+        ...(tag && {
+          productTags: {
+            some: {
+              tag: {
+                slug: tag,
+              },
+            },
           },
-        },
-      },
-    }),
+        }),
       },
       select: {
         id: true,

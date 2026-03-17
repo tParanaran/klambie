@@ -4,10 +4,13 @@ import CategoryView from '@/views/pages/c';
 
 export default async function Categories({
   params,
+  searchParams,
 }: {
   params: { slugs: string[] };
+  searchParams: { tag: string };
 }) {
   const { slugs } = await params;
+  const { tag } = await searchParams;
 
   let products = null;
   let filters = null;
@@ -16,6 +19,7 @@ export default async function Categories({
   try {
     const { data } = await axiosInstanceServer.post(`/product/all`, {
       slugs,
+      tag,
     });
 
     products = data.products;

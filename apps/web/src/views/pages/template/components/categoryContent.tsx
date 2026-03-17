@@ -1,4 +1,5 @@
-import { NavItem } from '@/utils/navLink';
+'use client';
+import { ICategories } from '../../c/types';
 import { useEffect, useState } from 'react';
 import { IoClose } from 'react-icons/io5';
 import { usePathname } from 'next/navigation';
@@ -9,7 +10,7 @@ import Link from 'next/link';
 interface ICategoryContent {
   slug?: string;
   level?: number;
-  navLinks?: NavItem[];
+  navLinks?: ICategories[];
   isMobile?: boolean;
 }
 
@@ -21,7 +22,7 @@ export default function CategoryContent({
 }: ICategoryContent) {
   const pathname = usePathname();
   const [openIndex, setOpenIndex] = useState<(number | null)[]>([]);
-  const [sideModalItem, setSideModalItem] = useState<NavItem | null>(null);
+  const [sideModalItem, setSideModalItem] = useState<ICategories | null>(null);
   const [slugModal, setSlugModal] = useState<string | null>(null);
 
   const handleClickOutside = () => {

@@ -14,7 +14,6 @@ import useAddToCart from '../../p/hooks/useAddToCart';
 import useSelectedVariant from '../../p/hooks/useSelectedVariant';
 import Loading from '@/views/components/loading';
 import ErrorsMessage, { IErrorsMessageHandle } from '../../p/components/errors';
-
 import AddToCartButton from '../../p/components/addButton';
 
 export default function ProductCard({ products }: { products: IProducts[] }) {
@@ -47,7 +46,7 @@ export default function ProductCard({ products }: { products: IProducts[] }) {
                 <img
                   src={image}
                   alt={`Product Image ${i}`}
-                  className="object-cover h-72 sm:h-80 lg:h-96 w-full rounded-2xl"
+                  className="object-cover w-full rounded-2xl h-70 lg:h-80"
                   width={300}
                   height={400}
                   aria-placeholder="blur"
@@ -67,7 +66,7 @@ export default function ProductCard({ products }: { products: IProducts[] }) {
             </div>
             <div className="absolute bottom-1 left-1 right-1 z-10">
               <div className="flex flex-wrap space-x-1 text-xs font-semilight">
-                <Tags tags={item.tags} categories={item.categories} />
+                <Tags tags={item.tags} />
               </div>
             </div>
             {/* <div className="absolute top-1 left-1 z-10">
