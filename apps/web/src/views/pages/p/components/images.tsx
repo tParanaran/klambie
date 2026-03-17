@@ -25,7 +25,7 @@ export default function Images({ images, selectedColorId }: IImages) {
   return (
     <>
       <div
-        className="grid grid-cols-2 md:grid-cols-1 lg:grid-cols-2"
+        className="grid grid-cols-2 md:grid-cols-1 lg:grid-cols-2 gap-1"
         onClick={showImagesHandler}
         aria-label="Zoom images"
         role="button"
@@ -33,13 +33,13 @@ export default function Images({ images, selectedColorId }: IImages) {
         <ImageSwiper
           images={withAttribute}
           selectedColorId={selectedColorId}
-          className={'object-cover w-full'}
+          className={'object-cover w-full rounded-2xl'}
         />
         {withoutAttribute.map((image, idx) => (
           <div key={idx}>
             <img
               src={image.url}
-              className="w-full object-cover"
+              className="w-full object-cover rounded-2xl"
               alt={`Product Image ${idx}`}
               width={300}
               height={400}

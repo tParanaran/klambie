@@ -40,9 +40,9 @@ export default function Tags({
           aria-label={tag.name}
           className={`${
             t % 2 === 0
-              ? 'bg-orange-800/80 text-[#ededed]'
-              : 'bg-gray-200/80 text-orange-700'
-          } rounded-full py-1 px-2 w-fit flex items-center mb-1 font-semibold`}
+              ? 'bg-orange-700 text-[#ededed]'
+              : 'bg-gray-50 text-[#FF4500]'
+          } rounded-full py-1 px-2 w-fit flex items-center mb-1`}
         >
           <IoSparkles className="mr-0.5 text-xs" /> {tag.name}
         </Link>

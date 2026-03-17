@@ -1,7 +1,6 @@
-export interface IFilters {
+export interface ICategories {
   id: number;
-  category: {
-    name: string;
-    slug: string;
-  };
+  name: string;
+  slug: string;
+  subcategories?: ICategories[];
 }

@@ -66,10 +66,10 @@ export default function ProductView({ product }: { product: IProduct }) {
           {/* Left Menu Desktop Mode */}
           <div className="relative">
             <Images images={product.images} selectedColorId={selectedColorId} />
-            <div className="absolute top-3 left-3 z-10 text-sm sm:text-base">
+            <div className="absolute top-3 left-3 z-10 text-sm">
               <Tags tags={product.tags} categories={categories} />
             </div>
-            <div className="hidden md:block absolute top-3 right-3 z-10">
+            <div className="hidden md:block absolute top-3 right-3 z-10 text-black">
               <ShareButton />
             </div>
           </div>

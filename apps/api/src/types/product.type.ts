@@ -46,7 +46,7 @@ export type InsertProduct = {
   productDetails: ProductDetails;
   productAttributes: { attributeId: number; imageBased: boolean }[];
   productCategories: number[];
-  productTags: number[];
+  productTags?: number[];
   images: { url: string; attributeValueId: number | null }[];
   productVariants: {
     barcode?: string | null;
@@ -118,8 +118,7 @@ export type Product = {
 
 export type Filters = {
   id: number;
-  category: {
-    name: string;
-    slug: string;
-  };
+  name: string;
+  slug: string;
+  subcategories: Filters[];
 };

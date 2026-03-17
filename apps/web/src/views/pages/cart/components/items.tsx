@@ -112,7 +112,7 @@ export default function CartItems({
                     onChange={() =>
                       toggleItem(item.productVariantId, item.quantity)
                     }
-                    className="w-4 h-4 appearance-none rounded-2xl border 
+                    className="w-4 h-4 appearance-none rounded-2xl border
               hover:ring hover:ring-black/90 hover:ring-offset-1 hover:ring-offset-slate-100 checked:ring-1 checked:ring-black/90 checked:ring-offset-2 checked:ring-offset-slate-100
              cursor-pointer bg-gray-100"
                   />

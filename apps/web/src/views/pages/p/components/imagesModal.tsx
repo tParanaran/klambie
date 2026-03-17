@@ -41,7 +41,7 @@ export default function ShowImages({
             <img
               src={image.url}
               alt={`Product Image`}
-              className="object-cover max-h-[75vh] w-full sm:w-auto"
+              className="object-cover max-h-[75vh] w-full sm:w-auto rounded-2xl"
               width={400}
               height={600}
               loading="lazy"
@@ -61,7 +61,7 @@ export default function ShowImages({
           <div>
             <Swiper
               slidesPerView={1}
-              spaceBetween={0}
+              spaceBetween={5}
               centeredSlides={true}
               loop={images.length > 1}
               freeMode={true}
@@ -79,7 +79,7 @@ export default function ShowImages({
                   <img
                     src={image.url}
                     alt={`Product Image`}
-                    className="max-h-[75vh] object-cover w-full"
+                    className="max-h-[75vh] object-cover w-full rounded-2xl"
                     width={300}
                     height={400}
                     loading="lazy"
@@ -92,7 +92,7 @@ export default function ShowImages({
                   <img
                     src={img.url}
                     alt={`Product Image ${i + 1}`}
-                    className="max-h-[75vh] object-cover w-full"
+                    className="max-h-[75vh] object-cover w-full rounded-2xl"
                     width={300}
                     height={400}
                     loading="lazy"

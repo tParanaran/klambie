@@ -37,6 +37,7 @@ export default function ImageSwiper({
         <div className="order-last md:order-first">
           <Swiper
             onSwiper={(swiper) => (swiperRef.current = swiper)}
+            spaceBetween={5}
             loop={true}
             modules={[Pagination]}
           >

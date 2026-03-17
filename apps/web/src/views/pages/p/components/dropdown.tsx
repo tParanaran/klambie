@@ -24,7 +24,7 @@ export default function Dropdown({ body, header }: IDropdown) {
   }, [isOpen, bodyLines?.length]);
 
   return (
-    <div className="relative border-t border-gray-300">
+    <div className="relative border-t-[0.5px] border-gray-300 dark:border-[#1A1A1A]">
       <div
         className="flex justify-between my-4 cursor-pointer"
         onClick={() => setIsOpen(!isOpen)}

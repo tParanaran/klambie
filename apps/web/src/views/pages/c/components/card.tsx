@@ -41,13 +41,13 @@ export default function ProductCard({ products }: { products: IProducts[] }) {
     <>
       {products.map((item, idx) => (
         <div key={idx} className="mb-5 z-0">
-          <Swiper>
+          <Swiper spaceBetween={5}>
             {item.images.map((image, i) => (
               <SwiperSlide key={i}>
                 <img
                   src={image}
                   alt={`Product Image ${i}`}
-                  className="object-cover h-72 sm:h-80 lg:h-96 w-full"
+                  className="object-cover h-72 sm:h-80 lg:h-96 w-full rounded-2xl"
                   width={300}
                   height={400}
                   aria-placeholder="blur"
@@ -66,7 +66,7 @@ export default function ProductCard({ products }: { products: IProducts[] }) {
               </button>
             </div>
             <div className="absolute bottom-1 left-1 right-1 z-10">
-              <div className="flex flex-wrap space-x-1 text-xs">
+              <div className="flex flex-wrap space-x-1 text-xs font-semilight">
                 <Tags tags={item.tags} categories={item.categories} />
               </div>
             </div>

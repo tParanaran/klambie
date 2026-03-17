@@ -46,11 +46,12 @@ export class ProductService {
               categoryHierarchyId: id,
             })),
           },
-          productTags: {
+          ...(productTags && productTags.length > 0 && {productTags: {
             create: productTags.map((id: number) => ({
-              tagId: id,
-            })),
+             tagId: id,
+           })),
           },
+        }),
           images: {
             create: images,
           },
@@ -306,7 +307,7 @@ export class ProductService {
   }
   async getAllProducts(
     slugs: string[],
-    tag: string,
+    tag?: string,
     user?: number,
     includeDescendants = true,
   ): Promise<{ products: Products[]; filters: Filters[] } | null> {
@@ -327,13 +328,15 @@ export class ProductService {
             categoryHierarchyId: { in: hierarchyIds },
           },
         },
-        productTags: {
-          some: {
-            tag: {
-              slug: tag,
-            },
+       ...(tag && {
+      productTags: {
+        some: {
+          tag: {
+            slug: tag,
           },
         },
+      },
+    }),
       },
       select: {
         id: true,

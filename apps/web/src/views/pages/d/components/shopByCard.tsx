@@ -17,7 +17,7 @@ export default function ShopByCard({
       <ShopByButton tags={tags} />
       <Suspense fallback={<Loading />}>
         {products?.length > 0 ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-0.5 my-5">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 my-5">
             <ProductCard products={products} />
           </div>
         ) : (

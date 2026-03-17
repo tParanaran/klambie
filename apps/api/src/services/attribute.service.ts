@@ -206,7 +206,11 @@ export class AttributeService {
   async getCategoryFilters(categoryId: number) {
     const parent = await prisma.categoryHierarchy.findUnique({
       where: { id: categoryId },
-      select: { path: true, level: true },
+      select: {
+        path: true,
+        level: true,
+        category: { select: { name: true, slug: true } },
+      },
     });
 
     if (!parent) throw new Error('Category not found');
@@ -219,6 +223,7 @@ export class AttributeService {
       },
       select: {
         id: true,
+        path: true,
         level: true,
         category: {
           select: {
@@ -227,8 +232,35 @@ export class AttributeService {
           },
         },
       },
+      orderBy: { path: 'asc' },
     });
 
-    return descendants;
+    const pathMap = new Map<string, any>();
+
+    const root = {
+      id: categoryId,
+      name: parent.category.name,
+      slug: parent.category.slug,
+      subcategories: [],
+    };
+    pathMap.set(parent.path, root);
+
+    for (const item of descendants) {
+      const node = {
+        id: item.id,
+        name: item.category.name,
+        slug: item.category.slug,
+        subcategories: [],
+      };
+      pathMap.set(item.path, node);
+
+      const parentPath = item.path.split('.').slice(0, -1).join('.');
+      const parentNode = pathMap.get(parentPath);
+      if (parentNode) {
+        parentNode.subcategories.push(node);
+      }
+    }
+
+    return root.subcategories;
   }
 }
