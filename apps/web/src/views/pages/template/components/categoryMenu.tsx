@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { BiCategory } from 'react-icons/bi';
 import AnchoredModalContainer from '@/views/components/anchoredModalContainer';
 import CategoryContent from './categoryContent';
-import { categories } from '@/utils/navLink';
+import { categories } from '@/utils/categories';
 
 export default function CategoryMenu() {
   const menuRef = useRef<HTMLButtonElement>(null);

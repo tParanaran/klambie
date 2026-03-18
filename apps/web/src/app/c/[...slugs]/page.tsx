@@ -29,9 +29,11 @@ export default async function Categories({
     products = null;
   }
 
+  const categoryView = { products, filters };
+
   return (
     <main>
-      <CategoryView products={products} filters={filters} />
+      <CategoryView {...categoryView} />
       {error && <ErrorMessage error={error} />}
     </main>
   );

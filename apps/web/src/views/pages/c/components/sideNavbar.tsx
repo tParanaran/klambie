@@ -10,7 +10,7 @@ export default function SideNavbar({ filters }: { filters?: ICategories[] }) {
   const [openIndex, setOpenIndex] = useState<number[][]>([]);
   const { getAllParams, deleteParams } = useQueryParams();
   const container =
-    'p-3 bg-black/5 dark:bg-white/10 rounded-2xl shadow-xs text-sm';
+    'p-2 md:p-3 bg-black/5 dark:bg-white/10 rounded-2xl shadow-xs text-sm';
   const header = 'font-semibold mb-2 text-base opacity-50';
 
   const categoryId = getAllParams('categoryId');
@@ -20,7 +20,7 @@ export default function SideNavbar({ filters }: { filters?: ICategories[] }) {
   const isFiltered = selectedCategories && selectedCategories?.length > 0;
 
   return (
-    <aside className="md:w-3xs lg:w-2xs mb-5 hidden md:block">
+    <aside className="w-44 md:w-52 lg:w-2xs mb-5 hidden sm:block">
       <nav className="sticky top-24 max-h-[calc(100vh-5rem)] overflow-y-auto space-y-3">
         {isFiltered && (
           <div className={container}>

@@ -5,11 +5,11 @@ import { useQueryParams } from '../../c/hooks/useQueryParams';
 import Link from 'next/link';
 
 export default function ShopByButton({ tags }: { tags: ITag[] }) {
-  const { pathname, createParams, getParams } = useQueryParams();
+  const { pathname, createLinkParams, getParams } = useQueryParams();
 
   return (
     <main className="my-3">
-      <h1 className={`${antonFont.className} text-xl sm:text-2xl uppercase`}>
+      <h1 className={`${antonFont.className} text-lg sm:text-xl uppercase`}>
         Shop By Essentials
       </h1>
       <div className="flex space-x-2 flex-wrap my-2">
@@ -17,7 +17,7 @@ export default function ShopByButton({ tags }: { tags: ITag[] }) {
           href={pathname}
           aria-label={`All Products`}
           scroll={false}
-          className={`${antonFont.className} uppercase px-4 py-1.5 rounded-full text-base sm:text-lg hover:bg-black hover:border-black hover:text-[#ededed] mt-2 ${
+          className={`${antonFont.className} uppercase px-3 py-1 rounded-full text-base sm:text-lg hover:bg-black hover:border-black hover:text-[#ededed] mt-2 ${
             getParams('tag') === undefined
               ? 'bg-orange-800 border-orange-800 text-[#ededed]'
               : 'border'
@@ -28,13 +28,13 @@ export default function ShopByButton({ tags }: { tags: ITag[] }) {
 
         {tags?.map((tag, idx) => (
           <Link
-            href={createParams('tag', tag.slug, { append: false })}
+            href={createLinkParams('tag', tag.slug, { append: false })}
             aria-label={`${tag} Product`}
             key={idx}
             scroll={false}
             className={`${
               antonFont.className
-            } uppercase px-4 py-1.5 rounded-full text-base sm:text-lg hover:bg-black hover:border-black hover:text-[#ededed] mt-2 ${
+            } uppercase px-3 py-1 rounded-full text-base sm:text-lg hover:bg-black hover:border-black hover:text-[#ededed] mt-2 ${
               getParams('tag') === tag.slug
                 ? 'bg-orange-800 border-orange-800 text-[#ededed]'
                 : 'border'

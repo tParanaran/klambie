@@ -3,7 +3,7 @@ import React from 'react';
 import AnchorIconDropdown from './dropdown';
 import Link from 'next/link';
 import CategoryContent from './categoryContent';
-import { categories } from '@/utils/navLink';
+import { categories } from '@/utils/categories';
 
 export default function CategoryLinks() {
   const initialDropdownState = categories.reduce(

@@ -1,38 +1,25 @@
 'use client';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-// import { useDebouncedCallback } from 'use-debounce';
+import { useDebouncedCallback } from 'use-debounce';
 import { IoClose, IoSearch } from 'react-icons/io5';
 import { useEffect, useRef, useState } from 'react';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import searchSchema from '../schema';
+import { useQueryParams } from '../../c/hooks/useQueryParams';
 
 interface ISearchForm {
   showSearch?: boolean;
 }
 
 export default function SearchBar({ showSearch }: ISearchForm) {
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
   const inputRef = useRef<HTMLInputElement>(null);
-  const { replace } = useRouter();
-  const [queryTerm, setQueryTerm] = useState<string>('');
+  const { getParams, createNewRouteParams, clearAllParams } = useQueryParams();
+  const params = getParams('q') || '';
 
   useEffect(() => {
     if (showSearch) {
       inputRef.current?.focus();
     }
-
-    const getParams = searchParams.get('search')?.toString();
-    if (getParams === undefined) {
-      setQueryTerm('');
-    } else {
-      setQueryTerm(getParams);
-    }
-  }, [searchParams]);
-
-  const HandleSearch = (term: string) => {
-    const params = new URLSearchParams();
-  };
+  }, []);
 
   const storeRecentSearch = (term: string) => {
     let recentSearches = JSON.parse(
@@ -45,18 +32,22 @@ export default function SearchBar({ showSearch }: ISearchForm) {
     localStorage.setItem('recentSearches', JSON.stringify(recentSearches));
   };
 
+  const HandleSearch = useDebouncedCallback((term: string) => {
+    createNewRouteParams('q', term, '/s');
+    storeRecentSearch(term);
+  }, 1000);
+
   return (
     <div className="text-orange-700">
       <div className="w-full">
         <Formik
           initialValues={{
-            search: queryTerm,
+            search: params,
           }}
           enableReinitialize={true}
           validationSchema={searchSchema}
           onSubmit={(values) => {
             HandleSearch(values.search);
-            storeRecentSearch(values.search);
           }}
         >
           {(props: FormikProps<{ search: string }>) => {
@@ -85,14 +76,14 @@ export default function SearchBar({ showSearch }: ISearchForm) {
                         : 'Search product here'
                     }
                     onChange={handleChange}
-                    values={values.search}
+                    value={values.search}
                   />
-                  {queryTerm !== '' ? (
+                  {params !== '' ? (
                     <button
                       type="button"
                       className="absolute right-2 top-2 text-orange-700 text-2xl hover:scale-125"
                       aria-label="Clear search"
-                      onClick={() => HandleSearch('')}
+                      onClick={clearAllParams}
                     >
                       <IoClose />
                     </button>

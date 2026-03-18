@@ -200,12 +200,6 @@ export const categories: ICategories[] = [
             subcategories: [],
           },
           {
-            id: 94,
-            name: 'Bags and Backpacks',
-            slug: 'bags-and-backpacks',
-            subcategories: [],
-          },
-          {
             id: 95,
             name: 'Accessories',
             slug: 'accessories',
@@ -412,12 +406,6 @@ export const categories: ICategories[] = [
             subcategories: [],
           },
           {
-            id: 98,
-            name: 'Bags and Backpacks',
-            slug: 'bags-and-backpacks',
-            subcategories: [],
-          },
-          {
             id: 99,
             name: 'Accessories',
             slug: 'accessories',
@@ -487,7 +475,7 @@ export const categories: ICategories[] = [
           },
           {
             id: 109,
-            name: 'Top and Bottom Sets',
+            name: 'Clothing Sets',
             slug: 'top-and-bottom-sets',
             subcategories: [],
           },
@@ -561,12 +549,6 @@ export const categories: ICategories[] = [
         slug: 'accessories',
         subcategories: [
           {
-            id: 121,
-            name: 'Bags and Backpacks',
-            slug: 'bags-and-backpacks',
-            subcategories: [],
-          },
-          {
             id: 122,
             name: 'Headwear',
             slug: 'headwear',
@@ -586,8 +568,26 @@ export const categories: ICategories[] = [
           },
           {
             id: 125,
-            name: 'Towels and Blankets',
-            slug: 'towels-and-blankets',
+            name: 'Towels',
+            slug: 'towels',
+            subcategories: [],
+          },
+          {
+            id: 161,
+            name: 'Backpacks',
+            slug: 'backpacks',
+            subcategories: [],
+          },
+          {
+            id: 162,
+            name: 'Bags',
+            slug: 'bags',
+            subcategories: [],
+          },
+          {
+            id: 163,
+            name: 'Blankets',
+            slug: 'blankets',
             subcategories: [],
           },
         ],

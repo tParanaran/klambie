@@ -1,15 +1,15 @@
 import { useState, useRef, useEffect } from 'react';
-import { NavItem } from '@/utils/navLink';
 import { IoChevronDown, IoChevronForward } from 'react-icons/io5';
 import Link from 'next/link';
+import { ICategories } from '../../c/types';
 
 interface IDropdownCategory {
-  item: NavItem;
+  item: ICategories;
   level?: number;
   index: number;
   openIndex: (number | null)[];
   setOpenIndex: React.Dispatch<React.SetStateAction<(number | null)[]>>;
-  setSideModalItem: React.Dispatch<React.SetStateAction<NavItem | null>>;
+  setSideModalItem: React.Dispatch<React.SetStateAction<ICategories | null>>;
   setSlugModal: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
@@ -61,7 +61,7 @@ export default function DropdownCategory({
       {level === 0 && (
         <button
           onClick={handleClick}
-          className={`w-full uppercase bg-black/15 dark:bg-white/5 font-semibold h-18 text-left transition-colors duration-200 p-3 flex items-center ${isOpen ? ' rounded-t-lg' : ' rounded-lg'}`}
+          className={`w-full uppercase bg-black/15 dark:bg-white/5 font-semibold h-16 text-left transition-colors duration-200 p-3 flex items-center ${isOpen ? ' rounded-t-lg' : ' rounded-lg'}`}
           aria-expanded={isOpen}
           aria-controls={`submenu-${level}-${index}`}
         >

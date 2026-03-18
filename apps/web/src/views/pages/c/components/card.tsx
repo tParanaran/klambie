@@ -39,14 +39,14 @@ export default function ProductCard({ products }: { products: IProducts[] }) {
   return (
     <>
       {products.map((item, idx) => (
-        <div key={idx} className="mb-5 z-0">
+        <div key={idx} className="mb-2 z-0">
           <Swiper spaceBetween={5}>
             {item.images.map((image, i) => (
               <SwiperSlide key={i}>
                 <img
                   src={image}
                   alt={`Product Image ${i}`}
-                  className="object-cover w-full rounded-2xl h-70 lg:h-80"
+                  className="object-cover w-full rounded-2xl"
                   width={300}
                   height={400}
                   aria-placeholder="blur"
@@ -65,7 +65,7 @@ export default function ProductCard({ products }: { products: IProducts[] }) {
               </button>
             </div>
             <div className="absolute bottom-1 left-1 right-1 z-10">
-              <div className="flex flex-wrap space-x-1 text-xs font-semilight">
+              <div className="flex flex-wrap space-x-1 font-semilight">
                 <Tags tags={item.tags} />
               </div>
             </div>
@@ -86,14 +86,14 @@ export default function ProductCard({ products }: { products: IProducts[] }) {
             </div>
 
             <div>
-              <h1 className="text-light text-xs uppercase mb-1 opacity-70">
+              <h1 className="text-light text-[10px] md:text-xs uppercase mb-1 opacity-70">
                 {item.categories
                   .map((category) => {
                     return category.name;
                   })
                   .join(', ')}
               </h1>
-              <div className="text-sm sm:text-base">
+              <div>
                 <p className="font-bold">{item.brand.name}</p>
                 <p className="font-light">{item.name}</p>
                 <div className="flex items-center space-x-2 flex-wrap">

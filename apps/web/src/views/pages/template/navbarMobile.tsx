@@ -10,7 +10,7 @@ import { useRef, useState } from 'react';
 import AnchoredModalContainer from '@/views/components/anchoredModalContainer';
 import CategoryContent from './components/categoryContent';
 import useMobileBehavior from './hooks/useMobile';
-import { categories } from '@/utils/navLink';
+import { categories } from '@/utils/categories';
 
 export default function NavbarMobile() {
   const categoryRef = useRef<HTMLButtonElement>(null);

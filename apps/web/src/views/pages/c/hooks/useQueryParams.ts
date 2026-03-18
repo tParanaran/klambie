@@ -20,7 +20,7 @@ export function useQueryParams() {
     return obj;
   };
 
-  const createParams = useCallback(
+  const createLinkParams = useCallback(
     (key: string, value: string, { append = true } = {}, newPath?: string) => {
       const params = new URLSearchParams(searchParams.toString());
 
@@ -31,6 +31,25 @@ export function useQueryParams() {
       }
 
       return `${pathname}${newPath ? `/${newPath}` : ''}?${params.toString()}`;
+    },
+    [searchParams, pathname, router],
+  );
+
+  const createNewRouteParams = useCallback(
+    (key: string, value: string, newPath: string) => {
+      const params = new URLSearchParams();
+      params.set(key, value);
+
+      let newPathname = pathname;
+
+      if (pathname !== newPath) {
+        newPathname = newPath;
+      }
+
+      const newUrl = params.toString()
+        ? `${newPathname}?${params.toString()}`
+        : newPathname;
+      router.replace(newUrl);
     },
     [searchParams, pathname, router],
   );
@@ -100,11 +119,12 @@ export function useQueryParams() {
     pathname,
     searchParams,
     matchPathname,
-    createParams,
+    createLinkParams,
     toggleParams,
     deleteParams,
     clearAllParams,
     getParams,
     getAllParams,
+    createNewRouteParams,
   };
 }
