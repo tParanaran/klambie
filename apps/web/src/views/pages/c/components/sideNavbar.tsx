@@ -11,7 +11,7 @@ import useAttribute from '../hooks/useAttribute';
 import TagParams from './tagParams';
 
 const container =
-  'p-2 md:p-3 bg-black/5 dark:bg-white/10 rounded-2xl shadow-xs text-sm';
+  'p-1.5 md:p-2 bg-black/5 dark:bg-white/10 rounded-2xl shadow-xs text-sm';
 const header = 'mb-2 text-sm opacity-50';
 const flexClass =
   'flex space-x-1 flex-wrap overflow-y-auto scrollbar-hide max-h-[22vh]';
@@ -44,7 +44,7 @@ export default function SideNavbar({ filters }: { filters?: ICategories[] }) {
     selectedAttributes.length > 0;
 
   return (
-    <aside className="w-44 md:w-56 lg:w-2xs mb-5 hidden sm:block">
+    <aside className="w-50 md:w-3xs lg:w-2xs mb-5 hidden sm:block">
       <nav className="sticky top-24 max-h-[calc(100vh-5rem)] overflow-y-auto space-y-3 scrollbar-hide">
         {isFiltered && (
           <div className={container}>
@@ -125,41 +125,31 @@ export default function SideNavbar({ filters }: { filters?: ICategories[] }) {
           </div>
         )}
 
-        {attributes.map((attr, a) => (
-          <>
-            {pathname !== '/c/groomity' && (
-              <div className={container} key={attr.slug}>
-                <h1 className={header}>{attr.name}</h1>
-                <div className={flexClass}>
-                  {attr.attributeValues.map((val) => (
-                    <TagButton
-                      key={val.slug}
-                      icon={
-                        attr.id === 2 && (
-                          <AiOutlineFieldNumber className="ml-1 text-lg" />
-                        )
-                      }
-                      onClick={() =>
-                        toggleParams('attributeId', String(val.id))
-                      }
-                      className={
-                        val.hexUrl
-                          ? 'text-black/70'
-                          : attr.id === 2
-                            ? 'pl-0!'
-                            : ''
-                      }
-                      hexUrl={val.hexUrl}
-                      aria-label={`Select ${val.value} attribute.`}
-                      active={attributeParams?.includes(String(val.id))}
-                    >
-                      {val.value}
-                    </TagButton>
-                  ))}
-                </div>
-              </div>
-            )}
-          </>
+        {attributes.map((attr) => (
+          <div className={container} key={attr.slug}>
+            <h1 className={header}>{attr.name}</h1>
+            <div className={flexClass}>
+              {attr.attributeValues.map((val) => (
+                <TagButton
+                  key={val.slug}
+                  icon={
+                    attr.id === 2 && (
+                      <AiOutlineFieldNumber className="ml-1 text-lg" />
+                    )
+                  }
+                  onClick={() => toggleParams('attributeId', String(val.id))}
+                  className={
+                    val.hexUrl ? 'text-black/70' : attr.id === 2 ? 'pl-0!' : ''
+                  }
+                  hexUrl={val.hexUrl}
+                  aria-label={`Select ${val.value} attribute.`}
+                  active={attributeParams?.includes(String(val.id))}
+                >
+                  {val.value}
+                </TagButton>
+              ))}
+            </div>
+          </div>
         ))}
       </nav>
     </aside>
