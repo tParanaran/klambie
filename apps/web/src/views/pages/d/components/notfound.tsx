@@ -17,7 +17,7 @@ export default function SearchNotFound({
         <p className="mt-3 tet-sm">
           The product you're looking for may be out of stock or no longer
           available, so look for suggested alternatives or search for similar
-          items.{' '}
+          items
         </p>
       </div>
       {children}

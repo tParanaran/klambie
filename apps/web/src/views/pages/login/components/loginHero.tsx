@@ -7,7 +7,7 @@ export default function LoginHero() {
   return (
     <div className="relative bg-black rounded-2xl h-80 sm:h-72 md:h-full">
       <Image
-        src={'/login-img.jpg'}
+        src={'/images/login-img.jpg'}
         alt={'Login image'}
         width={200}
         height={200}

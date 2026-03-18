@@ -1,6 +1,6 @@
 import { useAuthStore } from '@/store/authStore';
 import { usePathname } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react';
 import { IoNotifications } from 'react-icons/io5';
 import SearchBar from './components/searchBar';
 import LinkButton from '@/views/components/link';
@@ -53,13 +53,15 @@ export default function NavbarSearch() {
   return (
     <NavbarTopContainer>
       <div className="flex justify-between space-x-3 items-center">
-        <div
-          className="flex-2"
-          ref={modalRef}
-          onFocus={() => toggleDropdown('search')}
-        >
-          <SearchBar />
-        </div>
+        <Suspense>
+          <div
+            className="flex-2"
+            ref={modalRef}
+            onFocus={() => toggleDropdown('search')}
+          >
+            <SearchBar />
+          </div>
+        </Suspense>
         {!user?.id ? (
           <LinkButton
             linkName={pathname === '/login' ? 'Register' : 'Login'}

@@ -18,7 +18,7 @@ export default function ShopByCard({ products, tags }: IShopByCard) {
         </div>
       ) : (
         <SearchNotFound children={undefined} />
-      )}{' '}
+      )}
     </div>
   );
 }

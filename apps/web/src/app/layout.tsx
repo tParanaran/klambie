@@ -3,6 +3,8 @@ import 'swiper/css/bundle';
 import type { Metadata } from 'next';
 import { notoSans } from '@/utils/fonts';
 import AuthProvider from '@/provider/authProvider';
+import { Suspense } from 'react';
+import Loading from '@/views/components/loading';
 
 export const metadata: Metadata = {
   title: 'Klambie',
@@ -16,9 +18,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <AuthProvider>
-        <body className={notoSans.className}>{children}</body>
-      </AuthProvider>
+      <body className={notoSans.className}>
+        <AuthProvider>
+          {/* <Suspense fallback={<Loading />}></Suspense> */}
+          {children}
+        </AuthProvider>
+      </body>
     </html>
   );
 }

@@ -1,11 +1,11 @@
 import { IoSearch, IoPerson, IoNotifications } from 'react-icons/io5';
-import { useRef, useState } from 'react';
+import { Suspense, useRef, useState } from 'react';
 import AccountMenu from './accountMenu';
 import NotificationContent from '../notification';
-import SearchForm from './searchBar';
 import SearchRecent from './searchRecent';
 import AnchorIconDropdown from './dropdown';
 import BagMenu from './bagMenu';
+import SearchBar from './searchBar';
 
 interface IDropdown {
   search: boolean;
@@ -42,10 +42,13 @@ export default function IconDropdown() {
         Icon={IoSearch}
         label="Search"
       >
-        <div className="w-sm h-fit max-h-[75vh] overflow-y-auto scrollbar-hide p-3">
-          <SearchForm showSearch={dropdowns.search} />
-          <SearchRecent />
-        </div>
+        {' '}
+        <Suspense>
+          <div className="w-sm h-fit max-h-[75vh] overflow-y-auto scrollbar-hide p-3">
+            <SearchBar showSearch={dropdowns.search} />
+            <SearchRecent />
+          </div>{' '}
+        </Suspense>
       </AnchorIconDropdown>
 
       <BagMenu />
