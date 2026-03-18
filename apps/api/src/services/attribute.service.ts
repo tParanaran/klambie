@@ -1,6 +1,6 @@
 import { ProductHelper } from '@/helpers/product.helper';
 import { GenerateSlug } from '@/utils/slug';
-import { Tag } from 'generated/prisma/client';
+import { Brand, Tag } from 'generated/prisma/client';
 import { prisma } from 'lib/prisma';
 
 type DataInput = {
@@ -36,6 +36,19 @@ type CategoryInput = {
 const productHelper = new ProductHelper();
 
 export class AttributeService {
+  async getAllBrands(): Promise<
+    {
+      [k: string]: string | number | Date | null;
+    }[]
+  > {
+    const data = await prisma.brand.findMany();
+    const brands = data.map((item) => {
+      return Object.fromEntries(
+        Object.entries(item).filter(([_, value]) => value !== null),
+      );
+    });
+    return brands;
+  }
   async createBrand(input: DataInput): Promise<{ id: number }[]> {
     const result = await prisma.$transaction(async (tx) => {
       const brand = await productHelper.findOrCreate(tx.brand, input.data);
@@ -56,6 +69,26 @@ export class AttributeService {
     });
 
     return `Update ${brand.name} brand details successfully`;
+  }
+  async getAllAttributeValue() {
+    const attributesWithValues = await prisma.attribute.findMany({
+      include: {
+        attributeValues: true,
+      },
+    });
+
+    const attributes = attributesWithValues.map((attr) => ({
+      ...attr,
+      attributeValues: attr.attributeValues.map((val) => {
+        return Object.fromEntries(
+          Object.entries(val).filter(
+            ([key, v]) => v !== null && key !== 'attributeId',
+          ),
+        );
+      }),
+    }));
+
+    return attributes;
   }
   async createAttribute(input: DataInput): Promise<{ id: number }[]> {
     const result = await prisma.$transaction(async (tx) => {

@@ -4,16 +4,18 @@ import Link from 'next/link';
 import { ICategories } from '../../c/types';
 
 interface IDropdownCategory {
+  slug: string;
   item: ICategories;
   level?: number;
   index: number;
   openIndex: (number | null)[];
   setOpenIndex: React.Dispatch<React.SetStateAction<(number | null)[]>>;
   setSideModalItem: React.Dispatch<React.SetStateAction<ICategories | null>>;
-  setSlugModal: React.Dispatch<React.SetStateAction<string | null>>;
+  setSlugModal: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export default function DropdownCategory({
+  slug,
   item,
   level = 0,
   index,
@@ -55,6 +57,16 @@ export default function DropdownCategory({
       return newState.slice(0, level + 1);
     });
   };
+  if (!hasSub)
+    return (
+      <Link
+        href={`/c/${slug}/${item.slug}`}
+        className={`w-full transition-colors duration-200 p-3 md:py-2 lg:bg-black/5 lg:dark:bg-white/10 lg:rounded-lg flex justify-between ${isOpen ? 'bg-orange-800 text-[#ededed] font-bold' : ''}`}
+        aria-controls={`menu-${level}-${index}`}
+      >
+        <p className="ml-2">{item.name}</p>
+      </Link>
+    );
 
   return (
     <div className="relative lg:bg-black/5 lg:dark:bg-white/10 lg:rounded-lg">
@@ -112,6 +124,7 @@ export default function DropdownCategory({
           {item.subcategories!.map((subItem, subIndex) => (
             <DropdownCategory
               key={subItem.slug}
+              slug={item.slug}
               item={subItem}
               level={level + 1}
               index={subIndex}

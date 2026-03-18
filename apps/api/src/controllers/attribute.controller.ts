@@ -94,4 +94,22 @@ export class Attribute {
       next(error);
     }
   }
+  async getBrands(req: Request, res: Response, next: NextFunction) {
+    try {
+      const result = await attributeService.getAllBrands();
+
+      res.status(200).send(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+  async getAttribute(req: Request, res: Response, next: NextFunction) {
+    try {
+      const result = await attributeService.getAllAttributeValue();
+
+      res.status(200).send(result);
+    } catch (error) {
+      next(error);
+    }
+  }
 }

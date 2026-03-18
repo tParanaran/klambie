@@ -7,6 +7,7 @@ interface ITagButton {
   icon?: React.ReactNode;
   className?: string;
   active?: boolean;
+  hexUrl?: string;
 }
 
 export default function TagButton({
@@ -16,9 +17,10 @@ export default function TagButton({
   icon,
   className = '',
   active,
+  hexUrl,
 }: ITagButton) {
   const baseStyle =
-    'px-3 py-1 text-sm rounded-full mt-1 text-[#ededed] flex items-center cursor-pointer';
+    'px-2 py-1 text-sm rounded-full mt-1 text-[#ededed] flex items-center cursor-pointer';
 
   const content = (
     <>
@@ -42,6 +44,7 @@ export default function TagButton({
     <button
       onClick={onClick}
       className={`${baseStyle} ${className} ${active ? 'bg-[#FF4500]' : 'bg-orange-800 hover:bg-orange-700'}`}
+      style={{ backgroundColor: `${hexUrl}` }}
     >
       {content}
     </button>

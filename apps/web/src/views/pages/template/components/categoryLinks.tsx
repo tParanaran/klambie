@@ -3,9 +3,11 @@ import React from 'react';
 import AnchorIconDropdown from './dropdown';
 import Link from 'next/link';
 import CategoryContent from './categoryContent';
-import { categories } from '@/utils/categories';
+import useAttribute from '../../c/hooks/useAttribute';
 
 export default function CategoryLinks() {
+  const { categories } = useAttribute();
+
   const initialDropdownState = categories.reduce(
     (acc, item) => {
       acc[item.name] = false;
@@ -56,15 +58,15 @@ export default function CategoryLinks() {
             align={c === 0 ? 'left' : 'center'}
           >
             <div className="p-2 w-2xl max-h-[75vh] min-h-96 h-fit overflow-y-auto scrollbar-hide">
-              <div className="flex p-3 space-x-3 items-center">
-                <h1 className="font-semibold text-lg">{cat.name}</h1>
-                <Link
-                  href={`/d/${cat.slug}`}
-                  className="text-sm text-orange-800 dark:text-orange-600"
-                >
-                  Show All
-                </Link>
-              </div>
+              {' '}
+              <Link href={`/d/${cat.slug}`}>
+                <div className="flex space-x-3 items-center p-3">
+                  <h1 className="font-semibold text-lg">{cat.name}</h1>
+                  <p className="text-sm text-orange-800 dark:text-orange-600">
+                    Show All
+                  </p>
+                </div>
+              </Link>
               <div className="ml-2">
                 <CategoryContent
                   navLinks={cat.subcategories}

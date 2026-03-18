@@ -23,7 +23,9 @@ export default function CategoryContent({
   const pathname = usePathname();
   const [openIndex, setOpenIndex] = useState<(number | null)[]>([]);
   const [sideModalItem, setSideModalItem] = useState<ICategories | null>(null);
-  const [slugModal, setSlugModal] = useState<string | null>(null);
+  const [slugModal, setSlugModal] = useState<string>(slug || '');
+
+  console.log(slugModal);
 
   const handleClickOutside = () => {
     setOpenIndex([]);
@@ -47,6 +49,7 @@ export default function CategoryContent({
       >
         {navLinks?.map((item, i) => (
           <DropdownCategory
+            slug={slugModal}
             key={item.slug}
             item={item}
             level={level}

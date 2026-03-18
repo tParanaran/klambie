@@ -17,6 +17,15 @@ export interface ITag {
   slug: string;
 }
 
+export interface IBrand {
+  slug: string;
+  name: string;
+  id: number;
+  logo?: string;
+  bio?: string;
+  createdAt: string;
+}
+
 export interface IProducts {
   name: string;
   appliedPromotion?: IAppliedPromotion[];

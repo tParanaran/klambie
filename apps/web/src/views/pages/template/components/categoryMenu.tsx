@@ -3,9 +3,10 @@ import { useEffect, useRef, useState } from 'react';
 import { BiCategory } from 'react-icons/bi';
 import AnchoredModalContainer from '@/views/components/anchoredModalContainer';
 import CategoryContent from './categoryContent';
-import { categories } from '@/utils/categories';
+import useAttribute from '../../c/hooks/useAttribute';
 
 export default function CategoryMenu() {
+  const { categories } = useAttribute();
   const menuRef = useRef<HTMLButtonElement>(null);
   const [showMenu, setShowMenu] = useState<boolean>(false);
 

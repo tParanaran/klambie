@@ -10,9 +10,10 @@ import { useRef, useState } from 'react';
 import AnchoredModalContainer from '@/views/components/anchoredModalContainer';
 import CategoryContent from './components/categoryContent';
 import useMobileBehavior from './hooks/useMobile';
-import { categories } from '@/utils/categories';
+import useAttribute from '../c/hooks/useAttribute';
 
 export default function NavbarMobile() {
+  const { categories } = useAttribute();
   const categoryRef = useRef<HTMLButtonElement>(null);
   const [showCategory, setShowCategory] = useState<boolean>(false);
   const className = 'flex flex-col items-center justify-center text-xs';

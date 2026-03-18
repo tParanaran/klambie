@@ -1,7 +1,7 @@
 import { ICategories } from '@/views/pages/c/types';
 
 // Example: slug can be a kebab-case version of the name
-export const categories: ICategories[] = [
+export const initialCategories: ICategories[] = [
   {
     id: 21,
     name: 'Men',
