@@ -33,13 +33,9 @@ export class Product {
   }
   async fetchAllProducts(req: Request, res: Response, next: NextFunction) {
     try {
-      const tag = req.body?.tag;
-      const slugs = req.body.slugs;
-      const result = await productService.getAllProducts(
-        slugs,
-        tag,
-        req.user?.id,
-      );
+      const user = req.user?.id;
+
+      const result = await productService.getAllProducts({ ...req.body, user });
 
       if (!result) {
         return res.status(404).json({

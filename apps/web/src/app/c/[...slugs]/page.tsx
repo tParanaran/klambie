@@ -1,17 +1,34 @@
 import axiosInstanceServer from '@/lib/axios/server';
+import { normalizeParams } from '@/utils/params';
 import ErrorMessage from '@/views/components/error';
 import CategoryView from '@/views/pages/c';
+
+interface IsearchParams {
+  tag?: string;
+  brand?: string | string[];
+  categoryId?: string | string[];
+  attributeId?: string | string[];
+}
 
 export default async function Categories({
   params,
   searchParams,
 }: {
   params: { slugs: string[] };
-  searchParams: { tag: string };
+  searchParams: IsearchParams;
 }) {
   const { slugs } = await params;
-  const { tag } = await searchParams;
+  const { tag, brand, categoryId, attributeId } = await searchParams;
 
+  const brands = normalizeParams(brand);
+  const categoryIds = normalizeParams(categoryId, true);
+  const attributeIds = normalizeParams(attributeId, true);
+
+  console.log(brands);
+  console.log(categoryIds);
+  console.log(attributeIds);
+
+  let includeDescendants = categoryIds.length > 0 ? false : true;
   let products = null;
   let filters = null;
   let error;
@@ -20,6 +37,10 @@ export default async function Categories({
     const { data } = await axiosInstanceServer.post(`/product/all`, {
       slugs,
       tag,
+      brands,
+      categoryIds,
+      attributeIds,
+      includeDescendants,
     });
 
     products = data.products;

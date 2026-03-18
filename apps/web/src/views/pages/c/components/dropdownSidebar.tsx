@@ -63,7 +63,16 @@ export default function DropdownSidebar({
       <span className="inline-block mr-1 mb-1">
         <TagButton
           key={item.slug}
-          onClick={() => toggleParams('categoryId', String(item.id))}
+          href={
+            item.level && item.level < 4
+              ? `${pathname}/${item.slug}`
+              : undefined
+          }
+          onClick={
+            item.level && item.level > 3
+              ? () => toggleParams('categoryId', String(item.id))
+              : undefined
+          }
           aria-label={`Select ${item.name} filter`}
           active={categoryId?.includes(String(item.id))}
         >
@@ -106,9 +115,7 @@ export default function DropdownSidebar({
             {item.subcategories?.map((sub) => (
               <TagButton
                 key={sub.slug}
-                onClick={() =>
-                  toggleParams('categoryId', String(sub.id), item.slug)
-                }
+                href={`${pathname}/${item.slug}/${sub.slug}`}
                 aria-label={`Select ${sub.name} filter`}
                 active={categoryId?.includes(String(sub.id))}
               >

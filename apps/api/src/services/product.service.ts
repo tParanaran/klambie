@@ -8,6 +8,7 @@ import {
   Tag,
   VariantProduct,
   Filters,
+  GetAllProducts,
 } from '@/types/product.type';
 import { prisma } from 'lib/prisma';
 import { GenerateSlug } from '@/utils/slug';
@@ -307,21 +308,39 @@ export class ProductService {
     );
     return { variants, hexUrl, tag, category, brand, img };
   }
-  async getAllProducts(
-    slugs: string[],
-    tag?: string,
-    user?: number,
+  async getAllProducts({
+    slugs,
+    tag,
+    user,
     includeDescendants = true,
-  ): Promise<{ products: Products[]; filters: Filters[] } | null> {
+    brands,
+    attributeIds,
+    categoryIds,
+  }: GetAllProducts): Promise<{
+    products: Products[];
+    filters: Filters[];
+  } | null> {
     const hierarchyId = await attributeService.getAllHierarchyIds(slugs);
+
     if (!hierarchyId) return null;
 
     let hierarchyIds: number[] = [hierarchyId];
 
     if (includeDescendants) {
-      hierarchyIds =
+      const descendants =
         await attributeService.getAllDescendantHierarchyIds(hierarchyId);
+      hierarchyIds =
+        descendants.length > 0 ? [hierarchyId, ...descendants] : [hierarchyId];
     }
+
+    if (categoryIds && categoryIds.length > 0) {
+      hierarchyIds = Array.from(new Set([...hierarchyIds, ...categoryIds]));
+    }
+
+    console.log('Hierarchy slug:', slugs);
+    console.log('Hierarchy ID:', hierarchyId);
+    console.log('All hierarchy IDs (including descendants):', hierarchyIds);
+    console.log(categoryIds);
 
     const data = await prisma.product.findMany({
       where: {
@@ -339,6 +358,22 @@ export class ProductService {
             },
           },
         }),
+        ...(brands && brands.length > 0
+          ? { brand: { slug: { in: brands } } }
+          : {}),
+        ...(attributeIds && attributeIds.length > 0
+          ? {
+              productVariants: {
+                some: {
+                  productVariantAttributes: {
+                    some: {
+                      attributeValueId: { in: attributeIds },
+                    },
+                  },
+                },
+              },
+            }
+          : {}),
       },
       select: {
         id: true,
@@ -386,8 +421,8 @@ export class ProductService {
           hasDiscount,
           appliedPromotion,
           brand: product?.brand?.brandName ?? {
-            name: 'No Brand',
-            slug: 'no-brand',
+            name: 'Other',
+            slug: 'other',
           },
           hexUrl: product?.hexUrl,
           categories: product?.category?.categoriesName,
@@ -454,8 +489,8 @@ export class ProductService {
       slug,
       attributes: productAttributes.map((atrr) => atrr.attribute),
       brand: products?.brand?.brandName ?? {
-        name: 'No Brand',
-        slug: 'no-brand',
+        name: 'Other',
+        slug: 'other',
       },
       categories: products?.category?.categoriesName,
       tags: products?.tag?.tagsName,

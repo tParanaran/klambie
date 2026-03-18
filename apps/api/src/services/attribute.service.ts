@@ -1,4 +1,5 @@
 import { ProductHelper } from '@/helpers/product.helper';
+import { Filters } from '@/types/product.type';
 import { GenerateSlug } from '@/utils/slug';
 import { Brand, Tag } from 'generated/prisma/client';
 import { prisma } from 'lib/prisma';
@@ -236,7 +237,7 @@ export class AttributeService {
 
     return descendants.map((d) => d.id);
   }
-  async getCategoryFilters(categoryId: number) {
+  async getCategoryFilters(categoryId: number): Promise<Filters[]> {
     const parent = await prisma.categoryHierarchy.findUnique({
       where: { id: categoryId },
       select: {
@@ -273,6 +274,7 @@ export class AttributeService {
     const root = {
       id: categoryId,
       name: parent.category.name,
+      level: parent.level,
       slug: parent.category.slug,
       subcategories: [],
     };
@@ -282,6 +284,7 @@ export class AttributeService {
       const node = {
         id: item.id,
         name: item.category.name,
+        level: item.level,
         slug: item.category.slug,
         subcategories: [],
       };
@@ -296,7 +299,7 @@ export class AttributeService {
 
     return root.subcategories;
   }
-  async getAllCategoryTree() {
+  async getAllCategoryTree(): Promise<Filters[]> {
     const categories = await prisma.categoryHierarchy.findMany({
       select: {
         id: true,
@@ -308,7 +311,7 @@ export class AttributeService {
     });
 
     const pathMap = new Map<string, any>();
-    const roots: any[] = [];
+    const roots: Filters[] = [];
 
     for (const item of categories) {
       const node = {
