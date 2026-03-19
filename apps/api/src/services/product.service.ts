@@ -16,6 +16,7 @@ import { SKU } from '@/utils/sku';
 import { PromotionService } from './promotion.service';
 import { AttributeService } from './attribute.service';
 import FlattenCategories from '@/utils/categories';
+import Decimal from 'decimal.js';
 
 const sku = new SKU();
 const promotionService = new PromotionService();
@@ -316,6 +317,8 @@ export class ProductService {
     brands,
     attributeIds,
     categoryIds,
+    order,
+    sort,
   }: GetAllProducts): Promise<{
     products: Products[];
     filters: Filters[];
@@ -337,10 +340,20 @@ export class ProductService {
       hierarchyIds = Array.from(new Set([...hierarchyIds, ...categoryIds]));
     }
 
-    console.log('Hierarchy slug:', slugs);
-    console.log('Hierarchy ID:', hierarchyId);
-    console.log('All hierarchy IDs (including descendants):', hierarchyIds);
-    console.log(categoryIds);
+    const prismaOrder: any = {};
+    if (sort) {
+      switch (sort) {
+        case 'price':
+          prismaOrder.basePrice = order || 'asc';
+          break;
+        case 'latest':
+          prismaOrder.createdAt = order || 'desc';
+          break;
+        // case 'rating':
+        //   prismaOrder.rating = order || 'desc';
+        //   break; NEXT FEATURE
+      }
+    }
 
     const data = await prisma.product.findMany({
       where: {
@@ -388,6 +401,7 @@ export class ProductService {
           },
         },
       },
+      orderBy: prismaOrder,
     });
 
     if (!data) return null;
@@ -431,6 +445,17 @@ export class ProductService {
         };
       }),
     );
+
+    if (sort === 'discount') {
+      products.sort((a, b) => {
+        const aDiscount = new Decimal(a.price.discountApplied);
+        const bDiscount = new Decimal(b.price.discountApplied);
+
+        return order === 'asc'
+          ? aDiscount.minus(bDiscount).toNumber()
+          : bDiscount.minus(aDiscount).toNumber();
+      });
+    }
 
     const filters = await attributeService.getCategoryFilters(hierarchyId);
 

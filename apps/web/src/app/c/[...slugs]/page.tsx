@@ -8,6 +8,8 @@ interface IsearchParams {
   brand?: string | string[];
   categoryId?: string | string[];
   attributeId?: string | string[];
+  order?: string;
+  sort?: string;
 }
 
 export default async function Categories({
@@ -18,15 +20,12 @@ export default async function Categories({
   searchParams: IsearchParams;
 }) {
   const { slugs } = await params;
-  const { tag, brand, categoryId, attributeId } = await searchParams;
+  const { tag, brand, categoryId, attributeId, order, sort } =
+    await searchParams;
 
   const brands = normalizeParams(brand);
   const categoryIds = normalizeParams(categoryId, true);
   const attributeIds = normalizeParams(attributeId, true);
-
-  console.log(brands);
-  console.log(categoryIds);
-  console.log(attributeIds);
 
   let includeDescendants = categoryIds.length > 0 ? false : true;
   let products = null;
@@ -36,6 +35,8 @@ export default async function Categories({
   try {
     const { data } = await axiosInstanceServer.post(`/product/all`, {
       slugs,
+      sort,
+      order,
       tag,
       brands,
       categoryIds,

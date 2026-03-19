@@ -1,5 +1,4 @@
 'use client';
-import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { IoChevronDown } from 'react-icons/io5';
 import { ICategories } from '../types';
@@ -58,18 +57,16 @@ export default function DropdownSidebar({
     });
   }, [isOpen, openIndex, hasSub]);
 
+  console.log(item.level);
+
   if (!hasSub)
     return (
       <span className="inline-block mr-1 mb-1">
         <TagButton
           key={item.slug}
-          href={
-            item.level && item.level < 4
-              ? `${pathname}/${item.slug}`
-              : undefined
-          }
+          href={item.level > 4 ? `${pathname}/${item.slug}` : undefined}
           onClick={
-            item.level && item.level > 3
+            item.level > 3
               ? () => toggleParams('categoryId', String(item.id))
               : undefined
           }
@@ -115,7 +112,7 @@ export default function DropdownSidebar({
             {item.subcategories?.map((sub) => (
               <TagButton
                 key={sub.slug}
-                href={`${pathname}/${item.slug}/${sub.slug}`}
+                href={`${pathname}/${item.slug}${sub.level < 4 ? `/${sub.slug}` : `?categoryId=${sub.id}`}`}
                 aria-label={`Select ${sub.name} filter`}
                 active={categoryId?.includes(String(sub.id))}
               >

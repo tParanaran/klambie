@@ -36,6 +36,26 @@ export function useQueryParams() {
     [searchParams, pathname, router],
   );
 
+  const createParams = useCallback(
+    (values: Record<string, string>, options?: { append?: boolean }) => {
+      const params = new URLSearchParams(searchParams.toString());
+
+      Object.entries(values).forEach(([key, value]) => {
+        if (options?.append) {
+          params.append(key, value);
+        } else {
+          params.set(key, value);
+        }
+      });
+
+      const newUrl = params.toString()
+        ? `${pathname}?${params.toString()}`
+        : pathname;
+      router.replace(newUrl);
+    },
+    [searchParams, pathname, router],
+  );
+
   const createNewRouteParams = useCallback(
     (key: string, value: string, newPath: string) => {
       const params = new URLSearchParams();
@@ -127,5 +147,6 @@ export function useQueryParams() {
     getParams,
     getAllParams,
     createNewRouteParams,
+    createParams,
   };
 }

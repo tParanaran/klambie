@@ -132,4 +132,6 @@ export type GetAllProducts = {
   brands?: string[];
   attributeIds?: number[];
   categoryIds?: number[];
+  sort?: string;
+  order?: string;
 };

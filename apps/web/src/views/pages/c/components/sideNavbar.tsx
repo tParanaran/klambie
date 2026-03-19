@@ -18,8 +18,7 @@ const flexClass =
 
 export default function SideNavbar({ filters }: { filters?: ICategories[] }) {
   const [openIndex, setOpenIndex] = useState<number[][]>([]);
-  const { pathname, getAllParams, deleteParams, toggleParams } =
-    useQueryParams();
+  const { getAllParams, deleteParams, toggleParams } = useQueryParams();
   const { brands, attributes } = useAttribute();
 
   const categoryParams = getAllParams('categoryId');
