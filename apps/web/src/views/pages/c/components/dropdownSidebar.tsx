@@ -57,8 +57,6 @@ export default function DropdownSidebar({
     });
   }, [isOpen, openIndex, hasSub]);
 
-  console.log(item.level);
-
   if (!hasSub)
     return (
       <span className="inline-block mr-1 mb-1">

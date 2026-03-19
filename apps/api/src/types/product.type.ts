@@ -136,4 +136,5 @@ export type GetAllProducts = {
   order?: string;
   limit?: number;
   page?: number;
+  price?: string;
 };

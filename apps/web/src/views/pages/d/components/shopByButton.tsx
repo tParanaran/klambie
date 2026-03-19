@@ -1,11 +1,12 @@
 'use client';
 import { antonFont } from '@/utils/fonts';
-import { ITag } from '../../p/types/product.types';
 import { useQueryParams } from '../../c/hooks/useQueryParams';
 import Link from 'next/link';
+import useAttribute from '../../c/hooks/useAttribute';
 
-export default function ShopByButton({ tags }: { tags: ITag[] }) {
+export default function ShopByButton() {
   const { pathname, createLinkParams, getParams } = useQueryParams();
+  const { tags } = useAttribute();
 
   return (
     <main className="my-3">
@@ -26,7 +27,7 @@ export default function ShopByButton({ tags }: { tags: ITag[] }) {
           All
         </Link>
 
-        {tags?.map((tag, idx) => (
+        {tags.map((tag, idx) => (
           <Link
             href={createLinkParams('tag', tag.slug, { append: false })}
             aria-label={`${tag} Product`}

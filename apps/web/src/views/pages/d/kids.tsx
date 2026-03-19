@@ -1,15 +1,11 @@
 import ErrorMessage from '@/views/components/error';
 import ShopByCard from './components/shopByCard';
-import IDepartementView from './types';
+import { IDepartementView } from './types';
 
-export default async function KidsView({
-  products,
-  tags,
-  error,
-}: IDepartementView) {
+export default async function KidsView({ products, error }: IDepartementView) {
   return (
     <div>
-      <ShopByCard products={products} tags={tags} />
+      <ShopByCard products={products} />
       {error && <ErrorMessage error={error} />}
     </div>
   );

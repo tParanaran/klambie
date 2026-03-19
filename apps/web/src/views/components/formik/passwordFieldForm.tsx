@@ -1,17 +1,11 @@
 import { Field } from 'formik';
-import { ChangeEvent, useState } from 'react';
+import { useState } from 'react';
 import ErrorForm from './errorForm';
 import { IoEyeOffOutline, IoEyeOutline } from 'react-icons/io5';
+import { IHandleChange } from './textFieldForm';
 
 interface IFieldForm {
-  handleChange: {
-    (e: ChangeEvent<any>): void;
-    <T = string | ChangeEvent<any>>(
-      field: T,
-    ): T extends React.ChangeEvent<any>
-      ? void
-      : (e: string | React.ChangeEvent<any>) => void;
-  };
+  handleChange: IHandleChange;
   values: string;
 }
 

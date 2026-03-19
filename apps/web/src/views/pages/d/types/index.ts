@@ -1,7 +1,10 @@
-import { IProducts, ITag } from '../../p/types/product.types';
+import { IProducts } from '../../p/types/product.types';
 
-export default interface IDepartementView {
+export interface IDepartementView {
   products: IProducts[];
-  tags: ITag[];
   error?: string;
+}
+
+export interface IShopByCard {
+  products: IProducts[];
 }

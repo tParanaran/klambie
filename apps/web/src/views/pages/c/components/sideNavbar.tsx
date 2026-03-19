@@ -9,6 +9,7 @@ import DropdownSidebar from './dropdownSidebar';
 import TagButton from '@/views/components/tagButton';
 import useAttribute from '../hooks/useAttribute';
 import TagParams from './tagParams';
+import PriceFilterForm from './priceFrom';
 
 const container =
   'p-1.5 md:p-2 bg-black/5 dark:bg-white/10 rounded-2xl shadow-xs text-sm';
@@ -18,12 +19,16 @@ const flexClass =
 
 export default function SideNavbar({ filters }: { filters?: ICategories[] }) {
   const [openIndex, setOpenIndex] = useState<number[][]>([]);
-  const { getAllParams, deleteParams, toggleParams } = useQueryParams();
+  const { getAllParams, deleteParams, toggleParams, getParams } =
+    useQueryParams();
   const { brands, attributes } = useAttribute();
 
   const categoryParams = getAllParams('categoryId');
   const brandParams = getAllParams('brand');
   const attributeParams = getAllParams('attributeId');
+  const priceParams = getParams('price');
+
+  console.log(priceParams);
 
   const selectedCategories = filters?.filter((item) =>
     categoryParams?.includes(String(item.id)),
@@ -40,7 +45,8 @@ export default function SideNavbar({ filters }: { filters?: ICategories[] }) {
   const isFiltered =
     (selectedCategories && selectedCategories?.length > 0) ||
     selectedBrands.length > 0 ||
-    selectedAttributes.length > 0;
+    selectedAttributes.length > 0 ||
+    priceParams;
 
   return (
     <aside className="w-50 md:w-3xs lg:w-2xs mb-5 hidden sm:block">
@@ -49,6 +55,17 @@ export default function SideNavbar({ filters }: { filters?: ICategories[] }) {
           <div className={container}>
             <h1 className={header}>Applied Filters</h1>
             <div className={flexClass}>
+              {priceParams && (
+                <TagButton
+                  onClick={() => deleteParams('price', priceParams)}
+                  icon={<IoClose className="ml-1 text-lg" />}
+                  className="pr-2! pl-0!"
+                  aria-label={`Remove ${priceParams} filter`}
+                >
+                  Rp {priceParams}
+                </TagButton>
+              )}
+
               {selectedCategories?.map((item) => (
                 <TagButton
                   key={item.slug}
@@ -88,9 +105,7 @@ export default function SideNavbar({ filters }: { filters?: ICategories[] }) {
         )}
         <div className={container}>
           <h1 className={header}>Tags</h1>
-          <div className={flexClass}>
-            <TagParams />
-          </div>
+          <TagParams />
         </div>
         <div className={container}>
           <h1 className={header}>Brands</h1>
@@ -112,7 +127,7 @@ export default function SideNavbar({ filters }: { filters?: ICategories[] }) {
         {filters && filters.length > 0 && (
           <div className={container}>
             <h1 className={header}>Categories</h1>
-            {filters?.map((item, i) => (
+            {filters.map((item, i) => (
               <DropdownSidebar
                 key={item.slug}
                 item={item}
@@ -123,6 +138,13 @@ export default function SideNavbar({ filters }: { filters?: ICategories[] }) {
             ))}
           </div>
         )}
+
+        <div className={container}>
+          <h1 className={header}>Price</h1>
+          <div className={flexClass}>
+            <PriceFilterForm />
+          </div>
+        </div>
 
         {attributes.map((attr) => (
           <div className={container} key={attr.slug}>

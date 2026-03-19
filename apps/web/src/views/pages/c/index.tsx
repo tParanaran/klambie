@@ -22,8 +22,6 @@ export default function CategoryView({
 }: ICategoryView) {
   const { isMobile } = useDetectIsMobile({ widthScreen: 1024, maxWitdh: 850 });
 
-  console.log(products);
-
   return (
     <div>
       <div className="my-2 flex lg:items-center items-end">

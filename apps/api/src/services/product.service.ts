@@ -321,6 +321,7 @@ export class ProductService {
     sort,
     limit,
     page,
+    price,
   }: GetAllProducts): Promise<{
     products: Products[];
     filters: Filters[];
@@ -343,6 +344,19 @@ export class ProductService {
       hierarchyIds = Array.from(new Set([...hierarchyIds, ...categoryIds]));
     }
 
+    let priceFilter = {};
+
+    if (price) {
+      const [min, max] = price.split('-').map(Number);
+
+      priceFilter = {
+        basePrice: {
+          ...(min ? { gte: min } : {}),
+          ...(max ? { lte: max } : {}),
+        },
+      };
+    }
+
     const prismaOrder: any = {};
     if (sort) {
       switch (sort) {
@@ -359,6 +373,7 @@ export class ProductService {
     }
 
     const whereFilters: any = {
+      ...priceFilter,
       productCategories: {
         some: {
           categoryHierarchyId: { in: hierarchyIds },
@@ -459,21 +474,18 @@ export class ProductService {
     const totalItems = await prisma.product.count({
       where: whereFilters,
     });
-
-    if (sort === 'discount') {
-      products.sort((a, b) => {
-        const aDiscount = new Decimal(a.price.discountApplied);
-        const bDiscount = new Decimal(b.price.discountApplied);
-
-        return order === 'asc'
-          ? aDiscount.minus(bDiscount).toNumber()
-          : bDiscount.minus(aDiscount).toNumber();
-      });
-    }
-
     const filters = await attributeService.getCategoryFilters(hierarchyId);
 
-    console.log(products);
+    if (sort === 'discount') {
+      const discountedProducts = products.filter(
+        (product) => product.hasDiscount,
+      );
+      return {
+        products: discountedProducts,
+        filters,
+        totalItems: discountedProducts.length,
+      };
+    }
 
     return { products, filters, totalItems };
   }

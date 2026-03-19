@@ -25,8 +25,6 @@ export default function CategoryContent({
   const [sideModalItem, setSideModalItem] = useState<ICategories | null>(null);
   const [slugModal, setSlugModal] = useState<string>(slug || '');
 
-  console.log(slugModal);
-
   const handleClickOutside = () => {
     setOpenIndex([]);
     setSideModalItem(null);

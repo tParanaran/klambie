@@ -12,6 +12,7 @@ interface IsearchParams {
   sort?: string;
   page?: string;
   limit?: string;
+  price?: string;
 }
 
 export default async function Categories({
@@ -22,8 +23,17 @@ export default async function Categories({
   searchParams: IsearchParams;
 }) {
   const { slugs } = await params;
-  const { tag, brand, categoryId, attributeId, order, sort, limit, page } =
-    await searchParams;
+  const {
+    tag,
+    brand,
+    categoryId,
+    attributeId,
+    order,
+    sort,
+    limit,
+    page,
+    price,
+  } = await searchParams;
 
   const brands = normalizeParams(brand);
   const categoryIds = normalizeParams(categoryId, true);
@@ -47,6 +57,7 @@ export default async function Categories({
       includeDescendants,
       limit: parseInt(limit as string),
       page: parseInt(page as string),
+      price,
     });
 
     products = data.products;

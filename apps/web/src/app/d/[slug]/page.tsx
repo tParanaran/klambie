@@ -16,8 +16,7 @@ export default async function Department({
   const { slug } = await params;
   const { tag } = await searchParams;
 
-  let products = null;
-  let tags = null;
+  let products = [];
   let error;
 
   try {
@@ -25,15 +24,12 @@ export default async function Department({
       tag,
       slugs: [slug],
     });
-    const res = await axiosInstanceServer.get('/attribute/tag');
     products = data.products;
-    tags = res.data;
   } catch (error: any) {
-    products = null;
-    tags = null;
+    products = [];
     error = error.message || 'Something went wrong while fetching data.';
   }
-  const viewProps = { products, tags, error };
+  const viewProps = { products, error };
 
   switch (slug) {
     case 'men':

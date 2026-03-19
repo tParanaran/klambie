@@ -1,41 +1,36 @@
 import { Field } from 'formik';
 import ErrorForm from './errorForm';
-import { ChangeEvent } from 'react';
-
-export interface IHandleChange {
-  (e: ChangeEvent<any>): void;
-  <T = string | ChangeEvent<any>>(
-    field: T,
-  ): T extends React.ChangeEvent<any>
-    ? void
-    : (e: string | React.ChangeEvent<any>) => void;
-}
+import { IHandleChange } from './textFieldForm';
 
 interface IFieldForm {
   handleChange: IHandleChange;
-  values: string;
+  values: number | String;
   name: string;
-  label: string;
+  label?: string;
+  sortLabel?: string;
 }
 
-export default function TextFieldForm({
+export default function NumberFieldForm({
   handleChange,
   values,
   name,
   label,
+  sortLabel,
 }: IFieldForm) {
   return (
-    <div className="flex flex-col mt-3 grow">
-      <label htmlFor={name} className="ml-4">
-        {label}
-      </label>
+    <div className="flex flex-col mt-1.5">
+      {label && (
+        <label htmlFor={name} className="ml-4">
+          {label}
+        </label>
+      )}
       <Field
         type="text"
         id={name}
         name={name}
         onChange={handleChange}
         values={values}
-        placeholder={`Type your ${label.toLowerCase()} here`}
+        placeholder={`${label ? `Type your ${label.toLowerCase()} here` : sortLabel}`}
         className="appearance-none bg-black/10 dark:bg-white/10 rounded-full py-3 px-4 leading-tight focus:outline-none focus:bg-background focus:border focus:border-gray-300 placeholder:text-sm"
       />
       <ErrorForm name={name} />

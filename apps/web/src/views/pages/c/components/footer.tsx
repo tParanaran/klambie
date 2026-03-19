@@ -10,22 +10,22 @@ export default function Footer() {
 
   return (
     <div className=" bg-black/5 dark:bg-white/10 rounded-2xl py-5 mb-5 w-full flex items-center">
-      <div className="w-full lg:w-1/2 flex space-x-3 flex-wrap items-center justify-around mx-auto">
+      <div className="w-full lg:w-1/2 flex space-x-2 flex-wrap items-center justify-around mx-auto text-black/50 text-sm">
         <Link
-          className="p-3"
+          className="p-2"
           href={`/c/${matchCategory[0].slug}`}
           aria-label={matchCategory[0].slug}
         >
-          <p className="text-xs">{matchCategory[0].name}`s Home</p>
+          <p>{matchCategory[0].name}`s Home</p>
         </Link>
         {matchCategory[0].subcategories?.map((cat) => (
           <Link
             key={cat.slug}
-            className="p-3"
+            className="p-2"
             href={`/c/${matchCategory[0].slug}/${cat.slug}`}
             aria-label={cat.name}
           >
-            <p className="text-xs">
+            <p>
               {matchCategory[0].name}`s {cat.name}
             </p>
           </Link>
