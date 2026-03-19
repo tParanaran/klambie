@@ -29,7 +29,11 @@ export default function CategoryView({
       </div>
 
       <div className="flex gap-2 min-h-screen">
-        <SideNavbar filters={filters} />
+        <aside className="w-50 md:w-3xs lg:w-2xs mb-5 hidden sm:block">
+          <nav className="sticky top-24 max-h-[calc(100vh-5rem)] overflow-y-auto space-y-3 scrollbar-hide">
+            <SideNavbar filters={filters} />
+          </nav>
+        </aside>
 
         <div className="flex-1 flex flex-col">
           {products.length > 0 ? (

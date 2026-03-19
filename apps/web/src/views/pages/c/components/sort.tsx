@@ -1,7 +1,11 @@
 import TagButton from '@/views/components/tagButton';
-import { IoChevronDown } from 'react-icons/io5';
+import { IoChevronDown, IoFilter } from 'react-icons/io5';
 import { RiDiscountPercentLine } from 'react-icons/ri';
 import { useQueryParams } from '../hooks/useQueryParams';
+
+interface ISortProduct {
+  handlerModal: () => void;
+}
 
 const sortOptions = [
   {
@@ -22,7 +26,7 @@ const sortOptions = [
   },
 ];
 
-export default function SortProduct() {
+export default function SortProduct({ handlerModal }: ISortProduct) {
   const { getParams, createParams, deleteParams } = useQueryParams();
   const currentOrder = getParams('order');
   const currentSort = getParams('sort');
@@ -46,10 +50,21 @@ export default function SortProduct() {
 
   return (
     <div className="flex space-x-1 items-center">
+      <div className="block sm:hidden">
+        <button
+          className="px-3 py-1 text-sm rounded-full mt-1 text-[#ededed] flex items-center cursor-pointer bg-orange-800"
+          onClick={handlerModal}
+          aria-label="Filter modal"
+        >
+          <IoFilter className="text-lg mr-2" />
+          Filter
+        </button>
+      </div>
       {sortOptions.map((sort, s) => (
         <TagButton
           key={s}
           active={currentSort === sort.value}
+          className="sm:px-3!"
           icon={
             s === 0 ? (
               <RiDiscountPercentLine className="text-lg" />

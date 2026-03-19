@@ -26,7 +26,7 @@ export default function Pagination({ totalItems, limit = 1 }: IPagination) {
 
   useEffect(() => {
     if (currentPage && pageRef.current) {
-      const navbarHeight = 40;
+      const navbarHeight = 0;
       if (window.scrollY <= navbarHeight) {
         window.scrollTo({ top: navbarHeight, behavior: 'smooth' });
       }

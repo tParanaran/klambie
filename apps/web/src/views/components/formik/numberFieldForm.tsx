@@ -18,7 +18,7 @@ export default function NumberFieldForm({
   sortLabel,
 }: IFieldForm) {
   return (
-    <div className="flex flex-col mt-1.5">
+    <div className="flex flex-col mt-1.5 grow">
       {label && (
         <label htmlFor={name} className="ml-4">
           {label}
@@ -31,7 +31,7 @@ export default function NumberFieldForm({
         onChange={handleChange}
         values={values}
         placeholder={`${label ? `Type your ${label.toLowerCase()} here` : sortLabel}`}
-        className="appearance-none bg-black/10 dark:bg-white/10 rounded-full py-3 px-4 leading-tight focus:outline-none focus:bg-background focus:border focus:border-gray-300 placeholder:text-sm"
+        className="appearance-none bg-black/10 dark:bg-white/10 rounded-full py-3 px-4 leading-tight focus:outline-none focus:bg-background focus:border focus:border-gray-300 placeholder:text-xs"
       />
       <ErrorForm name={name} />
     </div>

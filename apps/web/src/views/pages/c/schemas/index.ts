@@ -9,6 +9,6 @@ export const PriceFilterSchema = object({
   priceTo: number()
     .typeError('Must be a number')
     .label('Price to')
-    .min(ref('priceFrom'), 'Cannot be less than Price From')
+    .min(ref('priceFrom'), 'Must be more than')
     .required('Required'),
 });
