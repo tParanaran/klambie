@@ -319,9 +319,12 @@ export class ProductService {
     categoryIds,
     order,
     sort,
+    limit,
+    page,
   }: GetAllProducts): Promise<{
     products: Products[];
     filters: Filters[];
+    totalItems: number;
   } | null> {
     const hierarchyId = await attributeService.getAllHierarchyIds(slugs);
 
@@ -355,39 +358,47 @@ export class ProductService {
       }
     }
 
-    const data = await prisma.product.findMany({
-      where: {
-        productCategories: {
-          some: {
-            categoryHierarchyId: { in: hierarchyIds },
-          },
+    const whereFilters: any = {
+      productCategories: {
+        some: {
+          categoryHierarchyId: { in: hierarchyIds },
         },
-        ...(tag && {
-          productTags: {
-            some: {
-              tag: {
-                slug: tag,
-              },
+      },
+      ...(tag && {
+        productTags: {
+          some: {
+            tag: {
+              slug: tag,
             },
           },
-        }),
-        ...(brands && brands.length > 0
-          ? { brand: { slug: { in: brands } } }
-          : {}),
-        ...(attributeIds && attributeIds.length > 0
-          ? {
-              productVariants: {
-                some: {
-                  productVariantAttributes: {
-                    some: {
-                      attributeValueId: { in: attributeIds },
-                    },
+        },
+      }),
+      ...(brands && brands.length > 0
+        ? { brand: { slug: { in: brands } } }
+        : {}),
+      ...(attributeIds && attributeIds.length > 0
+        ? {
+            productVariants: {
+              some: {
+                productVariantAttributes: {
+                  some: {
+                    attributeValueId: { in: attributeIds },
                   },
                 },
               },
-            }
-          : {}),
-      },
+            },
+          }
+        : {}),
+    };
+
+    const takeLimit = limit || 2;
+    const skipPage = page || 1;
+
+    const data = await prisma.product.findMany({
+      where: whereFilters,
+      orderBy: prismaOrder,
+      skip: skipPage != 1 ? (skipPage - 1) * takeLimit : 0,
+      take: takeLimit,
       select: {
         id: true,
         name: true,
@@ -401,7 +412,6 @@ export class ProductService {
           },
         },
       },
-      orderBy: prismaOrder,
     });
 
     if (!data) return null;
@@ -446,6 +456,10 @@ export class ProductService {
       }),
     );
 
+    const totalItems = await prisma.product.count({
+      where: whereFilters,
+    });
+
     if (sort === 'discount') {
       products.sort((a, b) => {
         const aDiscount = new Decimal(a.price.discountApplied);
@@ -459,7 +473,9 @@ export class ProductService {
 
     const filters = await attributeService.getCategoryFilters(hierarchyId);
 
-    return { products, filters };
+    console.log(products);
+
+    return { products, filters, totalItems };
   }
   async getOneProduct(slug: string, user?: number): Promise<Product | null> {
     const product = await prisma.product.findUnique({
@@ -468,19 +484,7 @@ export class ProductService {
         id: true,
         name: true,
         sku: true,
-        productDetails: {
-          select: {
-            description: true,
-            length: true,
-            material: true,
-            feature: true,
-            weight: true,
-            width: true,
-            height: true,
-            volume: true,
-            care: true,
-          },
-        },
+        productDetails: true,
         sizingGuide: {
           select: {
             guideData: true,

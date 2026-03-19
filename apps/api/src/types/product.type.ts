@@ -134,4 +134,6 @@ export type GetAllProducts = {
   categoryIds?: number[];
   sort?: string;
   order?: string;
+  limit?: number;
+  page?: number;
 };

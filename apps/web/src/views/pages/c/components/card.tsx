@@ -86,7 +86,7 @@ export default function ProductCard({ products }: { products: IProducts[] }) {
             </div>
 
             <div>
-              <h1 className="text-light text-[10px] md:text-xs uppercase mb-1 opacity-70">
+              <h1 className="text-light text-[11px] uppercase mb-1 opacity-70">
                 {item.categories
                   .map((category) => {
                     return category.name;

@@ -10,6 +10,8 @@ interface IsearchParams {
   attributeId?: string | string[];
   order?: string;
   sort?: string;
+  page?: string;
+  limit?: string;
 }
 
 export default async function Categories({
@@ -20,7 +22,7 @@ export default async function Categories({
   searchParams: IsearchParams;
 }) {
   const { slugs } = await params;
-  const { tag, brand, categoryId, attributeId, order, sort } =
+  const { tag, brand, categoryId, attributeId, order, sort, limit, page } =
     await searchParams;
 
   const brands = normalizeParams(brand);
@@ -28,7 +30,8 @@ export default async function Categories({
   const attributeIds = normalizeParams(attributeId, true);
 
   let includeDescendants = categoryIds.length > 0 ? false : true;
-  let products = null;
+  let products = [];
+  let totalItems = 0;
   let filters = null;
   let error;
 
@@ -42,16 +45,19 @@ export default async function Categories({
       categoryIds,
       attributeIds,
       includeDescendants,
+      limit: parseInt(limit as string),
+      page: parseInt(page as string),
     });
 
     products = data.products;
     filters = data.filters;
+    totalItems = data.totalItems;
   } catch (error: any) {
     error = error.message || 'Something went wrong while fetching data.';
-    products = null;
+    products = [];
   }
 
-  const categoryView = { products, filters };
+  const categoryView = { products, filters, totalItems };
 
   return (
     <main>

@@ -2,7 +2,7 @@ import TagButton from '@/views/components/tagButton';
 import { useQueryParams } from '../hooks/useQueryParams';
 import SortProduct from './sort';
 
-export default function TopNavbar({ totalFound }: { totalFound: number }) {
+export default function TopNavbar({ totalItems }: { totalItems: number }) {
   const { pathname } = useQueryParams();
   const segments = (pathname.match(/[^\/]+/g) || []).map((s) =>
     s ? s[0].toUpperCase() + s.slice(1) : '',
@@ -38,7 +38,7 @@ export default function TopNavbar({ totalFound }: { totalFound: number }) {
             </h1>
           )}
           <p className="text-black/50 text-sm inline-block">
-            {totalFound} items found
+            {totalItems} items found
           </p>
         </div>
 
