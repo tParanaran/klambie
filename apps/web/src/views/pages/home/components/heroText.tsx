@@ -18,11 +18,8 @@ export default function HeroText() {
           KLAMBIE makes clothes to elevate everyday life through lighthearted
           escapism. We're challenging conventional retail, putting an end to
           dead stock, uncoventional waste and more funtastic. While styles vary
-          by season,{' '}
-          <Link href="/shop" className="text-orange-700 hover:text-orange-600">
-            all collections
-          </Link>{' '}
-          are guided by the ineffable sense of freedom that comes with travel.
+          by season, all collections are guided by the ineffable sense of
+          freedom that comes with travel.
         </p>
       </div>
     </div>

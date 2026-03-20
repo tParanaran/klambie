@@ -1,15 +1,18 @@
+'use client';
 import TagButton from '@/views/components/tagButton';
-import { useQueryParams } from '../hooks/useQueryParams';
+import useDetectIsMobile from '../../template/hooks/useDetectIsMobile';
 import SortProduct from './sort';
-import { IoChevronBack } from 'react-icons/io5';
 import ModalContainer from '@/views/components/modalContainer';
 import SideNavbar from './sideNavbar';
+import { useQueryParams } from '../hooks/useQueryParams';
+import { IoChevronBack, IoClose } from 'react-icons/io5';
 import { useState } from 'react';
-import useDetectIsMobile from '../../template/hooks/useDetectIsMobile';
+import { useRouter } from 'next/navigation';
 
 export default function TopNavbar({ totalItems }: { totalItems: number }) {
+  const router = useRouter();
   const [showModal, setShowModal] = useState<boolean>(false);
-  const { isMobile } = useDetectIsMobile({ widthScreen: 500 });
+  const { isMobile } = useDetectIsMobile({ widthScreen: 525 });
   const { pathname } = useQueryParams();
   const segments = (pathname.match(/[^\/]+/g) || []).map((s) =>
     s ? s[0].toUpperCase() + s.slice(1) : '',
@@ -21,23 +24,35 @@ export default function TopNavbar({ totalItems }: { totalItems: number }) {
   return (
     <>
       <div className="py-1 lg:w-2xs md:w-3xs w-50 flex-wrap hidden sm:flex">
-        {segments?.map((segment, s) => (
+        {segments.length > 1 ? (
+          <>
+            {segments.map((segment, s) => (
+              <TagButton
+                key={s}
+                className="text-xs! pl-0! -ml-0.5"
+                icon={<IoChevronBack className="text-lg" />}
+                href={
+                  s === 0
+                    ? `/d/${segments[1].toLowerCase()}`
+                    : `/${segments
+                        .slice(0, s + 1)
+                        .join('/')
+                        .toLowerCase()}`
+                }
+              >
+                {s === 0 ? 'Home' : segment}
+              </TagButton>
+            ))}
+          </>
+        ) : (
           <TagButton
-            key={s}
-            className="text-xs! pl-0! -ml-0.5"
+            className="pr-3"
             icon={<IoChevronBack className="text-lg" />}
-            href={
-              s === 0
-                ? `/d/${segments[1].toLowerCase()}`
-                : `/${segments
-                    .slice(0, s + 1)
-                    .join('/')
-                    .toLowerCase()}`
-            }
+            onClick={() => router.back()}
           >
-            {s === 0 ? 'Home' : segment}
+            Back
           </TagButton>
-        ))}
+        )}
       </div>
       <div className="flex lg:flex-row flex-col justify-between flex-2 overflow-x-scroll scrollbar-hide">
         <div className="space-x-1 ml-2">
@@ -61,11 +76,26 @@ export default function TopNavbar({ totalItems }: { totalItems: number }) {
         <ModalContainer
           handlerModal={handlerModal}
           showModal={showModal}
-          style={`${isMobile ? 'w-screen' : 'w-1/2'} h-screen dark:bg-[#1b1a1e]/80 bg-[#ededed]/80 backdrop-blur-xl p-3 rounded-2xl`}
+          style={`${isMobile ? 'w-[90%]' : 'w-1/2'} h-screen dark:bg-[#1b1a1e]/80 bg-[#ededed]/80 backdrop-blur-xl p-3 rounded-2xl`}
           isFilter={true}
         >
-          <div className="max-h-[94vh] space-y-3 overflow-y-scroll scrollbar-hide">
-            <SideNavbar />
+          <div className="max-h-[94vh] space-y-3 overflow-y-scroll scrollbar-hide z-50">
+            <button
+              className="absolute top-2 right-2 p-3"
+              onClick={handlerModal}
+              aria-label="Close filter"
+            >
+              <IoClose className="text-2xl hover:scale-125" />
+            </button>
+            <div className="mb-7">
+              <SideNavbar />
+            </div>
+            <TagButton
+              className="absolute bottom-2 left-2 right-2 py-2"
+              onClick={handlerModal}
+            >
+              <p className="mx-auto uppercase">View {totalItems} items found</p>
+            </TagButton>
           </div>
         </ModalContainer>
       )}

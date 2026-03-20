@@ -2,9 +2,8 @@
 import NumberFieldForm from '@/views/components/formik/numberFieldForm';
 import { Form, Formik, FormikProps } from 'formik';
 import { PriceFilterSchema } from '../schemas';
-import { TiMinus } from 'react-icons/ti';
+import { FaArrowsLeftRightToLine } from 'react-icons/fa6';
 import { useQueryParams } from '../hooks/useQueryParams';
-import useDetectIsMobile from '../../template/hooks/useDetectIsMobile';
 
 interface IPriceFilter {
   priceFrom: string;
@@ -13,7 +12,6 @@ interface IPriceFilter {
 
 export default function PriceFilterForm() {
   const { createParams } = useQueryParams();
-  const { isMobile } = useDetectIsMobile({ widthScreen: 500 });
 
   return (
     <div>
@@ -36,7 +34,7 @@ export default function PriceFilterForm() {
           return (
             <Form onSubmit={handleSubmit}>
               <div className="flex flex-row sm:flex-col md:flex-row items-center flex-wrap">
-                <div className={`w-24 sm:w-46 md:w-26 lg:w-30 flex-2`}>
+                <div className={`w-24 sm:w-46 md:w-26 lg:w-30 flex-1`}>
                   <NumberFieldForm
                     handleChange={handleChange}
                     values={values.priceFrom}
@@ -45,9 +43,9 @@ export default function PriceFilterForm() {
                   />
                 </div>
                 <div className="block sm:hidden md:block">
-                  <TiMinus className="text-lg flex-none" />
+                  <FaArrowsLeftRightToLine className="text-lg flex-none" />
                 </div>
-                <div className={`w-24 sm:w-46 md:w-26 lg:w-30 flex-2`}>
+                <div className={`w-24 sm:w-46 md:w-26 lg:w-30 flex-1`}>
                   <NumberFieldForm
                     handleChange={handleChange}
                     values={values.priceTo}

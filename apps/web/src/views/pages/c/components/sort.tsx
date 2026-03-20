@@ -1,7 +1,9 @@
+'use client';
 import TagButton from '@/views/components/tagButton';
-import { IoChevronDown, IoFilter } from 'react-icons/io5';
+import { IoChevronDown, IoClose, IoFilter } from 'react-icons/io5';
 import { RiDiscountPercentLine } from 'react-icons/ri';
 import { useQueryParams } from '../hooks/useQueryParams';
+import useFilteredParams from '../hooks/useFilteredParams';
 
 interface ISortProduct {
   handlerModal: () => void;
@@ -27,9 +29,8 @@ const sortOptions = [
 ];
 
 export default function SortProduct({ handlerModal }: ISortProduct) {
-  const { getParams, createParams, deleteParams } = useQueryParams();
-  const currentOrder = getParams('order');
-  const currentSort = getParams('sort');
+  const { createParams, deleteParams, clearAllParams } = useQueryParams();
+  const { currentOrder, currentSort, isFiltered } = useFilteredParams();
 
   const handleClick = (value: string) => {
     if (value === 'discount') {
@@ -50,6 +51,15 @@ export default function SortProduct({ handlerModal }: ISortProduct) {
 
   return (
     <div className="flex space-x-1 items-center">
+      {isFiltered && (
+        <TagButton
+          icon={<IoClose className="text-lg" />}
+          onClick={clearAllParams}
+          className="flex-none block sm:hidden"
+        >
+          Clear Filter
+        </TagButton>
+      )}
       <div className="block sm:hidden">
         <button
           className="px-3 py-1 text-sm rounded-full mt-1 text-[#ededed] flex items-center cursor-pointer bg-orange-800"

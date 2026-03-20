@@ -2,7 +2,6 @@
 import { useState } from 'react';
 import { ICategories } from '../types';
 import { useQueryParams } from '../hooks/useQueryParams';
-import { IoClose } from 'react-icons/io5';
 import { TbBrandBooking } from 'react-icons/tb';
 import { AiOutlineFieldNumber } from 'react-icons/ai';
 import DropdownSidebar from './dropdownSidebar';
@@ -10,6 +9,8 @@ import TagButton from '@/views/components/tagButton';
 import useAttribute from '../hooks/useAttribute';
 import TagParams from './tagParams';
 import PriceFilterForm from './priceFrom';
+import useFilteredParams from '../hooks/useFilteredParams';
+import AppliedFilter from './appliedFilter';
 
 const container =
   'p-1.5 md:p-2 bg-black/5 dark:bg-white/10 rounded-2xl shadow-xs text-sm';
@@ -19,34 +20,9 @@ const flexClass =
 
 export default function SideNavbar({ filters }: { filters?: ICategories[] }) {
   const [openIndex, setOpenIndex] = useState<number[][]>([]);
-  const { getAllParams, deleteParams, toggleParams, getParams } =
-    useQueryParams();
+  const { toggleParams, clearAllParams } = useQueryParams();
   const { brands, attributes } = useAttribute();
-
-  const categoryParams = getAllParams('categoryId');
-  const brandParams = getAllParams('brand');
-  const attributeParams = getAllParams('attributeId');
-  const priceParams = getParams('price');
-
-  console.log(priceParams);
-
-  const selectedCategories = filters?.filter((item) =>
-    categoryParams?.includes(String(item.id)),
-  );
-  const selectedBrands = brands.filter((item) =>
-    brandParams?.includes(item.slug),
-  );
-  const selectedAttributes = attributes.flatMap((attr) =>
-    attr.attributeValues.filter((val) =>
-      attributeParams?.includes(String(val.id)),
-    ),
-  );
-
-  const isFiltered =
-    (selectedCategories && selectedCategories?.length > 0) ||
-    selectedBrands.length > 0 ||
-    selectedAttributes.length > 0 ||
-    priceParams;
+  const { isFiltered, brandParams, attributeParams } = useFilteredParams();
 
   return (
     <>
@@ -54,52 +30,11 @@ export default function SideNavbar({ filters }: { filters?: ICategories[] }) {
         <div className={container}>
           <h1 className={header}>Applied Filters</h1>
           <div className={flexClass}>
-            {priceParams && (
-              <TagButton
-                onClick={() => deleteParams('price', priceParams)}
-                icon={<IoClose className="ml-1 text-lg" />}
-                className="pr-2! pl-0!"
-                aria-label={`Remove ${priceParams} filter`}
-              >
-                Rp {priceParams}
-              </TagButton>
-            )}
-
-            {selectedCategories?.map((item) => (
-              <TagButton
-                key={item.slug}
-                onClick={() => deleteParams('categoryId', String(item.id))}
-                icon={<IoClose className="ml-1 text-lg" />}
-                className="pr-2! pl-0!"
-                aria-label={`Remove ${item.name} filter`}
-              >
-                {item.name}
-              </TagButton>
-            ))}
-            {selectedBrands.map((item) => (
-              <TagButton
-                key={item.slug}
-                onClick={() => deleteParams('brand', item.slug)}
-                icon={<IoClose className="ml-1 text-lg" />}
-                className="pr-2! pl-0!"
-                aria-label={`Remove ${item.name} filter`}
-              >
-                {item.name}
-              </TagButton>
-            ))}
-
-            {selectedAttributes.map((item) => (
-              <TagButton
-                key={item.slug}
-                onClick={() => deleteParams('attributeId', String(item.id))}
-                icon={<IoClose className="ml-1 text-lg" />}
-                className="pr-2! pl-0!"
-                aria-label={`Remove ${item.value} filter`}
-              >
-                {item.value}
-              </TagButton>
-            ))}
-          </div>{' '}
+            <AppliedFilter />
+          </div>
+          <TagButton className="ml-auto" onClick={clearAllParams}>
+            Clear All
+          </TagButton>
         </div>
       )}
       <div className={container}>

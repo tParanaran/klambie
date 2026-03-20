@@ -3,7 +3,7 @@ import { IoArrowDown, IoMailOutline } from 'react-icons/io5';
 
 export default function ContactLink() {
   return (
-    <div className="absolute flex flex-col-reverse sm:flex-row bottom-2 left-2 right-2  sm:bottom-5 sm:left-5 sm:right-5 gap-2 w-auto z-0">
+    <div className="absolute flex flex-col-reverse sm:flex-row bottom-2 left-2 right-2  sm:bottom-5 sm:left-5 sm:right-5 gap-2 w-auto z-auto">
       <Link
         href={'/register'}
         className="bg-white w-full py-1 rounded-full text-black flex justify-between items-center overflow-hidden text-sm sm:flex-row-reverse"

@@ -1,3 +1,4 @@
+'use client';
 import TagButton from '@/views/components/tagButton';
 import { HiOutlineHashtag } from 'react-icons/hi';
 import useAttribute from '../hooks/useAttribute';
