@@ -322,26 +322,33 @@ export class ProductService {
     limit,
     page,
     price,
+    q,
   }: GetAllProducts): Promise<{
     products: Products[];
     filters: Filters[];
     totalItems: number;
   } | null> {
-    const hierarchyId = await attributeService.getAllHierarchyIds(slugs);
+    let hierarchyIds: number[] = [];
+    let hierarchyId: number | null = null;
 
-    if (!hierarchyId) return null;
+    console.log(categoryIds);
 
-    let hierarchyIds: number[] = [hierarchyId];
+    slugs = slugs || [];
 
-    if (includeDescendants) {
-      const descendants =
-        await attributeService.getAllDescendantHierarchyIds(hierarchyId);
-      hierarchyIds =
-        descendants.length > 0 ? [hierarchyId, ...descendants] : [hierarchyId];
-    }
+    if (slugs.length > 0) {
+      hierarchyId = await attributeService.getAllHierarchyIds(slugs);
+      if (hierarchyId) {
+        hierarchyIds = [hierarchyId];
 
-    if (categoryIds && categoryIds.length > 0) {
-      hierarchyIds = Array.from(new Set([...hierarchyIds, ...categoryIds]));
+        if (includeDescendants) {
+          const descendants =
+            await attributeService.getAllDescendantHierarchyIds(hierarchyId);
+          hierarchyIds =
+            descendants.length > 0
+              ? [hierarchyId, ...descendants]
+              : [hierarchyId];
+        }
+      }
     }
 
     let priceFilter = {};
@@ -374,11 +381,26 @@ export class ProductService {
 
     const whereFilters: any = {
       ...priceFilter,
-      productCategories: {
-        some: {
-          categoryHierarchyId: { in: hierarchyIds },
-        },
-      },
+      ...(hierarchyIds.length > 0
+        ? {
+            productCategories: {
+              some: {
+                categoryHierarchyId: { in: hierarchyIds },
+              },
+            },
+          }
+        : {}),
+      ...(categoryIds && categoryIds.length > 0
+        ? {
+            productCategories: {
+              some: {
+                categoryHierarchy: {
+                  categoryId: { in: categoryIds },
+                },
+              },
+            },
+          }
+        : {}),
       ...(tag && {
         productTags: {
           some: {
@@ -402,6 +424,35 @@ export class ProductService {
                 },
               },
             },
+          }
+        : {}),
+      ...(q
+        ? {
+            OR: [
+              { name: { contains: q } },
+              { slug: { contains: q } },
+              {
+                productDetails: {
+                  is: {
+                    description: { contains: q },
+                  },
+                },
+              },
+              {
+                productDetails: {
+                  is: {
+                    feature: { contains: q },
+                  },
+                },
+              },
+              {
+                productDetails: {
+                  is: {
+                    material: { contains: q },
+                  },
+                },
+              },
+            ],
           }
         : {}),
     };
@@ -474,7 +525,12 @@ export class ProductService {
     const totalItems = await prisma.product.count({
       where: whereFilters,
     });
-    const filters = await attributeService.getCategoryFilters(hierarchyId);
+
+    let filters: Filters[] = await attributeService.getAllCategoryTree();
+
+    if (hierarchyId) {
+      filters = await attributeService.getCategoryFilters(hierarchyId);
+    }
 
     if (sort === 'discount') {
       const discountedProducts = products.filter(

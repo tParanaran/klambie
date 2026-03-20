@@ -1,8 +1,9 @@
 import axiosInstanceServer from '@/lib/axios/server';
 import parseSearchParams, { ISearchParams } from '@/utils/searchParams';
+import ErrorMessage from '@/views/components/error';
 import CategoryView from '@/views/pages/c';
 
-export default async function SearchPage({
+export default async function Categories({
   params,
   searchParams,
 }: {
@@ -36,6 +37,7 @@ export default async function SearchPage({
   return (
     <main>
       <CategoryView {...categoryView} />
+      {error && <ErrorMessage error={error} />}
     </main>
   );
 }

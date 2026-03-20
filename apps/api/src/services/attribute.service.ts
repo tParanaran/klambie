@@ -261,6 +261,7 @@ export class AttributeService {
         level: true,
         category: {
           select: {
+            id: true,
             name: true,
             slug: true,
           },
@@ -282,7 +283,7 @@ export class AttributeService {
 
     for (const item of descendants) {
       const node = {
-        id: item.id,
+        id: item.category.id,
         name: item.category.name,
         level: item.level,
         slug: item.category.slug,
@@ -305,7 +306,7 @@ export class AttributeService {
         id: true,
         path: true,
         level: true,
-        category: { select: { name: true, slug: true } },
+        category: { select: { name: true, slug: true, id: true } },
       },
       orderBy: { path: 'asc' },
     });
@@ -315,9 +316,10 @@ export class AttributeService {
 
     for (const item of categories) {
       const node = {
-        id: item.id,
+        id: item.category.id,
         name: item.category.name,
         slug: item.category.slug,
+        level: item.level,
         subcategories: [],
       };
       pathMap.set(item.path, node);

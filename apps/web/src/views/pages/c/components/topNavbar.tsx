@@ -81,7 +81,7 @@ export default function TopNavbar({ totalItems }: { totalItems: number }) {
         >
           <div className="max-h-[94vh] space-y-3 overflow-y-scroll scrollbar-hide z-50">
             <button
-              className="absolute top-2 right-2 p-3"
+              className="absolute top-2 right-2 p-3 z-50"
               onClick={handlerModal}
               aria-label="Close filter"
             >

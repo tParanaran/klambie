@@ -20,7 +20,13 @@ export default function DropdownSidebar({
   openIndex,
   setOpenIndex,
 }: IDropdownSidebar) {
-  const { pathname, toggleParams, getAllParams } = useQueryParams();
+  const {
+    pathname,
+    toggleParams,
+    getAllParams,
+    createParams,
+    createMutipleParams,
+  } = useQueryParams();
   const hasSub = item.subcategories && item.subcategories.length > 0;
   const isOpen = openIndex[level]?.includes(index) ?? false;
   const submenuRef = useRef<HTMLDivElement>(null);
@@ -64,7 +70,7 @@ export default function DropdownSidebar({
           key={item.slug}
           href={item.level > 4 ? `${pathname}/${item.slug}` : undefined}
           onClick={
-            item.level > 3
+            item.level > 2
               ? () => toggleParams('categoryId', String(item.id))
               : undefined
           }
@@ -102,7 +108,16 @@ export default function DropdownSidebar({
         >
           <div className="flex flex-wrap space-x-1 my-1">
             <TagButton
-              href={`${pathname}/${item.slug}`}
+              href={
+                pathname.startsWith('/c')
+                  ? `${pathname}/${item.slug}`
+                  : undefined
+              }
+              onClick={
+                pathname === '/s'
+                  ? () => createMutipleParams('categoryId', [String(item.id)])
+                  : undefined
+              }
               aria-label={`Select all ${item.name} filter`}
             >
               All
@@ -110,7 +125,20 @@ export default function DropdownSidebar({
             {item.subcategories?.map((sub) => (
               <TagButton
                 key={sub.slug}
-                href={`${pathname}/${item.slug}${sub.level < 4 ? `/${sub.slug}` : `?categoryId=${sub.id}`}`}
+                href={
+                  pathname.startsWith('/c')
+                    ? `${pathname}/${item.slug}${sub.level < 4 ? `/${sub.slug}` : `?categoryId=${sub.id}`}`
+                    : undefined
+                }
+                onClick={
+                  pathname === '/s'
+                    ? () =>
+                        createMutipleParams('categoryId', [
+                          String(item.id),
+                          String(sub.id),
+                        ])
+                    : undefined
+                }
                 aria-label={`Select ${sub.name} filter`}
                 active={categoryId?.includes(String(sub.id))}
               >

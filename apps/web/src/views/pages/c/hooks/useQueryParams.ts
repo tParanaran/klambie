@@ -75,6 +75,27 @@ export function useQueryParams() {
     [searchParams, pathname, router],
   );
 
+  const createMutipleParams = useCallback(
+    (key: string, values: string[]) => {
+      const params = new URLSearchParams(searchParams.toString());
+
+      const existingValues = params.getAll(key);
+
+      values.forEach((val) => {
+        if (!existingValues.includes(val)) {
+          params.append(key, val);
+        }
+      });
+
+      const newUrl = params.toString()
+        ? `${pathname}?${params.toString()}`
+        : pathname;
+
+      router.replace(newUrl);
+    },
+    [searchParams, pathname, router],
+  );
+
   const toggleParams = useCallback(
     (key: string, value: string, newPath?: string, { append = true } = {}) => {
       let params = new URLSearchParams(searchParams.toString());
@@ -141,6 +162,7 @@ export function useQueryParams() {
     searchParams,
     matchPathname,
     createLinkParams,
+    createMutipleParams,
     toggleParams,
     deleteParams,
     clearAllParams,

@@ -120,12 +120,12 @@ export type Filters = {
   id: number;
   name: string;
   slug: string;
-  level?: number;
+  level: number;
   subcategories: Filters[];
 };
 
 export type GetAllProducts = {
-  slugs: string[];
+  slugs?: string[];
   tag?: string;
   user?: number;
   includeDescendants?: boolean;
@@ -137,4 +137,6 @@ export type GetAllProducts = {
   limit?: number;
   page?: number;
   price?: string;
+  q?: string;
+  categories?: string[];
 };
