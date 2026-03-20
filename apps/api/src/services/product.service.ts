@@ -17,6 +17,7 @@ import { PromotionService } from './promotion.service';
 import { AttributeService } from './attribute.service';
 import FlattenCategories from '@/utils/categories';
 import Decimal from 'decimal.js';
+import { initialCategories } from '@/utils/initialCategories';
 
 const sku = new SKU();
 const promotionService = new PromotionService();
@@ -331,8 +332,6 @@ export class ProductService {
     let hierarchyIds: number[] = [];
     let hierarchyId: number | null = null;
 
-    console.log(categoryIds);
-
     slugs = slugs || [];
 
     if (slugs.length > 0) {
@@ -350,6 +349,8 @@ export class ProductService {
         }
       }
     }
+
+    hierarchyIds = Array.from(new Set(hierarchyIds));
 
     let priceFilter = {};
 
@@ -526,7 +527,7 @@ export class ProductService {
       where: whereFilters,
     });
 
-    let filters: Filters[] = await attributeService.getAllCategoryTree();
+    let filters: Filters[] = initialCategories;
 
     if (hierarchyId) {
       filters = await attributeService.getCategoryFilters(hierarchyId);

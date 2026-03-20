@@ -197,23 +197,33 @@ export class AttributeService {
 
     return result;
   }
-  async getAllHierarchyIds(slugs: string[]): Promise<number | null> {
-    if (!slugs.length) return null;
+  async getAllHierarchyIds(
+    values: (string | number)[],
+  ): Promise<number | null> {
+    if (!values.length) return null;
+    const isSlug = typeof values[0] === 'string';
 
     let currentHierarchies = await prisma.categoryHierarchy.findMany({
-      where: { category: { slug: slugs[0] }, parentId: null },
+      where: isSlug
+        ? { category: { slug: values[0] as string }, parentId: null }
+        : { category: { id: values[0] as number }, parentId: null },
       select: { id: true },
     });
 
     if (!currentHierarchies.length) return null;
 
-    for (let i = 1; i < slugs.length; i++) {
-      const nextSlug = slugs[i];
+    for (let i = 1; i < values.length; i++) {
+      const val = values[i];
       currentHierarchies = await prisma.categoryHierarchy.findMany({
-        where: {
-          parentId: { in: currentHierarchies.map((h) => h.id) },
-          category: { slug: nextSlug },
-        },
+        where: isSlug
+          ? {
+              parentId: { in: currentHierarchies.map((h) => h.id) },
+              category: { slug: val as string },
+            }
+          : {
+              parentId: { in: currentHierarchies.map((h) => h.id) },
+              id: val as number,
+            },
         select: { id: true },
       });
 
@@ -243,7 +253,7 @@ export class AttributeService {
       select: {
         path: true,
         level: true,
-        category: { select: { name: true, slug: true } },
+        category: { select: { name: true, slug: true, id: true } },
       },
     });
 
@@ -273,7 +283,7 @@ export class AttributeService {
     const pathMap = new Map<string, any>();
 
     const root = {
-      id: categoryId,
+      id: parent.category.id,
       name: parent.category.name,
       level: parent.level,
       slug: parent.category.slug,

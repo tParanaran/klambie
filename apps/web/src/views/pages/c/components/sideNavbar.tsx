@@ -23,6 +23,7 @@ export default function SideNavbar({ filters }: { filters?: ICategories[] }) {
   const { toggleParams, clearAllParams } = useQueryParams();
   const { brands, attributes } = useAttribute();
   const { isFiltered, brandParams, attributeParams } = useFilteredParams();
+  const [keyword, setKeyword] = useState<string>('');
 
   return (
     <>
@@ -70,6 +71,8 @@ export default function SideNavbar({ filters }: { filters?: ICategories[] }) {
               index={i}
               openIndex={openIndex}
               setOpenIndex={setOpenIndex}
+              setKeyword={setKeyword}
+              keyword={keyword}
             />
           ))}
         </div>

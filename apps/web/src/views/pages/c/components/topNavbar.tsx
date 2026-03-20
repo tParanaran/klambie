@@ -8,12 +8,25 @@ import { useQueryParams } from '../hooks/useQueryParams';
 import { IoChevronBack, IoClose } from 'react-icons/io5';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { ICategories } from '../types';
 
-export default function TopNavbar({ totalItems }: { totalItems: number }) {
+interface ITopNavbar {
+  totalItems: number;
+  filters: ICategories[];
+  query?: string;
+}
+
+export default function TopNavbar({ totalItems, filters, query }: ITopNavbar) {
   const router = useRouter();
   const [showModal, setShowModal] = useState<boolean>(false);
   const { isMobile } = useDetectIsMobile({ widthScreen: 525 });
-  const { pathname } = useQueryParams();
+  const { pathname, getAllParams, deleteParams } = useQueryParams();
+  const allParams = getAllParams('key');
+
+  const newPathname = allParams.map((s) =>
+    s ? s[0].toUpperCase() + s.slice(1) : '',
+  );
+
   const segments = (pathname.match(/[^\/]+/g) || []).map((s) =>
     s ? s[0].toUpperCase() + s.slice(1) : '',
   );
@@ -45,13 +58,26 @@ export default function TopNavbar({ totalItems }: { totalItems: number }) {
             ))}
           </>
         ) : (
-          <TagButton
-            className="pr-3"
-            icon={<IoChevronBack className="text-lg" />}
-            onClick={() => router.back()}
-          >
-            Back
-          </TagButton>
+          <>
+            <TagButton
+              className="text-xs! pl-0! -ml-0.5"
+              icon={<IoChevronBack className="text-lg" />}
+              onClick={() => router.back()}
+            >
+              Back
+            </TagButton>
+            {newPathname &&
+              newPathname.map((newPath, n) => (
+                <TagButton
+                  key={n}
+                  className="text-xs! pl-0! -ml-0.5"
+                  icon={<IoChevronBack className="text-lg" />}
+                  onClick={() => deleteParams('key')}
+                >
+                  {newPath}
+                </TagButton>
+              ))}
+          </>
         )}
       </div>
       <div className="flex lg:flex-row flex-col justify-between flex-2 overflow-x-scroll scrollbar-hide">
@@ -61,6 +87,11 @@ export default function TopNavbar({ totalItems }: { totalItems: number }) {
               {segments.length > 3
                 ? `${segments[3]} ${segments[1]}'s ${segments[2]}`
                 : segments.slice(1, 3).join("'s ")}
+            </h1>
+          )}
+          {query && (
+            <h1 className="text-base sm:text-lg md:text-xl font-semibold inline-block mr-2">
+              "{query}"
             </h1>
           )}
           <p className="text-sm inline-block opacity-50">
@@ -88,7 +119,7 @@ export default function TopNavbar({ totalItems }: { totalItems: number }) {
               <IoClose className="text-2xl hover:scale-125" />
             </button>
             <div className="mb-7">
-              <SideNavbar />
+              <SideNavbar filters={filters} />
             </div>
             <TagButton
               className="absolute bottom-2 left-2 right-2 py-2"

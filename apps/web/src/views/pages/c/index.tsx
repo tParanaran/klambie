@@ -13,19 +13,21 @@ interface ICategoryView {
   products: IProducts[];
   filters: ICategories[];
   totalItems: number;
+  query?: string;
 }
 
 export default function CategoryView({
   products,
   filters,
   totalItems,
+  query,
 }: ICategoryView) {
   const { isMobile } = useDetectIsMobile({ widthScreen: 1024, maxWitdh: 850 });
 
   return (
     <div>
       <div className="my-2 flex lg:items-center items-end">
-        <TopNavbar totalItems={totalItems} />
+        <TopNavbar totalItems={totalItems} filters={filters} query={query} />
       </div>
 
       <div className="flex gap-2 min-h-screen">

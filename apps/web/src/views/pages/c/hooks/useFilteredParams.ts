@@ -3,7 +3,7 @@ import { useQueryParams } from './useQueryParams';
 
 export default function useFilteredParams() {
   const { getAllParams, getParams } = useQueryParams();
-  const { brands, attributes, categories, tags } = useAttribute();
+  const { brands, attributes, tags, categories } = useAttribute();
 
   const categoryParams = getAllParams('categoryId');
   const tagParams = getParams('tag');

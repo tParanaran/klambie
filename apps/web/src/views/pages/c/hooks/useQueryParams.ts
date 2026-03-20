@@ -1,157 +1,126 @@
 'use client';
-import { usePathname, useSearchParams } from 'next/navigation';
-import { useRouter } from 'next/navigation';
-import { useCallback } from 'react';
+import { usePathname, useSearchParams, useRouter } from 'next/navigation';
+import { useCallback, useMemo } from 'react';
 
 export function useQueryParams() {
-  const DEPARTMENT = ['women', 'men', 'kids', 'sports', 'groomity'];
+  // Department list as readonly tuple for type safety
+  const DEPARTMENT = ['women', 'men', 'kids', 'sports', 'groomity'] as const;
+
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
 
-  const getQueryObject = () => {
+  // Helper to build URLs consistently
+  const buildUrl = (path: string, params: URLSearchParams) =>
+    params.toString() ? `${path}?${params.toString()}` : path;
+
+  // Memoize query object for performance
+  const queryObject = useMemo(() => {
     const obj: Record<string, string[]> = {};
     for (const [key, value] of searchParams.entries()) {
-      if (obj[key]) {
-        obj[key].push(value);
-      } else {
-        obj[key] = [value];
-      }
+      if (obj[key]) obj[key].push(value);
+      else obj[key] = [value];
     }
     return obj;
-  };
+  }, [searchParams.toString()]);
+
+  const getParams = (key: string): string | undefined => queryObject[key]?.[0];
+  const getAllParams = (key: string): string[] => queryObject[key] || [];
 
   const createLinkParams = useCallback(
     (key: string, value: string, { append = true } = {}, newPath?: string) => {
       const params = new URLSearchParams(searchParams.toString());
-
-      if (append) {
-        params.append(key, value); // Allow mutiple same keys
-      } else {
-        params.set(key, value); // Overwrite exsiting
-      }
-
-      return `${pathname}${newPath ? `/${newPath}` : ''}?${params.toString()}`;
+      append ? params.append(key, value) : params.set(key, value);
+      return buildUrl(newPath ?? pathname, params);
     },
-    [searchParams, pathname, router],
+    [searchParams.toString(), pathname],
   );
 
   const createParams = useCallback(
-    (values: Record<string, string>, options?: { append?: boolean }) => {
+    (
+      values: Record<string, string | string[]>,
+      options?: { append?: boolean },
+    ) => {
       const params = new URLSearchParams(searchParams.toString());
 
       Object.entries(values).forEach(([key, value]) => {
-        if (options?.append) {
-          params.append(key, value);
+        if (Array.isArray(value)) {
+          if (!options?.append) params.delete(key);
+          value.forEach((v) => params.append(key, v));
         } else {
-          params.set(key, value);
+          options?.append ? params.append(key, value) : params.set(key, value);
         }
       });
 
-      const newUrl = params.toString()
-        ? `${pathname}?${params.toString()}`
-        : pathname;
-      router.replace(newUrl);
+      router.replace(buildUrl(pathname, params));
     },
-    [searchParams, pathname, router],
+    [searchParams.toString(), pathname, router],
+  );
+
+  const createArrayParams = useCallback(
+    (
+      values: Record<string, string | string[]>,
+      options?: { append?: boolean },
+    ) => {
+      const params = new URLSearchParams(searchParams.toString());
+
+      Object.entries(values).forEach(([key, value]) => {
+        const arr = Array.isArray(value) ? value : [value];
+        const arrayValue = JSON.stringify(arr);
+        options?.append
+          ? params.append(key, arrayValue)
+          : params.set(key, arrayValue);
+      });
+
+      router.replace(buildUrl(pathname, params));
+    },
+    [searchParams.toString(), pathname, router],
   );
 
   const createNewRouteParams = useCallback(
     (key: string, value: string, newPath: string) => {
       const params = new URLSearchParams();
       params.set(key, value);
-
-      let newPathname = pathname;
-
-      if (pathname !== newPath) {
-        newPathname = newPath;
-      }
-
-      const newUrl = params.toString()
-        ? `${newPathname}?${params.toString()}`
-        : newPathname;
-      router.replace(newUrl);
+      router.replace(buildUrl(newPath, params));
     },
-    [searchParams, pathname, router],
-  );
-
-  const createMutipleParams = useCallback(
-    (key: string, values: string[]) => {
-      const params = new URLSearchParams(searchParams.toString());
-
-      const existingValues = params.getAll(key);
-
-      values.forEach((val) => {
-        if (!existingValues.includes(val)) {
-          params.append(key, val);
-        }
-      });
-
-      const newUrl = params.toString()
-        ? `${pathname}?${params.toString()}`
-        : pathname;
-
-      router.replace(newUrl);
-    },
-    [searchParams, pathname, router],
+    [router],
   );
 
   const toggleParams = useCallback(
     (key: string, value: string, newPath?: string, { append = true } = {}) => {
-      let params = new URLSearchParams(searchParams.toString());
+      const params = new URLSearchParams(searchParams.toString());
       const values = params.getAll(key);
 
       if (values.includes(value)) {
-        const newValues = values.filter((v) => v !== value);
+        // Remove the value
         params.delete(key);
-        newValues.forEach((v) => params.append(key, v));
+        values.filter((v) => v !== value).forEach((v) => params.append(key, v));
       } else {
-        if (append) {
-          params.append(key, value); // Allow mutiple same keys
-        } else {
-          params.set(key, value); // Overwrite exsiting
-        }
+        // Append: Allow mutiple keys, Set: Overwrite existing keys
+        append ? params.append(key, value) : params.set(key, value);
       }
 
-      const newUrl = params.toString()
-        ? `${pathname}${newPath ? `/${newPath}` : ''}?${params.toString()}`
-        : pathname;
-      router.replace(newUrl);
+      router.replace(buildUrl(newPath ?? pathname, params));
     },
-    [searchParams, pathname, router],
+    [searchParams.toString(), pathname, router],
   );
 
   const deleteParams = useCallback(
-    (key: string, value: string) => {
+    (key: string, value?: string) => {
       const params = new URLSearchParams(searchParams.toString());
-
       if (value === undefined) {
         params.delete(key);
       } else {
-        const values = params.getAll(key).filter((v) => v !== value);
-        params.delete(key);
-        values.forEach((v) => params.append(key, v));
+        params.delete(key, value);
       }
-
-      const newUrl = params.toString()
-        ? `${pathname}?${params.toString()}`
-        : pathname;
-      router.replace(newUrl);
+      router.replace(buildUrl(pathname, params));
     },
-    [searchParams, pathname, router],
+    [searchParams.toString(), pathname, router],
   );
 
   const clearAllParams = useCallback(() => {
     router.replace(pathname);
   }, [pathname, router]);
-
-  const getParams = (key: string): string | undefined => {
-    return getQueryObject()[key]?.[0];
-  };
-
-  const getAllParams = (key: string): string[] | undefined => {
-    return getQueryObject()[key] || [];
-  };
 
   const matchPathname = DEPARTMENT.find((dep) =>
     pathname.toLowerCase().includes(dep),
@@ -162,7 +131,6 @@ export function useQueryParams() {
     searchParams,
     matchPathname,
     createLinkParams,
-    createMutipleParams,
     toggleParams,
     deleteParams,
     clearAllParams,
@@ -170,5 +138,6 @@ export function useQueryParams() {
     getAllParams,
     createNewRouteParams,
     createParams,
+    createArrayParams,
   };
 }

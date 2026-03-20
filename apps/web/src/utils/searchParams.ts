@@ -11,6 +11,7 @@ export interface ISearchParams {
   limit?: string;
   price?: string;
   q?: string;
+  key: string | string[];
 }
 
 export default async function parseSearchParams(searchParams: ISearchParams) {
@@ -25,9 +26,11 @@ export default async function parseSearchParams(searchParams: ISearchParams) {
     page,
     price,
     q,
+    key,
   } = await searchParams;
 
   const brands = normalizeParams(brand);
+  const keys = normalizeParams(key);
   const categoryIds = normalizeParams(categoryId, true);
   const attributeIds = normalizeParams(attributeId, true);
 
@@ -42,5 +45,6 @@ export default async function parseSearchParams(searchParams: ISearchParams) {
     page: parseInt(page as string),
     price,
     q,
+    keys,
   };
 }

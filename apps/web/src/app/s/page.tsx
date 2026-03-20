@@ -3,13 +3,10 @@ import parseSearchParams, { ISearchParams } from '@/utils/searchParams';
 import CategoryView from '@/views/pages/c';
 
 export default async function SearchPage({
-  params,
   searchParams,
 }: {
-  params: { slugs: string[] };
   searchParams: ISearchParams;
 }) {
-  const { slugs } = await params;
   const parsedParams = await parseSearchParams(searchParams);
 
   let products = [];
@@ -19,7 +16,7 @@ export default async function SearchPage({
 
   try {
     const { data } = await axiosInstanceServer.post(`/product/all`, {
-      slugs,
+      slugs: parsedParams.keys,
       ...parsedParams,
     });
 
@@ -31,7 +28,7 @@ export default async function SearchPage({
     products = [];
   }
 
-  const categoryView = { products, filters, totalItems };
+  const categoryView = { products, filters, totalItems, query: parsedParams.q };
 
   return (
     <main>
