@@ -29,7 +29,7 @@ export default function Template({ children }: { children: React.ReactNode }) {
     <div>
       {' '}
       <ToastContainer />
-      {mounted && <BannerAnimation />}
+      <BannerAnimation mounted={mounted} />
       {cartNavbar && <NavbarCart />}
       {productNavbar && <NavbarProduct />}
       {!mobileNavbar && <NavbarSearch />}
@@ -37,7 +37,7 @@ export default function Template({ children }: { children: React.ReactNode }) {
         <Navbar />
         {children}
       </Container>
-      {mounted && <ContactAnimation />}
+      <ContactAnimation mounted={mounted} />
       {!mobileNavbar && <NavbarMobile />}
       <Footer />
     </div>

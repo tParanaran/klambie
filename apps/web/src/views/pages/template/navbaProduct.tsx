@@ -5,6 +5,8 @@ import NavbarTopContainer from '@/views/components/navbarTopContainer';
 import useHandleClickOutside from './hooks/useHandleClickOutside';
 import SearchBar from './components/searchBar';
 import SearchRecent from './components/searchRecent';
+import NavbarDepartment from './navbarDepartment';
+import useMobileBehavior from './hooks/useMobile';
 
 export default function NavbarProduct() {
   const [dropdown, setDropdown] = useState<boolean>(false);
@@ -15,26 +17,37 @@ export default function NavbarProduct() {
   const { dropdownRef, modalRef } = useHandleClickOutside({
     handleClickOutside,
   });
+
+  useMobileBehavior({
+    setShow: () => handleClickOutside,
+    show: dropdown,
+    ref: dropdownRef,
+    isMobile: dropdown,
+  });
   return (
-    <NavbarTopContainer>
-      <div className="flex justify-between space-x-3">
-        <GoBackButton />
-        <Suspense>
-          <div
-            className="flex-2"
-            ref={modalRef}
-            onFocus={() => setDropdown(true)}
-          >
-            <SearchBar />
-          </div>
-        </Suspense>
-        <ShareButton />
-      </div>
-      {dropdown && (
-        <div ref={dropdownRef}>
-          <SearchRecent />
+    <>
+      <NavbarTopContainer>
+        <div className="flex justify-between space-x-3">
+          <GoBackButton />
+          <Suspense>
+            <div
+              className="flex-2"
+              ref={modalRef}
+              onFocus={() => setDropdown(true)}
+            >
+              <SearchBar />
+            </div>
+          </Suspense>
+          <ShareButton />
         </div>
-      )}
-    </NavbarTopContainer>
+
+        {dropdown && (
+          <div ref={dropdownRef}>
+            <SearchRecent />
+          </div>
+        )}
+      </NavbarTopContainer>
+      {!dropdown && <NavbarDepartment />}
+    </>
   );
 }

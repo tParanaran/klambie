@@ -4,7 +4,7 @@ import { Dispatch, RefObject, SetStateAction, useEffect } from 'react';
 interface IUseMobile {
   setShow: Dispatch<SetStateAction<boolean>>;
   show: boolean;
-  ref: RefObject<HTMLButtonElement>;
+  ref: RefObject<HTMLButtonElement | HTMLDivElement>;
   isMobile?: boolean;
 }
 
@@ -29,7 +29,7 @@ export default function useMobileBehavior({
   // Scroll to behavior
   useEffect(() => {
     if (show && isMobile && ref.current) {
-      const navbarHeight = 64;
+      const navbarHeight = 40;
       if (window.scrollY <= navbarHeight) {
         window.scrollTo({ top: navbarHeight, behavior: 'smooth' });
       }

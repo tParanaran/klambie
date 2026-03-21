@@ -34,75 +34,88 @@ export default function TopNavbar({ totalItems, filters, query }: ITopNavbar) {
   const handlerModal = () => {
     setShowModal(!showModal);
   };
+
+  const content = (
+    <>
+      <div className="space-x-2">
+        {segments.length > 1 && (
+          <h1 className="text-base sm:text-lg md:text-xl font-semibold inline-block">
+            {segments.length > 3
+              ? `${segments[3]} ${segments[1]}'s ${segments[2]}`
+              : segments.slice(1, 3).join("'s ")}
+          </h1>
+        )}
+        {query && (
+          <h1 className="text-base sm:text-lg md:text-xl font-semibold inline-block mr-2">
+            "{query}"
+          </h1>
+        )}
+        <p className="text-sm inline-block opacity-50">
+          {totalItems} items found
+        </p>
+      </div>
+    </>
+  );
   return (
     <>
-      <div className="py-1 lg:w-2xs md:w-3xs w-50 flex-wrap hidden sm:flex">
-        {segments.length > 1 ? (
-          <>
-            {segments.map((segment, s) => (
-              <TagButton
-                key={s}
-                className="text-xs! pl-0! -ml-0.5"
-                icon={<IoChevronBack className="text-lg" />}
-                href={
-                  s === 0
-                    ? `/d/${segments[1].toLowerCase()}`
-                    : `/${segments
-                        .slice(0, s + 1)
-                        .join('/')
-                        .toLowerCase()}`
-                }
-              >
-                {s === 0 ? 'Home' : segment}
-              </TagButton>
-            ))}
-          </>
-        ) : (
-          <>
-            <TagButton
-              className="text-xs! pl-0! -ml-0.5"
-              icon={<IoChevronBack className="text-lg" />}
-              onClick={() => router.back()}
-            >
-              Back
-            </TagButton>
-            {newPathname &&
-              newPathname.map((newPath, n) => (
+      {/* Mobile View */}
+      <div className="lg:hidden">{content}</div>
+      <div className="flex py-2">
+        <div className="lg:w-2xs md:w-3xs w-50 hidden sm:block">
+          <div className="flex flex-wrap">
+            {segments.length > 1 ? (
+              <>
+                {segments.map((segment, s) => (
+                  <TagButton
+                    key={s}
+                    className="text-xs! pl-0! -ml-0.5"
+                    icon={<IoChevronBack className="text-lg" />}
+                    href={
+                      s === 0
+                        ? `/d/${segments[1].toLowerCase()}`
+                        : `/${segments
+                            .slice(0, s + 1)
+                            .join('/')
+                            .toLowerCase()}`
+                    }
+                  >
+                    {s === 0 ? 'Home' : segment}
+                  </TagButton>
+                ))}
+              </>
+            ) : (
+              <>
                 <TagButton
-                  key={n}
                   className="text-xs! pl-0! -ml-0.5"
                   icon={<IoChevronBack className="text-lg" />}
-                  onClick={() => deleteParams('key')}
+                  onClick={() => router.back()}
                 >
-                  {newPath}
+                  Back
                 </TagButton>
-              ))}
-          </>
-        )}
-      </div>
-      <div className="flex lg:flex-row flex-col justify-between flex-2 overflow-x-scroll scrollbar-hide">
-        <div className="space-x-1 ml-2">
-          {segments.length > 1 && (
-            <h1 className="text-base sm:text-lg md:text-xl font-semibold inline-block">
-              {segments.length > 3
-                ? `${segments[3]} ${segments[1]}'s ${segments[2]}`
-                : segments.slice(1, 3).join("'s ")}
-            </h1>
-          )}
-          {query && (
-            <h1 className="text-base sm:text-lg md:text-xl font-semibold inline-block mr-2">
-              "{query}"
-            </h1>
-          )}
-          <p className="text-sm inline-block opacity-50">
-            {totalItems} items found
-          </p>
+                {newPathname &&
+                  newPathname.map((newPath, n) => (
+                    <TagButton
+                      key={n}
+                      className="text-xs! pl-0! -ml-0.5"
+                      icon={<IoChevronBack className="text-lg" />}
+                      onClick={() => deleteParams('key')}
+                    >
+                      {newPath}
+                    </TagButton>
+                  ))}
+              </>
+            )}
+          </div>
         </div>
+        {/* Desktop View */}
+        <div className="flex justify-between flex-2 overflow-x-scroll scrollbar-hide">
+          <div className="hidden lg:block ml-2">{content}</div>
+          <div className="sm:ml-auto">
+            <SortProduct handlerModal={handlerModal} />
+          </div>
+        </div>
+      </div>
 
-        <div className="sm:ml-auto mt-2 lg:my-0">
-          <SortProduct handlerModal={handlerModal} />
-        </div>
-      </div>
       {showModal && (
         <ModalContainer
           handlerModal={handlerModal}

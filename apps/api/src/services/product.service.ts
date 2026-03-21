@@ -458,7 +458,7 @@ export class ProductService {
         : {}),
     };
 
-    const takeLimit = limit || 2;
+    const takeLimit = limit || 24;
     const skipPage = page || 1;
 
     const data = await prisma.product.findMany({

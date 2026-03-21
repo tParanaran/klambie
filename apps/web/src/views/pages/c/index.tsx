@@ -23,10 +23,11 @@ export default function CategoryView({
   query,
 }: ICategoryView) {
   const { isMobile } = useDetectIsMobile({ widthScreen: 1024, maxWitdh: 850 });
+  const detectTop = useDetectIsMobile({ widthScreen: 767 });
 
   return (
-    <div>
-      <div className="my-2 flex lg:items-center items-end">
+    <>
+      <div>
         <TopNavbar totalItems={totalItems} filters={filters} query={query} />
       </div>
 
@@ -61,6 +62,6 @@ export default function CategoryView({
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

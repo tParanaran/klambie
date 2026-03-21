@@ -9,7 +9,7 @@ interface IPagination {
   totalItems: number;
   limit?: number;
 }
-export default function Pagination({ totalItems, limit = 1 }: IPagination) {
+export default function Pagination({ totalItems, limit = 24 }: IPagination) {
   const pageRef = useRef<HTMLButtonElement | null>(null);
   const { getParams, createParams } = useQueryParams();
 
