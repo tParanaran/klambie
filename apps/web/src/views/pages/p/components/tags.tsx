@@ -14,7 +14,7 @@ export default function Tags({ tags }: { tags: ITag[] }) {
           key={tag.slug}
           href={createLinkParams('tag', `${tag.slug}`, { append: false })}
           icon={<IoSparkles className="mr-0.5 text-xs" />}
-          className={`${t % 2 === 0 ? 'bg-orange-700! text-[#ededed]!' : `bg-gray-50! text-[#FF4500]!`} mb-1! text-xs! px-2!`}
+          className={`${t % 2 === 0 ? 'bg-orange-700! text-[#ededed]!' : `bg-gray-50! text-[#FF4500]!`} mb-0.5! text-xs! px-2!`}
           aria-label={`Select ${tag.name}`}
         >
           {tag.name}

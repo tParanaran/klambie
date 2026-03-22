@@ -9,41 +9,43 @@ export default function ShopByButton() {
   const { tags } = useAttribute();
 
   return (
-    <main className="my-3">
+    <main className="mt-3">
       <h1 className={`${antonFont.className} text-lg sm:text-xl uppercase`}>
         Shop By Essentials
       </h1>
-      <div className="flex space-x-2 flex-wrap my-2">
-        <Link
-          href={pathname}
-          aria-label={`All Products`}
-          scroll={false}
-          className={`${antonFont.className} uppercase px-3 py-1 rounded-full text-base sm:text-lg hover:bg-black hover:border-black hover:text-[#ededed] mt-2 ${
-            getParams('tag') === undefined
-              ? 'bg-orange-800 border-orange-800 text-[#ededed]'
-              : 'border'
-          }`}
-        >
-          All
-        </Link>
-
-        {tags.map((tag, idx) => (
+      <div className="overflow-y-scroll scrollbar-hide">
+        <div className="flex space-x-2 py-2">
           <Link
-            href={createLinkParams('tag', tag.slug, { append: false })}
-            aria-label={`${tag} Product`}
-            key={idx}
+            href={pathname}
+            aria-label={`All Products`}
             scroll={false}
-            className={`${
-              antonFont.className
-            } uppercase px-3 py-1 rounded-full text-base sm:text-lg hover:bg-black hover:border-black hover:text-[#ededed] mt-2 ${
-              getParams('tag') === tag.slug
+            className={`${antonFont.className} uppercase flex-none px-3 py-1 rounded-full text-base sm:text-lg hover:bg-black hover:border-black hover:text-[#ededed] mt-2 ${
+              getParams('tag') === undefined
                 ? 'bg-orange-800 border-orange-800 text-[#ededed]'
                 : 'border'
             }`}
           >
-            {tag.name}
+            All
           </Link>
-        ))}
+
+          {tags.map((tag, idx) => (
+            <Link
+              href={createLinkParams('tag', tag.slug, { append: false })}
+              aria-label={`${tag} Product`}
+              key={idx}
+              scroll={false}
+              className={`${
+                antonFont.className
+              } uppercase px-3 py-1 rounded-full text-base flex-none sm:text-lg hover:bg-black hover:border-black hover:text-[#ededed] mt-2 ${
+                getParams('tag') === tag.slug
+                  ? 'bg-orange-800 border-orange-800 text-[#ededed]'
+                  : 'border'
+              }`}
+            >
+              {tag.name}
+            </Link>
+          ))}
+        </div>
       </div>
     </main>
   );

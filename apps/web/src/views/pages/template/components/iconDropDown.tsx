@@ -43,7 +43,7 @@ export default function IconDropdown() {
         label="Search"
       >
         {' '}
-        <Suspense>
+        <Suspense fallback={<div style={{ width: '384px' }} />}>
           <div className="w-sm h-fit max-h-[75vh] overflow-y-auto scrollbar-hide p-3">
             <SearchBar showSearch={dropdowns.search} />
             <SearchRecent />

@@ -61,7 +61,7 @@ export default function NavbarSearch() {
     <>
       <NavbarTopContainer>
         <div className="flex justify-between space-x-3 items-center">
-          <Suspense>
+          <Suspense fallback={<div style={{ width: '100%' }} />}>
             <div
               className="flex-2"
               ref={modalRef}
@@ -89,7 +89,7 @@ export default function NavbarSearch() {
             zIndex={isMobile ? 'z-10' : 'z-30'}
           >
             <div
-              className={`overflow-y-auto scrollbar-hide p-3 ${isMobile ? 'w-screen h-screen mt-16 max-h-[93vh]' : 'w-sm h-fit max-h-[75vh]'}`}
+              className={`overflow-y-auto scrollbar-hide p-3 ${isMobile ? 'w-screen h-screen mt-14 max-h-[93vh]' : 'w-sm h-fit max-h-[75vh]'}`}
             >
               <NotificationContent />
             </div>

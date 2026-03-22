@@ -5,6 +5,7 @@ import { ICategories } from '../types';
 import { useQueryParams } from '../hooks/useQueryParams';
 import TagButton from '@/views/components/tagButton';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 interface IDropdownSidebar {
   item: ICategories;
@@ -76,7 +77,21 @@ export default function DropdownSidebar({
   if (!hasSub)
     return (
       <>
-        {item.level <= 3 && (
+        {item.level === 1 && (
+          <Link
+            href={`/c/${item.slug}`}
+            className={`w-full transition-colors py-2 duration-200 flex items-center justify-between ${isOpen ? 'text-orange-800 dark:text-orange-600 font-semibold' : ''} ${level > 0 ? 'ml-2 pr-2' : ''}`}
+            aria-expanded={isOpen}
+            aria-controls={`submenu-${level}-${index}`}
+          >
+            {item.name}
+
+            <IoChevronForward
+              className={`text-xl ml-3 transition-transform duration-300 transform ${isOpen ? 'rotate-180' : 'rotate-0'}`}
+            />
+          </Link>
+        )}
+        {item.level <= 3 && item.level !== 1 && (
           <button
             onClick={() => handleNoSubParams(item.slug)}
             className={`w-full transition-colors py-2 duration-200 flex items-center justify-between ${isOpen ? 'text-orange-800 dark:text-orange-600 font-semibold' : ''} ${level > 0 ? 'ml-2 pr-2' : ''}`}

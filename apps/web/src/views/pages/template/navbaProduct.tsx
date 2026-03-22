@@ -27,9 +27,9 @@ export default function NavbarProduct() {
   return (
     <>
       <NavbarTopContainer>
-        <div className="flex justify-between space-x-3">
+        <div className="flex justify-between space-x-3 py-0.5">
           <GoBackButton />
-          <Suspense>
+          <Suspense fallback={<div style={{ width: '100%' }} />}>
             <div
               className="flex-2"
               ref={modalRef}

@@ -55,7 +55,7 @@ export default function SortProduct({ handlerModal }: ISortProduct) {
         <TagButton
           icon={<IoClose className="text-lg" />}
           onClick={clearAllParams}
-          className="flex-none block sm:hidden"
+          className="flex-none block sm:hidden pr-3!"
         >
           Clear Filter
         </TagButton>
@@ -73,8 +73,8 @@ export default function SortProduct({ handlerModal }: ISortProduct) {
       {sortOptions.map((sort, s) => (
         <TagButton
           key={s}
+          className="pr-3!"
           active={currentSort === sort.value}
-          className="sm:px-3!"
           icon={
             s === 0 ? (
               <RiDiscountPercentLine className="text-lg" />

@@ -9,6 +9,7 @@ import { IoChevronBack, IoClose } from 'react-icons/io5';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ICategories } from '../types';
+import { formatPathname } from '@/utils/formatPathname';
 
 interface ITopNavbar {
   totalItems: number;
@@ -27,9 +28,9 @@ export default function TopNavbar({ totalItems, filters, query }: ITopNavbar) {
     s ? s[0].toUpperCase() + s.slice(1) : '',
   );
 
-  const segments = (pathname.match(/[^\/]+/g) || []).map((s) =>
-    s ? s[0].toUpperCase() + s.slice(1) : '',
-  );
+  const segments = formatPathname(pathname);
+
+  const slugs = pathname.match(/[^\/]+/g) || [];
 
   const handlerModal = () => {
     setShowModal(!showModal);
@@ -37,19 +38,17 @@ export default function TopNavbar({ totalItems, filters, query }: ITopNavbar) {
 
   const content = (
     <>
-      <div className="space-x-2">
-        {segments.length > 1 && (
-          <h1 className="text-base sm:text-lg md:text-xl font-semibold inline-block">
+      <div className="space-x-2 text-base sm:text-lg font-semibold">
+        {segments.length >= 1 && (
+          <h1 className="inline-block">
             {segments.length > 3
-              ? `${segments[3]} ${segments[1]}'s ${segments[2]}`
-              : segments.slice(1, 3).join("'s ")}
+              ? `${segments[3]} ${segments[2]} of ${segments[1]}`
+              : segments.slice(1, 3).reverse().join(' of ')}
           </h1>
         )}
-        {query && (
-          <h1 className="text-base sm:text-lg md:text-xl font-semibold inline-block mr-2">
-            "{query}"
-          </h1>
-        )}
+
+        {query && <h1 className="inline-block">"{query}"</h1>}
+
         <p className="text-sm inline-block opacity-50">
           {totalItems} items found
         </p>
@@ -60,33 +59,30 @@ export default function TopNavbar({ totalItems, filters, query }: ITopNavbar) {
     <>
       {/* Mobile View */}
       <div className="lg:hidden">{content}</div>
-      <div className="flex py-2">
+      <div className="flex py-2 items-end">
         <div className="lg:w-2xs md:w-3xs w-50 hidden sm:block">
-          <div className="flex flex-wrap">
+          <div className="flex px-1 overflow-x-scroll scrollbar-hide">
             {segments.length > 1 ? (
               <>
-                {segments.map((segment, s) => (
+                {slugs.map((slug, s) => (
                   <TagButton
                     key={s}
-                    className="text-xs! pl-0! -ml-0.5"
+                    className={`text-xs! pl-0! -ml-0.5 ${s === 0 ? 'pr-3!' : ''}`}
                     icon={<IoChevronBack className="text-lg" />}
                     href={
                       s === 0
-                        ? `/d/${segments[1].toLowerCase()}`
-                        : `/${segments
-                            .slice(0, s + 1)
-                            .join('/')
-                            .toLowerCase()}`
+                        ? `/d/${slugs[1]}`
+                        : `/${slugs.slice(0, s + 1).join('/')}`
                     }
                   >
-                    {s === 0 ? 'Home' : segment}
+                    {s === 0 ? 'Home' : segments[s]}
                   </TagButton>
                 ))}
               </>
             ) : (
               <>
                 <TagButton
-                  className="text-xs! pl-0! -ml-0.5"
+                  className="text-xs! pr-3! pl-0! -ml-0.5"
                   icon={<IoChevronBack className="text-lg" />}
                   onClick={() => router.back()}
                 >
@@ -96,7 +92,7 @@ export default function TopNavbar({ totalItems, filters, query }: ITopNavbar) {
                   newPathname.map((newPath, n) => (
                     <TagButton
                       key={n}
-                      className="text-xs! pl-0! -ml-0.5"
+                      className={`text-xs! pl-0! -ml-0.5 ${n === 0 ? 'pr-3!' : ' '}`}
                       icon={<IoChevronBack className="text-lg" />}
                       onClick={() => deleteParams('key')}
                     >

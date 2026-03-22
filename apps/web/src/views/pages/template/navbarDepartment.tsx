@@ -3,8 +3,10 @@ import useAttribute from '../c/hooks/useAttribute';
 import useScrollDirection from './hooks/useScrollDirection';
 import useScrolled from './hooks/useScrolled';
 import useDetectIsMobile from './hooks/useDetectIsMobile';
+import { useQueryParams } from '../c/hooks/useQueryParams';
 
 export default function NavbarDepartment() {
+  const { pathname } = useQueryParams();
   const { categories } = useAttribute();
   const scrollDir = useScrollDirection(0);
   const isScroll = useScrolled();
@@ -14,7 +16,7 @@ export default function NavbarDepartment() {
     <nav
       style={{
         top: isScroll ? 62 : 100,
-        zIndex: isScroll ? 20 : 10,
+        zIndex: 30,
         right: isMobile ? 12 : 'fit',
       }}
       className={`fixed left-3 sm:left-5 transition-all duration-200 py-1.5 md:hidden rounded-full overflow-x-scroll scrollbar-hide
@@ -28,8 +30,8 @@ export default function NavbarDepartment() {
         {categories.map((cat) => (
           <Link
             key={cat.slug}
-            href={`/d/${cat.slug}`}
-            className="px-3 py-2  whitespace-nowrap bg-black/15 dark:bg-white/10 rounded-lg uppercase text-xs sm:text-sm font-semibold"
+            href={`/c/${cat.slug}`}
+            className={`px-3 py-2  whitespace-nowrap rounded-lg uppercase text-xs sm:text-sm font-semibold ${pathname === `/c/${cat.slug}` ? 'bg-black/90 dark:bg-orange-800 text-[#ededed]' : 'bg-black/15 dark:bg-white/10 '}`}
           >
             {cat.name}
           </Link>

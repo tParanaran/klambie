@@ -13,15 +13,22 @@ export default function Title({ title }: { title: ITitle }) {
   return (
     <>
       <div className="flex space-x-1 pb-2 sm:pb-5 flex-wrap mr-10 uppercase text-xs">
-        {categories?.map((category, c) => (
-          <Link
-            key={c}
-            href={'/'}
-            className="px-3 py-1 rounded-full mt-1 bg-orange-800 text-[#ededed] flex items-center hover:bg-orange-700"
-          >
-            {category.name}
-          </Link>
-        ))}
+        {categories?.map((_, i) => {
+          const path = categories
+            .slice(0, i + 1)
+            .map((cat) => cat.slug)
+            .join('/');
+
+          return (
+            <Link
+              key={i}
+              href={`/c/${path}`}
+              className="px-3 py-1 rounded-full mt-1 bg-orange-800 text-[#ededed]"
+            >
+              {categories[i].name}
+            </Link>
+          );
+        })}
       </div>
 
       <Link href={`/p/${slug}`} aria-label={name}>
