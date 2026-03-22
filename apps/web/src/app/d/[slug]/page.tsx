@@ -29,7 +29,7 @@ export default async function Department({
     products = [];
     error = error.message || 'Something went wrong while fetching data.';
   }
-  const viewProps = { products, error };
+  const viewProps = { products, error, slug };
 
   switch (slug) {
     case 'men':

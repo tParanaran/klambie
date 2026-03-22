@@ -67,7 +67,7 @@ export default function TopNavbar({ totalItems, filters, query }: ITopNavbar) {
                 {slugs.map((slug, s) => (
                   <TagButton
                     key={s}
-                    className={`text-xs! pl-0! -ml-0.5 ${s === 0 ? 'pr-3!' : ''}`}
+                    className={`text-xs! pl-0! -ml-0.5 flex-none ${s === 0 ? 'pr-3!' : ''}`}
                     icon={<IoChevronBack className="text-lg" />}
                     href={
                       s === 0
@@ -82,7 +82,7 @@ export default function TopNavbar({ totalItems, filters, query }: ITopNavbar) {
             ) : (
               <>
                 <TagButton
-                  className="text-xs! pr-3! pl-0! -ml-0.5"
+                  className="text-xs! pr-3! pl-0! -ml-0.5 flex-none"
                   icon={<IoChevronBack className="text-lg" />}
                   onClick={() => router.back()}
                 >
@@ -92,7 +92,7 @@ export default function TopNavbar({ totalItems, filters, query }: ITopNavbar) {
                   newPathname.map((newPath, n) => (
                     <TagButton
                       key={n}
-                      className={`text-xs! pl-0! -ml-0.5 ${n === 0 ? 'pr-3!' : ' '}`}
+                      className={`text-xs! pl-0! -ml-0.5 flex-none ${n === 0 ? 'pr-3!' : ' '}`}
                       icon={<IoChevronBack className="text-lg" />}
                       onClick={() => deleteParams('key')}
                     >

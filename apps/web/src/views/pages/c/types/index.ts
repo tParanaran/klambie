@@ -3,6 +3,8 @@ export interface ICategories {
   name: string;
   slug: string;
   level: number;
+  image?: string;
+  description?: string;
   subcategories?: ICategories[];
 }
 

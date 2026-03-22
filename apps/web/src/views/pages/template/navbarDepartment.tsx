@@ -31,7 +31,7 @@ export default function NavbarDepartment() {
           <Link
             key={cat.slug}
             href={`/c/${cat.slug}`}
-            className={`px-3 py-2  whitespace-nowrap rounded-lg uppercase text-xs sm:text-sm font-semibold ${pathname.includes(cat.slug) ? 'bg-black/90 dark:bg-orange-800 text-[#ededed]' : 'bg-black/15 dark:bg-white/10 '}`}
+            className={`px-3 py-2  whitespace-nowrap rounded-lg uppercase text-xs sm:text-sm font-semibold ${pathname.includes(`/c/${cat.slug}`) ? 'bg-black/90 dark:bg-orange-800 text-[#ededed]' : 'bg-black/15 dark:bg-white/10 '}`}
           >
             {cat.name}
           </Link>

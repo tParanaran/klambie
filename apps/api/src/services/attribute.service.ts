@@ -316,7 +316,15 @@ export class AttributeService {
         id: true,
         path: true,
         level: true,
-        category: { select: { name: true, slug: true, id: true } },
+        category: {
+          select: {
+            name: true,
+            slug: true,
+            id: true,
+            image: true,
+            description: true,
+          },
+        },
       },
       orderBy: { path: 'asc' },
     });
@@ -325,13 +333,23 @@ export class AttributeService {
     const roots: Filters[] = [];
 
     for (const item of categories) {
-      const node = {
+      if (!item.category) continue;
+      const node: Filters = {
         id: item.category.id,
         name: item.category.name,
         slug: item.category.slug,
         level: item.level,
         subcategories: [],
       };
+
+      if (item.category.image) {
+        node.image = item.category.image;
+      }
+
+      if (item.category.description) {
+        node.description = item.category.description;
+      }
+
       pathMap.set(item.path, node);
 
       const parentPath = item.path.split('.').slice(0, -1).join('.');

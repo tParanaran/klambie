@@ -120,6 +120,8 @@ export type Filters = {
   id: number;
   name: string;
   slug: string;
+  image?: string | null;
+  description?: string | null;
   level: number;
   subcategories: Filters[];
 };

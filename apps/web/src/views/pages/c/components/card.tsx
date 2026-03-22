@@ -1,7 +1,7 @@
 'use client';
 
 import { SwiperSlide, Swiper } from 'swiper/react';
-import { IoBagAddOutline } from 'react-icons/io5';
+import { TbShoppingBagPlus } from 'react-icons/tb';
 import { useRef } from 'react';
 import { IProducts } from '@/views/pages/p/types/product.types';
 import Link from 'next/link';
@@ -55,13 +55,13 @@ export default function ProductCard({ products }: { products: IProducts[] }) {
             ))}
             <div className="absolute top-1 right-1 z-10">
               <button
-                className="rounded-full text-3xl p-2 bg-black/60 font-bold text-[#ededed] uppercase w-full hover:bg-black disabled:opacity-50 disabled:cursor-not-allowed"
+                className="rounded-full text-2xl p-1.5 bg-black/60 font-bold text-[#ededed] uppercase w-full hover:bg-black disabled:opacity-50 disabled:cursor-not-allowed"
                 aria-label="Add to bag modal"
                 onClick={() => {
                   (variantHandler(item.slug, item.name), updateQuantity(1, 1));
                 }}
               >
-                <IoBagAddOutline />
+                <TbShoppingBagPlus />
               </button>
             </div>
             <div className="absolute bottom-1 left-1 right-1 z-10">

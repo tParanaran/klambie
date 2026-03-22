@@ -9,10 +9,8 @@ export default function ShopByButton() {
   const { tags } = useAttribute();
 
   return (
-    <main className="mt-3">
-      <h1 className={`${antonFont.className} text-lg sm:text-xl uppercase`}>
-        Shop By Essentials
-      </h1>
+    <main className="mt-5">
+      <h1 className="font-semibold text-lg">Shop By Essentials</h1>
       <div className="overflow-y-scroll scrollbar-hide">
         <div className="flex space-x-2 py-2">
           <Link

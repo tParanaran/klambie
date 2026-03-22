@@ -129,12 +129,12 @@ model Product {
 }
 
 model Brand {
-  id        Int      @id @default(autoincrement())
-  name      String   @unique @db.VarChar(100)
-  slug      String   @unique
-  logo      String?  @db.VarChar(200)
-  bio       String?  @db.VarChar(500)
-  createdAt DateTime @default(now())
+  id          Int      @id @default(autoincrement())
+  name        String   @unique @db.VarChar(100)
+  slug        String   @unique
+  image       String?  @db.VarChar(200)
+  description String?  @db.VarChar(500)
+  createdAt   DateTime @default(now())
 
   products Product[]
 }
@@ -248,9 +248,12 @@ model ProductVariantAttribute {
 }
 
 model Category {
-  id   Int    @id @default(autoincrement())
-  name String @unique
-  slug String @unique
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  slug        String   @unique
+  image       String?  @db.VarChar(200)
+  description String?  @db.VarChar(500)
+  createdAt   DateTime @default(now())
 
   categoryHierarchies CategoryHierarchy[]
 }
