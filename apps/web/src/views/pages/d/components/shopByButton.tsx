@@ -10,7 +10,7 @@ export default function ShopByButton() {
 
   return (
     <main className="mt-5">
-      <h1 className="font-semibold text-lg">Shop By Essentials</h1>
+      <h1 className="font-semibold text-lg ">Shop By Essentials</h1>
       <div className="overflow-y-scroll scrollbar-hide">
         <div className="flex space-x-2 py-2">
           <Link
