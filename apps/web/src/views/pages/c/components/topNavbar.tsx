@@ -119,7 +119,7 @@ export default function TopNavbar({ totalItems, filters, query }: ITopNavbar) {
           style={`${isMobile ? 'w-[90%]' : 'w-1/2'} h-screen dark:bg-[#1b1a1e]/80 bg-[#ededed]/80 backdrop-blur-xl p-3 rounded-2xl`}
           isFilter={true}
         >
-          <div className="max-h-[94vh] space-y-3 overflow-y-scroll scrollbar-hide z-50">
+          <div className="max-h-[94vh] overflow-y-scroll scrollbar-hide z-50">
             <button
               className="absolute top-2 right-2 p-3 z-50"
               onClick={handlerModal}
@@ -127,7 +127,7 @@ export default function TopNavbar({ totalItems, filters, query }: ITopNavbar) {
             >
               <IoClose className="text-2xl hover:scale-125" />
             </button>
-            <div className="mb-7">
+            <div className="mb-7 space-y-2">
               <SideNavbar filters={filters} />
             </div>
             <TagButton
