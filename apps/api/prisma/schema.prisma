@@ -248,12 +248,10 @@ model ProductVariantAttribute {
 }
 
 model Category {
-  id          Int      @id @default(autoincrement())
-  name        String   @unique
-  slug        String   @unique
-  image       String?  @db.VarChar(200)
-  description String?  @db.VarChar(500)
-  createdAt   DateTime @default(now())
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  slug      String   @unique
+  createdAt DateTime @default(now())
 
   categoryHierarchies CategoryHierarchy[]
 }

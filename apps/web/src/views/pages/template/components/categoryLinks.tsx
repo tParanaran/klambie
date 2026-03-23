@@ -63,7 +63,7 @@ export default function CategoryLinks() {
                 <div className="flex space-x-3 items-center p-3">
                   <h1 className="font-semibold text-lg">{cat.name}</h1>
                   <p className="text-sm text-orange-800 dark:text-orange-600">
-                    Show All
+                    Shop All
                   </p>
                 </div>
               </Link>

@@ -79,7 +79,7 @@ export default function CategoryContent({
                 href={`/c/${slug || slugModal}/${sideModalItem.slug}`}
                 className={`font-semibold rounded-lg hover:bg-orange-800 hover:text-[#ededed] bg-black/10 dark:bg-white/10 text-orange-800 dark:text-orange-600 ${isMobile ? 'py-3 px-8 text-base' : 'px-4 py-2 text-sm'}`}
               >
-                <p>Show All</p>
+                <p>Shop All</p>
               </Link>
               {sideModalItem.subcategories?.map((subItem, i) => (
                 <Link

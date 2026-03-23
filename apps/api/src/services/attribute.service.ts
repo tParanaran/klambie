@@ -321,8 +321,6 @@ export class AttributeService {
             name: true,
             slug: true,
             id: true,
-            image: true,
-            description: true,
           },
         },
       },
@@ -341,14 +339,6 @@ export class AttributeService {
         level: item.level,
         subcategories: [],
       };
-
-      if (item.category.image) {
-        node.image = item.category.image;
-      }
-
-      if (item.category.description) {
-        node.description = item.category.description;
-      }
 
       pathMap.set(item.path, node);
 

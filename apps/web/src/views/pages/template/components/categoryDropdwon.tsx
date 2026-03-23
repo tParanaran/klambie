@@ -118,7 +118,7 @@ export default function DropdownCategory({
             className="w-full transition-colors duration-200 p-3 md:py-2 text-left"
           >
             <p className="ml-2 text-orange-800 dark:text-orange-600">
-              Show All
+              Shop All
             </p>
           </Link>
           {item.subcategories!.map((subItem, subIndex) => (

@@ -9,10 +9,9 @@ export default function ShopByButton() {
   const { tags } = useAttribute();
 
   return (
-    <main className="mt-5">
-      <h1 className="font-semibold text-lg ">Shop By Essentials</h1>
+    <main className="mt-5 md:mt-10">
       <div className="overflow-y-scroll scrollbar-hide">
-        <div className="flex space-x-2 py-2">
+        <div className="flex space-x-2">
           <Link
             href={pathname}
             aria-label={`All Products`}

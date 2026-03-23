@@ -23,11 +23,10 @@ export default function CategoryView({
   query,
 }: ICategoryView) {
   const { isMobile } = useDetectIsMobile({ widthScreen: 1024, maxWitdh: 850 });
-  const detectTop = useDetectIsMobile({ widthScreen: 767 });
 
   return (
     <>
-      <div>
+      <div className="mt-5 md:mt-0">
         <TopNavbar totalItems={totalItems} filters={filters} query={query} />
       </div>
 
