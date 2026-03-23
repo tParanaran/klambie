@@ -8,4 +8,5 @@ export interface IDepartementView {
 
 export interface IShopByCard {
   products: IProducts[];
+  slug: string;
 }

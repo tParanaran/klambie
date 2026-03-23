@@ -15,9 +15,19 @@ import useSelectedVariant from '../../p/hooks/useSelectedVariant';
 import Loading from '@/views/components/loading';
 import ErrorsMessage, { IErrorsMessageHandle } from '../../p/components/errors';
 import AddToCartButton from '../../p/components/addButton';
+import { useQueryParams } from '../hooks/useQueryParams';
 
-export default function ProductCard({ products }: { products: IProducts[] }) {
+export default function ProductCard({
+  products,
+  style,
+  cardStyle,
+}: {
+  products: IProducts[];
+  style?: string;
+  cardStyle?: string;
+}) {
   const errorsProductRef = useRef<IErrorsMessageHandle | null>(null);
+  const { pathname } = useQueryParams();
   const { variants, showVariants, showVariantsHandler, variantHandler } =
     useVariants();
   const { quantities, updateQuantity } = useCartQuantities({});
@@ -39,14 +49,14 @@ export default function ProductCard({ products }: { products: IProducts[] }) {
   return (
     <>
       {products.map((item, idx) => (
-        <div key={idx} className="mb-2 z-0">
+        <div key={idx} className={`relative mb-2 z-0 ${style}`}>
           <Swiper spaceBetween={5}>
             {item.images.map((image, i) => (
               <SwiperSlide key={i}>
                 <img
                   src={image}
                   alt={`Product Image ${i}`}
-                  className="object-cover w-full rounded-2xl"
+                  className={`object-cover w-full rounded-2xl h-72 lg:h-96 ${cardStyle}`}
                   width={300}
                   height={400}
                   aria-placeholder="blur"
@@ -86,13 +96,15 @@ export default function ProductCard({ products }: { products: IProducts[] }) {
             </div>
 
             <div>
-              <h1 className="text-light text-[11px] uppercase mb-1 opacity-70">
-                {item.categories
-                  .map((category) => {
-                    return category.name;
-                  })
-                  .join(', ')}
-              </h1>
+              {pathname.includes('/c') && (
+                <h1 className="text-light text-[11px] uppercase mb-1 opacity-70">
+                  {item.categories
+                    .map((category) => {
+                      return category.name;
+                    })
+                    .join(', ')}
+                </h1>
+              )}
               <div>
                 <p className="font-bold">{item.brand.name}</p>
                 <p className="font-light">{item.name}</p>

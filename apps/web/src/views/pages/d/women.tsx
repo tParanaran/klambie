@@ -11,7 +11,7 @@ export default async function WomenView({
   return (
     <div>
       <ShopByCategory slug={slug} />
-      <ShopByCard products={products} />
+      <ShopByCard products={products} slug={slug} />
       {error && <ErrorMessage error={error} />}
     </div>
   );

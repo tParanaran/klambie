@@ -3,8 +3,10 @@ import { antonFont } from '@/utils/fonts';
 import { useQueryParams } from '../../c/hooks/useQueryParams';
 import Link from 'next/link';
 import useAttribute from '../../c/hooks/useAttribute';
+import { useRouter } from 'next/navigation';
 
-export default function ShopByButton() {
+export default function ShopByButton({ slug }: { slug: string }) {
+  const router = useRouter();
   const { pathname, createLinkParams, getParams } = useQueryParams();
   const { tags } = useAttribute();
 
@@ -12,18 +14,25 @@ export default function ShopByButton() {
     <main className="mt-5 md:mt-10">
       <div className="overflow-y-scroll scrollbar-hide">
         <div className="flex space-x-2">
-          <Link
-            href={pathname}
+          <button
+            onClick={() => {
+              const target =
+                pathname === `/d/${slug}` && !getParams('tag')
+                  ? `/c/${slug}`
+                  : pathname;
+
+              router.push(target, { scroll: false });
+            }}
             aria-label={`All Products`}
-            scroll={false}
             className={`${antonFont.className} uppercase flex-none px-3 py-1 rounded-full text-base sm:text-lg hover:bg-black hover:border-black hover:text-[#ededed] mt-2 ${
               getParams('tag') === undefined
                 ? 'bg-orange-800 border-orange-800 text-[#ededed]'
                 : 'border'
             }`}
           >
-            All
-          </Link>
+            <span className="hidden md:block">All</span>
+            <span className="md:hidden">All Collection</span>
+          </button>
 
           {tags.map((tag, idx) => (
             <Link

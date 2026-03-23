@@ -9,6 +9,7 @@ import { BiCategory } from 'react-icons/bi';
 import TagButton from '@/views/components/tagButton';
 import Image from 'next/image';
 import LinkButton from '@/views/components/link';
+import HorizontalScrollButton from './buttonScroll';
 
 interface IShopByCategory {
   slug: string;
@@ -26,11 +27,11 @@ export default function ShopByCategory({ slug }: IShopByCategory) {
   return (
     <main>
       <div className="w-10/12 md:w-8/12 text-center mx-auto">
-        <h1 className="font-bold text-2xl sm:text-4xl lg:text-5xl md:leading-12 mt-5 mb-5 md:mb-2">
-          Elevate Your Style With Klambie Collections
+        <h1 className="font-bold text-2xl sm:text-4xl lg:text-5xl md:leading-12 mt-5 mb-5 md:mb-3">
+          Elevate Your Style With Our {category.name} Collections
         </h1>
       </div>
-      <div className="overflow-x-scroll scrollbar-hide sm:overflow-x-hidden overflow-y-hidden">
+      <HorizontalScrollButton>
         <div className="flex sm:grid sm:grid-cols-3 md:grid-cols-5 gap-2 lg:gap-3">
           {segments.map((cat, c) => (
             <div
@@ -67,7 +68,7 @@ export default function ShopByCategory({ slug }: IShopByCategory) {
                 }`}
               >
                 <h1
-                  className={`${antonFont.className} font-semibold text-lg uppercase text-[#1b1a1e]`}
+                  className={`${antonFont.className} font-semibold text-lg uppercase text-[#1b1a1e] dark:text-[#ededed]`}
                 >
                   {cat.name}
                 </h1>
@@ -75,7 +76,7 @@ export default function ShopByCategory({ slug }: IShopByCategory) {
 
               {activeIndex !== c && (
                 <button
-                  className="rounded-full bg-[#1b1a1e] text-[#ededed] p-1 mx-1 text-2xl absolute bottom-2 right-2 rotate-45 z-20"
+                  className="rounded-full bg-[#1b1a1e] text-[#ededed] p-1 mx-1 text-2xl absolute bottom-2 right-2 rotate-45 z-10"
                   aria-label="See more"
                   onClick={
                     cat.subcategories?.length === 0
@@ -89,8 +90,8 @@ export default function ShopByCategory({ slug }: IShopByCategory) {
 
               {cat.subcategories && cat.subcategories.length > 0 && (
                 <div
-                  className={`absolute inset-0 dark:text-[#ededed] dark:bg-[#1b1a1e]/80 text-black bg-[#ededed]/80 backdrop-blur-sm p-1.5 flex flex-col z-10 justify-start transition-all duration-300
-            ${activeIndex === c ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5 group-hover:opacity-100 group-hover:translate-y-0'}
+                  className={`absolute inset-0 dark:text-[#ededed] dark:bg-[#1b1a1e]/80 text-black bg-[#ededed]/80 backdrop-blur-xs p-1.5 flex flex-col justify-start transition-all duration-300
+            ${activeIndex === c ? 'opacity-100 translate-y-0 pointer-events-auto z-10' : 'opacity-0 translate-y-5 pointer-events-none z-0'}
              `}
                 >
                   <p className="mb-3 opacity-50 text-sm md:text-base">
@@ -129,7 +130,7 @@ export default function ShopByCategory({ slug }: IShopByCategory) {
             </div>
           ))}
         </div>
-      </div>
+      </HorizontalScrollButton>
     </main>
   );
 }

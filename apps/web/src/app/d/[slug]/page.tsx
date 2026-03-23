@@ -23,6 +23,7 @@ export default async function Department({
     const { data } = await axiosInstanceServer.post(`/product/all`, {
       tag,
       slugs: [slug],
+      limit: 5,
     });
     products = data.products;
   } catch (error: any) {
