@@ -16,10 +16,9 @@ export default function ShopByButton({ slug }: { slug: string }) {
         <div className="flex space-x-2">
           <button
             onClick={() => {
-              const target =
-                pathname === `/d/${slug}` && !getParams('tag')
-                  ? `/c/${slug}`
-                  : pathname;
+              const target = pathname.includes(`/d/${slug}`)
+                ? `/c/${slug}`
+                : pathname;
 
               router.push(target, { scroll: false });
             }}
@@ -30,8 +29,7 @@ export default function ShopByButton({ slug }: { slug: string }) {
                 : 'border'
             }`}
           >
-            <span className="hidden md:block">All</span>
-            <span className="md:hidden">All Collection</span>
+            All Collection
           </button>
 
           {tags.map((tag, idx) => (

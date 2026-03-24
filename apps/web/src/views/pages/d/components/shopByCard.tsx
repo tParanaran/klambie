@@ -7,7 +7,7 @@ import HorizontalScrollButton from './buttonScroll';
 
 export default function ShopByCard({ products, slug }: IShopByCard) {
   return (
-    <div>
+    <div className="relative z-10 ">
       <ShopByButton slug={slug} />
       {products?.length > 0 ? (
         <HorizontalScrollButton>

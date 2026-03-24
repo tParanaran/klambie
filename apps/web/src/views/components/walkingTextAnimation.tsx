@@ -40,13 +40,11 @@ export default function WalkingTextAnimation({
   }, [duration]);
 
   return (
-    <div>
-      <div
-        ref={containerRef}
-        className="overflow-hidden whitespace-nowrap flex items-center"
-      >
-        <span className="pr-3 inline-block">{text}</span>
-      </div>
+    <div
+      ref={containerRef}
+      className="overflow-hidden whitespace-nowrap flex items-center"
+    >
+      <span className="pr-3 inline-block">{text}</span>
     </div>
   );
 }
