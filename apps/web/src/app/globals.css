@@ -87,10 +87,6 @@
       color-scheme: dark;
       color: #ededed;
     }
-
-    .nav-bg {
-      background: #1b1a1e;
-    }
   }
 }
 
@@ -116,8 +112,24 @@
       rgb(var(--background-start-rgb));
   }
 
-  .nav-bg {
-    background: whitesmoke;
+  .inverted-right::before,
+  .inverted-right::after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    width: 20px;
+    height: 100%;
+    background-color: transparent;
+    border-bottom-right-radius: 20px;
+    box-shadow: 0 20px 0 0 rgb(var(--background-start-rgb));
+  }
+  .inverted-right::before {
+    left: -20px;
+    bottom: 0;
+  }
+  .inverted-right::after {
+    right: 0;
+    bottom: 100%;
   }
 
   .scrollbar-hide::-webkit-scrollbar {
