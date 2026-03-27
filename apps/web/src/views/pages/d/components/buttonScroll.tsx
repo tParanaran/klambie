@@ -6,7 +6,7 @@ interface IHorizontalScrollButton {
 }
 
 const button =
-  'absolute top-1/2 -translate-y-1/2 z-10! bg-black/30 text-[#ededed] p-1.5 rounded-full flex-none lg:hidden';
+  'absolute top-1/2 -translate-y-1/2 z-10! bg-black/30 text-[#ededed] dark:text-orange-700 p-1.5 rounded-full flex-none';
 const overflow = 'overflow-x-scroll scrollbar-hide overflow-y-hidden';
 
 export default function HorizontalScrollButton({

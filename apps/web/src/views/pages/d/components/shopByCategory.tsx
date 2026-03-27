@@ -27,12 +27,11 @@ export default function ShopByCategory({ slug }: IShopByCategory) {
   return (
     <main>
       <div className="my-10">
-        <TitileContainer>
-          Elevate Your Style With Our{' '}
-          <span className="text-orange-800 dark:text-orange-700">
-            {category.name} Collections
-          </span>
-        </TitileContainer>
+        <TitileContainer
+          badge={'Our Collections'}
+          title={'Elevate Your Style With Our'}
+          spanTitle={`${category.name} Collections`}
+        />
       </div>
       <HorizontalScrollButton>
         <div className="flex sm:grid sm:grid-cols-3 md:grid-cols-5 gap-2 lg:gap-3">

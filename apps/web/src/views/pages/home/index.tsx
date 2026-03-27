@@ -1,3 +1,4 @@
+import BlogCard from '../blog/components/blogCard';
 import CategoryHome from './components/categories';
 import HeroMain from './components/heroMain';
 import HeroSwiper from './components/heroSwiper';
@@ -29,6 +30,7 @@ export default async function HomeView() {
         <HeroSwiper />
       </div>
       <CategoryHome />
+      <BlogCard />
     </div>
   );
 }

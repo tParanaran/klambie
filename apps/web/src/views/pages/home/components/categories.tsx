@@ -13,13 +13,12 @@ export default function CategoryHome() {
   return (
     <div className="mb-5">
       {' '}
-      <div className=" my-5 sm:my-10 lg:my-15">
-        <TitileContainer>
-          Level Up Your Style With{' '}
-          <span className="text-orange-800 dark:text-orange-700">
-            Our Collections
-          </span>
-        </TitileContainer>
+      <div className="mb-10 mt-5 lg:my-15">
+        <TitileContainer
+          badge={'Our Collections'}
+          title={'Level Up Your Style With'}
+          spanTitle="Our Collections"
+        />
       </div>
       <div
         className={`grid gap-2.5 lg:gap-3 items-end md:items-center ${isMobile ? 'grid-cols-2' : 'grid-cols-3 md:grid-cols-5'}`}
@@ -28,7 +27,7 @@ export default function CategoryHome() {
           <Link
             href={`/d/${category.slug}`}
             key={category.slug}
-            className={`relative rounded-2xl overflow-hidden w-auto hover:scale-105 ${c === 0 || c === 4 ? 'ms:h-56' : c === 2 ? 'md:h-96' : 'md:h-72'} ${c === 1 ? 'row-span-2 h-full' : 'h-40 sm:h-52'}`}
+            className={`relative rounded-2xl overflow-hidden w-auto hover:scale-105 transition-transform duration-300 will-change-transform ${c === 0 || c === 4 ? 'ms:h-56' : c === 2 ? 'md:h-96' : 'md:h-72'} ${c === 1 ? 'row-span-2 h-full' : 'h-40 sm:h-52'}`}
           >
             <div className="h-full w-full">
               <Image
