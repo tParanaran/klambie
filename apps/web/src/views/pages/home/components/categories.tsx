@@ -1,0 +1,59 @@
+'use client';
+import TitileContainer from '@/views/components/titleContainer';
+import useAttribute from '../../c/hooks/useAttribute';
+import Image from 'next/image';
+import useDetectIsMobile from '../../template/hooks/useDetectIsMobile';
+import Link from 'next/link';
+import { IoArrowForward } from 'react-icons/io5';
+import { antonFont } from '@/utils/fonts';
+
+export default function CategoryHome() {
+  const { categories } = useAttribute();
+  const { isMobile } = useDetectIsMobile({ widthScreen: 450 });
+  return (
+    <div className="mb-5">
+      {' '}
+      <div className=" my-5 sm:my-10 lg:my-15">
+        <TitileContainer>
+          Level Up Your Style With{' '}
+          <span className="text-orange-800 dark:text-orange-700">
+            Our Collections
+          </span>
+        </TitileContainer>
+      </div>
+      <div
+        className={`grid gap-2.5 lg:gap-3 items-end md:items-center ${isMobile ? 'grid-cols-2' : 'grid-cols-3 md:grid-cols-5'}`}
+      >
+        {categories.map((category, c) => (
+          <Link
+            href={`/d/${category.slug}`}
+            key={category.slug}
+            className={`relative rounded-2xl overflow-hidden w-auto hover:scale-105 ${c === 0 || c === 4 ? 'ms:h-56' : c === 2 ? 'md:h-96' : 'md:h-72'} ${c === 1 ? 'row-span-2 h-full' : 'h-40 sm:h-52'}`}
+          >
+            <div className="h-full w-full">
+              <Image
+                src={`/images/home/${category.slug}.jpg`}
+                height={225}
+                width={225}
+                alt={category.name}
+                className="object-cover w-full h-full"
+              />
+            </div>
+            <div className="absolute top-0 w-full bg-linear-to-t dark:bg-linear-to-b from-black/70 to-50% h-full p-2">
+              <h1
+                className={`${antonFont.className} font-semibold text-lg uppercase text-[#1b1a1e] dark:text-[#ededed]`}
+              >
+                {category.name}
+              </h1>
+            </div>
+            <div className="absolute z-10 top-0 right-0 w-9 h-9 bg-[rgb(var(--background-start-rgb))]! rounded-tr-2xl rounded-bl-2xl inverted-radius-tr"></div>
+
+            <div className="absolute top-0 right-0 z-10 rounded-2xl bg-[#1b1a1e] dark:bg-[#ededed] dark:text-[#1b1a1e]  text-white p-1 text-2xl">
+              <IoArrowForward className="-rotate-35" />
+            </div>
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+}

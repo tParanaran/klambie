@@ -1,37 +1,34 @@
+import CategoryHome from './components/categories';
 import HeroMain from './components/heroMain';
-import HeroPhoto from './components/heroPhoto';
 import HeroSwiper from './components/heroSwiper';
-import HeroText from './components/heroText';
+import HeroSwiperMobile from './components/heroSwiperMobile';
+import HeroTitle from './components/heroTittle';
+import NavbarHome from './components/navbar';
 
 export default async function HomeView() {
   return (
-    <div className="pb-[5%]">
-      <div className="relative">
-        <div className="grid grid-cols-1 lg:grid-cols-2 mb-7 gap-4">
-          <div className="row-span-2 hidden sm:block">
-            <HeroMain />
+    <div className="md:mt-8 pb-[5%]">
+      <div className="relative overflow-hidden">
+        <div className="grid grid-cols-1 sm:grid-cols-[1fr_1.5fr] gap-3 relative rounded-2xl overflow-hidden p-2">
+          <div className="space-y-2 sm:space-y-5">
+            <NavbarHome />
+            <HeroTitle />
           </div>
-          <div className="block sm:hidden z-0">
-            <HeroSwiper />
-          </div>
+
           <div>
-            <div className="grid gap-4 h-fit">
-              <div className="hidden sm:block lg:hidden">
-                <HeroPhoto />
-              </div>
-              <HeroText />
+            <div className="hidden sm:block relative">
+              <HeroMain />
+              <div className="absolute z-10 bottom-52 w-20.5 left-0 h-20 bg-[rgb(var(--background-start-rgb))]! rounded-tr-2xl inverted-radius-bl"></div>
+              <div className="absolute z-10 bottom-12 w-20.5 left-0 h-20 bg-[rgb(var(--background-start-rgb))]! rounded-tr-2xl inverted-radius-tl"></div>
+            </div>
+            <div className="block sm:hidden my-5">
+              <HeroSwiperMobile />
             </div>
           </div>
-          <div className="hidden lg:block h-fit">
-            <HeroPhoto />
-          </div>{' '}
         </div>
-
-        <div
-          id="shopBy"
-          className="h-12 absolute bottom-0 left-0 right-0"
-        ></div>
-      </div>{' '}
+        <HeroSwiper />
+      </div>
+      <CategoryHome />
     </div>
   );
 }

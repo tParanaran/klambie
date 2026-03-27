@@ -1,7 +1,7 @@
 import { antonFont } from '@/utils/fonts';
 import Image from 'next/image';
-import ContactLink from '../../home/components/contactLink';
 import LoginRegisterTitle from '@/views/components/loginRegisterTitle';
+import ContactLink from './contactLink';
 
 export default function LoginHero() {
   return (

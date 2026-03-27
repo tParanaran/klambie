@@ -17,6 +17,7 @@ export class PromotionRouter {
   private initializeRoutes(): void {
     this.router.post('/new', this.promotion.createNewPromotion);
     this.router.get('/switch/:id', this.promotion.deactivePromotion);
+    this.router.get('/banners', this.promotion.fetchBanners);
   }
 
   getRouter(): Router {

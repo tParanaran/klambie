@@ -4,6 +4,15 @@ import { Request, Response, NextFunction } from 'express';
 const promoService = new PromotionService();
 
 export class Promotion {
+  async fetchBanners(req: Request, res: Response, next: NextFunction) {
+    try {
+      const result = await promoService.getAllBanners();
+
+      res.status(200).send(result);
+    } catch (error) {
+      next(error);
+    }
+  }
   async createNewPromotion(req: Request, res: Response, next: NextFunction) {
     try {
       const result = await promoService.createPromotion(req.body);

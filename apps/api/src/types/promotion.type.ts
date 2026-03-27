@@ -40,3 +40,17 @@ export type AppliedPromotion = {
   badge: string;
   discount: Decimal;
 };
+
+export type Banner = {
+  id: number;
+  title: string;
+  image: string;
+  link: string;
+  active: boolean;
+  createdAt: string;
+  validUntil?: string;
+  categories: string[];
+  discount?: string;
+  promoCode?: string;
+  isSale: boolean;
+};

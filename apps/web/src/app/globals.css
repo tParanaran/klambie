@@ -87,6 +87,16 @@
       color-scheme: dark;
       color: #ededed;
     }
+
+    body {
+      background: linear-gradient(
+          to bottom,
+          transparent,
+          rgb(var(--background-end-rgb))
+        )
+        rgb(var(--background-start-rgb));
+      background-attachment: fixed;
+    }
   }
 }
 
@@ -104,16 +114,52 @@
 
   body {
     color: rgb(var(--foreground-rgb));
-    background: linear-gradient(
-        to bottom,
-        transparent,
-        rgb(var(--background-end-rgb))
-      )
-      rgb(var(--background-start-rgb));
+    background: rgb(var(--background-start-rgb));
+    background-attachment: fixed;
   }
 
-  .inverted-right::before,
-  .inverted-right::after {
+  .inverted-radius-tr::before,
+  .inverted-radius-tr::after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    width: 20px;
+    height: 100%;
+    background-color: transparent;
+    border-top-right-radius: 20px;
+    box-shadow: 0 -20px 0 0 rgb(var(--background-start-rgb));
+  }
+  .inverted-radius-tr::before {
+    top: 0;
+    right: 100%;
+  }
+  .inverted-radius-tr::after {
+    top: 100%;
+    right: 0;
+  }
+
+  .inverted-radius-bl::before,
+  .inverted-radius-bl::after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    width: 20px;
+    height: 100%;
+    background-color: transparent;
+    border-bottom-left-radius: 20px;
+    box-shadow: 0 20px 0 0 rgb(var(--background-start-rgb));
+  }
+  .inverted-radius-bl::before {
+    top: -100%;
+    left: 0;
+  }
+  .inverted-radius-bl::after {
+    bottom: 0;
+    left: 100%;
+  }
+
+  .inverted-radius-br::before,
+  .inverted-radius-br::after {
     content: '';
     position: absolute;
     z-index: -1;
@@ -123,13 +169,33 @@
     border-bottom-right-radius: 20px;
     box-shadow: 0 20px 0 0 rgb(var(--background-start-rgb));
   }
-  .inverted-right::before {
+  .inverted-radius-br::before {
     left: -20px;
     bottom: 0;
   }
-  .inverted-right::after {
+  .inverted-radius-br::after {
     right: 0;
     bottom: 100%;
+  }
+
+  .inverted-radius-tl::before,
+  .inverted-radius-tl::after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    width: 20px;
+    height: 100%;
+    background-color: transparent;
+    border-top-left-radius: 20px;
+    box-shadow: 0 -20px 0 0 rgb(var(--background-start-rgb));
+  }
+  .inverted-radius-tl::before {
+    top: 100%;
+    left: 0;
+  }
+  .inverted-radius-tl::after {
+    top: 0;
+    left: 100%;
   }
 
   .scrollbar-hide::-webkit-scrollbar {

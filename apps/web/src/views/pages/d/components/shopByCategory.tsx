@@ -4,11 +4,12 @@ import useAttribute from '../../c/hooks/useAttribute';
 import { useState } from 'react';
 import { antonFont } from '@/utils/fonts';
 import { useRouter } from 'next/navigation';
-import { IoArrowForward, IoClose } from 'react-icons/io5';
+import { IoArrowForward } from 'react-icons/io5';
 import { BiCategory } from 'react-icons/bi';
 import TagButton from '@/views/components/tagButton';
 import Image from 'next/image';
 import HorizontalScrollButton from './buttonScroll';
+import TitileContainer from '@/views/components/titleContainer';
 
 interface IShopByCategory {
   slug: string;
@@ -25,17 +26,20 @@ export default function ShopByCategory({ slug }: IShopByCategory) {
 
   return (
     <main>
-      <div className="w-10/12 md:w-8/12 text-center mx-auto">
-        <h1 className="font-bold text-2xl sm:text-4xl lg:text-5xl md:leading-12 my-10">
-          Elevate Your Style With Our {category.name} Collections
-        </h1>
+      <div className="my-10">
+        <TitileContainer>
+          Elevate Your Style With Our{' '}
+          <span className="text-orange-800 dark:text-orange-700">
+            {category.name} Collections
+          </span>
+        </TitileContainer>
       </div>
       <HorizontalScrollButton>
         <div className="flex sm:grid sm:grid-cols-3 md:grid-cols-5 gap-2 lg:gap-3">
           {segments.map((cat, c) => (
             <div
               key={cat.slug}
-              className={`relative flex-none cursor-pointer overflow-hidden w-50 h-50 sm:w-auto ${c === 1 || c === 3 ? 'md:row-span-2 md:h-72 lg:h-80 md:mt-auto' : c === 5 || c === 6 ? 'sm:h-32! md:h-28 lg:h-32' : 'md:h-48 lg:h-56'} ${c === 2 ? 'md:row-span-2 md:mt-auto md:h-56 lg:h-64' : ''} ${c === 1 ? 'sm:row-span-2! sm:mt-auto sm:h-80' : ''} ${c === 5 ? 'sm:col-span-2 md:col-span-1' : ''}`}
+              className={`relative flex-none cursor-pointer overflow-hidden w-50 h-50 sm:w-auto ${c === 1 || c === 3 ? 'md:row-span-2 md:h-72 lg:h-80 md:mt-auto' : c === 5 || c === 6 ? 'sm:h-32! md:h-28 lg:h-32' : 'md:h-48 lg:h-56'} ${c === 2 ? 'md:row-span-2 md:mt-auto md:h-56 lg:h-64' : ''} ${c === 1 ? 'sm:row-span-2! sm:mt-auto sm:h-88' : ''} ${c === 5 ? 'sm:col-span-2 md:col-span-1' : ''}`}
             >
               <div className="absolute inset-0 bg-[#ededed] dark:bg-[#1b1a1e] rounded-2xl -z-10" />
               <div className="relative w-full h-full rounded-2xl overflow-hidden">
@@ -62,14 +66,14 @@ export default function ShopByCategory({ slug }: IShopByCategory) {
                   </h1>
                 </div>
               </div>
-              <div className="absolute z-10 bg-bl bottom-0 right-0 w-9 h-9 bg-[rgb(var(--background-start-rgb))]! rounded-tl-2xl rounded-br-2xl inverted-right"></div>
+              <div className="absolute z-10 bg-bl bottom-0 left-0 w-9 h-9 bg-[rgb(var(--background-start-rgb))]! rounded-tr-2xl rounded-bl-2xl inverted-radius-bl"></div>
 
               <button
-                className={`absolute bottom-0 right-0 z-10 
+                className={`absolute bottom-0 left-0 z-10 
                   rounded-full bg-[#1b1a1e] dark:bg-[#ededed] dark:text-[#1b1a1e]  text-white p-1 text-2xl
                    shadow-lg
                   transition-all duration-300
-                   ${activeIndex === c ? 'rotate-45' : 'rotate-225'}`}
+                   ${activeIndex === c ? 'rotate-135' : '-rotate-45'}`}
                 aria-label="See more"
                 onClick={
                   cat.subcategories?.length === 0

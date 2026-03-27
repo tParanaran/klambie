@@ -16,6 +16,7 @@ import { ToastContainer } from 'react-toastify';
 export default function Template({ children }: { children: React.ReactNode }) {
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
+  const homeNavbar = pathname !== '/';
   const cartNavbar = pathname.startsWith('/cart');
   const productNavbar = pathname.startsWith('/p');
   const mobileNavbar =
@@ -34,7 +35,7 @@ export default function Template({ children }: { children: React.ReactNode }) {
       {productNavbar && <NavbarProduct />}
       {!mobileNavbar && <NavbarSearch />}
       <Container>
-        <Navbar />
+        {homeNavbar && <Navbar />}
         {children}
       </Container>
       <ContactAnimation mounted={mounted} />

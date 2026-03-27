@@ -6,6 +6,7 @@ import {
   AppliedPromotion,
   PromoRule,
   PromoInput,
+  Banner,
 } from '@/types/promotion.type';
 import { PromotionHelper } from '@/helpers/promotion.helper';
 import { OrderService } from './order.service';
@@ -14,6 +15,32 @@ const promotionHelper = new PromotionHelper();
 const orderService = new OrderService();
 
 export class PromotionService {
+  async getAllBanners(): Promise<Banner[]> {
+    const banners = await prisma.banner.findMany({
+      include: { categories: true },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    return banners.map((banner) => {
+      const result: Banner = {
+        id: banner.id,
+        title: banner.title,
+        image: banner.image,
+        link: banner.link,
+        active: banner.active,
+        createdAt: banner.createdAt.toISOString(),
+        categories: banner.categories.map((c) => c.slug),
+        isSale: banner.isSale ?? false,
+      };
+
+      if (banner.validUntil)
+        result.validUntil = banner.validUntil.toISOString();
+      if (banner.discount) result.discount = banner.discount;
+      if (banner.promoCode) result.promoCode = banner.promoCode;
+
+      return result;
+    });
+  }
   async createPromotion(data: Prisma.PromotionCreateInput): Promise<Promotion> {
     const result = await prisma.$transaction(async (tx) => {
       const {

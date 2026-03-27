@@ -254,6 +254,7 @@ model Category {
   createdAt DateTime @default(now())
 
   categoryHierarchies CategoryHierarchy[]
+  banners             Banner[]            @relation("BannerCategories")
 }
 
 model CategoryHierarchy {
@@ -519,4 +520,18 @@ model OrderAddress {
   longitude Float
 
   @@map("order_address")
+}
+
+model Banner {
+  id         Int        @id @default(autoincrement())
+  title      String
+  image      String
+  link       String
+  active     Boolean    @default(true)
+  createdAt  DateTime   @default(now())
+  validUntil DateTime? // optional, only for time-limited banners
+  isSale     Boolean    @default(false)
+  discount   String?
+  promoCode  String?
+  categories Category[] @relation("BannerCategories")
 }
