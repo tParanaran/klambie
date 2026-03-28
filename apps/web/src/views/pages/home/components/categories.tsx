@@ -6,6 +6,7 @@ import useDetectIsMobile from '../../template/hooks/useDetectIsMobile';
 import Link from 'next/link';
 import { IoArrowForward } from 'react-icons/io5';
 import { antonFont } from '@/utils/fonts';
+import { hoverEffect } from '@/utils/styling';
 
 export default function CategoryHome() {
   const { categories } = useAttribute();
@@ -27,7 +28,7 @@ export default function CategoryHome() {
           <Link
             href={`/d/${category.slug}`}
             key={category.slug}
-            className={`relative rounded-2xl overflow-hidden w-auto hover:scale-105 transition-transform duration-300 will-change-transform ${c === 0 || c === 4 ? 'ms:h-56' : c === 2 ? 'md:h-96' : 'md:h-72'} ${c === 1 ? 'row-span-2 h-full' : 'h-40 sm:h-52'}`}
+            className={`relative rounded-2xl overflow-hidden w-auto ${hoverEffect} ${c === 0 || c === 4 ? 'ms:h-56' : c === 2 ? 'md:h-96' : 'md:h-72'} ${c === 1 ? 'row-span-2 h-full' : 'h-40 sm:h-52'}`}
           >
             <div className="h-full w-full">
               <Image

@@ -2,7 +2,7 @@
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay } from 'swiper/modules';
-import { missions } from '@/utils/mission';
+import { missions } from '@/utils/about';
 
 export default function RegisterSwiper() {
   return (

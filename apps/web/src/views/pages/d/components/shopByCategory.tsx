@@ -10,6 +10,7 @@ import TagButton from '@/views/components/tagButton';
 import Image from 'next/image';
 import HorizontalScrollButton from './buttonScroll';
 import TitileContainer from '@/views/components/titleContainer';
+import { hoverEffect } from '@/utils/styling';
 
 interface IShopByCategory {
   slug: string;
@@ -34,11 +35,11 @@ export default function ShopByCategory({ slug }: IShopByCategory) {
         />
       </div>
       <HorizontalScrollButton>
-        <div className="flex sm:grid sm:grid-cols-3 md:grid-cols-5 gap-2 lg:gap-3">
+        <div className="flex sm:grid sm:grid-cols-3 md:grid-cols-5">
           {segments.map((cat, c) => (
             <div
               key={cat.slug}
-              className={`relative flex-none cursor-pointer overflow-hidden w-50 h-50 sm:w-auto ${c === 1 || c === 3 ? 'md:row-span-2 md:h-72 lg:h-80 md:mt-auto' : c === 5 || c === 6 ? 'sm:h-32! md:h-28 lg:h-32' : 'md:h-48 lg:h-56'} ${c === 2 ? 'md:row-span-2 md:mt-auto md:h-56 lg:h-64' : ''} ${c === 1 ? 'sm:row-span-2! sm:mt-auto sm:h-88' : ''} ${c === 5 ? 'sm:col-span-2 md:col-span-1' : ''}`}
+              className={`relative flex-none cursor-pointer overflow-hidden mx-1.5 my-2 w-50 h-50 sm:w-auto ${c === 1 || c === 3 ? 'md:row-span-2 md:h-72 lg:h-80 md:mt-auto' : c === 5 || c === 6 ? 'sm:h-32! md:h-28 lg:h-32' : 'md:h-48 lg:h-56'} ${c === 2 ? 'md:row-span-2 md:mt-auto md:h-56 lg:h-64' : ''} ${c === 1 ? 'sm:row-span-2! sm:mt-auto sm:h-88' : ''} ${c === 5 ? 'sm:col-span-2 md:col-span-1 sm:mx-3 md:mx-1.5' : ''} ${hoverEffect}`}
             >
               <div className="absolute inset-0 bg-primary rounded-2xl -z-10" />
               <div className="relative w-full h-full rounded-2xl overflow-hidden">

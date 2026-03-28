@@ -3,10 +3,10 @@ import { initialBlogCards } from '@/utils/blog';
 import formatDate from '@/utils/formatDate';
 import TitileContainer from '@/views/components/titleContainer';
 import Image from 'next/image';
-import Link from 'next/link';
 import { IoArrowForward } from 'react-icons/io5';
 import HorizontalScrollButton from '../../d/components/buttonScroll';
 import { useRouter } from 'next/navigation';
+import { hoverEffect } from '@/utils/styling';
 
 export default function BlogCard() {
   const router = useRouter();
@@ -26,7 +26,9 @@ export default function BlogCard() {
               key={blog.slug}
               className={b % 2 === 1 ? 'mt-10 md:mt-15' : ''}
             >
-              <div className="w-54 sm:w-64 bg-primary p-2 rounded-2xl flex-none hover:scale-105 transition-transform duration-300 will-change-transform overflow-hidden">
+              <div
+                className={`w-54 sm:w-64 bg-primary p-2 rounded-2xl flex-none overflow-hidden ${hoverEffect}`}
+              >
                 <div className="h-50">
                   <div>
                     <h1 className="text-lg">{blog.title}</h1>

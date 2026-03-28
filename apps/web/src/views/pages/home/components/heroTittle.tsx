@@ -21,7 +21,7 @@ export default function HeroTitle() {
               {line.map((word, j) => (
                 <span
                   key={j}
-                  className={`inline-block sm:bg-body bg-fixed pr-5 pt-1 ${i === lines.length - 1 ? 'rounded-b-2xl rounded-tr-2xl' : i === 0 ? 'rounded-t-2xl' : 'rounded-tr-2xl'}`}
+                  className={`inline-block bg-body bg-fixed pr-5 pt-1 ${i === lines.length - 1 ? 'rounded-b-2xl rounded-tr-2xl' : i === 0 ? 'rounded-t-2xl' : 'rounded-tr-2xl'}`}
                 >
                   {word}
                 </span>
