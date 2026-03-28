@@ -97,7 +97,7 @@ export default function ProductCard({
 
             <div>
               {pathname.includes('/c') && (
-                <h1 className="text-light text-[11px] uppercase mb-1 opacity-70">
+                <h1 className="text-dark text-[11px] uppercase mb-1 opacity-70">
                   {item.categories
                     .map((category) => {
                       return category.name;

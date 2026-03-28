@@ -3,10 +3,11 @@ import { aboutText, missions } from '@/utils/about';
 import { hoverEffect } from '@/utils/styling';
 import TitileContainer from '@/views/components/titleContainer';
 import HorizontalScrollButton from '../../d/components/buttonScroll';
+import Image from 'next/image';
 
 export default function About() {
   return (
-    <div className="my-10 lg:my-15 grid grid-cols-1 md:grid-cols-3">
+    <div className="my-10 lg:my-15 grid grid-cols-1 md:grid-cols-3 gap-10">
       <div></div>
       <div className="md:col-span-2">
         <TitileContainer

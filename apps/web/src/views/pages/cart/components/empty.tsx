@@ -12,7 +12,7 @@ export default function EmptyCart() {
         <p>Start filling it up with your favourites.</p>
       </div>
       <div>
-        <LinkButton linkName="Let's go shopping!" linkHref={'/d/men'} />
+        <LinkButton linkName="Let's go shopping!" linkHref={'/c'} />
       </div>
     </div>
   );

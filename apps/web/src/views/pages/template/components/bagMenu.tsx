@@ -2,7 +2,7 @@ import AnchoredModalContainer from '@/views/components/anchoredModalContainer';
 import BagButton from './bagButton';
 import { useEffect, useRef, useState } from 'react';
 import EmptyCart from '../../cart/components/empty';
-import { ICartItems, IPrice, ITotalPrice } from '../../cart/types';
+import { ICartItems, ITotalPrice } from '../../cart/types';
 import axiosInstanceClient from '@/lib/axios/client';
 import { Notify } from '@/lib/notify';
 import DeleteButton from '../../cart/components/deleleButton';
