@@ -1,14 +1,16 @@
 'use client';
 import { antonFont } from '@/utils/fonts';
 import { useQueryParams } from '../../c/hooks/useQueryParams';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import useAttribute from '../../c/hooks/useAttribute';
-import { useRouter } from 'next/navigation';
 
 export default function ShopByButton({ slug }: { slug: string }) {
   const router = useRouter();
   const { pathname, createLinkParams, getParams } = useQueryParams();
   const { tags } = useAttribute();
+
+  const classLink = `${antonFont.className} uppercase flex-none px-3 py-1 rounded-full text-base flex-none sm:text-lg bg-hover-dark hover:border-black text-hover-light mt-2`;
 
   return (
     <main className="mt-5 md:mt-10">
@@ -23,7 +25,7 @@ export default function ShopByButton({ slug }: { slug: string }) {
               router.push(target, { scroll: false });
             }}
             aria-label={`All Products`}
-            className={`${antonFont.className} uppercase flex-none px-3 py-1 rounded-full text-base sm:text-lg hover:bg-black hover:border-black hover:text-light mt-2 ${
+            className={`${classLink} ${
               getParams('tag') === undefined
                 ? 'bg-orange-800 border-orange-800 text-light'
                 : 'border'
@@ -38,13 +40,12 @@ export default function ShopByButton({ slug }: { slug: string }) {
               aria-label={`${tag} Product`}
               key={idx}
               scroll={false}
-              className={`${
-                antonFont.className
-              } uppercase px-3 py-1 rounded-full text-base flex-none sm:text-lg hover:bg-black hover:border-black hover:text-light mt-2 ${
-                getParams('tag') === tag.slug
-                  ? 'bg-orange-800 border-orange-800 text-light'
-                  : 'border'
-              }`}
+              className={`${classLink}
+               ${
+                 getParams('tag') === tag.slug
+                   ? 'bg-orange-800 border-orange-800 text-light'
+                   : 'border'
+               }`}
             >
               {tag.name}
             </Link>

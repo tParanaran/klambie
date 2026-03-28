@@ -8,6 +8,7 @@ interface ITagButton {
   className?: string;
   active?: boolean;
   hexUrl?: string;
+  scroll?: boolean;
 }
 
 export default function TagButton({
@@ -18,9 +19,13 @@ export default function TagButton({
   className = '',
   active,
   hexUrl,
+  scroll = true,
 }: ITagButton) {
   const baseStyle =
     'px-2 py-1 text-sm rounded-full mt-1 text-light flex items-center cursor-pointer';
+  const activeStyle = active
+    ? 'bg-active'
+    : 'bg-orange-800 hover:bg-orange-700';
 
   const content = (
     <>
@@ -33,7 +38,8 @@ export default function TagButton({
     return (
       <Link
         href={href}
-        className={`${baseStyle} ${className} ${active ? 'bg-active' : 'bg-orange-800 hover:bg-orange-700'}`}
+        className={`${baseStyle} ${className} ${activeStyle}`}
+        scroll={scroll}
       >
         {content}
       </Link>
@@ -43,7 +49,7 @@ export default function TagButton({
   return (
     <button
       onClick={onClick}
-      className={`${baseStyle} ${className} ${active ? 'bg-active' : 'bg-orange-800 hover:bg-orange-700'}`}
+      className={`${baseStyle} ${className} ${activeStyle}`}
       style={{ backgroundColor: `${hexUrl}` }}
     >
       {content}
