@@ -16,7 +16,7 @@ export default function NavbarDepartment() {
     <nav
       style={{
         top: isScroll ? 62 : 100,
-        zIndex: 30,
+        zIndex: 20,
         right: isMobile ? 12 : 'fit',
       }}
       className={`fixed left-3 sm:left-5 transition-all duration-200 py-1.5 md:hidden rounded-full overflow-x-scroll scrollbar-hide

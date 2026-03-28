@@ -7,17 +7,28 @@ import { IoArrowForward } from 'react-icons/io5';
 import HorizontalScrollButton from '../../d/components/buttonScroll';
 import { useRouter } from 'next/navigation';
 import { hoverEffect } from '@/utils/styling';
+import Link from 'next/link';
 
 export default function BlogCard() {
   const router = useRouter();
   return (
     <div>
-      <div className="my-10 lg:my-15">
+      <div className="my-10 lg:my-15 md:w-2xl">
         <TitileContainer
           badge={'Our Blogs'}
           title={'Get Inspired From Latest'}
           spanTitle="Threads And News"
+          isFull={true}
         />
+        <Link
+          href={'/blog'}
+          className="flex w-44 justify-between bg-primary rounded-full pl-3 py-1 items-center uppercase mt-3 relative"
+        >
+          <h1 className="flex-none text-sm text-orange-700">See more</h1>
+          <span className="text-2xl p-1 rounded-full flex-none mx-1 text-light bg-round-button">
+            <IoArrowForward />
+          </span>
+        </Link>
       </div>
       <HorizontalScrollButton>
         <div className="flex space-x-5 p-4">

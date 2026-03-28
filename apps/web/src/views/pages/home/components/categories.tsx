@@ -20,6 +20,15 @@ export default function CategoryHome() {
           title={'Level Up Your Style With'}
           spanTitle="Our Real Collections"
         />
+        <Link
+          href={'/c'}
+          className="flex w-44 justify-between bg-primary rounded-full pl-3 py-1 items-center uppercase mt-3 relative mx-auto"
+        >
+          <h1 className="flex-none text-sm text-orange-700">Shop All</h1>
+          <span className="text-2xl p-1 rounded-full flex-none mx-1 text-light bg-round-button">
+            <IoArrowForward />
+          </span>
+        </Link>
       </div>
       <div
         className={`grid gap-2.5 lg:gap-3 items-end md:items-center ${isMobile ? 'grid-cols-2' : 'grid-cols-3 md:grid-cols-5'}`}

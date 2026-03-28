@@ -66,7 +66,7 @@ export default function CategoryContent({
           {/* Side panel */}
           <div
             ref={modalRef}
-            className={`fixed h-fit z-30 transform transition-transform duration-300 ease-out translate-x-0 ${isMobile ? 'pt-16 bg-light dark:bg-dark sm:bg-transparent!  sm:right-10 top-0 w-full h-full sm:w-[45%] px-3 sm:px-0' : 'w-xs top-3 right-3 '}`}
+            className={`fixed h-fit z-30 transform transition-transform duration-300 ease-out translate-x-0 ${isMobile ? 'pt-16 bg-body sm:bg-transparent!  sm:right-10 top-0 w-full h-full sm:w-[45%] px-3 sm:px-0' : 'w-xs top-3 right-3 '}`}
           >
             <div className="flex py-3 justify-between items-center">
               <h2 className="font-semibold">{sideModalItem.name}</h2>
