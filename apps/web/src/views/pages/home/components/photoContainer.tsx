@@ -19,7 +19,7 @@ export default function PhotoContainer() {
               className="object-cover h-full w-full rounded-2xl"
             />
             <div
-              className={`absolute bottom-2 left-2 text-[#ededed] text-2xl uppercase tracking-tight ${antonFont.className}`}
+              className={`absolute bottom-2 left-2 text-light text-2xl uppercase tracking-tight ${antonFont.className}`}
             >
               <h1>{item.text}</h1>
             </div>

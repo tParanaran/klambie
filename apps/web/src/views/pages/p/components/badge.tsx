@@ -53,7 +53,7 @@ export default function CartBadge() {
     <>
       {' '}
       {total ? (
-        <span className="text-xs px-1 text-[#ededed] rounded-full bg-orange-700">
+        <span className="text-xs px-1 text-light rounded-full bg-orange-700">
           {total}
         </span>
       ) : null}

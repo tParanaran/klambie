@@ -11,7 +11,7 @@ export default function ButtonForm({ message, href }: IButtonForm) {
       <button
         type="submit"
         aria-label={href}
-        className="bg-orange-800 w-full rounded-full font-semibold uppercase hover:bg-orange-700 py-3 px-4 text-[#ededed]"
+        className="bg-orange-800 w-full rounded-full font-semibold uppercase hover:bg-orange-700 py-3 px-4 text-light"
       >
         {href}
       </button>

@@ -54,7 +54,7 @@ export default function Pagination({ totalItems, limit = 24 }: IPagination) {
                 aria-label="Page 1"
                 className={
                   currentPage === 1
-                    ? 'bg-orange-700 text-[#ededed] rounded-md px-3 py-1.5 scale-105 shadow-2xl'
+                    ? 'bg-orange-700 text-light rounded-md px-3 py-1.5 scale-105 shadow-2xl'
                     : 'px-2 py-2'
                 }
                 onClick={() => HandlePaginationChange(1)}
@@ -71,7 +71,7 @@ export default function Pagination({ totalItems, limit = 24 }: IPagination) {
               aria-label={`Page ${pageNumber}`}
               className={
                 currentPage === pageNumber
-                  ? 'bg-orange-700 text-[#ededed] rounded-md px-3 py-1.5 scale-105 shadow-2xl'
+                  ? 'bg-orange-700 text-light rounded-md px-3 py-1.5 scale-105 shadow-2xl'
                   : 'px-3 py-1.5'
               }
               onClick={() => HandlePaginationChange(pageNumber)}
@@ -89,7 +89,7 @@ export default function Pagination({ totalItems, limit = 24 }: IPagination) {
                 aria-label="Page Last"
                 className={
                   currentPage === totalPages
-                    ? 'bg-orange-700 text-[#ededed] rounded-md px-3 py-1.5 scale-105 shadow-2xl'
+                    ? 'bg-orange-700 text-light rounded-md px-3 py-1.5 scale-105 shadow-2xl'
                     : 'px-3 py-1.5'
                 }
                 onClick={() => HandlePaginationChange(totalPages)}

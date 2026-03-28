@@ -98,6 +98,31 @@
       background-attachment: fixed;
     }
 
+    .bg-primary {
+      background: #1a1a1a;
+    }
+
+    .bg-secondary-opacity {
+      background: #1b1a1ecc;
+    }
+
+    .bg-secondary {
+      background: #1b1a1e;
+    }
+
+    .text-secondary {
+      color: #ededed;
+    }
+
+    .text-dark {
+      color: #ededed;
+    }
+
+    .bg-round-button {
+      color: #1a1a1a;
+      background: #ededed;
+    }
+
     .inverted-radius-br-card::before,
     .inverted-radius-br-card::after {
       content: '';
@@ -128,6 +153,60 @@
     color: rgb(var(--foreground-rgb));
     background: rgb(var(--background-start-rgb));
     background-attachment: fixed;
+  }
+
+  .bg-body {
+    background: rgb(var(--background-start-rgb));
+  }
+
+  .bg-secondary-opacity {
+    background: #edededcc;
+  }
+
+  .bg-secondary,
+  .bg-primary {
+    background: #ededed;
+  }
+
+  .text-secondary {
+    color: #1b1a1e;
+  }
+
+  .text-light {
+    color: #ededed;
+  }
+
+  .text-dark {
+    color: #1b1a1e;
+  }
+
+  .bg-light {
+    background: #ededed;
+  }
+
+  .bg-dark {
+    background: #1a1a1a;
+  }
+
+  .bg-active {
+    background: #ff4500;
+  }
+
+  .text-active {
+    color: #ff4500;
+  }
+
+  .bg-round-button {
+    color: #ededed;
+    background: #1a1a1a;
+  }
+
+  .text-hover-light:hover {
+    color: #ededed;
+  }
+
+  .bg-hover-dark:hover {
+    background: #1a1a1a;
   }
 
   .inverted-radius-tr::before,

@@ -62,7 +62,7 @@ export default function SortProduct({ handlerModal }: ISortProduct) {
       )}
       <div className="block sm:hidden">
         <button
-          className="px-3 py-1 text-sm rounded-full mt-1 text-[#ededed] flex items-center cursor-pointer bg-orange-800"
+          className="px-3 py-1 text-sm rounded-full mt-1 text-light flex items-center cursor-pointer bg-orange-800"
           onClick={handlerModal}
           aria-label="Filter modal"
         >

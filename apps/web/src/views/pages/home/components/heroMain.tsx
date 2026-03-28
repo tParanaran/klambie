@@ -17,15 +17,15 @@ export default function HeroMain() {
         />
       </div>
 
-      <div className="absolute top-0 w-full h-full bg-linear-to-t dark:bg-linear-to-b from-black/90 to-transparent backdrop-blur-xs"></div>
+      <div className="absolute top-0 w-full h-full rounded-2xl bg-linear-to-t dark:bg-linear-to-b from-black/90 to-transparent backdrop-blur-xs"></div>
 
-      <div className="absolute z-10 top-0 right-0 w-42 h-12 bg-[rgb(var(--background-start-rgb))]! rounded-tr-2xl rounded-bl-2xl inverted-radius-tr">
+      <div className="absolute z-10 top-0 right-0 w-42 h-12 rounded-tr-2xl rounded-bl-2xl inverted-radius-tr bg-body">
         <Link
           href={'/contact'}
-          className="py-1 rounded-2xl flex justify-between w-41 items-center overflow-hidden text-xs md:text-sm ml-1 mb-1 bg-[#ededed] dark:bg-[#1A1A1A] dark:text-orange-700"
+          className="py-1 rounded-2xl flex justify-between w-41 items-center overflow-hidden text-xs md:text-sm ml-1 mb-1 bg-primary dark:text-orange-700"
         >
           <span
-            className="rounded-full bg-black text-[#ededed] dark:text-orange-700 p-1.5 text-2xl ml-1"
+            className="rounded-full bg-black text-light dark:text-orange-700 p-1.5 text-2xl ml-1"
             aria-label="Contact us"
           >
             <IoMailOutline className="hover:scale-110" />

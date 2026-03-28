@@ -1,4 +1,5 @@
 import BlogCard from '../blog/components/blogCard';
+import About from './components/about';
 import CategoryHome from './components/categories';
 import HeroMain from './components/heroMain';
 import HeroSwiper from './components/heroSwiper';
@@ -19,8 +20,8 @@ export default async function HomeView() {
           <div>
             <div className="hidden sm:block relative">
               <HeroMain />
-              <div className="absolute z-10 bottom-52 w-20.5 left-0 h-20 bg-[rgb(var(--background-start-rgb))]! rounded-tr-2xl inverted-radius-bl"></div>
-              <div className="absolute z-10 bottom-12 w-20.5 left-0 h-20 bg-[rgb(var(--background-start-rgb))]! rounded-tr-2xl inverted-radius-tl"></div>
+              <div className="absolute z-10 bottom-52 w-20.5 left-0 h-20 bg-body rounded-tr-2xl inverted-radius-bl"></div>
+              <div className="absolute z-10 bottom-12 w-20.5 left-0 h-20 bg-body rounded-tr-2xl inverted-radius-tl"></div>
             </div>
             <div className="block sm:hidden my-5">
               <HeroSwiperMobile />
@@ -31,6 +32,7 @@ export default async function HomeView() {
       </div>
       <CategoryHome />
       <BlogCard />
+      <About />
     </div>
   );
 }

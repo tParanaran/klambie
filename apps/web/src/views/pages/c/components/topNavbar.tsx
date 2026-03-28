@@ -113,31 +113,35 @@ export default function TopNavbar({ totalItems, filters, query }: ITopNavbar) {
       </div>
 
       {showModal && (
-        <ModalContainer
-          handlerModal={handlerModal}
-          showModal={showModal}
-          style={`${isMobile ? 'w-[90%]' : 'w-1/2'} h-screen dark:bg-[#1b1a1e]/80 bg-[#ededed]/80 backdrop-blur-xl p-3 rounded-2xl`}
-          isFilter={true}
-        >
-          <div className="max-h-[94vh] overflow-y-scroll scrollbar-hide z-50">
-            <button
-              className="absolute top-2 right-2 p-3 z-50"
-              onClick={handlerModal}
-              aria-label="Close filter"
-            >
-              <IoClose className="text-2xl hover:scale-125" />
-            </button>
-            <div className="mb-7 space-y-2">
-              <SideNavbar filters={filters} />
+        <div className="relative z-50">
+          <ModalContainer
+            handlerModal={handlerModal}
+            showModal={showModal}
+            style={`${isMobile ? 'w-[90%]' : 'w-1/2'} h-screen bg-secondary-opacity backdrop-blur-xl p-3 rounded-2xl`}
+            isFilter={true}
+          >
+            <div className="max-h-[94vh] overflow-y-scroll scrollbar-hide">
+              <button
+                className="absolute top-2 right-2 p-3 z-50"
+                onClick={handlerModal}
+                aria-label="Close filter"
+              >
+                <IoClose className="text-2xl hover:scale-125" />
+              </button>
+              <div className="mb-7 space-y-2">
+                <SideNavbar filters={filters} />
+              </div>
+              <TagButton
+                className="absolute bottom-2 left-2 right-2 py-2"
+                onClick={handlerModal}
+              >
+                <p className="mx-auto uppercase">
+                  View {totalItems} items found
+                </p>
+              </TagButton>
             </div>
-            <TagButton
-              className="absolute bottom-2 left-2 right-2 py-2"
-              onClick={handlerModal}
-            >
-              <p className="mx-auto uppercase">View {totalItems} items found</p>
-            </TagButton>
-          </div>
-        </ModalContainer>
+          </ModalContainer>
+        </div>
       )}
     </>
   );

@@ -61,7 +61,7 @@ export default function DropdownCategory({
     return (
       <Link
         href={`/c/${slug}/${item.slug}`}
-        className={`w-full transition-colors duration-200 p-3 md:py-2 lg:bg-black/5 lg:dark:bg-white/10 lg:rounded-lg flex justify-between ${isOpen ? 'bg-orange-800 text-[#ededed] font-bold' : ''}`}
+        className={`w-full transition-colors duration-200 p-3 md:py-2 lg:bg-black/5 lg:dark:bg-white/10 lg:rounded-lg flex justify-between ${isOpen ? 'bg-orange-800 text-light font-bold' : ''}`}
         aria-controls={`menu-${level}-${index}`}
       >
         <p className="ml-2">{item.name}</p>
@@ -89,7 +89,7 @@ export default function DropdownCategory({
       {level > 0 && (
         <button
           onClick={handleClick}
-          className={`w-full transition-colors duration-200 p-3 md:py-2 flex justify-between ${isOpen ? 'bg-orange-800 text-[#ededed] font-bold' : ''}`}
+          className={`w-full transition-colors duration-200 p-3 md:py-2 flex justify-between ${isOpen ? 'bg-orange-800 text-light font-bold' : ''}`}
           aria-expanded={isOpen}
           aria-controls={`submenu-${level}-${index}`}
         >

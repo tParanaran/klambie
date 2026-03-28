@@ -127,7 +127,7 @@ export default function CartItems({
                 />
                 <div className="absolute flex flex-wrap top-0 left-0 max-w-full gap-0.5">
                   <div
-                    className="text-xs text-[#ededed] bg-red-700 rounded-tl-xl rounded-br-xl py-1 px-2"
+                    className="text-xs text-light bg-red-700 rounded-tl-xl rounded-br-xl py-1 px-2"
                     title={item.appliedPromotions[0].badge}
                   >
                     {item.appliedPromotions

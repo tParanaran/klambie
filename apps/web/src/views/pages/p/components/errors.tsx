@@ -37,14 +37,14 @@ const ErrorsMessage = forwardRef<IErrorsMessageHandle>((props, ref) => {
       {visibleErrors.map((err, e) => (
         <div
           key={e}
-          className="text-[#ededed] text-xs mt-1 flex bg-red-800 rounded-full px-2 py-0.5 w-fit animate-pulse"
+          className="text-light text-xs mt-1 flex bg-red-800 rounded-full px-2 py-0.5 w-fit animate-pulse"
         >
           <IoWarning className="mr-1 text-lg" /> {err}
         </div>
       ))}
 
       {visibleSuccess && (
-        <p className="bg-emerald-600 text-[#ededed] text-xs mt-1 flex rounded-full px-2 py-0.5 w-fit animate-pulse">
+        <p className="bg-emerald-600 text-light text-xs mt-1 flex rounded-full px-2 py-0.5 w-fit animate-pulse">
           {' '}
           <IoInformation className="mr-1 text-lg" /> {visibleSuccess}
         </p>

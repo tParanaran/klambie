@@ -22,7 +22,7 @@ export default function ProductPrice({ price, hasDiscount }: IProductPrice) {
       ) : null}
 
       {hasDiscount ? (
-        <p className="text-light text-[#ededed] bg-red-700 rounded-md py-0.5 px-1 w-fit">
+        <p className="text-light text-light bg-red-700 rounded-md py-0.5 px-1 w-fit">
           -{discountPercentage}%
         </p>
       ) : null}

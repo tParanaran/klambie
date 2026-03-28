@@ -5,15 +5,15 @@ import Container from '@/views/components/container';
 
 export default function Footer() {
   return (
-    <div className="bg-black">
+    <div>
       <div className="bg-black/90">
         <Container>
-          <footer className="pt-[10%] pb-28 md:py-[10%] text-[#ededed] grid grid-cols-1 md:grid-cols-2 gap-10">
+          <footer className="pt-[10%] pb-28 md:py-[10%] text-light grid grid-cols-1 md:grid-cols-2 gap-10">
             <div>
               <div>
                 <Logo />
                 <p className="font-light text-xs uppercase">
-                  Real Designs By Real Artists For Real People
+                  Real Identity By Real Brands For Real Peoples
                 </p>
               </div>
               <div className="text-sm font-light opacity-50 mt-5">
@@ -93,7 +93,7 @@ export default function Footer() {
             </div>
           </footer>
           <footer className="py-2">
-            <div className="flex items-center  justify-center text-[#ededed] opacity-50 text-sm font-light text-center">
+            <div className="flex items-center  justify-center text-light opacity-50 text-sm font-light text-center">
               {' '}
               <MdCopyright />
               <p>2026 Klambie. All rights reserved.</p>

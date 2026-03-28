@@ -9,7 +9,7 @@ export default function RegisterView({ refferal }: IRefferal) {
       <div className="hidden md:block">
         <RegisterHero />
       </div>
-      <div className="bg-[rgb(var(--background-start-rgb))]! rounded-2xl px-5 py-16">
+      <div className="bg-primary rounded-2xl px-5 py-16">
         <LoginRegisterTitle title={'Create an account'} />
         <RegisterForm refferal={refferal} />
       </div>

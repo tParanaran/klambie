@@ -66,7 +66,7 @@ export default function CategoryContent({
           {/* Side panel */}
           <div
             ref={modalRef}
-            className={`fixed h-fit z-30 transform transition-transform duration-300 ease-out translate-x-0 ${isMobile ? 'pt-16 bg-[#ededed] dark:bg-black sm:bg-transparent!  sm:right-10 top-0 w-full h-full sm:w-[45%] px-3 sm:px-0' : 'w-xs top-3 right-3 '}`}
+            className={`fixed h-fit z-30 transform transition-transform duration-300 ease-out translate-x-0 ${isMobile ? 'pt-16 bg-light dark:bg-dark sm:bg-transparent!  sm:right-10 top-0 w-full h-full sm:w-[45%] px-3 sm:px-0' : 'w-xs top-3 right-3 '}`}
           >
             <div className="flex py-3 justify-between items-center">
               <h2 className="font-semibold">{sideModalItem.name}</h2>
@@ -77,7 +77,7 @@ export default function CategoryContent({
             <div className="flex flex-wrap gap-2">
               <Link
                 href={`/c/${slug || slugModal}/${sideModalItem.slug}`}
-                className={`font-semibold rounded-lg hover:bg-orange-800 hover:text-[#ededed] bg-black/10 dark:bg-white/10 text-orange-800 dark:text-orange-600 ${isMobile ? 'py-3 px-8 text-base' : 'px-4 py-2 text-sm'}`}
+                className={`font-semibold rounded-lg hover:bg-orange-800 text-hover-light bg-black/10 dark:bg-white/10 ${isMobile ? 'py-3 px-8 text-base' : 'px-4 py-2 text-sm'}`}
               >
                 <p>Shop All</p>
               </Link>
@@ -85,7 +85,7 @@ export default function CategoryContent({
                 <Link
                   href={`/c/${slug || slugModal}/${sideModalItem.slug}/${subItem.slug}`}
                   key={i}
-                  className={`px-4 py-2 rounded-lg hover:bg-orange-800 hover:text-[#ededed] bg-black/10 dark:bg-white/10 ${isMobile ? 'py-3 px-8 text-base' : 'px-4 py-2 text-sm'}`}
+                  className={`px-4 py-2 rounded-lg hover:bg-orange-800 text-hover-light bg-black/10 dark:bg-white/10 ${isMobile ? 'py-3 px-8 text-base' : 'px-4 py-2 text-sm'}`}
                 >
                   {subItem.name}
                 </Link>

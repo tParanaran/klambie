@@ -55,7 +55,7 @@ export default function PriceFilterForm() {
                 </div>
               </div>
               <button
-                className="px-3 py-1 text-sm rounded-full text-[#ededed] flex items-center cursor-pointer bg-orange-800 mt-2 ml-auto"
+                className="px-3 py-1 text-sm rounded-full text-light flex items-center cursor-pointer bg-orange-800 mt-2 ml-auto"
                 type="submit"
                 aria-label="Apply price filter"
               >

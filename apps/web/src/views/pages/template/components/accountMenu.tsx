@@ -14,7 +14,7 @@ export default function AccountMenu() {
   const { user } = useAuthStore();
 
   const className =
-    'flex items-center px-2 sm:px-5 py-1.5 hover:bg-orange-800 hover:text-[#ededed] w-full overflow-hidden';
+    'flex items-center px-2 sm:px-5 py-1.5 hover:bg-orange-800 text-hover-light w-full overflow-hidden';
   const iconClass = 'mr-2 text-lg';
 
   return (

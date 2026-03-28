@@ -36,7 +36,7 @@ export default function CategoryMenu() {
     >
       <button
         ref={menuRef}
-        className="text-[32px] hover:bg-black rounded-md p-1 bg-black/90 text-[#ededed]"
+        className="text-[32px] hover:bg-black rounded-md p-1 bg-dark text-light"
         type="button"
         aria-label="Open Menu"
         onClick={showMenuHandler}

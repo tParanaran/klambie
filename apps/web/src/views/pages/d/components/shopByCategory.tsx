@@ -40,7 +40,7 @@ export default function ShopByCategory({ slug }: IShopByCategory) {
               key={cat.slug}
               className={`relative flex-none cursor-pointer overflow-hidden w-50 h-50 sm:w-auto ${c === 1 || c === 3 ? 'md:row-span-2 md:h-72 lg:h-80 md:mt-auto' : c === 5 || c === 6 ? 'sm:h-32! md:h-28 lg:h-32' : 'md:h-48 lg:h-56'} ${c === 2 ? 'md:row-span-2 md:mt-auto md:h-56 lg:h-64' : ''} ${c === 1 ? 'sm:row-span-2! sm:mt-auto sm:h-88' : ''} ${c === 5 ? 'sm:col-span-2 md:col-span-1' : ''}`}
             >
-              <div className="absolute inset-0 bg-[#ededed] dark:bg-[#1b1a1e] rounded-2xl -z-10" />
+              <div className="absolute inset-0 bg-primary rounded-2xl -z-10" />
               <div className="relative w-full h-full rounded-2xl overflow-hidden">
                 <Image
                   height={224}
@@ -59,17 +59,17 @@ export default function ShopByCategory({ slug }: IShopByCategory) {
                   }`}
                 >
                   <h1
-                    className={`${antonFont.className} font-semibold text-lg uppercase text-[#1b1a1e] dark:text-[#ededed]`}
+                    className={`${antonFont.className} font-semibold text-lg uppercase text-dark`}
                   >
                     {cat.name}
                   </h1>
                 </div>
               </div>
-              <div className="absolute z-10 bg-bl bottom-0 left-0 w-9 h-9 bg-[rgb(var(--background-start-rgb))]! rounded-tr-2xl rounded-bl-2xl inverted-radius-bl"></div>
+              <div className="absolute z-10 bg-bl bottom-0 left-0 w-9 h-9 bg-body rounded-tr-2xl rounded-bl-2xl inverted-radius-bl"></div>
 
               <button
                 className={`absolute bottom-0 left-0 z-10 
-                  rounded-full bg-[#1b1a1e] dark:bg-[#ededed] dark:text-[#1b1a1e]  text-white p-1 text-2xl
+                  rounded-full bg-round-button p-1 text-2xl
                    shadow-lg
                   transition-all duration-300
                    ${activeIndex === c ? 'rotate-135' : '-rotate-45'}`}
@@ -85,7 +85,7 @@ export default function ShopByCategory({ slug }: IShopByCategory) {
 
               {cat.subcategories && cat.subcategories.length > 0 && (
                 <div
-                  className={`absolute inset-0 dark:text-[#ededed] dark:bg-[#1b1a1e]/80 text-black rounded-2xl bg-[#ededed]/80 backdrop-blur-xs p-1.5 flex flex-col justify-start transition-all duration-300 ${activeIndex === c ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-5 pointer-events-none'}`}
+                  className={`absolute inset-0 rounded-2xl bg-secondary-opacity backdrop-blur-xs p-1.5 flex flex-col justify-start transition-all duration-300 ${activeIndex === c ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-5 pointer-events-none'}`}
                 >
                   <p className="mb-3 opacity-50 text-sm md:text-base">
                     {cat.name}

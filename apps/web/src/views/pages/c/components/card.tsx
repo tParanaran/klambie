@@ -65,7 +65,7 @@ export default function ProductCard({
             ))}
             <div className="absolute top-1 right-1 z-10">
               <button
-                className="rounded-full text-2xl p-1.5 bg-black/60 font-bold text-[#ededed] uppercase w-full hover:bg-black disabled:opacity-50 disabled:cursor-not-allowed"
+                className="rounded-full text-2xl p-1.5 bg-black/60 font-bold text-light uppercase w-full hover:bg-black disabled:opacity-50 disabled:cursor-not-allowed"
                 aria-label="Add to bag modal"
                 onClick={() => {
                   (variantHandler(item.slug, item.name), updateQuantity(1, 1));

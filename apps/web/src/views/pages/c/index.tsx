@@ -26,7 +26,7 @@ export default function CategoryView({
 
   return (
     <>
-      <div className="mt-5 md:mt-0">
+      <div className="mt-5 md:mt-0 relative">
         <TopNavbar totalItems={totalItems} filters={filters} query={query} />
       </div>
 

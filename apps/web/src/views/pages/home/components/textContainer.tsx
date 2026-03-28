@@ -10,8 +10,8 @@ export default function TextContainer() {
         className="w-10 mb-3"
       />
       <p className="uppercase opacity-50 text-sm">
-        KLAMBIE makes clothes to elevate everyday life through lighthearted
-        escapism.
+        Klambie blends handpicked products from established real brands with our
+        own original collections.
       </p>
     </div>
   );

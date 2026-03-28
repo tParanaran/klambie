@@ -3,9 +3,9 @@ import { antonFont } from '@/utils/fonts';
 import useDetectIsMobile from '../../template/hooks/useDetectIsMobile';
 const lines = [
   ['Klambie'],
-  ['Real Designs'],
-  ['By Real Artists'],
-  ['For Real People'],
+  ['Real Identity'],
+  ['By Real Brands'],
+  ['For Real Peoples'],
 ];
 
 export default function HeroTitle() {

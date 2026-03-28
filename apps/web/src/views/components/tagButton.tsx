@@ -20,7 +20,7 @@ export default function TagButton({
   hexUrl,
 }: ITagButton) {
   const baseStyle =
-    'px-2 py-1 text-sm rounded-full mt-1 text-[#ededed] flex items-center cursor-pointer';
+    'px-2 py-1 text-sm rounded-full mt-1 text-light flex items-center cursor-pointer';
 
   const content = (
     <>
@@ -33,7 +33,7 @@ export default function TagButton({
     return (
       <Link
         href={href}
-        className={`${baseStyle} ${className} ${active ? 'bg-[#FF4500]' : 'bg-orange-800 hover:bg-orange-700'}`}
+        className={`${baseStyle} ${className} ${active ? 'bg-active' : 'bg-orange-800 hover:bg-orange-700'}`}
       >
         {content}
       </Link>
@@ -43,7 +43,7 @@ export default function TagButton({
   return (
     <button
       onClick={onClick}
-      className={`${baseStyle} ${className} ${active ? 'bg-[#FF4500]' : 'bg-orange-800 hover:bg-orange-700'}`}
+      className={`${baseStyle} ${className} ${active ? 'bg-active' : 'bg-orange-800 hover:bg-orange-700'}`}
       style={{ backgroundColor: `${hexUrl}` }}
     >
       {content}

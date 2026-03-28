@@ -4,7 +4,7 @@ export default function BannerAnimation({ mounted }: { mounted: boolean }) {
   return (
     <div>
       <nav
-        className={`relative bg-black/90 dark:bg-orange-800 py-2 text-nowrap text-[#ededed] text-center text-sm uppercase font-light overflow-hidden transition-all duration-500 ${
+        className={`relative bg-black/90 dark:bg-orange-800 py-2 text-nowrap text-light text-center text-sm uppercase font-light overflow-hidden transition-all duration-500 ${
           mounted ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-5'
         }`}
       >

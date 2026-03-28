@@ -32,7 +32,7 @@ export default function VeritificationButton({ token }: { token: string }) {
       {' '}
       <button
         onClick={verifyUser}
-        className="rounded-full py-2 sm:py-3 px-4 bg-orange-800 text-[#ededed] hover:bg-orange-700 font-semibold uppercase"
+        className="rounded-full py-2 sm:py-3 px-4 bg-orange-800 text-light hover:bg-orange-700 font-semibold uppercase"
       >
         Confirm Email
       </button>

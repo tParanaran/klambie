@@ -14,8 +14,8 @@ export default function BlogCard() {
     <div>
       <div className="my-10 lg:my-15">
         <TitileContainer
-          badge={' Our Blogs'}
-          title={'Get Inspired From'}
+          badge={'Our Blogs'}
+          title={'Get Inspired From Latest'}
           spanTitle="Threads And News"
         />
       </div>
@@ -26,7 +26,7 @@ export default function BlogCard() {
               key={blog.slug}
               className={b % 2 === 1 ? 'mt-10 md:mt-15' : ''}
             >
-              <div className="w-54 sm:w-64 bg-[#ededed] dark:bg-[#1A1A1A] p-2 rounded-2xl flex-none hover:scale-105 transition-transform duration-300 will-change-transform overflow-hidden">
+              <div className="w-54 sm:w-64 bg-primary p-2 rounded-2xl flex-none hover:scale-105 transition-transform duration-300 will-change-transform overflow-hidden">
                 <div className="h-50">
                   <div>
                     <h1 className="text-lg">{blog.title}</h1>
@@ -37,7 +37,7 @@ export default function BlogCard() {
                   </div>
 
                   <div className="mt-5">
-                    <p className="text-xs text-orange-700">#{blog.category}</p>
+                    <p className="text-xs text-active">#{blog.category}</p>
                     <p className="text-sm overflow-clip">{blog.description}</p>
                   </div>
                 </div>
@@ -50,10 +50,10 @@ export default function BlogCard() {
                     width={224}
                     className="w-50 h-40 sm:w-60 sm:h-52 rounded-2xl object-cover"
                   />
-                  <div className="absolute z-10 bottom-0 right-0 w-9 h-9 dark:bg-[#1b1a1e] bg-[#ededed] rounded-tl-2xl rounded-br-2xl inverted-radius-br-card"></div>
+                  <div className="absolute z-10 bottom-0 right-0 w-9 h-9 bg-primary rounded-tl-2xl rounded-br-2xl inverted-radius-br-card"></div>
 
                   <button
-                    className="absolute bottom-0 right-0 z-10 rounded-2xl bg-[#1b1a1e] dark:bg-[#ededed] dark:text-[#1b1a1e]  text-white p-1 text-2xl"
+                    className="absolute bottom-0 right-0 z-10 rounded-2xl bg-round-button p-1 text-2xl"
                     onClick={() => router.push(`/blog/${blog.slug}`)}
                     aria-label={blog.title}
                   >

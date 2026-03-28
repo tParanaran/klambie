@@ -23,9 +23,9 @@ export default function ShopByButton({ slug }: { slug: string }) {
               router.push(target, { scroll: false });
             }}
             aria-label={`All Products`}
-            className={`${antonFont.className} uppercase flex-none px-3 py-1 rounded-full text-base sm:text-lg hover:bg-black hover:border-black hover:text-[#ededed] mt-2 ${
+            className={`${antonFont.className} uppercase flex-none px-3 py-1 rounded-full text-base sm:text-lg hover:bg-black hover:border-black hover:text-light mt-2 ${
               getParams('tag') === undefined
-                ? 'bg-orange-800 border-orange-800 text-[#ededed]'
+                ? 'bg-orange-800 border-orange-800 text-light'
                 : 'border'
             }`}
           >
@@ -40,9 +40,9 @@ export default function ShopByButton({ slug }: { slug: string }) {
               scroll={false}
               className={`${
                 antonFont.className
-              } uppercase px-3 py-1 rounded-full text-base flex-none sm:text-lg hover:bg-black hover:border-black hover:text-[#ededed] mt-2 ${
+              } uppercase px-3 py-1 rounded-full text-base flex-none sm:text-lg hover:bg-black hover:border-black hover:text-light mt-2 ${
                 getParams('tag') === tag.slug
-                  ? 'bg-orange-800 border-orange-800 text-[#ededed]'
+                  ? 'bg-orange-800 border-orange-800 text-light'
                   : 'border'
               }`}
             >

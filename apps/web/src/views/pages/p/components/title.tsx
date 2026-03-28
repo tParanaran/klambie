@@ -23,7 +23,7 @@ export default function Title({ title }: { title: ITitle }) {
             <Link
               key={i}
               href={`/c/${path}`}
-              className="px-3 py-1 rounded-full mt-1 bg-orange-800 text-[#ededed]"
+              className="px-3 py-1 rounded-full mt-1 bg-orange-800 text-light"
             >
               {categories[i].name}
             </Link>

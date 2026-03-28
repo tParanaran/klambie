@@ -48,7 +48,7 @@ export default function HeroSwiper() {
   };
 
   return (
-    <div className="hidden sm:block absolute h-60 w-fit z-10 bottom-14 left-0 bg-[rgb(var(--background-start-rgb))] bg-fixed py-3 pr-3 rounded-2xl">
+    <div className="hidden sm:block absolute h-60 w-fit z-10 bottom-14 left-0 bg-body bg-fixed py-3 pr-3 rounded-2xl">
       <div className="flex space-x-5">
         <TextContainer />
         <div className={`${isMobile ? 'w-[24rem]' : 'w-xl'}`}>
@@ -67,13 +67,13 @@ export default function HeroSwiper() {
             <div className="space-x-2">
               <button
                 onClick={scrollLeft}
-                className="rounded-full hover:bg-black/90 p-1 hover:text-[#ededed]"
+                className="rounded-full p-1 hover:text-orange-700"
               >
                 <IoArrowBack className="text-2xl" />
               </button>
               <button
                 onClick={scrollRight}
-                className="rounded-full hover:bg-black/90 p-1 hover:text-[#ededed]"
+                className="rounded-full p-1 hover:text-orange-700"
               >
                 <IoArrowForward className="text-2xl" />
               </button>

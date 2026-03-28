@@ -17,7 +17,7 @@ export default function CategoryHome() {
         <TitileContainer
           badge={'Our Collections'}
           title={'Level Up Your Style With'}
-          spanTitle="Our Collections"
+          spanTitle="Our Real Collections"
         />
       </div>
       <div
@@ -40,14 +40,14 @@ export default function CategoryHome() {
             </div>
             <div className="absolute top-0 w-full bg-linear-to-t dark:bg-linear-to-b from-black/70 to-50% h-full p-2">
               <h1
-                className={`${antonFont.className} font-semibold text-lg uppercase text-[#1b1a1e] dark:text-[#ededed]`}
+                className={`${antonFont.className} font-semibold text-lg uppercase text-dark`}
               >
                 {category.name}
               </h1>
             </div>
-            <div className="absolute z-10 top-0 right-0 w-9 h-9 bg-[rgb(var(--background-start-rgb))]! rounded-tr-2xl rounded-bl-2xl inverted-radius-tr"></div>
+            <div className="absolute z-10 top-0 right-0 w-9 h-9 bg-body rounded-tr-2xl rounded-bl-2xl inverted-radius-tr"></div>
 
-            <div className="absolute top-0 right-0 z-10 rounded-2xl bg-[#1b1a1e] dark:bg-[#ededed] dark:text-[#1b1a1e]  text-white p-1 text-2xl">
+            <div className="absolute top-0 right-0 z-10 rounded-2xl bg-round-button p-1 text-2xl">
               <IoArrowForward className="-rotate-35" />
             </div>
           </Link>
