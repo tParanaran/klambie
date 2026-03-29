@@ -3,7 +3,7 @@ import { antonFont } from '@/utils/fonts';
 import useDetectIsMobile from '../../template/hooks/useDetectIsMobile';
 const lines = [
   ['Klambie'],
-  ['Real Identity'],
+  ['Real Taste'],
   ['By Real Brands'],
   ['For Real Peoples'],
 ];

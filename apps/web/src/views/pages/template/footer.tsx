@@ -13,7 +13,7 @@ export default function Footer() {
               <div>
                 <Logo />
                 <p className="font-light text-xs uppercase">
-                  Real Identity By Real Brands For Real Peoples
+                  Real Taste By Real Brands For Real Peoples
                 </p>
               </div>
               <div className="text-sm font-light opacity-50 mt-5">
