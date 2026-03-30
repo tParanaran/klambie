@@ -1,14 +1,13 @@
 'use client';
+import { antonFont } from '@/utils/fonts';
+import { hoverEffect } from '@/utils/styling';
+import SeeMoreButton from './seeMore';
+import ArrowForwarButton from './arrowForward';
 import TitileContainer from '@/views/components/titleContainer';
 import useAttribute from '../../c/hooks/useAttribute';
 import Image from 'next/image';
 import useDetectIsMobile from '../../template/hooks/useDetectIsMobile';
 import Link from 'next/link';
-import { IoArrowForward } from 'react-icons/io5';
-import { antonFont } from '@/utils/fonts';
-import { hoverEffect } from '@/utils/styling';
-import SeeMoreButton from './seeMore';
-import ArrowForwarButton from './arrowForward';
 
 export default function CategoryHome() {
   const { categories } = useAttribute();
