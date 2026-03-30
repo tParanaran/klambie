@@ -44,6 +44,24 @@ export default function SideNavbar({ filters }: { filters?: ICategories[] }) {
           <TagParams />
         </div>
       </div>
+
+      {filters && filters.length > 0 && (
+        <div className={container}>
+          <h1 className={header}>Categories</h1>
+          {filters.map((item, i) => (
+            <DropdownSidebar
+              key={item.slug}
+              item={item}
+              index={i}
+              openIndex={openIndex}
+              setOpenIndex={setOpenIndex}
+              setKeyword={setKeyword}
+              keyword={keyword}
+            />
+          ))}
+        </div>
+      )}
+
       <div className={container}>
         <h1 className={header}>Brands</h1>
         <div className={flexClass}>
@@ -61,22 +79,6 @@ export default function SideNavbar({ filters }: { filters?: ICategories[] }) {
           ))}
         </div>
       </div>
-      {filters && filters.length > 0 && (
-        <div className={container}>
-          <h1 className={header}>Categories</h1>
-          {filters.map((item, i) => (
-            <DropdownSidebar
-              key={item.slug}
-              item={item}
-              index={i}
-              openIndex={openIndex}
-              setOpenIndex={setOpenIndex}
-              setKeyword={setKeyword}
-              keyword={keyword}
-            />
-          ))}
-        </div>
-      )}
 
       <div className={container}>
         <h1 className={header}>Price</h1>

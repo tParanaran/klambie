@@ -7,6 +7,8 @@ import Link from 'next/link';
 import { IoArrowForward } from 'react-icons/io5';
 import { antonFont } from '@/utils/fonts';
 import { hoverEffect } from '@/utils/styling';
+import SeeMoreButton from './seeMore';
+import ArrowForwarButton from './arrowForward';
 
 export default function CategoryHome() {
   const { categories } = useAttribute();
@@ -20,15 +22,7 @@ export default function CategoryHome() {
           title={'Level Up Your Style With'}
           spanTitle="Our Real Collections"
         />
-        <Link
-          href={'/c'}
-          className="flex w-44 justify-between bg-primary rounded-full pl-3 py-1 items-center uppercase mt-3 relative mx-auto"
-        >
-          <h1 className="flex-none text-sm text-orange-700">Shop All</h1>
-          <span className="text-2xl p-1 rounded-full flex-none mx-1 text-light bg-round-button">
-            <IoArrowForward />
-          </span>
-        </Link>
+        <SeeMoreButton href={'/c'} name={'Shop All'} style="mx-auto" />
       </div>
       <div
         className={`grid gap-2.5 lg:gap-3 items-end md:items-center ${isMobile ? 'grid-cols-2' : 'grid-cols-3 md:grid-cols-5'}`}
@@ -55,11 +49,8 @@ export default function CategoryHome() {
                 {category.name}
               </h1>
             </div>
-            <div className="absolute z-10 top-0 right-0 w-9 h-9 bg-body rounded-tr-2xl rounded-bl-2xl inverted-radius-tr"></div>
 
-            <div className="absolute top-0 right-0 z-10 rounded-2xl bg-round-button p-1 text-2xl">
-              <IoArrowForward className="-rotate-35" />
-            </div>
+            <ArrowForwarButton />
           </Link>
         ))}
       </div>

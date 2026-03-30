@@ -135,6 +135,7 @@ model Brand {
   image       String?  @db.VarChar(200)
   description String?  @db.VarChar(500)
   createdAt   DateTime @default(now())
+  priority    Boolean  @default(false)
 
   products Product[]
 }

@@ -8,6 +8,7 @@ import HorizontalScrollButton from '../../d/components/buttonScroll';
 import { useRouter } from 'next/navigation';
 import { hoverEffect } from '@/utils/styling';
 import Link from 'next/link';
+import SeeMoreButton from '../../home/components/seeMore';
 
 export default function BlogCard() {
   const router = useRouter();
@@ -20,15 +21,7 @@ export default function BlogCard() {
           spanTitle="Threads And News"
           isFull={true}
         />
-        <Link
-          href={'/blog'}
-          className="flex w-44 justify-between bg-primary rounded-full pl-3 py-1 items-center uppercase mt-3 relative"
-        >
-          <h1 className="flex-none text-sm text-orange-700">See more</h1>
-          <span className="text-2xl p-1 rounded-full flex-none mx-1 text-light bg-round-button">
-            <IoArrowForward />
-          </span>
-        </Link>
+        <SeeMoreButton href={'/blog'} name={'See More'} />
       </div>
       <HorizontalScrollButton>
         <div className="flex space-x-5 p-4">
@@ -66,7 +59,7 @@ export default function BlogCard() {
                   <div className="absolute z-10 bottom-0 right-0 w-9 h-9 bg-primary rounded-tl-2xl rounded-br-2xl inverted-radius-br-card"></div>
 
                   <button
-                    className="absolute bottom-0 right-0 z-10 rounded-2xl bg-round-button p-1 text-2xl"
+                    className="absolute bottom-0 right-0 z-10 rounded-2xl bg-round-button p-1.5 text-xl"
                     onClick={() => router.push(`/blog/${blog.slug}`)}
                     aria-label={blog.title}
                   >

@@ -70,7 +70,7 @@ export default function ShopByCategory({ slug }: IShopByCategory) {
 
               <button
                 className={`absolute bottom-0 left-0 z-10 
-                  rounded-full bg-round-button p-1 text-2xl
+                  rounded-full bg-round-button p-1.5 text-xl
                    shadow-lg
                   transition-all duration-300
                    ${activeIndex === c ? 'rotate-135' : '-rotate-45'}`}

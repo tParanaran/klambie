@@ -39,7 +39,7 @@ const productHelper = new ProductHelper();
 export class AttributeService {
   async getAllBrands(): Promise<
     {
-      [k: string]: string | number | Date | null;
+      [k: string]: string | number | Date | null | boolean;
     }[]
   > {
     const data = await prisma.brand.findMany();

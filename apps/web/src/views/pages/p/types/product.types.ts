@@ -21,9 +21,10 @@ export interface IBrand {
   slug: string;
   name: string;
   id: number;
-  logo?: string;
-  bio?: string;
+  image?: string;
+  description?: string;
   createdAt: string;
+  priority: boolean;
 }
 
 export interface IProducts {

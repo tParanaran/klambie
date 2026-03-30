@@ -1,5 +1,6 @@
 import BlogCard from '../blog/components/blogCard';
 import About from './components/about';
+import BrandSection from './components/brands';
 import CategoryHome from './components/categories';
 import HeroMain from './components/heroMain';
 import HeroSwiper from './components/heroSwiper';
@@ -33,6 +34,7 @@ export default async function HomeView() {
       <CategoryHome />
       <BlogCard />
       <About />
+      <BrandSection />
     </div>
   );
 }

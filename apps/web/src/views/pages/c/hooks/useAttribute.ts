@@ -1,13 +1,10 @@
 import { useEffect, useState } from 'react';
 import { IBrand, ITag } from '../../p/types/product.types';
-import {
-  initialAttributes,
-  initialBrands,
-  initialTags,
-} from '@/utils/attribute';
+import { initialAttributes, initialTags } from '@/utils/attribute';
 import axiosInstanceClient from '@/lib/axios/client';
 import { IAttribute, ICategories } from '../types';
 import { initialCategories } from '@/utils/categories';
+import { initialBrands } from '@/utils/brands';
 
 export default function useAttribute() {
   const [error, setError] = useState<string>();
