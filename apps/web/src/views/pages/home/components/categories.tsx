@@ -12,6 +12,7 @@ import Link from 'next/link';
 export default function CategoryHome() {
   const { categories } = useAttribute();
   const { isMobile } = useDetectIsMobile({ widthScreen: 450 });
+
   return (
     <div className="my-10 lg:my-15">
       <div className="mb-10 lg:mb-15">

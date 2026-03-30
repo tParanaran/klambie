@@ -9,6 +9,7 @@ import AboutPatternMobile from './aboutPatternMobile';
 
 export default function About() {
   const { isMobile } = useDetectIsMobile({ widthScreen: 886, maxWitdh: 767 });
+
   return (
     <div className="my-10 lg:my-15 md:grid md:grid-cols-[300px_1fr]">
       <AboutPattern />
