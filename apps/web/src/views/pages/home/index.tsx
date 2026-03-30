@@ -31,10 +31,10 @@ export default async function HomeView() {
         </div>
         <HeroSwiper />
       </div>
-      <CategoryHome />
-      <BlogCard />
       <About />
+      <CategoryHome />
       <BrandSection />
+      <BlogCard />
     </div>
   );
 }

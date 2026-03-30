@@ -26,7 +26,7 @@ export default function BrandSection() {
       </div>
 
       <HorizontalScrollButton>
-        <div className="grid grid-rows-2 grid-cols-[repeat(5,240px)] lg:grid-cols-5 gap-3 p-1.5">
+        <div className="grid grid-rows-2 grid-cols-[repeat(5,208px)] sm:grid-cols-[repeat(5,240px)] lg:grid-cols-5 gap-3 p-1.5">
           {brandsPriority.map((brand) => (
             <div
               key={brand.slug}
@@ -37,7 +37,7 @@ export default function BrandSection() {
                 width={50}
                 height={50}
                 alt={brand.name}
-                className="w-full object-contain px-5 h-12"
+                className="w-full object-contain px-5 h-10 sm:h-12"
               />
               <div className="mt-2">
                 <h1 className="text-base text-active mb-1">{brand.name}</h1>

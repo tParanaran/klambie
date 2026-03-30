@@ -14,9 +14,8 @@ export default function CategoryHome() {
   const { categories } = useAttribute();
   const { isMobile } = useDetectIsMobile({ widthScreen: 450 });
   return (
-    <div className="mb-5">
-      {' '}
-      <div className="mb-10 mt-5 lg:my-15">
+    <div className="my-10 lg:my-15">
+      <div className="mb-10 lg:mb-15">
         <TitileContainer
           badge={'Our Collections'}
           title={'Level Up Your Style With'}
