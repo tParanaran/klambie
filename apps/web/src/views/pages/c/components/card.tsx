@@ -20,11 +20,9 @@ import { useQueryParams } from '../hooks/useQueryParams';
 export default function ProductCard({
   products,
   style,
-  cardStyle,
 }: {
   products: IProducts[];
   style?: string;
-  cardStyle?: string;
 }) {
   const errorsProductRef = useRef<IErrorsMessageHandle | null>(null);
   const { pathname } = useQueryParams();
@@ -49,18 +47,18 @@ export default function ProductCard({
   return (
     <>
       {products.map((item, idx) => (
-        <div key={idx} className={`relative mb-2 z-0 ${style}`}>
+        <div key={idx} className="relative mb-2 z-0 overflow-hidden">
           <Swiper spaceBetween={5}>
             {item.images.map((image, i) => (
               <SwiperSlide key={i}>
-                <img
-                  src={image}
-                  alt={`Product Image ${i}`}
-                  className={`object-cover w-full rounded-2xl h-72 lg:h-96 ${cardStyle}`}
-                  width={300}
-                  height={400}
-                  aria-placeholder="blur"
-                />
+                <div className={`relative aspect-3/4 ${style}`}>
+                  <img
+                    src={image}
+                    alt={`Product Image ${i}`}
+                    className="object-cover rounded-2xl h-full w-full"
+                    aria-placeholder="blur"
+                  />
+                </div>
               </SwiperSlide>
             ))}
             <div className="absolute top-1 right-1 z-10">
@@ -105,10 +103,10 @@ export default function ProductCard({
                     .join(', ')}
                 </h1>
               )}
-              <div>
-                <p className="font-bold">{item.brand.name}</p>
+              <div className="mt-3">
+                <p className="font-bold text-base">{item.brand.name}</p>
                 <p className="font-light">{item.name}</p>
-                <div className="flex items-center space-x-2 flex-wrap">
+                <div className="flex items-center space-x-2 flex-wrap text-base">
                   <ProductPrice
                     price={item.price}
                     hasDiscount={item.hasDiscount}

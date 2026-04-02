@@ -41,7 +41,7 @@ export default function CategoryView({
           {products.length > 0 ? (
             <div className="flex-1">
               <div
-                className={`grid grid-cols-2 ${isMobile ? 'grid-cols-3 text-sm' : 'lg:grid-cols-3 text-[15px]'} gap-2`}
+                className={`grid grid-cols-2 ${isMobile ? 'grid-cols-3 text-sm' : 'lg:grid-cols-3 text-[15px]'} gap-5`}
               >
                 <ProductCard products={products} />
               </div>{' '}

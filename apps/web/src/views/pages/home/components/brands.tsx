@@ -9,7 +9,7 @@ import SeeMoreButton from './seeMore';
 import ArrowForwarButton from './arrowForward';
 import HorizontalScrollButton from '../../d/components/buttonScroll';
 
-export default function BrandSection() {
+export default function BrandSection({ slug }: { slug?: string }) {
   const { brands } = useAttribute();
 
   const brandsPriority = brands.filter((brand) => brand.priority === true);
@@ -43,7 +43,7 @@ export default function BrandSection() {
                 <h1 className="text-base text-active mb-1">{brand.name}</h1>
                 <p className="text-sm opacity-50">{brand.description}</p>
               </div>
-              <Link href={`/c?brand=${brand.slug}`}>
+              <Link href={`/c${slug ? `/${slug}` : ''}?brand=${brand.slug}`}>
                 <ArrowForwarButton />
               </Link>{' '}
             </div>

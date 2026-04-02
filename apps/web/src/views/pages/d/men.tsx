@@ -2,6 +2,9 @@ import ErrorMessage from '@/views/components/error';
 import ShopByCard from './components/shopByCard';
 import { IDepartementView } from './types';
 import ShopByCategory from './components/shopByCategory';
+import BannerHero from './components/banner';
+import BrandSection from '../home/components/brands';
+import BlogCard from '../blog/components/blogCard';
 
 export default async function MenView({
   products,
@@ -11,7 +14,9 @@ export default async function MenView({
   return (
     <div>
       <ShopByCategory slug={slug} />
-      <ShopByCard products={products} slug={slug}/>
+      <BrandSection slug={slug} />
+      <ShopByCard products={products} slug={slug} />
+      <BlogCard />
       {error && <ErrorMessage error={error} />}
     </div>
   );
