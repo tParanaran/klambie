@@ -11,6 +11,7 @@ import Image from 'next/image';
 import HorizontalScrollButton from './buttonScroll';
 import TitileContainer from '@/views/components/titleContainer';
 import { hoverEffect } from '@/utils/styling';
+import SeeMoreButton from '../../home/components/seeMore';
 
 interface IShopByCategory {
   slug: string;
@@ -32,6 +33,11 @@ export default function ShopByCategory({ slug }: IShopByCategory) {
           badge={'Our Collections'}
           title={'Elevate Your Style With Our'}
           spanTitle={`${category.name} Collections`}
+        />
+        <SeeMoreButton
+          href={`/c/${slug}`}
+          name={'All Collection'}
+          style="mx-auto"
         />
       </div>
       <HorizontalScrollButton>

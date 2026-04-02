@@ -10,7 +10,7 @@ import NavbarHome from './components/navbar';
 
 export default async function HomeView() {
   return (
-    <div className="md:mt-8 pb-[5%]">
+    <div className="md:mt-8">
       <div className="relative overflow-hidden">
         <div className="grid grid-cols-1 sm:grid-cols-[1fr_1.5fr] gap-3 relative rounded-2xl overflow-hidden p-2">
           <div className="space-y-2 sm:space-y-5">

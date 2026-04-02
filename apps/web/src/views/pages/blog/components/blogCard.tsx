@@ -13,8 +13,8 @@ import SeeMoreButton from '../../home/components/seeMore';
 export default function BlogCard() {
   const router = useRouter();
   return (
-    <div>
-      <div className="my-10 lg:my-15 md:w-2xl">
+    <div className="my-10 lg:my-15">
+      <div className="mb-10 lg:mb-15 md:w-2xl">
         <TitileContainer
           badge={'Our Blogs'}
           title={'Get Inspired From Latest'}
