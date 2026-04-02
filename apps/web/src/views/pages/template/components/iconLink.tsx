@@ -1,42 +1,25 @@
-import { IoSearch, IoPerson, IoBagHandle } from 'react-icons/io5';
-import { useProfileStore } from '@/store/profileStore';
-import { useAuthStore } from '@/store/authStore';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { IconType } from 'react-icons';
 
-export default function IconLink() {
-  const { isOpen } = useProfileStore();
-  const { user } = useAuthStore();
-  const redirect = useRouter();
+interface IIconLink {
+  className?: string;
+  iconClass: string;
+  href: string;
+  name: string;
+  Icon: IconType;
+}
 
-  const ProfileHandler = () => {
-    if (user) {
-      isOpen();
-    } else {
-      redirect.push('/login');
-    }
-  };
-
+export default function IconLink({
+  className,
+  iconClass,
+  href,
+  name,
+  Icon,
+}: IIconLink) {
   return (
-    <div className="flex space-x-2 text-2xl">
-      <button aria-label="Search" className="hover:scale-125">
-        <IoSearch />
-      </button>
-      <div className="relative hover:scale-125">
-        <Link href={'/cart'} aria-label="Cart">
-          <IoBagHandle />
-        </Link>
-        <div className="absolute top-0 -right-2 text-xs px-1 text-[#ededed] rounded-full bg-orange-700">
-          1
-        </div>
-      </div>
-      <button
-        aria-label="Profile"
-        onClick={ProfileHandler}
-        className="hover:scale-125"
-      >
-        <IoPerson />
-      </button>
-    </div>
+    <Link href={href} className={className}>
+      <Icon className={iconClass} />
+      <p>{name}</p>{' '}
+    </Link>
   );
 }

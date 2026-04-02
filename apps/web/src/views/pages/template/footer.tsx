@@ -5,15 +5,15 @@ import Container from '@/views/components/container';
 
 export default function Footer() {
   return (
-    <div className="bg-black">
+    <div>
       <div className="bg-black/90">
         <Container>
-          <footer className="py-[10%] text-[#ededed] grid grid-cols-1 md:grid-cols-2 gap-10">
+          <footer className="pt-[10%] pb-28 md:py-[10%] text-light grid grid-cols-1 md:grid-cols-2 gap-10">
             <div>
               <div>
                 <Logo />
                 <p className="font-light text-xs uppercase">
-                  Real Designs By Real Artists For Real People
+                  Real Taste By Real Brands For Real Peoples
                 </p>
               </div>
               <div className="text-sm font-light opacity-50 mt-5">
@@ -40,16 +40,18 @@ export default function Footer() {
                 </div>
               </div>
             </div>
-            <div className="flex lg:justify-end space-x-4 sm:space-x-20 md:space-x-10 lg:space-x-24 font-light text-sm flex-wrap">
-              <div className="flex flex-col space-y-5 mt-5">
+            <div className="flex lg:justify-end space-x-5 sm:space-x-20 md:space-x-10 lg:space-x-24 font-light text-sm flex-wrap">
+              <div className="flex flex-col space-y-4 mt-5">
                 <h1 className="opacity-50">Quick Links</h1>
-                <Link href="/shop">Shop</Link>
+                <Link href="/d/men">Men</Link>
+                <Link href="/d/women">Women</Link>
+                <Link href="/d/kids">Kids</Link>
+                <Link href="/d/sports">Sports</Link>
+                <Link href="/d/groomity">Groomity</Link>
                 <Link href="/register">Register</Link>
                 <Link href="/login">Login</Link>
-                <Link href="/question">FAQ</Link>
-                <Link href="/contact">Contact us</Link>
               </div>
-              <div className="flex flex-col space-y-5 mt-5">
+              <div className="flex flex-col space-y-4 mt-5">
                 <h1 className="opacity-50">Social</h1>
                 <a
                   href="https://www.facebook.com/"
@@ -80,8 +82,10 @@ export default function Footer() {
                   Linkedin
                 </a>
               </div>
-              <div className="flex flex-col space-y-5 mt-5">
+              <div className="flex flex-col space-y-4 mt-5">
                 <h1 className="opacity-50">Legal</h1>
+                <Link href="/question">FAQ</Link>
+                <Link href="/contact">Contact us</Link>
                 <Link href="/">Term of service</Link>
                 <Link href="/">Privacy policy</Link>
                 <Link href="/">Cookie policy</Link>
@@ -89,7 +93,7 @@ export default function Footer() {
             </div>
           </footer>
           <footer className="py-2">
-            <div className="flex items-center  justify-center text-[#ededed] opacity-50 text-sm font-light text-center">
+            <div className="flex items-center  justify-center text-light opacity-50 text-sm font-light text-center">
               {' '}
               <MdCopyright />
               <p>2026 Klambie. All rights reserved.</p>

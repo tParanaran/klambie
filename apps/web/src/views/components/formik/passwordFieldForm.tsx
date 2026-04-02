@@ -1,24 +1,18 @@
 import { Field } from 'formik';
-import { ChangeEvent, useState } from 'react';
+import { useState } from 'react';
 import ErrorForm from './errorForm';
 import { IoEyeOffOutline, IoEyeOutline } from 'react-icons/io5';
+import { IHandleChange } from './textFieldForm';
 
 interface IFieldForm {
-  handleChange: {
-    (e: ChangeEvent<any>): void;
-    <T = string | ChangeEvent<any>>(
-      field: T,
-    ): T extends React.ChangeEvent<any>
-      ? void
-      : (e: string | React.ChangeEvent<any>) => void;
-  };
+  handleChange: IHandleChange;
   values: string;
-  name: string;
-  label: string;
 }
 
-export default function PasswordFieldForm(prop: IFieldForm) {
-  const { handleChange, values, name, label } = prop;
+export default function PasswordFieldForm({
+  handleChange,
+  values,
+}: IFieldForm) {
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   return (
@@ -34,7 +28,7 @@ export default function PasswordFieldForm(prop: IFieldForm) {
           onChange={handleChange}
           values={values}
           placeholder="Type your password here"
-          className="appearance-none w-full bg-black/10 rounded-full py-3 px-4 leading-tight focus:outline-none focus:bg-background focus:border focus:border-gray-300 placeholder:text-sm"
+          className="appearance-none w-full bg-black/10 dark:bg-white/10 rounded-full py-3 px-4 leading-tight focus:outline-none focus:bg-background focus:border focus:border-gray-300 placeholder:text-sm"
         />
         <button
           type="button"

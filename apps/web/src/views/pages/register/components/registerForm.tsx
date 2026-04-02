@@ -9,18 +9,18 @@ import Link from 'next/link';
 import TextFieldForm from '@/views/components/formik/textFieldForm';
 import PasswordFieldForm from '@/views/components/formik/passwordFieldForm';
 import ButtonForm from '@/views/components/formik/buttonForm';
-import axiosInstance from '@/lib/axios';
 import DOMPurify from 'dompurify';
 import VertificationdModal from '@/views/components/vertificationModal';
+import axiosInstanceClient from '@/lib/axios/client';
 
-export default function RegisterForm(prop: IRefferal) {
+export default function RegisterForm({ refferal }: IRefferal) {
   const [message, setMessage] = useState<string>('');
   const [html, setHtml] = useState<string>('');
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
 
   const RegisterHandler = async (values: IRegister) => {
     try {
-      const { data } = await axiosInstance.post('/auth/register', values);
+      const { data } = await axiosInstanceClient.post('/auth/register', values);
       if (data) {
         setHtml(DOMPurify.sanitize(data.message));
         setIsSuccess(data.success);
@@ -40,7 +40,7 @@ export default function RegisterForm(prop: IRefferal) {
           name: '',
           email: '',
           password: '',
-          refferal: prop.refferal,
+          refferal: refferal,
         }}
         validationSchema={RegisterSchema}
         onSubmit={(values) => {
@@ -71,8 +71,6 @@ export default function RegisterForm(prop: IRefferal) {
               <PasswordFieldForm
                 handleChange={handleChange}
                 values={values.password}
-                name={'password'}
-                label={'Password'}
               />
 
               <div className="mt-10">

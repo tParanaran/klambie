@@ -129,12 +129,13 @@ model Product {
 }
 
 model Brand {
-  id        Int      @id @default(autoincrement())
-  name      String   @unique @db.VarChar(100)
-  slug      String   @unique
-  logo      String?  @db.VarChar(200)
-  bio       String?  @db.VarChar(500)
-  createdAt DateTime @default(now())
+  id          Int      @id @default(autoincrement())
+  name        String   @unique @db.VarChar(100)
+  slug        String   @unique
+  image       String?  @db.VarChar(200)
+  description String?  @db.VarChar(500)
+  createdAt   DateTime @default(now())
+  priority    Boolean  @default(false)
 
   products Product[]
 }
@@ -248,11 +249,13 @@ model ProductVariantAttribute {
 }
 
 model Category {
-  id   Int    @id @default(autoincrement())
-  name String @unique
-  slug String @unique
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  slug      String   @unique
+  createdAt DateTime @default(now())
 
   categoryHierarchies CategoryHierarchy[]
+  banners             Banner[]            @relation("BannerCategories")
 }
 
 model CategoryHierarchy {
@@ -260,12 +263,14 @@ model CategoryHierarchy {
   parentId          Int?
   categoryId        Int
   level             Int // 1 = department, 2 collection, 3 = category, 4 = subcategory
+  path              String              @db.VarChar(255)
   parent            CategoryHierarchy?  @relation("CategoryParent", fields: [parentId], references: [id])
   children          CategoryHierarchy[] @relation("CategoryParent")
   category          Category            @relation(fields: [categoryId], references: [id])
   productCategories ProductCategory[]
 
   @@index([parentId])
+  @@index([path])
   @@map("category_hierarchy")
 }
 
@@ -408,7 +413,7 @@ model UserPromotion {
 
 model Cart {
   id        Int       @id @default(autoincrement())
-  userId    Int?
+  userId    Int?      @unique
   sessionId String?   @unique
   expiresAt DateTime?
   createdAt DateTime  @default(now())
@@ -516,4 +521,18 @@ model OrderAddress {
   longitude Float
 
   @@map("order_address")
+}
+
+model Banner {
+  id         Int        @id @default(autoincrement())
+  title      String
+  image      String
+  link       String
+  active     Boolean    @default(true)
+  createdAt  DateTime   @default(now())
+  validUntil DateTime? // optional, only for time-limited banners
+  isSale     Boolean    @default(false)
+  discount   String?
+  promoCode  String?
+  categories Category[] @relation("BannerCategories")
 }

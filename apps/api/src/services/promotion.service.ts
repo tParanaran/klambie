@@ -1,12 +1,12 @@
 import Decimal from 'decimal.js';
-import Rupiah from '@/utils/rupiah';
-import { Price } from '@/types/product.type';
+import { PromoResult } from '@/types/product.type';
 import { Prisma, Promotion } from 'generated/prisma/client';
 import { prisma } from 'lib/prisma';
 import {
-  AppliedPromotions,
-  GetPromotion,
-  PriceInput,
+  AppliedPromotion,
+  PromoRule,
+  PromoInput,
+  Banner,
 } from '@/types/promotion.type';
 import { PromotionHelper } from '@/helpers/promotion.helper';
 import { OrderService } from './order.service';
@@ -15,6 +15,32 @@ const promotionHelper = new PromotionHelper();
 const orderService = new OrderService();
 
 export class PromotionService {
+  async getAllBanners(): Promise<Banner[]> {
+    const banners = await prisma.banner.findMany({
+      include: { categories: true },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    return banners.map((banner) => {
+      const result: Banner = {
+        id: banner.id,
+        title: banner.title,
+        image: banner.image,
+        link: banner.link,
+        active: banner.active,
+        createdAt: banner.createdAt.toISOString(),
+        categories: banner.categories.map((c) => c.slug),
+        isSale: banner.isSale ?? false,
+      };
+
+      if (banner.validUntil)
+        result.validUntil = banner.validUntil.toISOString();
+      if (banner.discount) result.discount = banner.discount;
+      if (banner.promoCode) result.promoCode = banner.promoCode;
+
+      return result;
+    });
+  }
   async createPromotion(data: Prisma.PromotionCreateInput): Promise<Promotion> {
     const result = await prisma.$transaction(async (tx) => {
       const {
@@ -57,7 +83,7 @@ export class PromotionService {
 
     return `${deactive.isActive ? 'Enable' : 'Disable'} ${deactive.name} successfully`;
   }
-  async getPromotion(): Promise<GetPromotion[]> {
+  async getPromotion(): Promise<PromoRule[]> {
     return await prisma.promotion.findMany({
       select: {
         type: true,
@@ -77,20 +103,22 @@ export class PromotionService {
       },
     });
   }
-  async promotionRuleCheck(price: PriceInput): Promise<{ price: Price }> {
-    const { productInfo, variants, user } = price;
+  async promotionRuleCheck(input: PromoInput): Promise<PromoResult> {
+    const { product, variants, user } = input;
 
     const userCountOrder = await orderService.getCountOrder(user);
     const promotions = await this.getPromotion();
 
-    let originalPrice = new Decimal(productInfo.basePrice);
+    let originalPrice = new Decimal(product.basePrice);
 
     // ----------------------------------
     // Choose Cheapest In-Stock Variant
     // ----------------------------------
 
     if (variants && variants.length > 0) {
-      const availableVariants = variants.filter((v) => v.stock > 0);
+      const availableVariants = variants.filter(
+        (v) => v.stock - v.reservedStock > 0,
+      );
 
       if (availableVariants.length > 0) {
         const cheapest = availableVariants.reduce((prev, current) =>
@@ -123,40 +151,39 @@ export class PromotionService {
           return false;
       }
 
-      const targetIds = [
-        ...new Set(
-          p.promotionAssignments.map((t) => t.targetId).filter(Boolean),
-        ),
-      ];
-      if (p.applyTo === 'PRODUCT' && targetIds.includes(productInfo.id))
-        return true;
-      if (p.applyTo === 'BRAND' && targetIds.includes(productInfo.brandId))
-        return true;
-      if (
-        p.applyTo === 'CATEGORY' &&
-        targetIds.some((id) => productInfo.categoriesId.includes(Number(id)))
-      )
-        return true;
-      if (
-        p.applyTo === 'TAG' &&
-        targetIds.some((id) => productInfo.tagsId.includes(Number(id)))
-      )
-        return true;
+      const targetSet = new Set(
+        p.promotionAssignments.map((t) => t.targetId).filter(Boolean),
+      );
 
-      return false;
+      if (p.applyTo === 'PRODUCT') {
+        return targetSet.has(product.id);
+      }
+
+      if (p.applyTo === 'BRAND') {
+        return targetSet.has(product?.brandId ?? 24);
+      }
+
+      if (p.applyTo === 'CATEGORY') {
+        return product?.categoriesId?.some((id) => targetSet.has(id));
+      }
+
+      if (p.applyTo === 'TAG') {
+        return product?.tagsId?.some((id) => targetSet.has(id));
+      }
     });
 
-    let discountPercentage;
+    let discountPercentage = new Decimal(0);
 
     if (applicablePromos.length === 0)
       return {
+        productVariantId: product.id,
         price: {
-          originalPrice: Rupiah(Number(originalPrice)).toString(),
-          finalPrice: Rupiah(Number(originalPrice)).toString(),
+          originalPrice: new Decimal(originalPrice),
+          finalPrice: new Decimal(originalPrice),
+          discountApplied: new Decimal(0),
           discountPercentage,
-          hasDiscount: discountPercentage !== null,
-          appliedPromotions: undefined,
         },
+        hasDiscount: discountPercentage !== null,
       };
 
     // ----------------------------------
@@ -168,7 +195,7 @@ export class PromotionService {
 
     let bestPrice = originalPrice;
     let bestDiscount = new Decimal(0);
-    let bestApplied: AppliedPromotions[] = [];
+    let bestApplied: AppliedPromotion[] = [];
 
     for (const promo of nonStackablePromos) {
       const { finalPrice, discountApplied, promoApplied } =
@@ -188,7 +215,7 @@ export class PromotionService {
     if (stackablePromos.length > 0) {
       let combinedPrice = originalPrice;
       let combinedDiscount = new Decimal(0);
-      const applied: AppliedPromotions[] = [];
+      const applied: AppliedPromotion[] = [];
 
       // ----------------------------------
       // Sort so FIXED applies before PERCENTAGE
@@ -215,20 +242,19 @@ export class PromotionService {
     }
 
     discountPercentage = bestPrice.equals(0)
-      ? undefined
-      : '-' +
-        bestDiscount.div(originalPrice).mul(100).toFixed(2).toString() +
-        '%';
+      ? new Decimal(0)
+      : new Decimal(bestDiscount.div(originalPrice).mul(100).toFixed(1));
 
     return {
+      productVariantId: product.id,
       price: {
-        originalPrice: Rupiah(Number(originalPrice)).toString(),
-        finalPrice: Rupiah(Number(bestPrice)).toString(), // price customer pays
-        discountApplied: Rupiah(Number(bestDiscount)).toString(),
+        originalPrice: new Decimal(originalPrice),
+        finalPrice: new Decimal(bestPrice),
+        discountApplied: new Decimal(bestDiscount),
         discountPercentage,
-        hasDiscount: discountPercentage !== null,
-        appliedPromotions: bestApplied,
       },
+      hasDiscount: discountPercentage !== null,
+      appliedPromotion: bestApplied,
     };
   }
 }

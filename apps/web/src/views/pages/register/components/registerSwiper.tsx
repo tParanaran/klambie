@@ -1,10 +1,8 @@
 'use client';
 
-import 'swiper/css';
-import 'swiper/css/pagination';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay } from 'swiper/modules';
-import { IoEarth, IoGlobe } from 'react-icons/io5';
+import { missions } from '@/utils/about';
 
 export default function RegisterSwiper() {
   return (
@@ -20,36 +18,21 @@ export default function RegisterSwiper() {
         disableOnInteraction: false,
       }}
     >
-      <SwiperSlide>
-        <div>
-          <div className="flex items-center space-x-2 mb-2">
-            <div className="p-1.5 bg-black rounded-full text-white  text-2xl">
-              <IoGlobe />
+      {missions.map((mission, m) => (
+        <SwiperSlide key={m}>
+          <div>
+            <div className="flex items-center space-x-2 mb-2">
+              <div className="p-1.5 bg-primary rounded-full text-dark text-2xl">
+                <mission.icon />
+              </div>
+              <h1 className="font-semibold uppercase lg:text-lg">
+                {mission.label}
+              </h1>
             </div>
-            <h1 className="font-semibold uppercase lg:text-lg">Mission</h1>
+            <p className="text-sm lg:text-base">{mission.text}</p>
           </div>
-          <p className="text-sm lg:text-base">
-            We are on a mission to empower creative independence in a commersial
-            world and incredible.
-          </p>
-        </div>
-      </SwiperSlide>
-      <SwiperSlide>
-        <div>
-          <div className="flex items-center space-x-2 mb-2">
-            <div className="p-1.5 bg-black rounded-full text-2xl text-white ">
-              <IoEarth />
-            </div>
-            <h1 className="font-semibold uppercase lg:text-lg">
-              Sustainbility
-            </h1>
-          </div>
-          <p className="text-sm lg:text-base">
-            We are challenging conventional retail, putting an end to dead
-            stock, unconventional waste and more funtastic.
-          </p>
-        </div>
-      </SwiperSlide>
+        </SwiperSlide>
+      ))}
     </Swiper>
   );
 }

@@ -46,9 +46,25 @@ export class ProductHelper {
     });
     if (!hierarchy) {
       hierarchy = await tx.categoryHierarchy.create({
-        data: { categoryId: category.id, parentId, level },
+        data: { categoryId: category.id, parentId, level, path: 'temp' },
       });
     }
+
+    let path = '';
+    if (!parentId) {
+      path = hierarchy.id.toString();
+    } else {
+      const parent = await tx.categoryHierarchy.findUnique({
+        where: { id: parentId },
+        select: { path: true },
+      });
+      path = parent?.path + '.' + hierarchy.id;
+    }
+
+    hierarchy = await tx.categoryHierarchy.update({
+      where: { id: hierarchy.id },
+      data: { path },
+    });
 
     return hierarchy;
   }

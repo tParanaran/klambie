@@ -1,15 +1,14 @@
-import { AppliedPromotions, GetPromotion } from '@/types/promotion.type';
-import Rupiah from '@/utils/rupiah';
+import { AppliedPromotion, PromoRule } from '@/types/promotion.type';
 import Decimal from 'decimal.js';
 
 export class PromotionHelper {
   async calculatePromotionPrice(
     price: Decimal,
-    promo: GetPromotion,
+    promo: PromoRule,
   ): Promise<{
     finalPrice: Decimal;
     discountApplied: Decimal;
-    promoApplied: AppliedPromotions;
+    promoApplied: AppliedPromotion;
   }> {
     let discount = new Decimal(0);
     const rule = promo.promotionRule;
@@ -28,9 +27,9 @@ export class PromotionHelper {
       name: promo.name,
       badge:
         promo.type === 'PERCENTAGE'
-          ? `${promo.value}% OFF`
-          : `${promo.value} OFF`,
-      discount: Rupiah(Number(discount)).toString(),
+          ? `${promo.value}%`
+          : `${promo.value.dividedBy(1000)}k`,
+      discount,
     };
 
     const finalPrice = Decimal.max(price.minus(discount), 0);

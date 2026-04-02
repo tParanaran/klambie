@@ -1,38 +1,50 @@
 'use client';
 import gsap from 'gsap';
-import { useRef } from 'react';
-import { useGSAP } from '@gsap/react';
+import { useEffect, useRef } from 'react';
 
-gsap.registerPlugin(useGSAP);
+export default function WalkingTextAnimation({
+  text,
+  duration = 40,
+}: {
+  text: string;
+  duration?: number;
+}) {
+  const containerRef = useRef<HTMLDivElement>(null);
 
-export default function WalkingTextAnimation({ text }: { text: string }) {
-  const conatinerRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
 
-  useGSAP(
-    () => {
-      const duplicatedText = conatinerRef.current?.cloneNode(true);
-      if (duplicatedText) {
-        conatinerRef.current?.parentNode?.appendChild(duplicatedText);
-      }
+    // Remove animation before
+    gsap.killTweensOf(container.children);
 
-      gsap.to([conatinerRef.current, duplicatedText], {
-        xPercent: -100,
-        duration: 35,
-        ease: 'none',
-        repeat: -1,
-        modifiers: {
-          xPercent: gsap.utils.wrap(-100, 0),
-        },
-      });
-    },
-    { scope: conatinerRef },
-  );
+    // Text Duplication
+    if (container.children.length < 2) {
+      const duplicated = container.children[0].cloneNode(true) as HTMLElement;
+      container.appendChild(duplicated);
+    }
+
+    // Set position children
+    gsap.set(container.children, { x: '0%' });
+
+    // Linear loop infinite animation
+    gsap.to(container.children, {
+      x: '-100%',
+      duration,
+      ease: 'linear',
+      repeat: -1,
+      modifiers: {
+        x: (x: string) => `${parseFloat(x) % 100}%`,
+      },
+    });
+  }, [duration]);
 
   return (
-    <div className="overflow-hidden whitespace-nowrap">
-      <div ref={conatinerRef} className="inline-block">
-        <span className="pr-3">{text}</span>
-      </div>
+    <div
+      ref={containerRef}
+      className="overflow-hidden whitespace-nowrap flex items-center"
+    >
+      <span className="pr-3 inline-block">{text}</span>
     </div>
   );
 }

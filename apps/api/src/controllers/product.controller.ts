@@ -12,9 +12,37 @@ export class Product {
       next(error);
     }
   }
+  async fetchVariants(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { slug } = req.params;
+      const result = await productService.getProductVariant(slug);
+
+      if (!result) {
+        return res.status(404).json({
+          message: 'Product not found',
+        });
+      }
+      const { variants, img } = result;
+      res.status(200).send({
+        variants,
+        variantImages: img?.variantImages,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
   async fetchAllProducts(req: Request, res: Response, next: NextFunction) {
     try {
-      const result = await productService.getAllProducts(req.user?.id);
+      const user = req.user?.id;
+
+      const result = await productService.getAllProducts({ ...req.body, user });
+
+      if (!result) {
+        return res.status(404).json({
+          message: 'Product not found',
+        });
+      }
+
       res.status(200).send(result);
     } catch (error) {
       next(error);
@@ -24,6 +52,12 @@ export class Product {
     try {
       const { slug } = req.params;
       const result = await productService.getOneProduct(slug, req.user?.id);
+
+      if (!result) {
+        return res.status(404).json({
+          message: 'Product not found',
+        });
+      }
       res.status(200).send(result);
     } catch (error) {
       next(error);

@@ -5,14 +5,13 @@ interface IButtonForm {
   href: string;
 }
 
-export default function ButtonForm(props: IButtonForm) {
-  const { message, href } = props;
+export default function ButtonForm({ message, href }: IButtonForm) {
   return (
     <div>
       <button
         type="submit"
         aria-label={href}
-        className="bg-orange-800 w-full rounded-full font-semibold uppercase hover:bg-orange-700 py-3 px-4 text-[#ededed]"
+        className="bg-orange-800 w-full rounded-full font-semibold uppercase hover:bg-orange-700 py-3 px-4 text-light"
       >
         {href}
       </button>

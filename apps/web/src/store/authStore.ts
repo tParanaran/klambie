@@ -3,7 +3,7 @@ import { create } from 'zustand';
 
 export interface IUser {
   name: string;
-  username: string;
+  id: number;
   email: string;
   role: number;
 }
@@ -18,6 +18,6 @@ export const useAuthStore = create<IAuthStore>((set) => ({
   user: null,
   onAuthSuccess: (payload) => set(() => ({ user: payload })),
   clearAuth: () => {
-    set(() => ({ user: null })), deleteCookie('access_token');
+    (set(() => ({ user: null })), deleteCookie('access_token'));
   },
 }));

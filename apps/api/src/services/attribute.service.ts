@@ -1,5 +1,7 @@
 import { ProductHelper } from '@/helpers/product.helper';
+import { Filters } from '@/types/product.type';
 import { GenerateSlug } from '@/utils/slug';
+import { Brand, Tag } from 'generated/prisma/client';
 import { prisma } from 'lib/prisma';
 
 type DataInput = {
@@ -35,6 +37,19 @@ type CategoryInput = {
 const productHelper = new ProductHelper();
 
 export class AttributeService {
+  async getAllBrands(): Promise<
+    {
+      [k: string]: string | number | Date | null | boolean;
+    }[]
+  > {
+    const data = await prisma.brand.findMany();
+    const brands = data.map((item) => {
+      return Object.fromEntries(
+        Object.entries(item).filter(([_, value]) => value !== null),
+      );
+    });
+    return brands;
+  }
   async createBrand(input: DataInput): Promise<{ id: number }[]> {
     const result = await prisma.$transaction(async (tx) => {
       const brand = await productHelper.findOrCreate(tx.brand, input.data);
@@ -55,6 +70,26 @@ export class AttributeService {
     });
 
     return `Update ${brand.name} brand details successfully`;
+  }
+  async getAllAttributeValue() {
+    const attributesWithValues = await prisma.attribute.findMany({
+      include: {
+        attributeValues: true,
+      },
+    });
+
+    const attributes = attributesWithValues.map((attr) => ({
+      ...attr,
+      attributeValues: attr.attributeValues.map((val) => {
+        return Object.fromEntries(
+          Object.entries(val).filter(
+            ([key, v]) => v !== null && key !== 'attributeId',
+          ),
+        );
+      }),
+    }));
+
+    return attributes;
   }
   async createAttribute(input: DataInput): Promise<{ id: number }[]> {
     const result = await prisma.$transaction(async (tx) => {
@@ -96,6 +131,10 @@ export class AttributeService {
     });
 
     return `Update ${brand.value} brand details successfully`;
+  }
+  async fetchTag(): Promise<Tag[]> {
+    const tag = await prisma.tag.findMany();
+    return tag;
   }
   async createTag(input: DataInput): Promise<{ id: number }[]> {
     const result = await prisma.$transaction(async (tx) => {
@@ -157,5 +196,160 @@ export class AttributeService {
     });
 
     return result;
+  }
+  async getAllHierarchyIds(
+    values: (string | number)[],
+  ): Promise<number | null> {
+    if (!values.length) return null;
+    const isSlug = typeof values[0] === 'string';
+
+    let currentHierarchies = await prisma.categoryHierarchy.findMany({
+      where: isSlug
+        ? { category: { slug: values[0] as string }, parentId: null }
+        : { category: { id: values[0] as number }, parentId: null },
+      select: { id: true },
+    });
+
+    if (!currentHierarchies.length) return null;
+
+    for (let i = 1; i < values.length; i++) {
+      const val = values[i];
+      currentHierarchies = await prisma.categoryHierarchy.findMany({
+        where: isSlug
+          ? {
+              parentId: { in: currentHierarchies.map((h) => h.id) },
+              category: { slug: val as string },
+            }
+          : {
+              parentId: { in: currentHierarchies.map((h) => h.id) },
+              id: val as number,
+            },
+        select: { id: true },
+      });
+
+      if (!currentHierarchies.length) return null;
+    }
+
+    return currentHierarchies[0]?.id ?? null;
+  }
+  async getAllDescendantHierarchyIds(parentId: number): Promise<number[]> {
+    const parent = await prisma.categoryHierarchy.findUnique({
+      where: { id: parentId },
+      select: { path: true },
+    });
+
+    if (!parent) return [];
+
+    const descendants = await prisma.categoryHierarchy.findMany({
+      where: { path: { startsWith: parent.path + '.' } },
+      select: { id: true },
+    });
+
+    return descendants.map((d) => d.id);
+  }
+  async getCategoryFilters(categoryId: number): Promise<Filters[]> {
+    const parent = await prisma.categoryHierarchy.findUnique({
+      where: { id: categoryId },
+      select: {
+        path: true,
+        level: true,
+        category: { select: { name: true, slug: true, id: true } },
+      },
+    });
+
+    if (!parent) throw new Error('Category not found');
+
+    const descendants = await prisma.categoryHierarchy.findMany({
+      where: {
+        path: {
+          startsWith: parent.path + '.',
+        },
+      },
+      select: {
+        id: true,
+        path: true,
+        level: true,
+        category: {
+          select: {
+            id: true,
+            name: true,
+            slug: true,
+          },
+        },
+      },
+      orderBy: { path: 'asc' },
+    });
+
+    const pathMap = new Map<string, any>();
+
+    const root = {
+      id: parent.category.id,
+      name: parent.category.name,
+      level: parent.level,
+      slug: parent.category.slug,
+      subcategories: [],
+    };
+    pathMap.set(parent.path, root);
+
+    for (const item of descendants) {
+      const node = {
+        id: item.category.id,
+        name: item.category.name,
+        level: item.level,
+        slug: item.category.slug,
+        subcategories: [],
+      };
+      pathMap.set(item.path, node);
+
+      const parentPath = item.path.split('.').slice(0, -1).join('.');
+      const parentNode = pathMap.get(parentPath);
+      if (parentNode) {
+        parentNode.subcategories.push(node);
+      }
+    }
+
+    return root.subcategories;
+  }
+  async getAllCategoryTree(): Promise<Filters[]> {
+    const categories = await prisma.categoryHierarchy.findMany({
+      select: {
+        id: true,
+        path: true,
+        level: true,
+        category: {
+          select: {
+            name: true,
+            slug: true,
+            id: true,
+          },
+        },
+      },
+      orderBy: { path: 'asc' },
+    });
+
+    const pathMap = new Map<string, any>();
+    const roots: Filters[] = [];
+
+    for (const item of categories) {
+      if (!item.category) continue;
+      const node: Filters = {
+        id: item.category.id,
+        name: item.category.name,
+        slug: item.category.slug,
+        level: item.level,
+        subcategories: [],
+      };
+
+      pathMap.set(item.path, node);
+
+      const parentPath = item.path.split('.').slice(0, -1).join('.');
+      if (parentPath && pathMap.has(parentPath)) {
+        pathMap.get(parentPath).subcategories.push(node);
+      } else {
+        roots.push(node);
+      }
+    }
+
+    return roots;
   }
 }

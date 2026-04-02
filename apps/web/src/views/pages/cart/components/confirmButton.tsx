@@ -1,0 +1,16 @@
+'use client';
+
+export default function ConfirmButton() {
+  const CheckoutHandler = async () => {};
+
+  return (
+    <button
+      aria-label="Checkout"
+      type="submit"
+      className="rounded-full py-2 sm:py-3 px-4 bg-orange-800 font-semibold text-light w-full hover:bg-orange-700 uppercase"
+      onClick={CheckoutHandler}
+    >
+      Confirm
+    </button>
+  );
+}

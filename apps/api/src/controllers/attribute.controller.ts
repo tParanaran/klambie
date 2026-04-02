@@ -41,9 +41,6 @@ export class Attribute {
   ) {
     try {
       const result = await attributeService.createAttributeValue(req.body);
-
-      console.log(result);
-
       res.status(200).send(result);
     } catch (error) {
       next(error);
@@ -70,9 +67,45 @@ export class Attribute {
       next(error);
     }
   }
+  async fetchTag(req: Request, res: Response, next: NextFunction) {
+    try {
+      const result = await attributeService.fetchTag();
+
+      res.status(200).send(result);
+    } catch (error) {
+      next(error);
+    }
+  }
   async createNewCategory(req: Request, res: Response, next: NextFunction) {
     try {
       const result = await attributeService.generateCategoryHierarchy(req.body);
+
+      res.status(200).send(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+  async getCategoryTree(req: Request, res: Response, next: NextFunction) {
+    try {
+      const result = await attributeService.getAllCategoryTree();
+
+      res.status(200).send(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+  async getBrands(req: Request, res: Response, next: NextFunction) {
+    try {
+      const result = await attributeService.getAllBrands();
+
+      res.status(200).send(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+  async getAttribute(req: Request, res: Response, next: NextFunction) {
+    try {
+      const result = await attributeService.getAllAttributeValue();
 
       res.status(200).send(result);
     } catch (error) {

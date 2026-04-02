@@ -1,31 +1,28 @@
 import Decimal from 'decimal.js';
 import { PromotionRule } from 'generated/prisma/client';
 
-type Product = {
+export type Product = {
   id: number;
   basePrice: Decimal;
-  brandId: number;
-  categoriesId: number[];
-  tagsId: number[];
+  quantity: number;
+  brandId?: number;
+  categoriesId?: number[];
+  tagsId?: number[];
 };
 
-type VariantPrice = {
+export type Variant = {
   basePrice: Decimal;
   stock: number;
-  productVariantAttributes: {
-    attributeValue: {
-      hexUrl: string | null;
-    };
-  }[];
+  reservedStock: number;
 };
 
-export type PriceInput = {
-  productInfo: Product;
+export type PromoInput = {
+  product: Product;
   user?: number;
-  variants: VariantPrice[] | null;
+  variants?: Variant[];
 };
 
-export type GetPromotion = {
+export type PromoRule = {
   type: 'PERCENTAGE' | 'FIXED_AMOUNT';
   applyTo: 'PRODUCT' | 'BRAND' | 'CATEGORY' | 'ORDER' | 'TAG';
   name: string;
@@ -38,8 +35,22 @@ export type GetPromotion = {
   promotionAssignments: { targetId: number }[];
 };
 
-export type AppliedPromotions = {
+export type AppliedPromotion = {
   name: string;
   badge: string;
-  discount: string;
+  discount: Decimal;
+};
+
+export type Banner = {
+  id: number;
+  title: string;
+  image: string;
+  link: string;
+  active: boolean;
+  createdAt: string;
+  validUntil?: string;
+  categories: string[];
+  discount?: string;
+  promoCode?: string;
+  isSale: boolean;
 };

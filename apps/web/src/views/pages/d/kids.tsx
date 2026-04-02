@@ -1,0 +1,22 @@
+import ErrorMessage from '@/views/components/error';
+import ShopByCard from './components/shopByCard';
+import { IDepartementView } from './types';
+import ShopByCategory from './components/shopByCategory';
+import BrandSection from '../home/components/brands';
+import BlogCard from '../blog/components/blogCard';
+
+export default async function KidsView({
+  products,
+  error,
+  slug,
+}: IDepartementView) {
+  return (
+    <div>
+      <ShopByCategory slug={slug} />
+      <BrandSection slug={slug} />
+      <ShopByCard products={products} slug={slug} />
+      <BlogCard />
+      {error && <ErrorMessage error={error} />}
+    </div>
+  );
+}

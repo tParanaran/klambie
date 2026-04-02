@@ -1,11 +1,13 @@
-import { Anton, Montserrat } from 'next/font/google';
+import localFont from 'next/font/local';
 
-export const montserratFont = Montserrat({
-  weight: ['300'],
-  subsets: ['latin'],
+export const notoSans = localFont({
+  src: '../../public/fonts/NotoSans-VariableFont_wdth,wght.ttf',
+  variable: '--font-noto-sans',
+  display: 'swap',
 });
 
-export const antonFont = Anton({
-  weight: ['400'],
-  subsets: ['latin'],
+export const antonFont = localFont({
+  src: '../../public/fonts/AntonSC-Regular.ttf',
+  display: 'swap',
+  variable: '--font-anton',
 });

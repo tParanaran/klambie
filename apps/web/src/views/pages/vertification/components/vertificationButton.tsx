@@ -1,11 +1,11 @@
 'use client';
 
-import axiosInstance from '@/lib/axios';
+import axiosInstanceClient from '@/lib/axios/client';
 import VertificationdModal from '@/views/components/vertificationModal';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-export default function VeritificationButton(prop: { token: string }) {
+export default function VeritificationButton({ token }: { token: string }) {
   const redirect = useRouter();
   const [message, setMessage] = useState<string>('');
 
@@ -14,9 +14,9 @@ export default function VeritificationButton(prop: { token: string }) {
 
   const verifyUser = async () => {
     try {
-      const { data } = await axiosInstance.get('/auth/verification', {
+      const { data } = await axiosInstanceClient.get('/auth/verification', {
         headers: {
-          Authorization: `Bearer ${prop.token}`,
+          Authorization: `Bearer ${token}`,
         },
       });
       if (data.success) {
@@ -32,7 +32,7 @@ export default function VeritificationButton(prop: { token: string }) {
       {' '}
       <button
         onClick={verifyUser}
-        className="rounded-full py-2 sm:py-3 px-4 bg-orange-800 text-[#ededed] hover:bg-orange-700 font-semibold uppercase"
+        className="rounded-full py-2 sm:py-3 px-4 bg-orange-800 text-light hover:bg-orange-700 font-semibold uppercase"
       >
         Confirm Email
       </button>

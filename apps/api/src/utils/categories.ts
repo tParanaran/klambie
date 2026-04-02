@@ -2,12 +2,13 @@ type CategoryNode = {
   category?: {
     id?: number;
     name?: string;
+    slug?: string;
   };
   parent?: CategoryNode | null;
 };
 
-export default function flattenCategories(ch: CategoryNode): {
-  categories: string[];
+export default function FlattenCategories(ch: CategoryNode): {
+  categories: { name: string; slug: string }[];
   categoriesId: number[];
 } {
   const chain: CategoryNode[] = [];
@@ -18,18 +19,28 @@ export default function flattenCategories(ch: CategoryNode): {
     current = current.parent;
   }
 
+  const seenNames = new Set<string>();
+
   return chain.reduce(
     (acc, node) => {
-      if (node.category?.name) {
-        acc.categories.push(node.category.name);
+      const name = node.category?.name;
+      const slug = node.category?.slug;
+      const id = node.category?.id;
+
+      if (name && slug && !seenNames.has(name)) {
+        acc.categories.push({ name, slug });
+        seenNames.add(name);
       }
 
-      if (node.category?.id !== undefined) {
-        acc.categoriesId.push(node.category.id);
+      if (id !== undefined) {
+        acc.categoriesId.push(id);
       }
 
       return acc;
     },
-    { categories: [] as string[], categoriesId: [] as number[] },
+    {
+      categories: [] as { name: string; slug: string }[],
+      categoriesId: [] as number[],
+    },
   );
 }
