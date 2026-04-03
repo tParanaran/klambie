@@ -1,8 +1,8 @@
 import { ProductHelper } from '@/helpers/product.helper';
 import { Filters } from '@/types/product.type';
 import { GenerateSlug } from '@/utils/slug';
-import { Brand, Tag } from 'generated/prisma/client';
-import { prisma } from 'lib/prisma';
+import { Tag } from '@generated/prisma/client';
+import { prisma } from '@lib/prisma';
 
 type DataInput = {
   data: string[];

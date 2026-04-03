@@ -1,10 +1,11 @@
 import './globals.css';
-import 'swiper/css/bundle';
+import 'swiper/css';
+import 'swiper/css/pagination';
+import 'swiper/css/navigation';
 import type { Metadata } from 'next';
 import { notoSans } from '@/utils/fonts';
-import AuthProvider from '@/provider/authProvider';
 import { Suspense } from 'react';
-import Loading from '@/views/components/loading';
+import AuthProvider from '@/provider/authProvider';
 
 export const metadata: Metadata = {
   title: 'Klambie',
@@ -20,8 +21,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={notoSans.className}>
         <AuthProvider>
-          {/* <Suspense fallback={<Loading />}></Suspense> */}
-          {children}
+          <Suspense>{children}</Suspense>
         </AuthProvider>
       </body>
     </html>

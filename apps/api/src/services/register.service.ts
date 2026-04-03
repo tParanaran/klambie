@@ -1,4 +1,4 @@
-import { prisma } from 'lib/prisma';
+import { prisma } from '../../lib/prisma';
 import { genSalt, hash } from 'bcrypt';
 import GenerateUsername from '@/utils/username';
 import SendMail from '@/utils/sendMail';

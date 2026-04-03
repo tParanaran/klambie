@@ -1,4 +1,4 @@
-import { sign } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import { transporter } from '@/lib/mail';
 import { BASE_WEB_URL, SECRET_KEY } from '@/config';
 import Handlebars from 'handlebars';
@@ -19,7 +19,7 @@ export default async function SendMail(dataMail: SendMail): Promise<void> {
   const templateSource = await fs.readFileSync(templatePath, 'utf-8');
   const compiledTemplate = Handlebars.compile(templateSource);
 
-  const token = sign({ email }, SECRET_KEY as string, { expiresIn: '1hr' });
+  const token = jwt.sign({ email }, SECRET_KEY as string, { expiresIn: '1hr' });
 
   const vertificationUrl = BASE_WEB_URL + '/verification/' + token;
   const loginUrl = BASE_WEB_URL + '/login';

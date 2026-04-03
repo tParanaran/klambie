@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { SECRET_KEY } from '@/config';
 import { User } from '@/custom';
-import { verify } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 
 async function VerificationToken(
   req: Request,
@@ -13,7 +13,7 @@ async function VerificationToken(
 
     if (!token) throw new Error('Woowee! Sorry unauthorized');
 
-    const user = verify(token, SECRET_KEY as string);
+    const user = jwt.verify(token, SECRET_KEY as string);
 
     if (!user) throw new Error('Woowee! Sorry expired authorized');
 
@@ -35,7 +35,7 @@ async function IsUserLogin(req: Request, res: Response, next: NextFunction) {
       return next();
     }
 
-    const user = verify(token, SECRET_KEY as string);
+    const user = jwt.verify(token, SECRET_KEY as string);
 
     req.user = user as User;
 

@@ -1,7 +1,7 @@
 import Decimal from 'decimal.js';
 import { PromoResult } from '@/types/product.type';
 import { Prisma, Promotion } from 'generated/prisma/client';
-import { prisma } from 'lib/prisma';
+import { prisma } from '../../lib/prisma';
 import {
   AppliedPromotion,
   PromoRule,

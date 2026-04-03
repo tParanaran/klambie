@@ -1,8 +1,8 @@
 import { SECRET_KEY } from '@/config';
 import SendMail from '@/utils/sendMail';
 import { compare } from 'bcrypt';
-import { sign } from 'jsonwebtoken';
-import { prisma } from 'lib/prisma';
+import jwt from 'jsonwebtoken';
+import { prisma } from '../../lib/prisma';
 
 type Login = {
   email: string;
@@ -57,7 +57,7 @@ export class LoginService {
       role: findUser.role.id,
     };
 
-    const token = sign(payload, SECRET_KEY as string, { expiresIn: '1d' });
+    const token = jwt.sign(payload, SECRET_KEY as string, { expiresIn: '1d' });
 
     return { token, id: findUser.id };
   }

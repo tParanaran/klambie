@@ -6,7 +6,7 @@ import {
   InsertCart,
   CartItemIds,
 } from '@/types/cart.types';
-import { prisma } from 'lib/prisma';
+import { prisma } from '../../lib/prisma';
 import { PromotionService } from './promotion.service';
 import Decimal from 'decimal.js';
 import { Cart, CartItem } from 'generated/prisma/client';

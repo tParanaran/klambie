@@ -10,7 +10,7 @@ import {
   Filters,
   GetAllProducts,
 } from '@/types/product.type';
-import { prisma } from 'lib/prisma';
+import { prisma } from '../../lib/prisma';
 import { GenerateSlug } from '@/utils/slug';
 import { SKU } from '@/utils/sku';
 import { PromotionService } from './promotion.service';

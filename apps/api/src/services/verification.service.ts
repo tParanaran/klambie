@@ -1,5 +1,5 @@
 import SendMail from '@/utils/sendMail';
-import { prisma } from 'lib/prisma';
+import { prisma } from '../../lib/prisma';
 
 export class VerificationService {
   async verifyUser(email: string): Promise<{ success: boolean }> {
