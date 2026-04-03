@@ -1,11 +1,12 @@
 import { IoSearch, IoPerson, IoNotifications } from 'react-icons/io5';
 import { Suspense, useRef, useState } from 'react';
 import AccountMenu from './accountMenu';
-import NotificationContent from '../notification';
+
 import SearchRecent from './searchRecent';
 import AnchorIconDropdown from './dropdown';
 import BagMenu from './bagMenu';
 import SearchBar from './searchBar';
+import NotificationContent from './notificationContent';
 
 interface IDropdown {
   search: boolean;

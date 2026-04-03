@@ -21,10 +21,13 @@ export default function Template({ children }: { children: React.ReactNode }) {
   const productNavbar = pathname.startsWith('/p');
   const mobileNavbar =
     pathname.startsWith('/cart') || pathname.startsWith('/p');
+  const dashboard = pathname.startsWith("/dashboard")
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  if(dashboard) return <div className='bg-primary'>{children}</div>
 
   return (
     <div>

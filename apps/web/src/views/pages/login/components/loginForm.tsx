@@ -24,8 +24,7 @@ export default function LoginForm() {
       const { data } = await axiosInstanceClient.post('/auth/login', values);
 
       if (data.success) {
-        await AuthHandler(onAuthSuccess);
-        redirect.push('/');
+        await AuthHandler(redirect, onAuthSuccess);
       }
     } catch (err: any) {
       if (isAxiosError(err)) {

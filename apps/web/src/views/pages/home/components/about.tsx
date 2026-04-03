@@ -43,7 +43,7 @@ export default function About() {
                     <div className="absolute z-10 top-0 left-0 w-9 h-9 bg-body rounded-tl-2xl rounded-br-2xl inverted-radius-tl"></div>
 
                     <div className="absolute top-0 left-0 z-10 rounded-2xl bg-round-button p-1 text-xl">
-                      <mission.icon />
+                      <mission.Icon />
                     </div>
                   </div>
                 ))}{' '}

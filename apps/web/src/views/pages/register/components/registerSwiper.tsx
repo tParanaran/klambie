@@ -23,7 +23,7 @@ export default function RegisterSwiper() {
           <div>
             <div className="flex items-center space-x-2 mb-2">
               <div className="p-1.5 bg-primary rounded-full text-dark text-2xl">
-                <mission.icon />
+                <mission.Icon />
               </div>
               <h1 className="font-semibold uppercase lg:text-lg">
                 {mission.label}
