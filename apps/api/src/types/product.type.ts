@@ -140,3 +140,32 @@ export type GetAllProducts = {
   q?: string;
   categories?: string[];
 };
+
+export type GetProductDashboard = {
+  limit?: number;
+  q?: string;
+};
+
+export type ProductDashboard = {
+  productId: number;
+  name: string;
+  brand: string;
+  slug: string;
+  sku: string;
+  price: Decimal;
+  stock: number;
+  reservedStock: number;
+  soldQty: number;
+  status: string;
+  image: string;
+  productVariants: {
+    productVariantId: number;
+    sku: string;
+    name: string;
+    stock: number;
+    reservedStock: number;
+    price: Decimal;
+    soldQty: number;
+    image: string;
+  }[];
+};

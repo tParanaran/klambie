@@ -2,7 +2,6 @@ import ErrorMessage from '@/views/components/error';
 import ShopByCard from './components/shopByCard';
 import { IDepartementView } from './types';
 import ShopByCategory from './components/shopByCategory';
-import BannerHero from './components/banner';
 import BrandSection from '../home/components/brands';
 import BlogCard from '../blog/components/blogCard';
 

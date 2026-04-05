@@ -1,12 +1,12 @@
 'use client';
 import { BiCategory } from 'react-icons/bi';
+import { useRef, useState } from 'react';
 import { IoHeartOutline, IoPerson } from 'react-icons/io5';
 import Link from 'next/link';
 import Image from 'next/image';
 import BagButton from './components/bagButton';
 import NavbarBottomContainer from '@/views/components/navbarBottomContainer';
 import IconLink from './components/iconLink';
-import { useRef, useState } from 'react';
 import AnchoredModalContainer from '@/views/components/anchoredModalContainer';
 import CategoryContent from './components/categoryContent';
 import useMobileBehavior from './hooks/useMobile';
@@ -31,7 +31,7 @@ export default function NavbarMobile() {
 
   return (
     <NavbarBottomContainer>
-      <div className="flex items-center space-x-4 justify-between">
+      <div className="flex items-center space-x-4 justify-between overflow-y-scroll scrollbar-hide">
         <Link href={'/'} className={className}>
           <Image
             src="/icon.svg"

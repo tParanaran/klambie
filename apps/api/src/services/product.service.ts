@@ -9,19 +9,22 @@ import {
   VariantProduct,
   Filters,
   GetAllProducts,
+  ProductDashboard,
+  GetProductDashboard,
 } from '@/types/product.type';
 import { prisma } from '../../lib/prisma';
 import { GenerateSlug } from '@/utils/slug';
 import { SKU } from '@/utils/sku';
 import { PromotionService } from './promotion.service';
 import { AttributeService } from './attribute.service';
-import FlattenCategories from '@/utils/categories';
-import Decimal from 'decimal.js';
 import { initialCategories } from '@/utils/initialCategories';
+import { SalesService } from './sales.service';
+import FlattenCategories from '@/utils/categories';
 
 const sku = new SKU();
 const promotionService = new PromotionService();
 const attributeService = new AttributeService();
+const salesService = new SalesService();
 
 export class ProductService {
   async newProduct(data: InsertProduct): Promise<{ message: string }> {
@@ -595,6 +598,132 @@ export class ProductService {
       images: products?.img?.variantImages,
       variants: products?.variants,
     };
+
+    return result;
+  }
+  async getProductDashboard({
+    q,
+    limit,
+  }: GetProductDashboard): Promise<ProductDashboard[]> {
+    const products = await prisma.product.findMany({
+      select: {
+        id: true,
+        name: true,
+        sku: true,
+        slug: true,
+        basePrice: true,
+        status: true,
+        brand: {
+          select: { name: true },
+        },
+        images: {
+          select: {
+            url: true,
+            attributeValueId: true,
+          },
+        },
+        productVariants: {
+          select: {
+            id: true,
+            sku: true,
+            basePrice: true,
+            stock: true,
+            reservedStock: true,
+            productVariantAttributes: {
+              select: {
+                attributeValue: {
+                  select: {
+                    id: true,
+                    value: true,
+                    attribute: {
+                      select: {
+                        name: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!products.length) return [];
+
+    const variantIds = products.flatMap((p) =>
+      p.productVariants.map((v) => v.id),
+    );
+
+    const soldMap = await salesService.getSoldQtyByVariant(variantIds);
+
+    const getVariantImage = (
+      variant: any,
+      images: { url: string; attributeValueId: number | null }[],
+    ): string | null => {
+      const attributeValueIds = variant.productVariantAttributes.map(
+        (a: any) => a.attributeValue.id,
+      );
+
+      const variantImage = images.find(
+        (img) =>
+          img.attributeValueId &&
+          attributeValueIds.includes(img.attributeValueId),
+      );
+
+      if (variantImage) return variantImage.url;
+
+      const productImage = images.find((img) => !img.attributeValueId);
+
+      return productImage ? productImage.url : null;
+    };
+
+    const result = products.map((p) => {
+      let totalStock = 0;
+      let totalSold = 0;
+      let totalReserved = 0;
+
+      const variants = p.productVariants.map((v) => {
+        const soldQty = soldMap.get(v.id) || 0;
+
+        totalStock += v.stock;
+        totalSold += soldQty;
+        totalReserved += v.reservedStock;
+
+        const attributeText = v.productVariantAttributes
+          .reverse()
+          .map((a) => a.attributeValue.value)
+          .join(' - ');
+
+        const image = getVariantImage(v, p.images) || p.images[0].url;
+
+        return {
+          productVariantId: v.id,
+          sku: v.sku,
+          name: attributeText,
+          stock: v.stock,
+          reservedStock: v.reservedStock,
+          price: v.basePrice,
+          soldQty,
+          image,
+        };
+      });
+
+      return {
+        productId: p.id,
+        name: p.name,
+        brand: p.brand?.name || 'Other',
+        sku: p.sku,
+        status: p.status,
+        slug: p.slug,
+        price: p.basePrice,
+        stock: totalStock,
+        reservedStock: totalReserved,
+        soldQty: totalSold,
+        image: p.images[0].url,
+        productVariants: variants,
+      };
+    });
 
     return result;
   }

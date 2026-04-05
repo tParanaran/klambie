@@ -63,4 +63,19 @@ export class Product {
       next(error);
     }
   }
+  async fetchProductDashboard(req: Request, res: Response, next: NextFunction) {
+    try {
+      const result = await productService.getProductDashboard({ ...req.body });
+
+      if (!result) {
+        return res.status(404).json({
+          message: 'Product not found',
+        });
+      }
+
+      res.status(200).send(result);
+    } catch (error) {
+      next(error);
+    }
+  }
 }

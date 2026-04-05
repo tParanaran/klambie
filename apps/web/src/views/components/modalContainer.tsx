@@ -6,10 +6,12 @@ interface IMOdalContainer {
   children: React.ReactNode;
   style?: string;
   isFilter?: boolean;
+  isDashboard?: boolean;
 }
 
 export default function ModalContainer({
   isFilter = false,
+  isDashboard = false,
   handlerModal,
   showModal,
   children,
@@ -24,7 +26,7 @@ export default function ModalContainer({
         showModal
           ? 'opacity-100 pointer-events-auto'
           : 'opacity-0 pointer-events-none'
-      } ${isFilter ? 'bg-black/20 dark:bg-white/20' : ''}`}
+      } ${isFilter || isDashboard ? 'bg-black/20 dark:bg-white/20' : ''}`}
     >
       <div
         ref={modalRef}

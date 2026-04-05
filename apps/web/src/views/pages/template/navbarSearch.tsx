@@ -46,7 +46,7 @@ export default function NavbarSearch() {
   return (
     <>
       <NavbarTopContainer>
-        <div className="flex justify-between space-x-3 items-center">
+        <div className="flex justify-between space-x-2 sm:space-x-3 items-center overflow-y-scroll scrollbar-hide">
           <Suspense fallback={<div style={{ width: '100%' }} />}>
             <div
               className="flex-2"
@@ -62,7 +62,7 @@ export default function NavbarSearch() {
               linkHref={pathname === '/login' ? '/register' : '/login'}
             />
           ) : (
-            <h1 className="px-2 sm:px-5 py-2 font-semibold text-orange-800 dark:text-orange-600">
+            <h1 className="px-2 sm:px-5 py-2 font-semibold text-orange-800 dark:text-orange-600 flex-none">
               Hi, {user?.name.split(' ')[0]}
             </h1>
           )}
