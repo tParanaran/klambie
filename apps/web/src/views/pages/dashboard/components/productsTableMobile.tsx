@@ -8,7 +8,7 @@ import ModalContainer from '@/views/components/modalContainer';
 import SortVariants from './sortVariants';
 import ActionsVariant from './actionsVariant';
 
-export default function ProductTableMobile({ products }: IProductView) {
+export default function ProductsTableMobile({ products }: IProductView) {
   const [openVariants, setOPenVariants] = useState<string | null>(null);
 
   const toggleVariants = (slug: string) => {
@@ -51,9 +51,12 @@ export default function ProductTableMobile({ products }: IProductView) {
                       </p>
                     </div>
                   </div>
-                  <div className="absolute right-1 top-0.5">
-                    <Status status={product.status} />
-                  </div>
+
+                  <Status
+                    status={product.status}
+                    productId={product.productId}
+                    style="absolute right-1 top-0.5"
+                  />
                 </div>
 
                 <div className="overflow-y-scroll scrollbar-hide">
@@ -61,24 +64,27 @@ export default function ProductTableMobile({ products }: IProductView) {
                     toggleVariants={() => toggleVariants(product.slug)}
                     isOpen={isOpen}
                     variantsLength={product.productVariants.length}
+                    slug={product.slug}
+                    id={product.productId}
+                    name={product.name}
                   />
                 </div>
               </div>
-              {openVariants && product.productVariants && (
+              {isOpen && product.productVariants && (
                 <ModalContainer
                   handlerModal={() => toggleVariants('')}
-                  style="left-0! right-0! bottom-0!"
+                  style="left-0! right-0! bottom-0! overflow-contain"
                   showModal={isOpen}
                   isDashboard={true}
                 >
                   <div>
-                    <div className="overflow-y-scroll scrollbar-hide">
+                    <div className="overflow-y-scroll scrollbar-hide -top-2 mx-auto sticky z-20 bg-secondary w-fit px-2 rounded-full">
                       <SortVariants />
                     </div>
                     {product.productVariants.map((variant) => (
                       <div
                         key={variant.productVariantId}
-                        className="flex space-x-2 justify-around border-b-[0.5px] border-gray-300 dark:border-black/90 py-2"
+                        className="flex space-x-2 justify-around border-b-[0.5px] border-gray-300 dark:border-black/90 py-2 ml-5"
                       >
                         <img
                           src={variant.image}
@@ -106,7 +112,10 @@ export default function ProductTableMobile({ products }: IProductView) {
                           </div>
                         </div>
                         <div className="my-auto">
-                          <ActionsVariant />
+                          <ActionsVariant
+                            id={variant.productVariantId}
+                            name={variant.name}
+                          />
                         </div>
                       </div>
                     ))}

@@ -2,7 +2,6 @@ import { IoGrid, IoPerson, IoSearch } from 'react-icons/io5';
 import { useAuthStore } from '@/store/authStore';
 import { useState } from 'react';
 import formatDate from '@/utils/formatDate';
-import useScrolled from '../../template/hooks/useScrolled';
 import Notification from '../../template/notification';
 import Link from 'next/link';
 import SideNavbar from './sideNavbar';
@@ -14,17 +13,11 @@ const classIcon =
 
 export default function TopNavbar() {
   const [showNavbar, setShowNavbar] = useState<boolean>(false);
-  const isScroll = useScrolled();
   const { user } = useAuthStore();
 
   return (
     <>
-      <nav
-        style={{
-          height: isScroll ? 'auto' : 110,
-        }}
-        className={`sticky flex justify-between flex-nowrap flex-row md:flex-row-reverse top-0 left-0 right-0 px-3 max-w-screen text-sm overflow-y-scroll scrollbar-hide space-x-2 ${isScroll ? 'py-2 text-secondary bg-secondary-opacity backdrop-blur-xl shadow-xs z-20' : 'pt-3 md:pt-5 z-0'} `}
-      >
+      <nav className="sticky flex justify-between flex-nowrap flex-row md:flex-row-reverse top-0 left-0 right-0 px-3 max-w-screen text-sm overflow-y-scroll scrollbar-hide space-x-2 py-3 md:py-5 bg-body">
         <div className="flex space-x-1 items-start">
           <button
             className={`${className} block md:hidden`}

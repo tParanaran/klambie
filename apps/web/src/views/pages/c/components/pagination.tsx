@@ -2,14 +2,14 @@
 
 import { IoChevronBack, IoChevronForward } from 'react-icons/io5';
 import { useQueryParams } from '../hooks/useQueryParams';
-import getVisiblePageNumbers from '@/utils/pagination';
 import { useEffect, useRef } from 'react';
+import getVisiblePageNumbers from '@/utils/pagination';
 
 interface IPagination {
   totalItems: number;
   limit?: number;
 }
-export default function Pagination({ totalItems, limit = 24 }: IPagination) {
+export default function Pagination({ totalItems, limit = 18 }: IPagination) {
   const pageRef = useRef<HTMLButtonElement | null>(null);
   const { getParams, createParams } = useQueryParams();
 

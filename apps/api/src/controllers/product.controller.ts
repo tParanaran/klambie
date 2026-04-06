@@ -78,4 +78,31 @@ export class Product {
       next(error);
     }
   }
+  async changeStatus(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.params;
+      const result = await productService.toggleProductStatus(Number(id));
+      res.status(200).send(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+  async delete(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.params;
+      const result = await productService.deleteProduct(Number(id));
+      res.status(200).send(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+  async deleteVariant(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.params;
+      const result = await productService.deleteVariant(Number(id));
+      res.status(200).send(result);
+    } catch (error) {
+      next(error);
+    }
+  }
 }

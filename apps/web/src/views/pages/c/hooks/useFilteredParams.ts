@@ -12,6 +12,8 @@ export default function useFilteredParams() {
   const priceParams = getParams('price');
   const currentOrder = getParams('order');
   const currentSort = getParams('sort');
+  const currentOrderBy = getParams('orderBy');
+  const currentSortBy = getParams('sortBy');
 
   const selectedCategories = categories.filter((item) =>
     categoryParams?.includes(String(item.id)),
@@ -46,5 +48,7 @@ export default function useFilteredParams() {
     tagParams,
     currentOrder,
     currentSort,
+    currentOrderBy,
+    currentSortBy,
   };
 }

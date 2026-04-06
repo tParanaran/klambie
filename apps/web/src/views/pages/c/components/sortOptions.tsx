@@ -6,10 +6,10 @@ import useFilteredParams from '../hooks/useFilteredParams';
 
 interface ISortOptions {
   sortOptions: { label: string; value: string }[];
-  style?: string;
+  scroll?: boolean;
 }
 
-export default function SortOptions({ sortOptions, style }: ISortOptions) {
+export default function SortOptions({ sortOptions, scroll }: ISortOptions) {
   const { createParams, deleteParams } = useQueryParams();
   const { currentOrder, currentSort } = useFilteredParams();
 
@@ -23,10 +23,14 @@ export default function SortOptions({ sortOptions, style }: ISortOptions) {
 
     if (currentSort === value) {
       currentOrder === 'desc'
-        ? createParams({ sort: '', order: '' }, { append: false })
-        : createParams({ sort: value, order: 'desc' }, { append: false });
+        ? createParams({ sort: '', order: '' }, { append: false }, scroll)
+        : createParams(
+            { sort: value, order: 'desc' },
+            { append: false },
+            scroll,
+          );
     } else {
-      createParams({ sort: value, order: 'asc' }, { append: false });
+      createParams({ sort: value, order: 'asc' }, { append: false }, scroll);
     }
   };
   return (
@@ -34,7 +38,7 @@ export default function SortOptions({ sortOptions, style }: ISortOptions) {
       {sortOptions.map((sort, s) => (
         <TagButton
           key={s}
-          className={`${style ? style : 'pr3!'}`}
+          className="pr3!"
           active={currentSort === sort.value}
           icon={
             sort.label === 'Discount' ? (
@@ -49,6 +53,7 @@ export default function SortOptions({ sortOptions, style }: ISortOptions) {
             )
           }
           onClick={() => handleClick(sort.value)}
+          scroll={scroll}
         >
           {s === 3 && currentSort === 'latest' && currentOrder === 'asc'
             ? 'Oldest'

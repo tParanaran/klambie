@@ -461,7 +461,7 @@ export class ProductService {
         : {}),
     };
 
-    const takeLimit = limit || 24;
+    const takeLimit = limit || 18;
     const skipPage = page || 1;
 
     const data = await prisma.product.findMany({
@@ -604,8 +604,41 @@ export class ProductService {
   async getProductDashboard({
     q,
     limit,
-  }: GetProductDashboard): Promise<ProductDashboard[]> {
+    page,
+    order,
+    sort,
+    sortBy,
+    orderBy,
+  }: GetProductDashboard): Promise<{
+    products: ProductDashboard[];
+    totalItems: number;
+  }> {
+    const takeLimit = limit || 10;
+    const skipPage = page || 1;
+
+    const prismaOrder: any = {};
+
+    if (sortBy === 'price') {
+      prismaOrder.basePrice = orderBy || 'asc';
+    }
+
+    const variantOrder: any = {};
+    const shouldManualVariantSort = sort === 'soldQty';
+
+    if (!shouldManualVariantSort) {
+      if (sort === 'price') {
+        variantOrder.basePrice = order || 'asc';
+      } else if (sort === 'stock') {
+        variantOrder.stock = order || 'desc';
+      } else if (sort === 'reserved') {
+        variantOrder.reservedStock = order || 'desc';
+      }
+    }
+
     const products = await prisma.product.findMany({
+      skip: skipPage != 1 ? (skipPage - 1) * takeLimit : 0,
+      take: takeLimit,
+      orderBy: prismaOrder,
       select: {
         id: true,
         name: true,
@@ -623,6 +656,7 @@ export class ProductService {
           },
         },
         productVariants: {
+          orderBy: shouldManualVariantSort ? undefined : variantOrder,
           select: {
             id: true,
             sku: true,
@@ -649,7 +683,7 @@ export class ProductService {
       },
     });
 
-    if (!products.length) return [];
+    if (!products.length) return { products: [], totalItems: 0 };
 
     const variantIds = products.flatMap((p) =>
       p.productVariants.map((v) => v.id),
@@ -709,6 +743,14 @@ export class ProductService {
         };
       });
 
+      if (shouldManualVariantSort) {
+        variants.sort((a, b) => {
+          return order === 'desc'
+            ? b.soldQty - a.soldQty
+            : a.soldQty - b.soldQty;
+        });
+      }
+
       return {
         productId: p.id,
         name: p.name,
@@ -725,6 +767,166 @@ export class ProductService {
       };
     });
 
-    return result;
+    if (sortBy && sortBy !== 'price') {
+      result.sort((a, b) => {
+        let valA = 0;
+        let valB = 0;
+
+        switch (sortBy) {
+          case 'stock':
+            valA = a.stock;
+            valB = b.stock;
+            break;
+          case 'soldQty':
+            valA = a.soldQty;
+            valB = b.soldQty;
+            break;
+          case 'reserved':
+            valA = a.reservedStock;
+            valB = b.reservedStock;
+            break;
+        }
+
+        if (orderBy === 'desc') return valB - valA;
+        return valA - valB;
+      });
+    }
+
+    const totalItems = await prisma.product.count();
+
+    return { products: result, totalItems };
+  }
+  async toggleProductStatus(id: number): Promise<{ message: string }> {
+    const product = await prisma.product.findUnique({
+      where: { id },
+      select: { status: true },
+    });
+
+    const newStatus = product?.status === 'ACTIVE' ? 'ARCHIVE' : 'ACTIVE';
+
+    await prisma.product.update({
+      where: { id },
+      data: { status: newStatus },
+    });
+
+    return { message: `Status updated to ${newStatus}` };
+  }
+  async updateProduct(
+    id: number,
+    data: Partial<InsertProduct>,
+  ): Promise<{ message: string }> {
+    const {
+      name,
+      brandId,
+      sizingGuideId,
+      basePrice,
+      productDetails,
+      productCategories,
+      productTags,
+      images,
+      productAttributes,
+    } = data;
+
+    const result = await prisma.$transaction(async (tx) => {
+      const product = await tx.product.update({
+        where: { id },
+        data: {
+          ...(name && {
+            name,
+            slug: await GenerateSlug(name),
+          }),
+          ...(brandId && { brandId }),
+          ...(sizingGuideId && { sizingGuideId }),
+          ...(basePrice !== undefined && { basePrice }),
+
+          ...(productDetails && {
+            productDetails: {
+              deleteMany: {},
+              create: productDetails,
+            },
+          }),
+
+          ...(productAttributes && {
+            productAttributes: {
+              deleteMany: {},
+              create: productAttributes,
+            },
+          }),
+
+          ...(productCategories && {
+            productCategories: {
+              deleteMany: {},
+              create: productCategories.map((id: number) => ({
+                categoryHierarchyId: id,
+              })),
+            },
+          }),
+
+          ...(productTags && {
+            productTags: {
+              deleteMany: {},
+              create: productTags.map((id: number) => ({
+                tagId: id,
+              })),
+            },
+          }),
+
+          ...(images && {
+            images: {
+              deleteMany: {},
+              create: images,
+            },
+          }),
+        },
+      });
+
+      return product.name;
+    });
+
+    return { message: `Update ${result} successfully` };
+  }
+  async deleteProduct(id: number): Promise<{ message: string }> {
+    const result = await prisma.product.delete({
+      where: { id },
+    });
+
+    return { message: `Delete ${result.name} successfully` };
+  }
+  async deleteVariant(variantId: number) {
+    const variant = await prisma.productVariant.findUnique({
+      where: { id: variantId },
+      select: {
+        productVariantAttributes: {
+          select: {
+            attributeValue: {
+              select: {
+                id: true,
+                value: true,
+                attribute: {
+                  select: {
+                    name: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!variant) {
+      throw new Error('Variant not found');
+    }
+
+    const attributeText = variant.productVariantAttributes
+      .reverse()
+      .map((a) => a.attributeValue.value)
+      .join(' - ');
+
+    await prisma.productVariant.delete({
+      where: { id: variantId },
+    });
+
+    return { message: `Delete variant ${attributeText} successfully` };
   }
 }

@@ -5,26 +5,21 @@ import SortOptions from '../../c/components/sortOptions';
 
 export default function SortVariants() {
   const { clearAllParams } = useQueryParams();
+
   return (
-    <div className="flex items-center justify-between py-2 text-xs">
+    <div className="flex items-center justify-between mt-1 mb-2 text-xs">
       <div className="hidden sm:block">
         <TagButton
-          className="px-3 bg-black/15! dark:bg-white/10! text-dark flex-none"
-          onClick={clearAllParams}
+          className="px-3 flex-none"
+          onClick={() => clearAllParams(false)}
         >
           Variants
         </TagButton>
       </div>
       <div className="flex text-center space-x-1">
-        <SortOptions
-          sortOptions={sortDashboardOptions}
-          style="bg-black/15! dark:bg-white/10! text-dark pr-3!"
-        />
+        <SortOptions sortOptions={sortDashboardOptions} scroll={false} />
         <div className="w-fit hidden sm:block">
-          <TagButton
-            className="px-3 bg-black/15! dark:bg-white/10! text-dark"
-            onClick={clearAllParams}
-          >
+          <TagButton className="px-3" onClick={() => clearAllParams(false)}>
             Action
           </TagButton>
         </div>

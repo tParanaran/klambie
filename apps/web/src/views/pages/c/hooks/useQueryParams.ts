@@ -40,6 +40,7 @@ export function useQueryParams() {
     (
       values: Record<string, string | string[]>,
       options?: { append?: boolean },
+      scroll = true,
     ) => {
       const params = new URLSearchParams(searchParams.toString());
 
@@ -52,7 +53,7 @@ export function useQueryParams() {
         }
       });
 
-      router.replace(buildUrl(pathname, params));
+      router.replace(buildUrl(pathname, params), { scroll });
     },
     [searchParams.toString(), pathname, router],
   );
@@ -106,21 +107,24 @@ export function useQueryParams() {
   );
 
   const deleteParams = useCallback(
-    (key: string, value?: string) => {
+    (key: string, value?: string, scroll = true) => {
       const params = new URLSearchParams(searchParams.toString());
       if (value === undefined) {
         params.delete(key);
       } else {
         params.delete(key, value);
       }
-      router.replace(buildUrl(pathname, params));
+      router.replace(buildUrl(pathname, params), { scroll });
     },
     [searchParams.toString(), pathname, router],
   );
 
-  const clearAllParams = useCallback(() => {
-    router.replace(pathname);
-  }, [pathname, router]);
+  const clearAllParams = useCallback(
+    (scroll = true) => {
+      router.replace(pathname, { scroll });
+    },
+    [pathname, router],
+  );
 
   const matchPathname = DEPARTMENT.find((dep) =>
     pathname.toLowerCase().includes(dep),

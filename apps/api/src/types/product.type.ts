@@ -143,7 +143,12 @@ export type GetAllProducts = {
 
 export type GetProductDashboard = {
   limit?: number;
+  page?: number;
   q?: string;
+  order?: string;
+  orderBy?: string;
+  sortBy?: string;
+  sort?: string;
 };
 
 export type ProductDashboard = {
