@@ -105,4 +105,17 @@ export class Product {
       next(error);
     }
   }
+  async uppdateVariant(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.params;
+
+      console.log(id);
+      console.log(req.body);
+
+      const result = await productService.updateVariant(Number(id), req.body);
+      res.status(200).send(result);
+    } catch (error) {
+      next(error);
+    }
+  }
 }

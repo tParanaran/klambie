@@ -1,14 +1,16 @@
 'use client';
 import React, { useRef, useState } from 'react';
 import { sortDashboardOptions } from '@/utils/productDashboard';
+import { IProductDashboard, IVariantsDashboard } from '../types';
+import { useVariantActions } from '../hooks/useActionVariants';
 import Rupiah from '@/utils/rupiah';
 import SortTable from './sort';
 import SortVariants from './sortVariants';
 import Actions from './actions';
-import ActionsVariant from './actionsVariant';
 import Status from './status';
 import SearchNotFound from '../../d/components/notfound';
-import { IProductDashboard } from '../types';
+import ActionVariants from './actionVariants';
+import VariantsModal from './variantsModal';
 
 export default function ProductsTable({
   products,
@@ -16,6 +18,7 @@ export default function ProductsTable({
   products: IProductDashboard[];
 }) {
   const [openVariants, setOPenVariants] = useState<string | null>(null);
+  const variantActions = useVariantActions();
   const contentRef = useRef<HTMLDivElement>(null);
 
   const toggleVariants = (slug: string) => {
@@ -139,9 +142,13 @@ export default function ProductsTable({
                                   <div className="w-20 mr-1 my-auto">
                                     {variant.soldQty}
                                   </div>
-                                  <ActionsVariant
-                                    id={variant.productVariantId}
-                                    name={variant.name}
+                                  <ActionVariants
+                                    onDelete={() =>
+                                      variantActions.openDelete(variant)
+                                    }
+                                    onEdit={() =>
+                                      variantActions.openEdit(variant)
+                                    }
                                   />
                                 </div>
                               </div>
@@ -157,6 +164,7 @@ export default function ProductsTable({
           )}
         </tbody>
       </table>
+      <VariantsModal {...variantActions} />
     </div>
   );
 }

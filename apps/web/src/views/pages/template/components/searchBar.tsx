@@ -10,7 +10,7 @@ interface ISearchForm {
   showSearch?: boolean;
 }
 
-export default function SearchBar({ showSearch }: ISearchForm) {
+export default function ({ showSearch }: ISearchForm) {
   const inputRef = useRef<HTMLInputElement>(null);
   const { getParams, createNewRouteParams, clearAllParams } = useQueryParams();
   const params = getParams('q') || '';

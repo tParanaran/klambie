@@ -1,7 +1,7 @@
 'use client';
 import { IoCaretDown } from 'react-icons/io5';
 import TagButton from '@/views/components/tagButton';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import useActions from '../hooks/useActions';
 import DeleteModal from './deleteModal';
 
@@ -64,9 +64,10 @@ export default function Actions({
 
       <DeleteModal
         showModal={showModal}
-        setShowModal={setShowModal}
         id={id}
         name={name}
+        closeModal={() => setShowModal(false)}
+        modalHandler={() => setShowModal(!showModal)}
       />
     </>
   );

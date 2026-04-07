@@ -1,13 +1,15 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { IProductDashboard } from '../types';
+import { useVariantActions } from '../hooks/useActionVariants';
 import Actions from './actions';
 import Rupiah from '@/utils/rupiah';
 import Status from './status';
 import ModalContainer from '@/views/components/modalContainer';
 import SortVariants from './sortVariants';
-import ActionsVariant from './actionsVariant';
 import SearchNotFound from '../../d/components/notfound';
+import ActionVariants from './actionVariants';
+import VariantsModal from './variantsModal';
 
 export default function ProductsTableMobile({
   products,
@@ -15,10 +17,22 @@ export default function ProductsTableMobile({
   products: IProductDashboard[];
 }) {
   const [openVariants, setOPenVariants] = useState<string | null>(null);
+  const [isChildren, setIsChildren] = useState<boolean>(false);
+  const actionVariants = useVariantActions();
 
   const toggleVariants = (slug: string) => {
     setOPenVariants((prev) => (prev === slug ? null : slug));
   };
+
+  const { showDelete, showEdit, openDelete, openEdit } = actionVariants;
+
+  useEffect(() => {
+    if (showDelete || showEdit) {
+      setIsChildren(true);
+    } else {
+      setIsChildren(false);
+    }
+  }, [showEdit, showDelete]);
 
   return (
     <div className="block sm:hidden bg-black/10 dark:bg-white/10 rounded-2xl overflow-hidden">
@@ -82,9 +96,9 @@ export default function ProductsTableMobile({
                     />
                   </div>
                 </div>
-                {isOpen && product.productVariants && (
+                {isOpen && !isChildren && product.productVariants && (
                   <ModalContainer
-                    handlerModal={() => toggleVariants('')}
+                    handlerModal={() => setOPenVariants(null)}
                     style="left-0! right-0! bottom-0! overflow-contain"
                     showModal={isOpen}
                     isDashboard={true}
@@ -124,9 +138,9 @@ export default function ProductsTableMobile({
                             </div>
                           </div>
                           <div className="my-auto">
-                            <ActionsVariant
-                              id={variant.productVariantId}
-                              name={variant.name}
+                            <ActionVariants
+                              onDelete={() => openDelete(variant)}
+                              onEdit={() => openEdit(variant)}
                             />
                           </div>
                         </div>
@@ -139,6 +153,8 @@ export default function ProductsTableMobile({
           })}
         </div>
       )}
+
+      {actionVariants.selectedVariant && <VariantsModal {...actionVariants} />}
     </div>
   );
 }

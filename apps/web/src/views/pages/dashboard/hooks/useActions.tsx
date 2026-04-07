@@ -1,8 +1,9 @@
 import { useRouter } from 'next/navigation';
 import { useToast } from './useToast';
 import axiosInstanceClient from '@/lib/axios/client';
+import { IEditVariants } from '../types';
 
-export default function useActions(id: number) {
+export default function useActions(id: number, closeModal?: () => void) {
   const { toast, showToast } = useToast();
   const router = useRouter();
 
@@ -14,6 +15,8 @@ export default function useActions(id: number) {
         message: data.message,
         type: 'success',
       });
+
+      if (closeModal) closeModal();
       router.refresh();
     } catch (error: any) {
       showToast({
@@ -32,10 +35,11 @@ export default function useActions(id: number) {
         message: data.message,
         type: 'success',
       });
+      if (closeModal) closeModal();
       router.refresh();
     } catch (error: any) {
       showToast({
-        message: error.message || 'Something went wrong while change status.',
+        message: error.message || 'Something went wrong while delete product.',
         type: 'error',
       });
     }
@@ -50,14 +54,42 @@ export default function useActions(id: number) {
         message: data.message,
         type: 'success',
       });
+      if (closeModal) closeModal();
       router.refresh();
     } catch (error: any) {
       showToast({
-        message: error.message || 'Something went wrong while change status.',
+        message: error.message || 'Something went wrong while delete variant.',
         type: 'error',
       });
     }
   };
 
-  return { toast, router, archive, deleteHandler, deleteVariant };
+  const updateVariant = async (newData: IEditVariants) => {
+    try {
+      const { data } = await axiosInstanceClient.patch(
+        `/product/updateVariant/${id}`,
+        { ...newData },
+      );
+      showToast({
+        message: data.message,
+        type: 'success',
+      });
+      if (closeModal) closeModal();
+      router.refresh();
+    } catch (error: any) {
+      showToast({
+        message: error.message || 'Something went wrong while update data.',
+        type: 'error',
+      });
+    }
+  };
+
+  return {
+    toast,
+    router,
+    archive,
+    deleteHandler,
+    deleteVariant,
+    updateVariant,
+  };
 }

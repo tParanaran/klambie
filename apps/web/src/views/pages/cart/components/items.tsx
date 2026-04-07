@@ -140,7 +140,7 @@ export default function CartItems({
                 <Link href={`/p/${item.slug}`} aria-label={item.name}>
                   <h1 className="font-semibold">{item.brand}</h1>
                   <h1 className="font-semibold">{item.name}</h1>
-                  <div className="opacity-50 text-xs text-light">
+                  <div className="opacity-50 text-xs">
                     <p>SKU : {item.sku}</p>
                   </div>
                 </Link>

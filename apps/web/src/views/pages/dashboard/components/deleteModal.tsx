@@ -3,10 +3,10 @@ import ModalContainer from '@/views/components/modalContainer';
 import { TbHttpDelete } from 'react-icons/tb';
 import useActions from '../hooks/useActions';
 import ToastMessage from '@/views/components/toastMessage';
-import { Dispatch, SetStateAction, useEffect } from 'react';
 
 interface IDeleteMOdal {
-  setShowModal: Dispatch<SetStateAction<boolean>>;
+  closeModal: () => void;
+  modalHandler: () => void;
   id: number;
   name: string;
   showModal: boolean;
@@ -18,19 +18,13 @@ export default function DeleteModal({
   name,
   showModal,
   isVariant = false,
-  setShowModal,
+  closeModal,
+  modalHandler,
 }: IDeleteMOdal) {
-  const { archive, deleteHandler, toast, deleteVariant } = useActions(id);
-
-  const modalHandler = () => {
-    setShowModal(!showModal);
-  };
-
-  useEffect(() => {
-    if (toast.type === 'success') {
-      setShowModal(false);
-    }
-  }, [toast.visible]);
+  const { archive, deleteHandler, toast, deleteVariant } = useActions(
+    id,
+    closeModal,
+  );
 
   return (
     <>

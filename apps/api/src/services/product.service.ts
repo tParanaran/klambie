@@ -833,6 +833,41 @@ export class ProductService {
 
     return { message: `Update ${result} successfully` };
   }
+  async updateVariant(
+    id: number,
+    data: { stock: number; basePrice: number },
+  ): Promise<{ message: string }> {
+    const result = await prisma.$transaction(async (tx) => {
+      const variant = await tx.productVariant.update({
+        where: { id },
+        data: { ...data },
+        select: {
+          productVariantAttributes: {
+            select: {
+              attributeValue: {
+                select: {
+                  id: true,
+                  value: true,
+                  attribute: {
+                    select: {
+                      name: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      });
+
+      return variant.productVariantAttributes
+        .reverse()
+        .map((a) => a.attributeValue.value)
+        .join(' - ');
+    });
+
+    return { message: `Update ${result} variant successfully` };
+  }
   async deleteProduct(id: number): Promise<{ message: string }> {
     const result = await prisma.product.delete({
       where: { id },

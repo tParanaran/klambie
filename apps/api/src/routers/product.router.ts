@@ -46,6 +46,12 @@ export class ProductRouter {
       AdminGuard,
       this.product.deleteVariant,
     );
+    this.router.patch(
+      '/updateVariant/:id',
+      VerificationToken,
+      AdminGuard,
+      this.product.uppdateVariant,
+    );
   }
 
   getRouter(): Router {

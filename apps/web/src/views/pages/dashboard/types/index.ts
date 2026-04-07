@@ -8,6 +8,17 @@ export interface ISidebarItem {
   dropdown?: ISidebarItem[];
 }
 
+export interface IVariantsDashboard {
+  productVariantId: number;
+  sku: string;
+  name: string;
+  stock: number;
+  reservedStock: number;
+  price: string;
+  soldQty: number;
+  image: string;
+}
+
 export interface IProductDashboard {
   productId: number;
   name: string;
@@ -20,14 +31,10 @@ export interface IProductDashboard {
   soldQty: number;
   image: string;
   status: string;
-  productVariants: {
-    productVariantId: number;
-    sku: string;
-    name: string;
-    stock: number;
-    reservedStock: number;
-    price: string;
-    soldQty: number;
-    image: string;
-  }[];
+  productVariants: IVariantsDashboard[];
+}
+
+export interface IEditVariants {
+  stock: number;
+  basePrice: number;
 }
