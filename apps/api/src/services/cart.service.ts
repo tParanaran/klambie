@@ -9,7 +9,7 @@ import {
 import { prisma } from '../../lib/prisma';
 import { PromotionService } from './promotion.service';
 import Decimal from 'decimal.js';
-import { Cart, CartItem } from 'generated/prisma/client';
+import { Cart, CartItem } from '@generated/prisma/client';
 import { ProductService } from './product.service';
 
 const promotionService = new PromotionService();

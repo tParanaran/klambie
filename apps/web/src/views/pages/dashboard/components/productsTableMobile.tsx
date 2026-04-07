@@ -1,14 +1,19 @@
 'use client';
 import { useState } from 'react';
-import { IProductView } from '../products';
+import { IProductDashboard } from '../types';
 import Actions from './actions';
 import Rupiah from '@/utils/rupiah';
 import Status from './status';
 import ModalContainer from '@/views/components/modalContainer';
 import SortVariants from './sortVariants';
 import ActionsVariant from './actionsVariant';
+import SearchNotFound from '../../d/components/notfound';
 
-export default function ProductsTableMobile({ products }: IProductView) {
+export default function ProductsTableMobile({
+  products,
+}: {
+  products: IProductDashboard[];
+}) {
   const [openVariants, setOPenVariants] = useState<string | null>(null);
 
   const toggleVariants = (slug: string) => {
@@ -22,110 +27,118 @@ export default function ProductsTableMobile({ products }: IProductView) {
           Product Details
         </p>
       </div>
-      <div>
-        {products.map((product) => {
-          const isOpen = openVariants === product.slug;
-          return (
-            <div key={product.slug}>
-              <div className="relative p-1 border-b-[0.5px] border-gray-300 dark:border-black/90">
-                <div className="flex space-x-2">
-                  <img
-                    src={product.image}
-                    className="aspect-square rounded-full h-16 object-cover my-auto"
-                    aria-label={product.name}
-                  />
-                  <div className="text-sm">
-                    <h1 className="font-semibold">{product.brand}</h1>
-                    <p className="line-clamp-2">{product.name}</p>
-                    <p className="opacity-50">SKU: {product.sku}</p>
-                    <p className="opacity-50">Price: {Rupiah(product.price)}</p>
-                    <div className="flex space-x-3 flex-wrap">
-                      <p className="opacity-50 flex-none">
-                        Stock: {product.stock}
+      {products.length === 0 ? (
+        <div className="h-[70vh] px-3 text-sm">
+          <SearchNotFound children={undefined} />
+        </div>
+      ) : (
+        <div>
+          {products.map((product) => {
+            const isOpen = openVariants === product.slug;
+            return (
+              <div key={product.slug}>
+                <div className="relative p-1 border-b-[0.5px] border-gray-300 dark:border-black/90">
+                  <div className="flex space-x-2">
+                    <img
+                      src={product.image}
+                      className="aspect-square rounded-full h-16 object-cover my-auto"
+                      aria-label={product.name}
+                    />
+                    <div className="text-sm">
+                      <h1 className="font-semibold">{product.brand}</h1>
+                      <p className="line-clamp-2">{product.name}</p>
+                      <p className="opacity-50">SKU: {product.sku}</p>
+                      <p className="opacity-50">
+                        Price: {Rupiah(product.price)}
                       </p>
-                      <p className="opacity-50 flex-none">
-                        Order: {product.reservedStock}
-                      </p>
-                      <p className="opacity-50 flex-none">
-                        Sales: {product.soldQty}
-                      </p>
+                      <div className="flex space-x-3 flex-wrap">
+                        <p className="opacity-50 flex-none">
+                          Stock: {product.stock}
+                        </p>
+                        <p className="opacity-50 flex-none">
+                          Order: {product.reservedStock}
+                        </p>
+                        <p className="opacity-50 flex-none">
+                          Sales: {product.soldQty}
+                        </p>
+                      </div>
                     </div>
+
+                    <Status
+                      status={product.status}
+                      productId={product.productId}
+                      style="absolute right-1 top-0.5"
+                    />
                   </div>
 
-                  <Status
-                    status={product.status}
-                    productId={product.productId}
-                    style="absolute right-1 top-0.5"
-                  />
+                  <div className="overflow-y-scroll scrollbar-hide">
+                    <Actions
+                      toggleVariants={() => toggleVariants(product.slug)}
+                      isOpen={isOpen}
+                      variantsLength={product.productVariants.length}
+                      slug={product.slug}
+                      id={product.productId}
+                      name={product.name}
+                    />
+                  </div>
                 </div>
-
-                <div className="overflow-y-scroll scrollbar-hide">
-                  <Actions
-                    toggleVariants={() => toggleVariants(product.slug)}
-                    isOpen={isOpen}
-                    variantsLength={product.productVariants.length}
-                    slug={product.slug}
-                    id={product.productId}
-                    name={product.name}
-                  />
-                </div>
-              </div>
-              {isOpen && product.productVariants && (
-                <ModalContainer
-                  handlerModal={() => toggleVariants('')}
-                  style="left-0! right-0! bottom-0! overflow-contain"
-                  showModal={isOpen}
-                  isDashboard={true}
-                >
-                  <div>
-                    <div className="overflow-y-scroll scrollbar-hide -top-2 mx-auto sticky z-20 bg-secondary w-fit px-2 rounded-full">
-                      <SortVariants />
-                    </div>
-                    {product.productVariants.map((variant) => (
-                      <div
-                        key={variant.productVariantId}
-                        className="flex space-x-2 justify-around border-b-[0.5px] border-gray-300 dark:border-black/90 py-2 ml-5"
-                      >
-                        <img
-                          src={variant.image}
-                          className="aspect-square rounded-full h-16 object-cover my-auto"
-                          aria-label={variant.name}
-                        />
-                        <div className="text-sm">
-                          <h1 className="line-clamp-2">{variant.name}</h1>
-                          <p className="opacity-50 text-xs">
-                            SKU: {variant.sku}
-                          </p>
-                          <p className="opacity-50">
-                            Price: {Rupiah(variant.price)}
-                          </p>
-                          <div className="flex space-x-3 flex-wrap">
-                            <p className="opacity-50 flex-none">
-                              Stock: {variant.stock}
+                {isOpen && product.productVariants && (
+                  <ModalContainer
+                    handlerModal={() => toggleVariants('')}
+                    style="left-0! right-0! bottom-0! overflow-contain"
+                    showModal={isOpen}
+                    isDashboard={true}
+                  >
+                    <div>
+                      <div className="overflow-y-scroll scrollbar-hide -top-2 mx-auto sticky z-20 bg-secondary w-fit px-2 rounded-full">
+                        <SortVariants />
+                      </div>
+                      {product.productVariants.map((variant) => (
+                        <div
+                          key={variant.productVariantId}
+                          className="flex space-x-2 justify-around border-b-[0.5px] border-gray-300 dark:border-black/90 py-2 ml-5"
+                        >
+                          <img
+                            src={variant.image}
+                            className="aspect-square rounded-full h-16 object-cover my-auto"
+                            aria-label={variant.name}
+                          />
+                          <div className="text-sm">
+                            <h1 className="line-clamp-2">{variant.name}</h1>
+                            <p className="opacity-50 text-xs">
+                              SKU: {variant.sku}
                             </p>
-                            <p className="opacity-50 flex-none">
-                              Order: {variant.reservedStock}
+                            <p className="opacity-50">
+                              Price: {Rupiah(variant.price)}
                             </p>
-                            <p className="opacity-50 flex-none">
-                              Sales: {variant.soldQty}
-                            </p>
+                            <div className="flex space-x-3 flex-wrap">
+                              <p className="opacity-50 flex-none">
+                                Stock: {variant.stock}
+                              </p>
+                              <p className="opacity-50 flex-none">
+                                Order: {variant.reservedStock}
+                              </p>
+                              <p className="opacity-50 flex-none">
+                                Sales: {variant.soldQty}
+                              </p>
+                            </div>
+                          </div>
+                          <div className="my-auto">
+                            <ActionsVariant
+                              id={variant.productVariantId}
+                              name={variant.name}
+                            />
                           </div>
                         </div>
-                        <div className="my-auto">
-                          <ActionsVariant
-                            id={variant.productVariantId}
-                            name={variant.name}
-                          />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </ModalContainer>
-              )}
-            </div>
-          );
-        })}
-      </div>
+                      ))}
+                    </div>
+                  </ModalContainer>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }

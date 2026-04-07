@@ -19,3 +19,9 @@ export interface IAttribute {
   slug: string;
   attributeValues: IAttributeValue[];
 }
+
+export interface IPagination {
+  totalItems: number;
+  totalPages: number;
+  currentPages: number;
+}

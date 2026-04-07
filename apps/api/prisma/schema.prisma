@@ -222,6 +222,7 @@ model ProductVariant {
   basePrice                Decimal                   @db.Decimal(18, 2)
   stock                    Int
   reservedStock            Int                       @default(0)
+  soldQty                  Int                       @default(0)
   isActive                 Boolean                   @default(true)
   createdAt                DateTime                  @default(now())
   updatedAt                DateTime                  @updatedAt

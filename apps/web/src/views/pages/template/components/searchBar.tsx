@@ -83,7 +83,7 @@ export default function SearchBar({ showSearch }: ISearchForm) {
                       type="button"
                       className="absolute right-2 top-2 text-orange-700 text-2xl hover:scale-125"
                       aria-label="Clear search"
-                      onClick={clearAllParams}
+                      onClick={() => clearAllParams}
                     >
                       <IoClose />
                     </button>

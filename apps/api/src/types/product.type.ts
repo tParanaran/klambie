@@ -174,3 +174,9 @@ export type ProductDashboard = {
     image: string;
   }[];
 };
+
+export type Pagination = {
+  totalItems: number;
+  totalPages: number;
+  currentPages: number;
+};

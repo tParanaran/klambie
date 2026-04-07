@@ -4,34 +4,29 @@ import { IoChevronBack, IoChevronForward } from 'react-icons/io5';
 import { useQueryParams } from '../hooks/useQueryParams';
 import { useEffect, useRef } from 'react';
 import getVisiblePageNumbers from '@/utils/pagination';
+import { IPagination } from '../types';
 
-interface IPagination {
-  totalItems: number;
-  limit?: number;
-}
-export default function Pagination({ totalItems, limit = 18 }: IPagination) {
+export default function Pagination({
+  totalItems,
+  totalPages,
+  currentPages,
+}: IPagination) {
   const pageRef = useRef<HTMLButtonElement | null>(null);
-  const { getParams, createParams } = useQueryParams();
+  const { createParams } = useQueryParams();
 
-  const currentPage = parseInt(getParams('page') || '1');
-  const totalPages = Math.ceil(totalItems / limit);
-  const visiblePages = getVisiblePageNumbers(currentPage, totalPages, 4);
-
+  const visiblePages = getVisiblePageNumbers(currentPages, totalPages, 4);
   const HandlePaginationChange = (newPage: number) => {
-    createParams(
-      { page: String(newPage), limit: String(limit) },
-      { append: false },
-    );
+    createParams({ page: String(newPage) }, { append: false });
   };
 
   useEffect(() => {
-    if (currentPage && pageRef.current) {
+    if (currentPages && pageRef.current) {
       const navbarHeight = 0;
       if (window.scrollY <= navbarHeight) {
         window.scrollTo({ top: navbarHeight, behavior: 'smooth' });
       }
     }
-  }, [currentPage]);
+  }, [currentPages]);
 
   if (totalItems > 0) {
     return (
@@ -40,8 +35,8 @@ export default function Pagination({ totalItems, limit = 18 }: IPagination) {
           <button
             className="rounded-full p-2 text-xl bg-black/5 dark:bg-white/10 hover:scale-105"
             aria-label="Previous Page"
-            onClick={() => HandlePaginationChange(currentPage - 1)}
-            disabled={currentPage === 1}
+            onClick={() => HandlePaginationChange(currentPages - 1)}
+            disabled={currentPages === 1}
           >
             <IoChevronBack />
           </button>
@@ -53,7 +48,7 @@ export default function Pagination({ totalItems, limit = 18 }: IPagination) {
               <button
                 aria-label="Page 1"
                 className={
-                  currentPage === 1
+                  currentPages === 1
                     ? 'bg-orange-700 text-light rounded-md px-3 py-1.5 scale-105 shadow-2xl'
                     : 'px-2 py-2'
                 }
@@ -70,7 +65,7 @@ export default function Pagination({ totalItems, limit = 18 }: IPagination) {
               key={pageNumber}
               aria-label={`Page ${pageNumber}`}
               className={
-                currentPage === pageNumber
+                currentPages === pageNumber
                   ? 'bg-orange-700 text-light rounded-md px-3 py-1.5 scale-105 shadow-2xl'
                   : 'px-3 py-1.5'
               }
@@ -88,7 +83,7 @@ export default function Pagination({ totalItems, limit = 18 }: IPagination) {
               <button
                 aria-label="Page Last"
                 className={
-                  currentPage === totalPages
+                  currentPages === totalPages
                     ? 'bg-orange-700 text-light rounded-md px-3 py-1.5 scale-105 shadow-2xl'
                     : 'px-3 py-1.5'
                 }
@@ -103,8 +98,8 @@ export default function Pagination({ totalItems, limit = 18 }: IPagination) {
           <button
             className="rounded-full p-2 text-xl bg-black/5 dark:bg-white/10 hover:scale-105"
             aria-label="Next Page"
-            onClick={() => HandlePaginationChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
+            onClick={() => HandlePaginationChange(currentPages + 1)}
+            disabled={currentPages === totalPages}
           >
             <IoChevronForward />
           </button>

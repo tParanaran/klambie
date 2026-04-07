@@ -11,6 +11,7 @@ import {
   GetAllProducts,
   ProductDashboard,
   GetProductDashboard,
+  Pagination,
 } from '@/types/product.type';
 import { prisma } from '../../lib/prisma';
 import { GenerateSlug } from '@/utils/slug';
@@ -18,13 +19,13 @@ import { SKU } from '@/utils/sku';
 import { PromotionService } from './promotion.service';
 import { AttributeService } from './attribute.service';
 import { initialCategories } from '@/utils/initialCategories';
-import { SalesService } from './sales.service';
 import FlattenCategories from '@/utils/categories';
+import { ProductHelper } from '@/helpers/product.helper';
 
 const sku = new SKU();
+const productHelper = new ProductHelper();
 const promotionService = new PromotionService();
 const attributeService = new AttributeService();
-const salesService = new SalesService();
 
 export class ProductService {
   async newProduct(data: InsertProduct): Promise<{ message: string }> {
@@ -330,7 +331,7 @@ export class ProductService {
   }: GetAllProducts): Promise<{
     products: Products[];
     filters: Filters[];
-    totalItems: number;
+    pages: Pagination;
   } | null> {
     let hierarchyIds: number[] = [];
     let hierarchyId: number | null = null;
@@ -436,6 +437,13 @@ export class ProductService {
               { name: { contains: q } },
               { slug: { contains: q } },
               {
+                brand: {
+                  is: {
+                    name: { contains: q },
+                  },
+                },
+              },
+              {
                 productDetails: {
                   is: {
                     description: { contains: q },
@@ -461,14 +469,22 @@ export class ProductService {
         : {}),
     };
 
-    const takeLimit = limit || 18;
-    const skipPage = page || 1;
+    const totalItems = await prisma.product.count({
+      where: whereFilters,
+    });
+
+    const { skip, take, totalPages, currentPages } =
+      await productHelper.getPagination({
+        page,
+        limit,
+        totalItems,
+      });
 
     const data = await prisma.product.findMany({
       where: whereFilters,
       orderBy: prismaOrder,
-      skip: skipPage != 1 ? (skipPage - 1) * takeLimit : 0,
-      take: takeLimit,
+      skip,
+      take,
       select: {
         id: true,
         name: true,
@@ -526,10 +542,6 @@ export class ProductService {
       }),
     );
 
-    const totalItems = await prisma.product.count({
-      where: whereFilters,
-    });
-
     let filters: Filters[] = initialCategories;
 
     if (hierarchyId) {
@@ -540,14 +552,26 @@ export class ProductService {
       const discountedProducts = products.filter(
         (product) => product.hasDiscount,
       );
+
+      const totalItems = discountedProducts.length;
+
+      const { totalPages, currentPages } = await productHelper.getPagination({
+        totalItems,
+        limit,
+        page,
+      });
       return {
         products: discountedProducts,
         filters,
-        totalItems: discountedProducts.length,
+        pages: { totalItems, totalPages, currentPages },
       };
     }
 
-    return { products, filters, totalItems };
+    return {
+      products,
+      filters,
+      pages: { totalItems, totalPages, currentPages },
+    };
   }
   async getOneProduct(slug: string, user?: number): Promise<Product | null> {
     const product = await prisma.product.findUnique({
@@ -611,190 +635,114 @@ export class ProductService {
     orderBy,
   }: GetProductDashboard): Promise<{
     products: ProductDashboard[];
-    totalItems: number;
+    pages: Pagination;
   }> {
-    const takeLimit = limit || 10;
-    const skipPage = page || 1;
+    const whereClause: any = {};
 
-    const prismaOrder: any = {};
-
-    if (sortBy === 'price') {
-      prismaOrder.basePrice = orderBy || 'asc';
+    if (q) {
+      whereClause.OR = [
+        { name: { contains: q } },
+        { sku: { contains: q } },
+        {
+          brand: {
+            name: { contains: q },
+          },
+        },
+      ];
     }
+    const isAggregateSort =
+      sortBy === 'stock' || sortBy === 'order' || sortBy === 'sales';
 
-    const variantOrder: any = {};
-    const shouldManualVariantSort = sort === 'soldQty';
+    if (isAggregateSort) {
+      const fieldMap = {
+        stock: 'stock',
+        order: 'reservedStock',
+        sales: 'soldQty',
+      };
 
-    if (!shouldManualVariantSort) {
-      if (sort === 'price') {
-        variantOrder.basePrice = order || 'asc';
-      } else if (sort === 'stock') {
-        variantOrder.stock = order || 'desc';
-      } else if (sort === 'reserved') {
-        variantOrder.reservedStock = order || 'desc';
+      const field = fieldMap[sortBy];
+
+      let filteredProductIds: number[] | undefined;
+
+      if (q) {
+        const filteredProducts = await prisma.product.findMany({
+          where: whereClause,
+          select: { id: true },
+        });
+
+        filteredProductIds = filteredProducts.map((p) => p.id);
       }
-    }
 
-    const products = await prisma.product.findMany({
-      skip: skipPage != 1 ? (skipPage - 1) * takeLimit : 0,
-      take: takeLimit,
-      orderBy: prismaOrder,
-      select: {
-        id: true,
-        name: true,
-        sku: true,
-        slug: true,
-        basePrice: true,
-        status: true,
-        brand: {
-          select: { name: true },
+      const grouped = await prisma.productVariant.groupBy({
+        by: ['productId'],
+        where: filteredProductIds
+          ? { productId: { in: filteredProductIds } }
+          : undefined,
+        _sum: {
+          [field]: true,
         },
-        images: {
-          select: {
-            url: true,
-            attributeValueId: true,
+        orderBy: {
+          _sum: {
+            [field]: orderBy || 'desc',
           },
         },
-        productVariants: {
-          orderBy: shouldManualVariantSort ? undefined : variantOrder,
-          select: {
-            id: true,
-            sku: true,
-            basePrice: true,
-            stock: true,
-            reservedStock: true,
-            productVariantAttributes: {
-              select: {
-                attributeValue: {
-                  select: {
-                    id: true,
-                    value: true,
-                    attribute: {
-                      select: {
-                        name: true,
-                      },
-                    },
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
-    });
-
-    if (!products.length) return { products: [], totalItems: 0 };
-
-    const variantIds = products.flatMap((p) =>
-      p.productVariants.map((v) => v.id),
-    );
-
-    const soldMap = await salesService.getSoldQtyByVariant(variantIds);
-
-    const getVariantImage = (
-      variant: any,
-      images: { url: string; attributeValueId: number | null }[],
-    ): string | null => {
-      const attributeValueIds = variant.productVariantAttributes.map(
-        (a: any) => a.attributeValue.id,
-      );
-
-      const variantImage = images.find(
-        (img) =>
-          img.attributeValueId &&
-          attributeValueIds.includes(img.attributeValueId),
-      );
-
-      if (variantImage) return variantImage.url;
-
-      const productImage = images.find((img) => !img.attributeValueId);
-
-      return productImage ? productImage.url : null;
-    };
-
-    const result = products.map((p) => {
-      let totalStock = 0;
-      let totalSold = 0;
-      let totalReserved = 0;
-
-      const variants = p.productVariants.map((v) => {
-        const soldQty = soldMap.get(v.id) || 0;
-
-        totalStock += v.stock;
-        totalSold += soldQty;
-        totalReserved += v.reservedStock;
-
-        const attributeText = v.productVariantAttributes
-          .reverse()
-          .map((a) => a.attributeValue.value)
-          .join(' - ');
-
-        const image = getVariantImage(v, p.images) || p.images[0].url;
-
-        return {
-          productVariantId: v.id,
-          sku: v.sku,
-          name: attributeText,
-          stock: v.stock,
-          reservedStock: v.reservedStock,
-          price: v.basePrice,
-          soldQty,
-          image,
-        };
       });
 
-      if (shouldManualVariantSort) {
-        variants.sort((a, b) => {
-          return order === 'desc'
-            ? b.soldQty - a.soldQty
-            : a.soldQty - b.soldQty;
+      const totalItems = grouped.length;
+
+      const { take, currentPages, totalPages } =
+        await productHelper.getPagination({
+          page,
+          limit,
+          totalItems,
         });
-      }
+
+      const paginatedIds = grouped
+        .slice((currentPages - 1) * take, currentPages * take)
+        .map((g) => g.productId);
+
+      const rawProducts = await prisma.product.findMany({
+        where: {
+          id: { in: paginatedIds },
+        },
+        select: await productHelper.baseSelect(sort, order),
+      });
+
+      const sortedProducts = paginatedIds.map((id) =>
+        rawProducts.find((p) => p.id === id),
+      );
 
       return {
-        productId: p.id,
-        name: p.name,
-        brand: p.brand?.name || 'Other',
-        sku: p.sku,
-        status: p.status,
-        slug: p.slug,
-        price: p.basePrice,
-        stock: totalStock,
-        reservedStock: totalReserved,
-        soldQty: totalSold,
-        image: p.images[0].url,
-        productVariants: variants,
+        products: await productHelper.mapProducts(sortedProducts),
+        pages: { totalItems, totalPages, currentPages },
       };
-    });
-
-    if (sortBy && sortBy !== 'price') {
-      result.sort((a, b) => {
-        let valA = 0;
-        let valB = 0;
-
-        switch (sortBy) {
-          case 'stock':
-            valA = a.stock;
-            valB = b.stock;
-            break;
-          case 'soldQty':
-            valA = a.soldQty;
-            valB = b.soldQty;
-            break;
-          case 'reserved':
-            valA = a.reservedStock;
-            valB = b.reservedStock;
-            break;
-        }
-
-        if (orderBy === 'desc') return valB - valA;
-        return valA - valB;
-      });
     }
 
-    const totalItems = await prisma.product.count();
+    let prismaOrder: any = {};
 
-    return { products: result, totalItems };
+    if (sortBy === 'price') {
+      prismaOrder = { basePrice: orderBy || 'asc' };
+    }
+
+    const totalItems = await prisma.product.count({
+      where: whereClause,
+    });
+
+    const { take, skip, currentPages, totalPages } =
+      await productHelper.getPagination({ page, limit, totalItems });
+
+    const products = await prisma.product.findMany({
+      where: whereClause,
+      skip,
+      take,
+      orderBy: prismaOrder,
+      select: await productHelper.baseSelect(sort, order),
+    });
+
+    return {
+      products: await productHelper.mapProducts(products),
+      pages: { totalItems, totalPages, currentPages },
+    };
   }
   async toggleProductStatus(id: number): Promise<{ message: string }> {
     const product = await prisma.product.findUnique({

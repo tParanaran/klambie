@@ -41,7 +41,7 @@ export default async function Categories({
 
   let includeDescendants = categoryIds.length > 0 ? false : true;
   let products = [];
-  let totalItems = 0;
+  let pages = null;
   let filters = null;
   let error;
 
@@ -55,20 +55,20 @@ export default async function Categories({
       categoryIds,
       attributeIds,
       includeDescendants,
-      limit: parseInt(limit as string),
-      page: parseInt(page as string),
+      limit: parseInt(limit as string) || 18,
+      page: parseInt(page as string) || 1,
       price,
     });
 
     products = data.products;
     filters = data.filters;
-    totalItems = data.totalItems;
+    pages = data.pages;
   } catch (error: any) {
     error = error.message || 'Something went wrong while fetching data.';
     products = [];
   }
 
-  const categoryView = { products, filters, totalItems };
+  const categoryView = { products, filters, pages };
 
   return (
     <main>

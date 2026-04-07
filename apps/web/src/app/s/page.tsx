@@ -10,7 +10,7 @@ export default async function SearchPage({
   const parsedParams = await parseSearchParams(searchParams);
 
   let products = [];
-  let totalItems = 0;
+  let pages = null;
   let filters = null;
   let error;
 
@@ -22,13 +22,13 @@ export default async function SearchPage({
 
     products = data.products;
     filters = data.filters;
-    totalItems = data.totalItems;
+    pages = data.pages;
   } catch (error: any) {
     error = error.message || 'Something went wrong while fetching data.';
     products = [];
   }
 
-  const categoryView = { products, filters, totalItems, query: parsedParams.q };
+  const categoryView = { products, filters, pages, query: parsedParams.q };
 
   return (
     <main>

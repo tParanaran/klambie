@@ -1,6 +1,6 @@
 'use client';
 import { IProducts } from '../p/types/product.types';
-import { ICategories } from './types';
+import { ICategories, IPagination } from './types';
 import SearchNotFound from '../d/components/notfound';
 import SideNavbar from './components/sideNavbar';
 import ProductCard from './components/card';
@@ -12,14 +12,14 @@ import Footer from './components/footer';
 interface ICategoryView {
   products: IProducts[];
   filters: ICategories[];
-  totalItems: number;
+  pages: IPagination;
   query?: string;
 }
 
 export default function CategoryView({
   products,
   filters,
-  totalItems,
+  pages,
   query,
 }: ICategoryView) {
   const { isMobile } = useDetectIsMobile({ widthScreen: 1024, maxWitdh: 850 });
@@ -27,7 +27,11 @@ export default function CategoryView({
   return (
     <>
       <div className="mt-5 md:mt-0 relative">
-        <TopNavbar totalItems={totalItems} filters={filters} query={query} />
+        <TopNavbar
+          totalItems={pages.totalItems}
+          filters={filters}
+          query={query}
+        />
       </div>
 
       <div className="flex gap-2 min-h-screen">
@@ -54,7 +58,7 @@ export default function CategoryView({
           <div>
             {products.length > 0 && (
               <nav className="flex justify-between items-center w-full lg:w-1/2 mx-auto font-semibold space-x-1 my-5">
-                <Pagination totalItems={totalItems} />
+                <Pagination {...pages} />
               </nav>
             )}
             <Footer />
