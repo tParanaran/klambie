@@ -17,6 +17,8 @@ import ErrorsMessage, { IErrorsMessageHandle } from '../../p/components/errors';
 import AddToCartButton from '../../p/components/addButton';
 import { useQueryParams } from '../hooks/useQueryParams';
 import ToastMessage from '@/views/components/toastMessage';
+import Button from '@/views/components/button';
+import { useCartQuery } from '../../p/hooks/useCartQuery';
 
 interface IProductCard {
   products: IProducts[];
@@ -25,7 +27,8 @@ interface IProductCard {
 
 export default function ProductCard({ products, style }: IProductCard) {
   const errorsProductRef = useRef<IErrorsMessageHandle | null>(null);
-  const { pathname } = useQueryParams();
+  const total = useCartQuery();
+  const { pathname, router } = useQueryParams();
   const { variants, toast, showVariants, showVariantsHandler, variantHandler } =
     useVariants();
   const { quantities, updateQuantity } = useCartQuantities({});
@@ -144,7 +147,17 @@ export default function ProductCard({ products, style }: IProductCard) {
           <AddToCartButton
             isLoading={isLoading}
             handleAddToCart={handleAddToCart}
-          />
+          >
+            {' '}
+            {total > 0 && (
+              <Button
+                className="bg-dark w-fit hidden md:block"
+                onClick={() => router.push('/cart')}
+              >
+                My Bag ({total})
+              </Button>
+            )}
+          </AddToCartButton>
         </ShowVariants>
       )}
       {isLoading && <Loading />}

@@ -1,13 +1,9 @@
 'use client';
 
-import axiosInstanceClient from '@/lib/axios/client';
 import Loading from '@/views/components/loading';
-import { useState } from 'react';
 import { IoClose } from 'react-icons/io5';
-import { useRouter } from 'next/navigation';
-import { useQueryClient } from '@tanstack/react-query';
-import { useToast } from '../../dashboard/hooks/useToast';
 import ToastMessage from '@/views/components/toastMessage';
+import useDelete from '../hooks/useDelete';
 
 export default function DeleteButton({
   variantId,
@@ -16,43 +12,7 @@ export default function DeleteButton({
   variantId: number;
   inStock: boolean;
 }) {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const { toast, showToast } = useToast();
-  const queryClient = useQueryClient();
-  const router = useRouter();
-
-  const DeleteCartHandler = async (variantId: number) => {
-    setIsLoading(true);
-    try {
-      const { data } = await axiosInstanceClient.delete(
-        `/shop-cart/delete/${variantId}`,
-      );
-
-      if (data && inStock) {
-        queryClient.invalidateQueries({ queryKey: ['cart'] });
-        queryClient.setQueryData(['cartLastAdded'], (old: number = 0) => {
-          return old - data.deleteItems || 0;
-        });
-      }
-
-      router.refresh();
-
-      showToast({
-        type: data.type,
-        message: data.message,
-      });
-    } catch (error) {
-      showToast({
-        type: 'error',
-        message:
-          error instanceof Error
-            ? error.message
-            : 'Something went wrong while delete item',
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const { DeleteCartHandler, isLoading, toast } = useDelete({ inStock });
 
   return (
     <>

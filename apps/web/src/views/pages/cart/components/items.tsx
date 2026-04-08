@@ -18,12 +18,15 @@ import SelectAllToggle from './selectAll';
 import Image from 'next/image';
 import ShippingDetails from './shipping';
 import EmptyCart from './empty';
-import TagButton from '@/views/components/tagButton';
 import ToastMessage from '@/views/components/toastMessage';
+import useDelete from '../hooks/useDelete';
+import { IoRemoveCircleSharp } from 'react-icons/io5';
+import DeleteAll from './deleteAll';
 
 interface ICart {
   cartItems: [ICartItems[], ICartItems[]];
   selectedItems: ICartItemIds[];
+  selectedCount: number;
   toggleItem: (id: number, qty: number) => void;
   toggleSelectAll: () => void;
 }
@@ -31,12 +34,14 @@ interface ICart {
 export default function CartItems({
   cartItems,
   selectedItems,
+  selectedCount,
   toggleItem,
   toggleSelectAll,
 }: ICart) {
   const errorsRefs = useRef<Record<number, IErrorsMessageHandle | null>>({});
   const errorsModalRef = useRef<IErrorsMessageHandle | null>(null);
   const [cartItemVariant, setCartItemVariant] = useState<IVariantAttribute>();
+  const handler = useDelete({ inStock: false });
   const { variants, showVariants, showVariantsHandler, variantHandler, toast } =
     useVariants();
   const { quantities, updateQuantity } = useCartQuantities({
@@ -84,23 +89,32 @@ export default function CartItems({
   return (
     <div>
       <div>
-        <div className="flex space-x-3 items-center mb-2">
-          {!emptyCart && (
-            <div className="hidden md:block  mr-2">
-              <SelectAllToggle
-                toggleSelectAll={toggleSelectAll}
-                isSelectedItem={selectedItems.length === availableTotal}
-              />
-            </div>
-          )}
+        <div className="flex justify-between flex-wrap my-2">
+          <div className="flex space-x-3 items-center mb-2">
+            {!emptyCart && (
+              <div className="hidden md:block  mr-2">
+                <SelectAllToggle
+                  toggleSelectAll={toggleSelectAll}
+                  isSelectedItem={selectedCount === availableTotal}
+                />
+              </div>
+            )}
 
-          <div className="flex space-x-2 items-center">
-            <Image src="/icon.svg" alt="Klambie" height={20} width={20} />
-            <p className="font-semibold text-sm">
-              KLAMBIE ({selectedItems.length + '/' + availableTotal} Items
-              selected)
-            </p>
+            <div className="flex space-x-2 items-center">
+              <Image src="/icon.svg" alt="Klambie" height={20} width={20} />
+              <p className="font-semibold text-sm">
+                KLAMBIE ({selectedCount + '/' + availableTotal} Items selected)
+              </p>
+            </div>
           </div>
+          {!emptyCart && (
+            <DeleteAll
+              deleteAllHandler={() => {
+                const idsToDelete = selectedItems.map((item) => item.variantId);
+                handler.DeleteCartHandler(idsToDelete);
+              }}
+            />
+          )}
         </div>
         <ShippingDetails />
         {emptyCart && <EmptyCart />}
@@ -117,9 +131,14 @@ export default function CartItems({
                     <h1 className="font-bold my-1">
                       List of Unavailable Products
                     </h1>
-                    <TagButton className="flex-none">
-                      <p>Delete All</p>
-                    </TagButton>
+                    <DeleteAll
+                      deleteAllHandler={() => {
+                        const idsToDelete = itemsArray.map(
+                          (item) => item.productVariantId,
+                        );
+                        handler.DeleteCartHandler(idsToDelete);
+                      }}
+                    />
                   </div>
                 )}
               </>
@@ -276,6 +295,9 @@ export default function CartItems({
       )}
       {toast.visible && (
         <ToastMessage {...toast} style="fixed bottom-3 right-3" />
+      )}
+      {handler.toast.visible && (
+        <ToastMessage {...handler.toast} style="fixed bottom-3 right-3" />
       )}
     </div>
   );

@@ -436,7 +436,7 @@ export class CartService {
     return { cartItems, totalPrice };
   }
   async deleteCart(
-    productId: number,
+    data: { productIds: number[] | number },
     sessionId: string,
     userId?: number,
   ): Promise<{ deleteItems: number; message: string; type: string }> {
@@ -451,29 +451,41 @@ export class CartService {
 
     const id = cart.cart.id;
 
-    const result = await prisma.cartItem.delete({
-      where: {
-        cartId_productVariantId: {
-          cartId: id,
-          productVariantId: productId,
-        },
-      },
-    });
-    const emptyCart = await prisma.cartItem.findMany({
-      where: {
-        cartId: id,
-      },
+    const { productIds } = data;
+
+    const idsToDelete = Array.isArray(productIds) ? productIds : [productIds];
+
+    console.log(idsToDelete);
+
+    const deleteResults = await Promise.all(
+      idsToDelete.map((productVariantId) =>
+        prisma.cartItem.deleteMany({
+          where: {
+            cartId: id,
+            productVariantId,
+          },
+        }),
+      ),
+    );
+
+    const totalDeleted = deleteResults.reduce(
+      (sum, r) => sum + (r.count ?? 0),
+      0,
+    );
+
+    const remainingItems = await prisma.cartItem.findMany({
+      where: { cartId: id },
     });
 
-    if (emptyCart.length === 0) {
+    if (remainingItems.length === 0) {
       await prisma.cart.delete({
-        where: { id: id },
+        where: { id },
       });
     }
 
     return {
-      deleteItems: result.quantity,
-      message: `Delete ${result.quantity} items successfully`,
+      deleteItems: totalDeleted,
+      message: `Deleted ${totalDeleted} items successfully`,
       type: 'success',
     };
   }

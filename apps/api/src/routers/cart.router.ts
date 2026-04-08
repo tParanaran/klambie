@@ -21,7 +21,7 @@ export class CartRouter {
     this.router.post('/add', IsUserLogin, AddCartValidation, this.cart.addCart);
     this.router.get('/count', IsUserLogin, this.cart.count);
     this.router.get('/get', IsUserLogin, this.cart.fetchCart);
-    this.router.delete('/delete/:productId', IsUserLogin, this.cart.delete);
+    this.router.delete('/delete', IsUserLogin, this.cart.delete);
     this.router.post('/select', IsUserLogin, this.cart.selectItems);
     this.router.patch(
       '/update-qty/:productId',

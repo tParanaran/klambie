@@ -67,7 +67,7 @@ export default function NavbarMobile() {
         </div>
 
         <div>
-          <BagButton />
+          <BagButton text="Bag" />
         </div>
 
         <IconLink

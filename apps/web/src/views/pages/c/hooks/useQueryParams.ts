@@ -131,6 +131,7 @@ export function useQueryParams() {
   );
 
   return {
+    router,
     pathname,
     searchParams,
     matchPathname,

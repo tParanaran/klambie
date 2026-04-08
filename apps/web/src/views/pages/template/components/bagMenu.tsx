@@ -68,7 +68,7 @@ export default function BagMenu() {
           aria-label="Bag Menu"
           className={`flex items-center justify-center flex-col ${showMenu ? 'text-orange-800 dark:text-orange-600' : ''}`}
         >
-          <BagButton isMobile={false} />
+          <BagButton isMobile={false} text="Bag" />
         </button>
         <AnchoredModalContainer
           open={showMenu}

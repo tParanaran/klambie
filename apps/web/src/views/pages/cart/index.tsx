@@ -9,6 +9,7 @@ import useSelect from './hooks/useSelect';
 import NavbarCheckout from './components/navbar';
 import DeliveryAddress from './components/delivery';
 import ToastMessage from '@/views/components/toastMessage';
+import { useEffect, useMemo } from 'react';
 
 export default function CartView({
   cartItems,
@@ -21,9 +22,9 @@ export default function CartView({
       cartItems: cartItems[0],
     });
 
-  const selectedCount = selectedItems.reduce(
-    (sum, item) => sum + item.quantity,
-    0,
+  const selectedCount = useMemo(
+    () => selectedItems.reduce((sum, item) => sum + item.quantity, 0),
+    [selectedItems],
   );
 
   return (
@@ -37,6 +38,7 @@ export default function CartView({
           <CartItems
             cartItems={cartItems}
             selectedItems={selectedItems}
+            selectedCount={selectedCount}
             toggleItem={toggleItem}
             toggleSelectAll={toggleSelectAll}
           />

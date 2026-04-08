@@ -46,7 +46,10 @@ export default function useSelect({ cartItems }: { cartItems: ICartItems[] }) {
   };
 
   useEffect(() => {
-    if (!cartItems || cartItems.length === 0) return;
+    if (!cartItems || cartItems.length === 0) {
+      setSelectedItems([]);
+      return;
+    }
 
     setSelectedItems((prevSelected) =>
       cartItems
