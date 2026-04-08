@@ -20,7 +20,10 @@ export default function useActions(id: number, closeModal?: () => void) {
       router.refresh();
     } catch (error: any) {
       showToast({
-        message: error.message || 'Something went wrong while change status.',
+        message:
+          error.response?.data?.message ||
+          error.message ||
+          'Something went wrong while delete variant.',
         type: 'error',
       });
     }
@@ -39,7 +42,10 @@ export default function useActions(id: number, closeModal?: () => void) {
       router.refresh();
     } catch (error: any) {
       showToast({
-        message: error.message || 'Something went wrong while delete product.',
+        message:
+          error.response?.data?.message ||
+          error.message ||
+          'Something went wrong while delete variant.',
         type: 'error',
       });
     }
@@ -58,7 +64,10 @@ export default function useActions(id: number, closeModal?: () => void) {
       router.refresh();
     } catch (error: any) {
       showToast({
-        message: error.message || 'Something went wrong while delete variant.',
+        message:
+          error.response?.data?.message ||
+          error.message ||
+          'Something went wrong while delete variant.',
         type: 'error',
       });
     }
@@ -78,7 +87,10 @@ export default function useActions(id: number, closeModal?: () => void) {
       router.refresh();
     } catch (error: any) {
       showToast({
-        message: error.message || 'Something went wrong while update data.',
+        message:
+          error.response?.data?.message ||
+          error.message ||
+          'Something went wrong while delete variant.',
         type: 'error',
       });
     }

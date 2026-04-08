@@ -1,5 +1,9 @@
 import { ProductHelper } from '@/helpers/product.helper';
-import { Filters } from '@/types/product.type';
+import {
+  Filters,
+  GroupedAttributes,
+  VariantProduct,
+} from '@/types/product.type';
 import { GenerateSlug } from '@/utils/slug';
 import { Tag } from '@generated/prisma/client';
 import { prisma } from '@lib/prisma';
@@ -351,5 +355,49 @@ export class AttributeService {
     }
 
     return roots;
+  }
+  async groupedAttributes(variants: VariantProduct[]) {
+    const map = new Map<number, GroupedAttributes>();
+
+    const validValueIds = new Set<number>();
+
+    variants.forEach((v) => {
+      if (!v.inStock) return;
+
+      v.attributes.forEach((a) => {
+        validValueIds.add(a.id);
+      });
+    });
+
+    variants.forEach((variant) => {
+      variant.attributes.forEach((attr) => {
+        const attributeId = attr.attribute.id;
+
+        if (!map.has(attributeId)) {
+          map.set(attributeId, {
+            attributeId,
+            attributeName: attr.attribute.name,
+            values: [],
+          });
+        }
+
+        const group = map.get(attributeId)!;
+
+        const existing = group.values.find((v) => v.id === attr.id);
+
+        if (!existing) {
+          group.values.push({
+            id: attr.id,
+            variantId: variant.id,
+            value: attr.value,
+            hexUrl: attr.hexUrl,
+            inStock: variant.inStock,
+            isDisabled: !validValueIds.has(attr.id),
+          });
+        }
+      });
+    });
+
+    return Array.from(map.values()).reverse();
   }
 }

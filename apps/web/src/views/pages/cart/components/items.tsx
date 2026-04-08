@@ -45,11 +45,12 @@ export default function CartItems({
     selectedAttributes,
     selectedVariant,
     selectedColorId,
-    groupedAttributes,
+    computedGroupedAttributes,
     handleSelect,
   } = useSelectedVariant({
     variants: variants?.variants ?? [],
     cartItemVariant,
+    groupedAttributes: variants?.groupedAttributes ?? [],
   });
   const { confirmHandler } = useChangeVariant({
     selectedVariant,
@@ -199,7 +200,7 @@ export default function CartItems({
           name={variants.name}
           positionStyle={'bottom-28 md:bottom-1'}
           quantities={quantities}
-          groupedAttributes={groupedAttributes}
+          groupedAttributes={computedGroupedAttributes}
           selectedVariant={selectedVariant}
           selectedColorId={selectedColorId}
           selectedAttributes={selectedAttributes}

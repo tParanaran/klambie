@@ -32,7 +32,7 @@ export default function Attributes({
                       type="radio"
                       id={value.value}
                       checked={isSelected}
-                      disabled={!value.inStock}
+                      disabled={value.isDisabled}
                       aria-label={value.value}
                       onChange={() => handleSelect(attr.attributeId, value.id)}
                       title={value.value}
@@ -48,7 +48,7 @@ export default function Attributes({
                       type="radio"
                       id={value.value}
                       className="hidden peer"
-                      disabled={!value.inStock}
+                      disabled={value.isDisabled}
                       name={attr.attributeName}
                       checked={isSelected}
                       aria-label={value.value}
@@ -56,7 +56,7 @@ export default function Attributes({
                     />
                     <label
                       htmlFor={value.value}
-                      className={`py-2 px-4 mb-2 rounded-md border-[0.5px] border-[#444444] hover:ring hover:ring-black/90 hover:ring-offset-1 hover:ring-offset-slate-100 peer-checked:ring-1 peer-checked:ring-black/90 peer-checked:ring-offset-2 peer-checked:ring-offset-slate-100 ${value.inStock ? '' : 'bg-gray-100 text-gray-400 cursor-not-allowed opacity-70'}`}
+                      className={`py-2 px-4 mb-2 rounded-md border-[0.5px] border-[#444444] hover:ring hover:ring-black/90 hover:ring-offset-1 hover:ring-offset-slate-100 peer-checked:ring-1 peer-checked:ring-black/90 peer-checked:ring-offset-2 peer-checked:ring-offset-slate-100 ${value.isDisabled ? ' text-gray-400 cursor-not-allowed opacity-40' : ''}`}
                     >
                       {value.value}
                     </label>

@@ -48,7 +48,7 @@ export default function EditVariantsModal({
                 const { values, handleChange, handleSubmit } = props;
                 return (
                   <Form onSubmit={handleSubmit}>
-                    <div>
+                    <div className="text-center">
                       <div className="p-3 bg-green-700 rounded-full inline-block text-light mb-2">
                         <TbHttpPatch className="text-4xl" />
                       </div>

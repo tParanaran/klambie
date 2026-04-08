@@ -3,7 +3,10 @@
 import { SwiperSlide, Swiper } from 'swiper/react';
 import { TbShoppingBagPlus } from 'react-icons/tb';
 import { useRef } from 'react';
-import { IProducts } from '@/views/pages/p/types/product.types';
+import {
+  IGroupedAttribute,
+  IProducts,
+} from '@/views/pages/p/types/product.types';
 import Link from 'next/link';
 import Tags from '@/views/pages/p/components/tags';
 import ProductPrice from '../../p/components/price';
@@ -17,13 +20,12 @@ import ErrorsMessage, { IErrorsMessageHandle } from '../../p/components/errors';
 import AddToCartButton from '../../p/components/addButton';
 import { useQueryParams } from '../hooks/useQueryParams';
 
-export default function ProductCard({
-  products,
-  style,
-}: {
+interface IProductCard {
   products: IProducts[];
   style?: string;
-}) {
+}
+
+export default function ProductCard({ products, style }: IProductCard) {
   const errorsProductRef = useRef<IErrorsMessageHandle | null>(null);
   const { pathname } = useQueryParams();
   const { variants, showVariants, showVariantsHandler, variantHandler } =
@@ -33,9 +35,13 @@ export default function ProductCard({
     selectedAttributes,
     selectedVariant,
     selectedColorId,
-    groupedAttributes,
+    computedGroupedAttributes,
     handleSelect,
-  } = useSelectedVariant({ variants: variants?.variants ?? [], isModal: true });
+  } = useSelectedVariant({
+    variants: variants?.variants ?? [],
+    isModal: true,
+    groupedAttributes: variants?.groupedAttributes ?? [],
+  });
   const quantity = selectedVariant ? (quantities[selectedVariant.id] ?? 1) : 1;
   const { isLoading, handleAddToCart } = useAddToCart({
     selectedAttributes,
@@ -124,7 +130,7 @@ export default function ProductCard({
           name={variants.name}
           positionStyle={'md:bottom-1 bottom-19'}
           quantities={quantities}
-          groupedAttributes={groupedAttributes}
+          groupedAttributes={computedGroupedAttributes}
           selectedVariant={selectedVariant}
           selectedColorId={selectedColorId}
           selectedAttributes={selectedAttributes}

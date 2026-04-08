@@ -99,6 +99,7 @@ export interface IGroupedAttribute {
     value: string;
     hexUrl?: string;
     inStock: boolean;
+    isDisabled: boolean;
   }[];
 }
 

@@ -1,7 +1,10 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { IProduct } from '@/views/pages/p/types/product.types';
+import {
+  IGroupedAttribute,
+  IProduct,
+} from '@/views/pages/p/types/product.types';
 import Title from './components/title';
 import Images from './components/images';
 import Details from './components/details';
@@ -18,7 +21,13 @@ import ShowVariants from '../cart/components/showVariant';
 import ShareButton from './components/shareButton';
 import NavbarAddToCart from './components/navbar';
 
-export default function ProductView({ product }: { product: IProduct }) {
+export default function ProductView({
+  product,
+  groupedAttributes,
+}: {
+  product: IProduct;
+  groupedAttributes: IGroupedAttribute[];
+}) {
   const errorsProductRef = useRef<IErrorsMessageHandle | null>(null);
   const [quantity, setQuantity] = useState<number>(1);
   const [showVariant, setShowVariant] = useState<boolean>(false);
@@ -29,9 +38,13 @@ export default function ProductView({ product }: { product: IProduct }) {
     selectedAttributes,
     selectedVariant,
     selectedColorId,
-    groupedAttributes,
     handleSelect,
-  } = useSelectedVariant({ variants: product.variants, isModal: showVariant });
+    computedGroupedAttributes,
+  } = useSelectedVariant({
+    variants: product.variants,
+    isModal: showVariant,
+    groupedAttributes,
+  });
   const { isLoading, handleAddToCart } = useAddToCart({
     selectedAttributes,
     selectedVariant,
@@ -87,14 +100,14 @@ export default function ProductView({ product }: { product: IProduct }) {
           <div className="md:sticky md:top-24">
             <Title title={{ slug, categories, brand, name }} />
             <div className="flex space-x-1 mt-2">
-              {cheapestVariants[0].price && !selectedVariant && (
+              {cheapestVariants[0]?.price && !selectedVariant && (
                 <p className="font-semibold text-orange-700">From</p>
               )}
               <ProductPrice
-                price={selectedVariant?.price || cheapestVariants[0].price}
+                price={selectedVariant?.price || cheapestVariants[0]?.price}
                 hasDiscount={
                   selectedVariant?.hasDiscount ||
-                  cheapestVariants[0].hasDiscount
+                  cheapestVariants[0]?.hasDiscount
                 }
               />
             </div>
@@ -102,7 +115,7 @@ export default function ProductView({ product }: { product: IProduct }) {
               <Attributes
                 handleSelect={handleSelect}
                 selectedAttributes={selectedAttributes}
-                groupedAttributes={groupedAttributes}
+                groupedAttributes={computedGroupedAttributes}
               />
 
               <div className="hidden md:block">
@@ -149,7 +162,7 @@ export default function ProductView({ product }: { product: IProduct }) {
         <ShowVariants
           variantImages={product.images}
           name={product.name}
-          groupedAttributes={groupedAttributes}
+          groupedAttributes={computedGroupedAttributes}
           selectedVariant={selectedVariant}
           selectedColorId={selectedColorId}
           selectedAttributes={selectedAttributes}

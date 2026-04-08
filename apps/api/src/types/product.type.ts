@@ -113,7 +113,7 @@ export type Product = {
   productDetails: ProductDetails | null;
   images?: { attributeId?: number | null; url: string }[];
   attributes: { id: number; name: string }[];
-  variants?: VariantProduct[];
+  variants: VariantProduct[];
 };
 
 export type Filters = {
@@ -179,4 +179,17 @@ export type Pagination = {
   totalItems: number;
   totalPages: number;
   currentPages: number;
+};
+
+export type GroupedAttributes = {
+  attributeId: number;
+  attributeName: string;
+  values: {
+    id: number;
+    variantId: number;
+    value: string;
+    hexUrl?: string | null;
+    inStock: boolean;
+    isDisabled: boolean;
+  }[];
 };

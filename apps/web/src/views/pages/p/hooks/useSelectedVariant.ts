@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
-import { IVariant } from '../types/product.types';
-import { GetGroupedAttributes } from './groupAttributes';
+import { IGroupedAttribute, IVariant } from '../types/product.types';
 
 interface IUseSelected {
   variants: IVariant[];
+  groupedAttributes: IGroupedAttribute[];
   cartItemVariant?: {
     variantId: number;
     attributes: { attributeId: number; attributeValueId: number }[];
@@ -13,6 +13,7 @@ interface IUseSelected {
 
 export default function useSelectedVariant({
   variants,
+  groupedAttributes,
   cartItemVariant,
   isModal,
 }: IUseSelected) {
@@ -28,10 +29,6 @@ export default function useSelectedVariant({
     minPrice !== null
       ? inStockVariants.filter((v) => Number(v.price.finalPrice) === minPrice)
       : [];
-
-  const groupedAttributes = useMemo(() => {
-    return [...GetGroupedAttributes(variants)].reverse();
-  }, [variants]);
 
   const selectedVariant = useMemo(() => {
     if (!variants || variants.length === 0) return null;
@@ -89,13 +86,41 @@ export default function useSelectedVariant({
     ? selectedAttributes[colorAttributeId]
     : undefined;
 
+  const computedGroupedAttributes = useMemo(() => {
+    return groupedAttributes.map((attr) => ({
+      ...attr,
+      values: attr.values.map((value) => {
+        const isDisabled = !variants.some((variant) => {
+          if (!variant.inStock) return false;
+
+          return variant.attributes.every((vAttr) => {
+            if (vAttr.attribute.id === attr.attributeId) {
+              return vAttr.id === value.id;
+            }
+
+            if (selectedAttributes[vAttr.attribute.id]) {
+              return vAttr.id === selectedAttributes[vAttr.attribute.id];
+            }
+
+            return true;
+          });
+        });
+
+        return {
+          ...value,
+          isDisabled,
+        };
+      }),
+    }));
+  }, [groupedAttributes, variants, selectedAttributes]);
+
   return {
     inStockVariants,
     cheapestVariants,
     selectedAttributes,
     selectedVariant,
-    groupedAttributes,
     selectedColorId,
     handleSelect,
+    computedGroupedAttributes,
   };
 }

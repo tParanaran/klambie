@@ -22,9 +22,10 @@ export class Product {
           message: 'Product not found',
         });
       }
-      const { variants, img } = result;
+      const { variants, img, groupedAttributes } = result;
       res.status(200).send({
         variants,
+        groupedAttributes,
         variantImages: img?.variantImages,
       });
     } catch (error) {

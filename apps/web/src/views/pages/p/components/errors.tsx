@@ -33,7 +33,7 @@ const ErrorsMessage = forwardRef<IErrorsMessageHandle>((props, ref) => {
     },
   }));
   return (
-    <div>
+    <div className="flex space-x-1 flex-wrap">
       {visibleErrors.map((err, e) => (
         <div
           key={e}

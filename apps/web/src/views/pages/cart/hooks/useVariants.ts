@@ -1,13 +1,17 @@
 'use client';
 import { useState } from 'react';
-import { IImages, IVariant } from '../../p/types/product.types';
+import {
+  IGroupedAttribute,
+  IImages,
+  IVariant,
+} from '../../p/types/product.types';
 import axiosInstanceClient from '@/lib/axios/client';
 import { Notify } from '@/lib/notify';
-import { number } from 'yup';
 
 interface IVariantData {
   variants: IVariant[];
   variantImages: IImages[];
+  groupedAttributes: IGroupedAttribute[];
   name: string;
   quantity: number;
 }

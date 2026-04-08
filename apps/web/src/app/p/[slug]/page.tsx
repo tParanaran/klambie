@@ -20,5 +20,5 @@ export default async function Product({
 
   if (!product) return notFound();
 
-  return <ProductView product={product} />;
+  return <ProductView {...product} />;
 }

@@ -22,9 +22,9 @@ export const QtyValidation = [
 export const AddCartValidation = [
   body('productVariantId')
     .notEmpty()
-    .withMessage('Product ID is required')
+    .withMessage('Selected variant is required')
     .isInt()
-    .withMessage('Product ID must be number'),
+    .withMessage('Selected variant must be'),
   body('quantity')
     .notEmpty()
     .withMessage('Quantity is required')

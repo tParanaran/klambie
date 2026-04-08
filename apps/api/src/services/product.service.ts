@@ -12,6 +12,7 @@ import {
   ProductDashboard,
   GetProductDashboard,
   Pagination,
+  GroupedAttributes,
 } from '@/types/product.type';
 import { prisma } from '../../lib/prisma';
 import { GenerateSlug } from '@/utils/slug';
@@ -217,6 +218,7 @@ export class ProductService {
     user?: number,
   ): Promise<{
     variants: VariantProduct[];
+    groupedAttributes: GroupedAttributes[];
     hexUrl: string[];
     tag: Tag | null;
     category: Category | null;
@@ -312,7 +314,11 @@ export class ProductService {
         };
       }),
     );
-    return { variants, hexUrl, tag, category, brand, img };
+
+    const groupedAttributes =
+      await attributeService.groupedAttributes(variants);
+
+    return { variants, groupedAttributes, hexUrl, tag, category, brand, img };
   }
   async getAllProducts({
     slugs,
@@ -573,8 +579,14 @@ export class ProductService {
       pages: { totalItems, totalPages, currentPages },
     };
   }
-  async getOneProduct(slug: string, user?: number): Promise<Product | null> {
-    const product = await prisma.product.findUnique({
+  async getOneProduct(
+    slug: string,
+    user?: number,
+  ): Promise<{
+    product: Product;
+    groupedAttributes: GroupedAttributes[];
+  } | null> {
+    const data = await prisma.product.findUnique({
       where: { slug },
       select: {
         id: true,
@@ -599,14 +611,16 @@ export class ProductService {
       },
     });
 
-    if (!product) return null;
+    if (!data) return null;
 
     const [products] = await Promise.all([this.getProductVariant(slug, user)]);
 
-    const { productDetails, name, id, sku, productAttributes, sizingGuide } =
-      product;
+    if (!products) return null;
 
-    const result: Product = {
+    const { productDetails, name, id, sku, productAttributes, sizingGuide } =
+      data;
+
+    const product: Product = {
       id,
       name,
       sku,
@@ -617,13 +631,17 @@ export class ProductService {
         name: 'Other',
         slug: 'other',
       },
-      categories: products?.category?.categoriesName,
-      tags: products?.tag?.tagsName,
-      images: products?.img?.variantImages,
-      variants: products?.variants,
+      categories: products.category?.categoriesName,
+      tags: products.tag?.tagsName,
+      images: products.img?.variantImages,
+      variants: products.variants,
     };
 
-    return result;
+    const groupedAttributes = await attributeService.groupedAttributes(
+      product.variants,
+    );
+
+    return { product, groupedAttributes };
   }
   async getProductDashboard({
     q,
@@ -879,6 +897,7 @@ export class ProductService {
     const variant = await prisma.productVariant.findUnique({
       where: { id: variantId },
       select: {
+        productId: true,
         productVariantAttributes: {
           select: {
             attributeValue: {
@@ -899,6 +918,16 @@ export class ProductService {
 
     if (!variant) {
       throw new Error('Variant not found');
+    }
+
+    const totalVariants = await prisma.productVariant.count({
+      where: {
+        productId: variant.productId,
+      },
+    });
+
+    if (totalVariants <= 1) {
+      throw new Error('Cannot delete the only variant of this product');
     }
 
     const attributeText = variant.productVariantAttributes
