@@ -107,7 +107,7 @@ export default function CartItems({
               </p>
             </div>
           </div>
-          {!emptyCart && (
+          {selectedCount > 0 && (
             <DeleteAll
               deleteAllHandler={() => {
                 const idsToDelete = selectedItems.map((item) => item.variantId);

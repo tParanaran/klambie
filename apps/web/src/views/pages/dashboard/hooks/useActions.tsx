@@ -7,9 +7,12 @@ export default function useActions(id: number, closeModal?: () => void) {
   const { toast, showToast } = useToast();
   const router = useRouter();
 
-  const archive = async () => {
+  const archive = async (isArchive = false) => {
     try {
-      const { data } = await axiosInstanceClient.patch(`/product/status/${id}`);
+      const { data } = await axiosInstanceClient.patch(
+        `/product/status/${id}`,
+        { isArchive },
+      );
 
       showToast({
         message: data.message,

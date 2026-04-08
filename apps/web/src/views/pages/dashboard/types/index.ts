@@ -15,6 +15,7 @@ export interface IVariantsDashboard {
   stock: number;
   reservedStock: number;
   price: string;
+  isActive: boolean;
   soldQty: number;
   image: string;
 }
@@ -35,6 +36,7 @@ export interface IProductDashboard {
 }
 
 export interface IEditVariants {
-  stock: number;
-  basePrice: number;
+  stock?: number;
+  basePrice?: number;
+  isActive?: boolean;
 }

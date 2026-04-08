@@ -82,7 +82,10 @@ export class Product {
   async changeStatus(req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
-      const result = await productService.toggleProductStatus(Number(id));
+      const result = await productService.toggleProductStatus(
+        Number(id),
+        req.body,
+      );
       res.status(200).send(result);
     } catch (error) {
       next(error);

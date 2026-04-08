@@ -139,8 +139,17 @@ export default function ProductsTable({
                                   <div className="w-20 my-auto">
                                     {variant.reservedStock}
                                   </div>
-                                  <div className="w-20 mr-1 my-auto">
+                                  <div className="w-17 mr-1 my-auto">
                                     {variant.soldQty}
+                                  </div>
+                                  <div className="w-16 mr-1 my-auto">
+                                    <Status
+                                      status={
+                                        variant.isActive ? 'ACTIVE' : 'ARCHIVE'
+                                      }
+                                      productId={variant.productVariantId}
+                                      isVariant={true}
+                                    />
                                   </div>
                                   <ActionVariants
                                     onDelete={() =>

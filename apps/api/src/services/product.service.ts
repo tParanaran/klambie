@@ -774,13 +774,28 @@ export class ProductService {
       pages: { totalItems, totalPages, currentPages },
     };
   }
-  async toggleProductStatus(id: number): Promise<{ message: string }> {
+  async toggleProductStatus(
+    id: number,
+    data: { isArchive: boolean },
+  ): Promise<{ message: string }> {
     const product = await prisma.product.findUnique({
       where: { id },
       select: { status: true },
     });
 
-    const newStatus = product?.status === 'ACTIVE' ? 'ARCHIVE' : 'ACTIVE';
+    if (!product) {
+      throw new Error('Product not found');
+    }
+
+    const { isArchive } = data;
+
+    let newStatus: 'ACTIVE' | 'ARCHIVE';
+
+    if (isArchive) {
+      newStatus = 'ARCHIVE';
+    } else {
+      newStatus = product.status === 'ACTIVE' ? 'ARCHIVE' : 'ACTIVE';
+    }
 
     await prisma.product.update({
       where: { id },

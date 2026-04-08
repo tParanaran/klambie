@@ -112,11 +112,19 @@ export default function ProductsTableMobile({
                           key={variant.productVariantId}
                           className="flex space-x-2 justify-around border-b-[0.5px] border-gray-300 dark:border-black/90 py-2 ml-5"
                         >
-                          <img
-                            src={variant.image}
-                            className="aspect-square rounded-full h-16 object-cover my-auto"
-                            aria-label={variant.name}
-                          />
+                          <div className="flex flex-col-reverse gap-1">
+                            <Status
+                              status={variant.isActive ? 'ACTIVE' : 'ARCHIVE'}
+                              productId={variant.productVariantId}
+                              isVariant={true}
+                            />
+                            <img
+                              src={variant.image}
+                              className="aspect-square rounded-full h-16 object-cover my-auto"
+                              aria-label={variant.name}
+                            />
+                          </div>
+
                           <div className="text-sm">
                             <h1 className="line-clamp-2">{variant.name}</h1>
                             <p className="opacity-50 text-xs">

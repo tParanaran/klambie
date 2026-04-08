@@ -3,6 +3,7 @@ import { ICartItems, ITotalPrice } from '../types';
 import { useDebounce } from './useDebounce';
 import axiosInstanceClient from '@/lib/axios/client';
 import { useToast } from '../../dashboard/hooks/useToast';
+import { useRouter } from 'next/navigation';
 
 export interface ICartItemIds {
   variantId: number;
@@ -10,6 +11,7 @@ export interface ICartItemIds {
 }
 
 export default function useSelect({ cartItems }: { cartItems: ICartItems[] }) {
+  const router = useRouter();
   const { toast, showToast } = useToast();
   const [selectedItems, setSelectedItems] = useState<ICartItemIds[]>(
     cartItems.map((item) => ({
@@ -77,6 +79,7 @@ export default function useSelect({ cartItems }: { cartItems: ICartItems[] }) {
         });
 
         setTotalPrice({ ...res.data });
+        router.refresh();
       } catch (error) {
         showToast({
           type: 'error',

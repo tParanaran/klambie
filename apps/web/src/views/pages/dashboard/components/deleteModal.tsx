@@ -21,10 +21,8 @@ export default function DeleteModal({
   closeModal,
   modalHandler,
 }: IDeleteMOdal) {
-  const { archive, deleteHandler, toast, deleteVariant } = useActions(
-    id,
-    closeModal,
-  );
+  const { archive, deleteHandler, toast, deleteVariant, updateVariant } =
+    useActions(id, closeModal);
 
   return (
     <>
@@ -56,11 +54,15 @@ export default function DeleteModal({
               <Button className="bg-emerald-700" onClick={modalHandler}>
                 Cancel
               </Button>
-              {!isVariant && (
-                <Button className="bg-dark" onClick={archive}>
-                  Archive
-                </Button>
-              )}
+
+              <Button
+                className="bg-dark"
+                onClick={() =>
+                  isVariant ? updateVariant({ isActive: false }) : archive(true)
+                }
+              >
+                Archive
+              </Button>
             </div>
           </div>
         </ModalContainer>

@@ -18,6 +18,11 @@ export default function SortVariants() {
       </div>
       <div className="flex text-center space-x-1">
         <SortOptions sortOptions={sortDashboardOptions} scroll={false} />
+
+        <TagButton className="px-3" onClick={() => clearAllParams(false)}>
+          Status
+        </TagButton>
+
         <div className="w-fit hidden sm:block">
           <TagButton className="px-3" onClick={() => clearAllParams(false)}>
             Action

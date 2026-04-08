@@ -9,7 +9,7 @@ import useSelect from './hooks/useSelect';
 import NavbarCheckout from './components/navbar';
 import DeliveryAddress from './components/delivery';
 import ToastMessage from '@/views/components/toastMessage';
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 
 export default function CartView({
   cartItems,

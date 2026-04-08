@@ -170,6 +170,7 @@ export type ProductDashboard = {
     sku: string;
     name: string;
     stock: number;
+    isActive: boolean;
     reservedStock: number;
     price: Decimal;
     soldQty: number;
