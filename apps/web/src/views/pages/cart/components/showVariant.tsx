@@ -14,6 +14,7 @@ import ModalContainer from '@/views/components/modalContainer';
 interface IShowVariant {
   variantImages: IImages[];
   positionStyle: string;
+  isClickOutside?: boolean;
   name: string;
   children: React.ReactNode;
   groupedAttributes: IGroupedAttribute[];
@@ -40,6 +41,7 @@ export default function ShowVariants({
   selectedColorId,
   selectedAttributes,
   showVariants,
+  isClickOutside,
   onClose,
   handleSelect,
   updateQuantity,
@@ -61,6 +63,7 @@ export default function ShowVariants({
   return (
     <>
       <ModalContainer
+        isClickOutside={isClickOutside}
         handlerModal={onClose}
         showModal={showVariants}
         style={`lg:max-w-xl mx-auto md:left-1/5 md:right-1/5 lg:left-1/4 lg:right-1/4 ${positionStyle}`}

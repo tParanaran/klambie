@@ -26,7 +26,7 @@ export default function AddToCartButton({
             onClick={() => console.log('Next Feature')}
             disabled={false}
             loading={isLoading}
-            className="border border-orange-800 text-orange-800 dark:text-orange-600 dark:border-orange-600  text-hover-light"
+            className="border border-orange-800 text-orange-800 dark:text-orange-600 dark:border-orange-600 hover:text-white hover:border-orange-700"
           >
             Buy Now{' '}
           </Button>

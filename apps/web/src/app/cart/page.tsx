@@ -1,8 +1,6 @@
 import axiosInstanceServer from '@/lib/axios/server';
 import ErrorMessage from '@/views/components/error';
 import CartView from '@/views/pages/cart';
-import EmptyCart from '@/views/pages/cart/components/empty';
-import NavbarMobile from '@/views/pages/template/navbarMobile';
 
 export default async function Cart() {
   let cartData = null;
@@ -18,14 +16,7 @@ export default async function Cart() {
 
   return (
     <main>
-      {cartData?.length > 0 ? (
-        <CartView cartItems={cartData} />
-      ) : (
-        <>
-          <EmptyCart />
-          <NavbarMobile />
-        </>
-      )}
+      <CartView cartItems={cartData} />
       {error && <ErrorMessage error={error} />}
     </main>
   );

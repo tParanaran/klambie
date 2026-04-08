@@ -15,7 +15,7 @@ import { useCartQuery } from '../../p/hooks/useCartQuery';
 export default function BagMenu() {
   const [showMenu, setShowMenu] = useState<boolean>(false);
   const menuRef = useRef<HTMLButtonElement>(null);
-  const [carts, setCarts] = useState<ICartItems[] | null>(null);
+  const [carts, setCarts] = useState<[ICartItems[], ICartItems[]] | null>(null);
   const [price, setPrice] = useState<ITotalPrice | null>(null);
   const total = useCartQuery();
 
@@ -67,10 +67,10 @@ export default function BagMenu() {
         anchorRef={menuRef}
       >
         <div className="w-sm h-fit">
-          {carts && carts.length > 0 ? (
+          {carts && carts[0].length > 0 ? (
             <>
               <div className="max-h-[60vh] overflow-y-auto scrollbar-hide p-3">
-                {carts.map((item, i) => (
+                {carts[0].map((item, i) => (
                   <div key={i}>
                     <div className="relative min-h-37.5 mt-0.5 p-2 gap-2 flex text-xs">
                       <div className="absolute top-1/2 right-0">

@@ -9,7 +9,7 @@ import {
 import { prisma } from '../../lib/prisma';
 import { PromotionService } from './promotion.service';
 import Decimal from 'decimal.js';
-import { Cart, CartItem } from '@generated/prisma/client';
+import { Cart } from '@generated/prisma/client';
 import { ProductService } from './product.service';
 
 const promotionService = new PromotionService();
@@ -127,35 +127,46 @@ export class CartService {
     userId?: number,
   ): Promise<{
     cart: Cart;
-    cartItems: CartItem[];
     cartItemIds: CartItemIds[];
   } | null> {
     if (!sessionId && !userId) return null;
-    let cart;
 
-    if (userId) {
-      cart = await prisma.cart.findUnique({
-        where: { userId },
-        include: {
-          cartItems: true,
+    const cart = await prisma.cart.findUnique({
+      where: userId ? { userId } : { sessionId },
+      include: {
+        cartItems: {
+          include: {
+            productVariant: {
+              include: {
+                product: true,
+              },
+            },
+          },
         },
-      });
-    } else {
-      cart = await prisma.cart.findUnique({
-        where: { sessionId },
-        include: {
-          cartItems: true,
-        },
-      });
-    }
+      },
+    });
+
     if (!cart) return null;
 
-    const cartItemIds = cart.cartItems.map((item) => ({
+    const validatedItems = cart.cartItems.map((item) => {
+      const isProductActive = item.productVariant.product.status === 'ACTIVE';
+      const isVariantActive = item.productVariant?.isActive !== false;
+      const isInStock =
+        item.productVariant?.stock - item.productVariant?.reservedStock > 0;
+
+      return {
+        ...item,
+        inStock: isProductActive && isVariantActive && isInStock,
+      };
+    });
+
+    const cartItemIds = validatedItems.map((item) => ({
       variantId: item.productVariantId,
       quantity: item.quantity,
+      inStock: item.inStock,
     }));
 
-    return { cart: cart, cartItems: cart.cartItems, cartItemIds };
+    return { cart, cartItemIds };
   }
   async getTotalCart(
     sessionId: string,
@@ -165,7 +176,9 @@ export class CartService {
 
     if (!cart) return null;
 
-    const total = cart.cartItems.reduce((acc, item) => acc + item.quantity, 0);
+    const total = cart.cartItemIds
+      .filter((item) => item.inStock)
+      .reduce((acc, item) => acc + item.quantity, 0);
 
     return { total };
   }
@@ -295,6 +308,14 @@ export class CartService {
           });
 
           if (!variant) return null;
+
+          const isProductActive = variant.product.status === 'ACTIVE';
+          const isVariantActive = variant.isActive !== false;
+          const isInStock = variant.stock - variant.reservedStock > 0;
+          const stockAvailable = variant.stock - variant.reservedStock;
+
+          const inStock = isProductActive && isVariantActive && isInStock;
+
           const { slug } = variant.product;
           const [category, tag, brand, img] = await Promise.all([
             productService.getProductCategory(slug),
@@ -326,7 +347,6 @@ export class CartService {
             : new Decimal(0);
           const totalPrice = subtotal.minus(discount);
 
-          const stockAvailable = variant.stock - variant.reservedStock;
           const variantAttributeValueIds = variant.productVariantAttributes.map(
             (a) => a.attributeValueId,
           );
@@ -354,7 +374,7 @@ export class CartService {
             slug: variant.product.slug,
             brand: brand?.brandName.name,
             stockAvailable,
-            inStock: stockAvailable > 0,
+            inStock,
             attributes: variant.productVariantAttributes.map((a) => ({
               attributeId: a.attributeValue.attributeId,
               attributeValueId: a.attributeValueId,
@@ -366,17 +386,20 @@ export class CartService {
       )
     ).filter((i): i is CartItems => i !== null);
 
-    const subTotal = cartItems.reduce(
+    const availableItems = cartItems.filter((i) => i.inStock);
+    const nonAvailableItems = cartItems.filter((i) => !i.inStock);
+
+    const subTotal = availableItems.reduce(
       (sum, item) => sum.plus(item.price.subtotal),
       new Decimal(0),
     );
 
-    const discountTotal = cartItems.reduce(
+    const discountTotal = availableItems.reduce(
       (sum, item) => sum.plus(item.price.discount),
       new Decimal(0),
     );
 
-    const grandTotal = cartItems.reduce(
+    const grandTotal = availableItems.reduce(
       (sum, item) => sum.plus(item.price.totalPrice),
       new Decimal(0),
     );
@@ -386,7 +409,7 @@ export class CartService {
     }
 
     return {
-      cartItems,
+      cartItems: [availableItems, nonAvailableItems],
       totalPrice: {
         subTotal,
         discountTotal,
@@ -498,7 +521,7 @@ export class CartService {
       message: 'Quantity updated successfully.',
       addQuantity:
         quantity -
-        cart.cartItems.find((c) => c.productVariantId === productId)?.quantity!,
+        cart.cartItemIds.find((c) => c.variantId === productId)?.quantity!,
       success: true,
     };
   }
@@ -532,12 +555,10 @@ export class CartService {
       };
     }
 
-    const existingItems = cart.cartItems.find(
-      (c) => c.productVariantId === productId,
+    const existingItems = cart.cartItemIds.find(
+      (c) => c.variantId === productId,
     );
-    const newItems = cart.cartItems.find(
-      (c) => c.productVariantId === newProductId,
-    );
+    const newItems = cart.cartItemIds.find((c) => c.variantId === newProductId);
 
     if (!existingItems)
       return {

@@ -391,6 +391,7 @@ export class ProductService {
     }
 
     const whereFilters: any = {
+      status: 'ACTIVE',
       ...priceFilter,
       ...(hierarchyIds.length > 0
         ? {
@@ -496,6 +497,7 @@ export class ProductService {
         name: true,
         basePrice: true,
         slug: true,
+        type: true,
         productVariants: {
           select: {
             basePrice: true,
@@ -536,6 +538,7 @@ export class ProductService {
           price,
           hasDiscount,
           appliedPromotion,
+          type: p.type,
           brand: product?.brand?.brandName ?? {
             name: 'Other',
             slug: 'other',
@@ -592,6 +595,7 @@ export class ProductService {
         id: true,
         name: true,
         sku: true,
+        type: true,
         productDetails: true,
         sizingGuide: {
           select: {
@@ -617,13 +621,21 @@ export class ProductService {
 
     if (!products) return null;
 
-    const { productDetails, name, id, sku, productAttributes, sizingGuide } =
-      data;
+    const {
+      productDetails,
+      name,
+      id,
+      sku,
+      productAttributes,
+      type,
+      sizingGuide,
+    } = data;
 
     const product: Product = {
       id,
       name,
       sku,
+      type,
       productDetails,
       slug,
       attributes: productAttributes.map((atrr) => atrr.attribute),

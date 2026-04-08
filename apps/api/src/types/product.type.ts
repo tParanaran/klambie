@@ -76,6 +76,7 @@ export type Products = {
   hasDiscount: boolean;
   price: Price;
   slug: string;
+  type: string;
   brand: { name: string; slug: string };
   categories?: { name: string; slug: string }[];
   tags?: { name: string; slug: string }[];
@@ -107,6 +108,7 @@ export type Product = {
   name: string;
   slug: string;
   sku: string;
+  type: string;
   brand: { name: string; slug: string };
   categories?: { name: string; slug: string }[];
   tags?: { name: string; slug: string }[];

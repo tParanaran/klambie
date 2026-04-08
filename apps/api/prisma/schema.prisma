@@ -104,6 +104,11 @@ enum ProductStatus {
   ACTIVE
 }
 
+enum ProductType {
+  VARIANT
+  NO_VARIANT
+}
+
 model Product {
   id                Int                @id @default(autoincrement())
   name              String             @db.VarChar(200)
@@ -113,6 +118,7 @@ model Product {
   brand             Brand              @relation(fields: [brandId], references: [id], onDelete: Restrict)
   basePrice         Decimal            @db.Decimal(18, 2)
   status            ProductStatus      @default(ACTIVE)
+  type              ProductType        @default(NO_VARIANT)
   sizingGuideId     Int?
   sizingGuide       SizingGuide?       @relation(fields: [sizingGuideId], references: [id])
   productDetails    ProductDetails?

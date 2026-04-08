@@ -73,7 +73,7 @@ export default function ProductView({
   };
 
   return (
-    <>
+    <div className="relative z-10">
       <div className="grid grid-cols-1 md:grid-cols-[1.2fr_1fr] lg:grid-cols-[1.5fr_1fr] pb-[5%] gap-4">
         <div>
           {/* Left Menu Desktop Mode */}
@@ -175,9 +175,10 @@ export default function ProductView({
           positionStyle={'bottom-19 md:bottom-1'}
           children={undefined}
           showVariants={showVariant}
-        ></ShowVariants>
+          isClickOutside={!showVariant}
+        />
       )}
       {isLoading && <Loading />}
-    </>
+    </div>
   );
 }

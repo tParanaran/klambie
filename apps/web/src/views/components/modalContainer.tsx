@@ -3,6 +3,7 @@ import useHandleClickOutside from '../pages/template/hooks/useHandleClickOutside
 interface IMOdalContainer {
   handlerModal: () => void;
   showModal: boolean;
+  isClickOutside?: boolean;
   children: React.ReactNode;
   style?: string;
   isFilter?: boolean;
@@ -12,17 +13,21 @@ interface IMOdalContainer {
 export default function ModalContainer({
   isFilter = false,
   isDashboard = false,
+  isClickOutside = true,
   handlerModal,
   showModal,
   children,
   style,
 }: IMOdalContainer) {
   const { modalRef, dropdownRef } = useHandleClickOutside({
-    handleClickOutside: handlerModal,
+    handleClickOutside: () => {
+      if (isClickOutside) handlerModal();
+    },
   });
   return (
     <div
-      className={`fixed inset-0 z-30 transition-opacity duration-300 ${
+      onClick={handlerModal}
+      className={`fixed inset-0 z-20 transition-opacity duration-300 ${
         showModal
           ? 'opacity-100 pointer-events-auto'
           : 'opacity-0 pointer-events-none'

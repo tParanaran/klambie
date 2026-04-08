@@ -9,10 +9,14 @@ import useSelect from './hooks/useSelect';
 import NavbarCheckout from './components/navbar';
 import DeliveryAddress from './components/delivery';
 
-export default function CartView({ cartItems }: { cartItems: ICartItems[] }) {
+export default function CartView({
+  cartItems,
+}: {
+  cartItems: [ICartItems[], ICartItems[]];
+}) {
   const total = useCartQuery();
   const { selectedItems, totalPrice, toggleItem, toggleSelectAll } = useSelect({
-    cartItems,
+    cartItems: cartItems[0],
   });
 
   const selectedCount = selectedItems.reduce(

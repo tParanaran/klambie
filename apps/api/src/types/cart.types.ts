@@ -27,10 +27,15 @@ export type Price = {
   discount: Decimal;
 };
 
-export type CartItemIds = { variantId: number; quantity: number };
+export type CartItemIds = {
+  variantId: number;
+  quantity: number;
+  inStock: boolean;
+};
 
 export type CartItems = {
   productVariantId: number;
+
   slug: string;
   name: string;
   brand: string;
@@ -57,6 +62,6 @@ type TotalPrice = {
 };
 
 export type CartItemsResponse = {
-  cartItems: CartItems[];
+  cartItems: [CartItems[], CartItems[]];
   totalPrice: TotalPrice;
 };
