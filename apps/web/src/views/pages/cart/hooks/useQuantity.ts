@@ -26,9 +26,11 @@ export default function useCartQuantities({
   const router = useRouter();
 
   useEffect(() => {
+    if (!cartItems || cartItems.length === 0) return;
+
     const initial: Record<number, number> = {};
 
-    cartItems?.forEach((item) => {
+    cartItems.forEach((item) => {
       const qty = item.quantity ?? 1;
       initial[item.productVariantId] = qty;
 

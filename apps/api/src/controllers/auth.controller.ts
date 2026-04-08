@@ -59,7 +59,7 @@ export class AuthUser {
       return res
         .clearCookie('access_token')
         .status(200)
-        .json({ success: true, message: 'Logout successful' });
+        .json({ success: true, message: 'Logout successfully' });
     } catch (error) {
       next(error);
     }

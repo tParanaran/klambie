@@ -439,10 +439,15 @@ export class CartService {
     productId: number,
     sessionId: string,
     userId?: number,
-  ): Promise<{ deleteItems: number }> {
+  ): Promise<{ deleteItems: number; message: string; type: string }> {
     const cart = await this.getCart(sessionId, userId);
 
-    if (!cart) return { deleteItems: 0 };
+    if (!cart)
+      return {
+        deleteItems: 0,
+        message: 'Items not found in cart',
+        type: 'error',
+      };
 
     const id = cart.cart.id;
 
@@ -466,7 +471,11 @@ export class CartService {
       });
     }
 
-    return { deleteItems: result.quantity };
+    return {
+      deleteItems: result.quantity,
+      message: `Delete ${result.quantity} items successfully`,
+      type: 'success',
+    };
   }
   async addUpdateQty(
     productId: number,

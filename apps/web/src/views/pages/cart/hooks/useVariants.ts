@@ -6,7 +6,7 @@ import {
   IVariant,
 } from '../../p/types/product.types';
 import axiosInstanceClient from '@/lib/axios/client';
-import { Notify } from '@/lib/notify';
+import { useToast } from '../../dashboard/hooks/useToast';
 
 interface IVariantData {
   variants: IVariant[];
@@ -17,6 +17,7 @@ interface IVariantData {
 }
 
 export default function useVariants() {
+  const { toast, showToast } = useToast();
   const [variants, setVariants] = useState<IVariantData | null>(null);
   const [showVariants, setShowVariants] = useState(false);
 
@@ -32,7 +33,13 @@ export default function useVariants() {
       setVariants({ ...data, name, quantity: quantity ?? 1 });
       setShowVariants(true);
     } catch (error) {
-      Notify(error instanceof Error ? error.message : 'Something went wrong');
+      showToast({
+        type: 'error',
+        message:
+          error instanceof Error
+            ? error.message
+            : 'Something went wrong while fetching items',
+      });
     }
   };
 
@@ -41,6 +48,7 @@ export default function useVariants() {
   };
 
   return {
+    toast,
     variants,
     showVariants,
     showVariantsHandler,

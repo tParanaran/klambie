@@ -8,6 +8,7 @@ import CheckoutButton from './components/checkoutButton';
 import useSelect from './hooks/useSelect';
 import NavbarCheckout from './components/navbar';
 import DeliveryAddress from './components/delivery';
+import ToastMessage from '@/views/components/toastMessage';
 
 export default function CartView({
   cartItems,
@@ -15,9 +16,10 @@ export default function CartView({
   cartItems: [ICartItems[], ICartItems[]];
 }) {
   const total = useCartQuery();
-  const { selectedItems, totalPrice, toggleItem, toggleSelectAll } = useSelect({
-    cartItems: cartItems[0],
-  });
+  const { selectedItems, totalPrice, toast, toggleItem, toggleSelectAll } =
+    useSelect({
+      cartItems: cartItems[0],
+    });
 
   const selectedCount = selectedItems.reduce(
     (sum, item) => sum + item.quantity,
@@ -28,7 +30,9 @@ export default function CartView({
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[2fr_1fr] gap-0 md:gap-5 pb-[5%]">
         <div>
-          <h1 className="font-bold mb-2 hidden md:block">My Bag ({total})</h1>
+          <h1 className="font-bold mb-2 hidden md:block">
+            My Bag ({total ?? 0})
+          </h1>
           <DeliveryAddress />
           <CartItems
             cartItems={cartItems}
@@ -58,10 +62,14 @@ export default function CartView({
 
       <NavbarCheckout
         toggleSelectAll={toggleSelectAll}
-        isSelectedItem={selectedItems.length === cartItems.length}
+        isSelectedItem={selectedItems.length === cartItems?.[0].length}
         totalPrice={totalPrice}
         selectedCount={selectedCount}
       />
+
+      {toast.visible && (
+        <ToastMessage {...toast} style="fixed bottom-3 right-3" />
+      )}
     </>
   );
 }

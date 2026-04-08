@@ -19,6 +19,7 @@ import Image from 'next/image';
 import ShippingDetails from './shipping';
 import EmptyCart from './empty';
 import TagButton from '@/views/components/tagButton';
+import ToastMessage from '@/views/components/toastMessage';
 
 interface ICart {
   cartItems: [ICartItems[], ICartItems[]];
@@ -36,7 +37,7 @@ export default function CartItems({
   const errorsRefs = useRef<Record<number, IErrorsMessageHandle | null>>({});
   const errorsModalRef = useRef<IErrorsMessageHandle | null>(null);
   const [cartItemVariant, setCartItemVariant] = useState<IVariantAttribute>();
-  const { variants, showVariants, showVariantsHandler, variantHandler } =
+  const { variants, showVariants, showVariantsHandler, variantHandler, toast } =
     useVariants();
   const { quantities, updateQuantity } = useCartQuantities({
     cartItems: cartItems[0],
@@ -77,52 +78,52 @@ export default function CartItems({
     }
   }, [selectedVariant]);
 
+  const availableTotal = cartItems[0].length ?? 0;
+  const emptyCart = availableTotal <= 0;
+
   return (
     <div>
-      {cartItems.map((itemsArray, arrayIndex) => {
+      <div>
+        <div className="flex space-x-3 items-center mb-2">
+          {!emptyCart && (
+            <div className="hidden md:block  mr-2">
+              <SelectAllToggle
+                toggleSelectAll={toggleSelectAll}
+                isSelectedItem={selectedItems.length === availableTotal}
+              />
+            </div>
+          )}
+
+          <div className="flex space-x-2 items-center">
+            <Image src="/icon.svg" alt="Klambie" height={20} width={20} />
+            <p className="font-semibold text-sm">
+              KLAMBIE ({selectedItems.length + '/' + availableTotal} Items
+              selected)
+            </p>
+          </div>
+        </div>
+        <ShippingDetails />
+        {emptyCart && <EmptyCart />}
+      </div>
+      {cartItems?.map((itemsArray, arrayIndex) => {
         const isUnavailable = arrayIndex === 1;
-        const availableTotal = cartItems[0].length;
-        const emptyCart = availableTotal <= 0;
 
         return (
           <div key={arrayIndex}>
-            {isUnavailable ? (
-              <div className="flex justify-between mb-1 mt-5 items-center flex-wrap">
-                <h1 className="font-bold my-1">List of Unavailable Products</h1>
-                <TagButton className="flex-none">
-                  <p>Delete All</p>
-                </TagButton>
-              </div>
-            ) : (
-              <div>
-                <div className="flex space-x-3 items-center mb-2">
-                  {!emptyCart && (
-                    <div className="hidden md:block  mr-2">
-                      <SelectAllToggle
-                        toggleSelectAll={toggleSelectAll}
-                        isSelectedItem={selectedItems.length === availableTotal}
-                      />
-                    </div>
-                  )}
-
-                  <div className="flex space-x-2 items-center">
-                    <Image
-                      src="/icon.svg"
-                      alt="Klambie"
-                      height={20}
-                      width={20}
-                    />
-                    <p className="font-semibold text-sm">
-                      KLAMBIE ({selectedItems.length + '/' + availableTotal}{' '}
-                      Items selected)
-                    </p>
+            {isUnavailable && (
+              <>
+                {cartItems[1].length > 0 && (
+                  <div className="flex justify-between mb-1 mt-5 items-center flex-wrap">
+                    <h1 className="font-bold my-1">
+                      List of Unavailable Products
+                    </h1>
+                    <TagButton className="flex-none">
+                      <p>Delete All</p>
+                    </TagButton>
                   </div>
-                </div>
-                <ShippingDetails />
-                {emptyCart && <EmptyCart />}
-              </div>
+                )}
+              </>
             )}
-
             {itemsArray.map((item, i) => {
               if (!errorsRefs.current[item.productVariantId]) {
                 errorsRefs.current[item.productVariantId] = null;
@@ -137,7 +138,10 @@ export default function CartItems({
                     }`}
                   >
                     <div className="absolute top-1/2 right-2 z-10">
-                      <DeleteButton variantId={item.productVariantId} />
+                      <DeleteButton
+                        variantId={item.productVariantId}
+                        inStock={item.inStock}
+                      />
                     </div>
                     <div className="flex space-x-2 items-center">
                       {!isUnavailable && (
@@ -269,6 +273,9 @@ export default function CartItems({
             Confirm
           </Button>
         </ShowVariants>
+      )}
+      {toast.visible && (
+        <ToastMessage {...toast} style="fixed bottom-3 right-3" />
       )}
     </div>
   );

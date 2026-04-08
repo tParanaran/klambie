@@ -11,7 +11,6 @@ import NavbarMobile from '@/views/pages/template/navbarMobile';
 import NavbarSearch from '@/views/pages/template/navbarSearch';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { ToastContainer } from 'react-toastify';
 
 export default function Template({ children }: { children: React.ReactNode }) {
   const [mounted, setMounted] = useState(false);
@@ -31,8 +30,6 @@ export default function Template({ children }: { children: React.ReactNode }) {
 
   return (
     <div>
-      {' '}
-      <ToastContainer />
       <BannerAnimation mounted={mounted} />
       {cartNavbar && <NavbarCart />}
       {productNavbar && <NavbarProduct />}

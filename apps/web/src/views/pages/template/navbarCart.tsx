@@ -10,7 +10,7 @@ export default function NavbarCart() {
       <NavbarTopContainer>
         <div className="flex space-x-3 py-2">
           <GoBackButton />
-          <h1 className="font-semibold text-lg">My Bag ({total})</h1>
+          <h1 className="font-semibold text-lg">My Bag ({total ?? 0})</h1>
         </div>
       </NavbarTopContainer>
       <NavbarDepartment />

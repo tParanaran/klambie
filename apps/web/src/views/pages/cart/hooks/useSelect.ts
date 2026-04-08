@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { ICartItems, ITotalPrice } from '../types';
 import { useDebounce } from './useDebounce';
-import { Notify } from '@/lib/notify';
 import axiosInstanceClient from '@/lib/axios/client';
+import { useToast } from '../../dashboard/hooks/useToast';
 
 export interface ICartItemIds {
   variantId: number;
@@ -10,6 +10,7 @@ export interface ICartItemIds {
 }
 
 export default function useSelect({ cartItems }: { cartItems: ICartItems[] }) {
+  const { toast, showToast } = useToast();
   const [selectedItems, setSelectedItems] = useState<ICartItemIds[]>(
     cartItems.map((item) => ({
       variantId: item.productVariantId,
@@ -45,6 +46,8 @@ export default function useSelect({ cartItems }: { cartItems: ICartItems[] }) {
   };
 
   useEffect(() => {
+    if (!cartItems || cartItems.length === 0) return;
+
     setSelectedItems((prevSelected) =>
       cartItems
         .map((item) => ({
@@ -71,13 +74,19 @@ export default function useSelect({ cartItems }: { cartItems: ICartItems[] }) {
         });
 
         setTotalPrice({ ...res.data });
-      } catch (err) {
-        Notify('Failed to calculate total price');
+      } catch (error) {
+        showToast({
+          type: 'error',
+          message:
+            error instanceof Error
+              ? error.message
+              : 'Something went wrong while calculate total price',
+        });
       }
     };
 
     fetchTotal();
   }, [debouncedQuantities]);
 
-  return { toggleItem, toggleSelectAll, selectedItems, totalPrice };
+  return { toggleItem, toggleSelectAll, selectedItems, totalPrice, toast };
 }

@@ -3,9 +3,10 @@ import { getCookie } from 'cookies-next';
 import React, { useEffect, useState } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import { useAuthStore } from '@/store/authStore';
-import { Notify } from '@/lib/notify';
 import { useRouter } from 'next/navigation';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { useToast } from '@/views/pages/dashboard/hooks/useToast';
+import ToastMessage from '@/views/components/toastMessage';
 
 type Token = {
   email: string;
@@ -22,6 +23,7 @@ export default function AuthProvider({
   children: React.ReactNode;
 }) {
   const { onAuthSuccess, clearAuth } = useAuthStore();
+  const { toast, showToast } = useToast();
   const redirect = useRouter();
   const access_token = getCookie('access_token') || '';
   const [queryClient] = useState(() => new QueryClient());
@@ -30,7 +32,10 @@ export default function AuthProvider({
     const token: Token = jwtDecode(access_token as string);
 
     if (Date.now() >= token.exp * 1000) {
-      Notify('Login session was expired, pleasae login again');
+      showToast({
+        type: 'error',
+        message: 'Login session was expired, pleasae login again',
+      });
       clearAuth();
       redirect.push('/login');
     } else {
@@ -51,6 +56,11 @@ export default function AuthProvider({
     }
   }, []);
   return (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    <QueryClientProvider client={queryClient}>
+      {children}
+      {toast.visible && (
+        <ToastMessage {...toast} style="fixed bottom-3 right-3" />
+      )}
+    </QueryClientProvider>
   );
 }
