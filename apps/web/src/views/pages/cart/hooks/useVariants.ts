@@ -6,7 +6,7 @@ import {
   IVariant,
 } from '../../p/types/product.types';
 import axiosInstanceClient from '@/lib/axios/client';
-import { useToast } from '../../dashboard/hooks/useToast';
+import { useToastStore } from '@/store/toastStore';
 
 interface IVariantData {
   variants: IVariant[];
@@ -17,7 +17,7 @@ interface IVariantData {
 }
 
 export default function useVariants() {
-  const { toast, showToast } = useToast();
+  const showToast = useToastStore((s) => s.showToast);
   const [variants, setVariants] = useState<IVariantData | null>(null);
   const [showVariants, setShowVariants] = useState(false);
 
@@ -48,7 +48,6 @@ export default function useVariants() {
   };
 
   return {
-    toast,
     variants,
     showVariants,
     showVariantsHandler,

@@ -16,7 +16,6 @@ import Loading from '@/views/components/loading';
 import ErrorsMessage, { IErrorsMessageHandle } from '../../p/components/errors';
 import AddToCartButton from '../../p/components/addButton';
 import { useQueryParams } from '../hooks/useQueryParams';
-import ToastMessage from '@/views/components/toastMessage';
 import Button from '@/views/components/button';
 import { useCartQuery } from '../../p/hooks/useCartQuery';
 
@@ -29,7 +28,7 @@ export default function ProductCard({ products, style }: IProductCard) {
   const errorsProductRef = useRef<IErrorsMessageHandle | null>(null);
   const total = useCartQuery();
   const { pathname, router } = useQueryParams();
-  const { variants, toast, showVariants, showVariantsHandler, variantHandler } =
+  const { variants, showVariants, showVariantsHandler, variantHandler } =
     useVariants();
   const { quantities, updateQuantity } = useCartQuantities({});
   const {
@@ -162,9 +161,6 @@ export default function ProductCard({ products, style }: IProductCard) {
         </ShowVariants>
       )}
       {isLoading && <Loading />}
-      {toast.visible && (
-        <ToastMessage {...toast} style="fixed bottom-3 right-3" />
-      )}
     </>
   );
 }

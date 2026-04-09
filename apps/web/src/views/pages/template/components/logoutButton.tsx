@@ -2,9 +2,8 @@
 import { useAuthStore } from '@/store/authStore';
 import { useRouter } from 'next/navigation';
 import { IoPower } from 'react-icons/io5';
+import { useToastStore } from '@/store/toastStore';
 import axiosInstanceClient from '@/lib/axios/client';
-import ToastMessage from '@/views/components/toastMessage';
-import { useToast } from '../../dashboard/hooks/useToast';
 
 export default function LogoutButton({
   className,
@@ -16,7 +15,7 @@ export default function LogoutButton({
   name?: string;
 }) {
   const redirect = useRouter();
-  const { toast, showToast } = useToast();
+  const showToast = useToastStore((s) => s.showToast);
   const { clearAuth } = useAuthStore();
 
   const LogoutHandler = async () => {
@@ -41,14 +40,8 @@ export default function LogoutButton({
   };
 
   return (
-    <>
-      {' '}
-      <button className={className} onClick={LogoutHandler} aria-label="Logout">
-        <IoPower className={iconClass} /> {name}
-      </button>
-      {toast.visible && (
-        <ToastMessage {...toast} style="fixed bottom-3 right-3" />
-      )}
-    </>
+    <button className={className} onClick={LogoutHandler} aria-label="Logout">
+      <IoPower className={iconClass} /> {name}
+    </button>
   );
 }

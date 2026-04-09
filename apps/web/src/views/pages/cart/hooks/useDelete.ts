@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { useToast } from '../../dashboard/hooks/useToast';
+import { useToastStore } from '@/store/toastStore';
 import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import axiosInstanceClient from '@/lib/axios/client';
 
 export default function useDelete() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const { toast, showToast } = useToast();
+  const showToast = useToastStore((s) => s.showToast);
   const queryClient = useQueryClient();
   const router = useRouter();
 
@@ -46,5 +46,5 @@ export default function useDelete() {
     }
   };
 
-  return { isLoading, toast, DeleteCartHandler };
+  return { isLoading, DeleteCartHandler };
 }

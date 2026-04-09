@@ -812,7 +812,12 @@ export class ProductService {
       data: { status: newStatus },
     });
 
-    return { message: `Status updated to ${newStatus}` };
+    return {
+      message:
+        newStatus === 'ACTIVE'
+          ? 'Product is now available for sale'
+          : 'Product has been archived and hidden from customers',
+    };
   }
   async updateProduct(
     id: number,

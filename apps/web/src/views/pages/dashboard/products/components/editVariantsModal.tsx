@@ -1,6 +1,5 @@
 import Button from '@/views/components/button';
 import ModalContainer from '@/views/components/modalContainer';
-import ToastMessage from '@/views/components/toastMessage';
 import useActions from '../hooks/useActions';
 import { TbHttpPatch } from 'react-icons/tb';
 import { Form, Formik, FormikProps } from 'formik';
@@ -27,7 +26,7 @@ export default function EditVariantsModal({
   showModal,
 }: IEditModal) {
   const { productVariantId, name, stock, price } = variant;
-  const { toast, updateVariant } = useActions(productVariantId, closeModal);
+  const { updateVariant } = useActions(productVariantId, closeModal);
 
   return (
     <>
@@ -97,9 +96,6 @@ export default function EditVariantsModal({
             </Formik>
           </div>
         </ModalContainer>
-      )}
-      {toast.visible && (
-        <ToastMessage {...toast} style="fixed bottom-3 right-3" />
       )}
     </>
   );

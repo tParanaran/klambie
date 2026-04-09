@@ -18,7 +18,8 @@ export default function ButtonForm({ message, href }: IButtonForm) {
       {message !== '' ? (
         <div className="flex items-center  my-1 ml-4 text-orange-700 space-x-1">
           {' '}
-          <IoAlertCircle /> <p className="text-sm"> {message}</p>
+          <IoAlertCircle className="text-3xl" />{' '}
+          <p className="text-sm"> {message}</p>
         </div>
       ) : null}
     </div>

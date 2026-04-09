@@ -1,14 +1,14 @@
 'use client';
 import React, { useRef, useState } from 'react';
 import { sortDashboardOptions } from '@/utils/productDashboard';
-import { IProductDashboard, IVariantsDashboard } from '../types';
+import { IProductDashboard } from '../types';
 import { useVariantActions } from '../hooks/useActionVariants';
-import Rupiah from '@/utils/rupiah';
 import SortTable from './sort';
-import SortVariants from './sortVariants';
-import Actions from './actions';
+import SearchNotFound from '@/views/pages/d/components/notfound';
 import Status from './status';
-import SearchNotFound from '../../d/components/notfound';
+import Rupiah from '@/utils/rupiah';
+import Actions from './actions';
+import SortVariants from './sortVariants';
 import ActionVariants from './actionVariants';
 import VariantsModal from './variantsModal';
 

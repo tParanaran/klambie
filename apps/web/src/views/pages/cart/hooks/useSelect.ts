@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { ICartItems, ITotalPrice } from '../types';
 import { useDebounce } from './useDebounce';
 import axiosInstanceClient from '@/lib/axios/client';
-import { useToast } from '../../dashboard/hooks/useToast';
+import { useToastStore } from '@/store/toastStore';
 
 export interface ICartItemIds {
   variantId: number;
@@ -10,7 +10,7 @@ export interface ICartItemIds {
 }
 
 export default function useSelect({ cartItems }: { cartItems: ICartItems[] }) {
-  const { toast, showToast } = useToast();
+  const showToast = useToastStore((s) => s.showToast);
   const [selectedItems, setSelectedItems] = useState<ICartItemIds[]>(
     cartItems.map((item) => ({
       variantId: item.productVariantId,
@@ -91,5 +91,5 @@ export default function useSelect({ cartItems }: { cartItems: ICartItems[] }) {
     fetchTotal();
   }, [debouncedQuantities]);
 
-  return { toggleItem, toggleSelectAll, selectedItems, totalPrice, toast };
+  return { toggleItem, toggleSelectAll, selectedItems, totalPrice };
 }

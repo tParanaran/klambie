@@ -1,7 +1,7 @@
 import { sortDashboardOptions } from '@/utils/productDashboard';
-import { useQueryParams } from '../../c/hooks/useQueryParams';
 import TagButton from '@/views/components/tagButton';
-import SortOptions from '../../c/components/sortOptions';
+import SortOptions from '@/views/pages/c/components/sortOptions';
+import { useQueryParams } from '@/views/pages/c/hooks/useQueryParams';
 
 export default function SortVariants() {
   const { clearAllParams } = useQueryParams();

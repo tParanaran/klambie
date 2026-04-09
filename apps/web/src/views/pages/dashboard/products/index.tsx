@@ -1,9 +1,9 @@
-import ErrorMessage from '@/views/components/error';
 import { IProductDashboard } from './types';
+import { IPagination } from '../../c/types';
+import ErrorMessage from '@/views/components/error';
 import ProductsTableMobile from './components/productsTableMobile';
 import ProductsTable from './components/productsTable';
-import Pagination from '../c/components/pagination';
-import { IPagination } from '../c/types';
+import Pagination from '../../c/components/pagination';
 
 interface IProductView {
   products: IProductDashboard[];

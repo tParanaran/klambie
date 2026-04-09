@@ -13,9 +13,11 @@ import TextFieldForm from '@/views/components/formik/textFieldForm';
 import PasswordFieldForm from '@/views/components/formik/passwordFieldForm';
 import ButtonForm from '@/views/components/formik/buttonForm';
 import axiosInstanceClient from '@/lib/axios/client';
+import { useToastStore } from '@/store/toastStore';
 
 export default function LoginForm() {
   const { onAuthSuccess } = useAuthStore();
+  const showToast = useToastStore((s) => s.showToast);
   const redirect = useRouter();
   const [message, setMessage] = useState<string>('');
 
@@ -25,6 +27,7 @@ export default function LoginForm() {
 
       if (data.success) {
         await AuthHandler(redirect, onAuthSuccess);
+        showToast({ type: 'success', message: data.message });
       }
     } catch (err: any) {
       if (isAxiosError(err)) {

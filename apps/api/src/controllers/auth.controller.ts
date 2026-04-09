@@ -49,7 +49,7 @@ export class AuthUser {
         .status(200)
         .cookie('access_token', result.token)
         .clearCookie('sessionId')
-        .send({ success: true });
+        .send({ success: true, message: 'Login Successfully' });
     } catch (error) {
       next(error);
     }

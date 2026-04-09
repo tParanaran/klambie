@@ -1,4 +1,5 @@
 import axiosInstanceServer from '@/lib/axios/server';
+import ErrorMessage from '@/views/components/error';
 import ProductsDahsboardView from '@/views/pages/dashboard/products';
 
 export default async function Products({
@@ -41,6 +42,7 @@ export default async function Products({
   return (
     <section>
       <ProductsDahsboardView {...viewProps} />
+      {error && <ErrorMessage error={error} />}
     </section>
   );
 }

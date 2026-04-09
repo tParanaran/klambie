@@ -1,6 +1,6 @@
+import useFilteredParams from '@/views/pages/c/hooks/useFilteredParams';
+import { useQueryParams } from '@/views/pages/c/hooks/useQueryParams';
 import { IoChevronDown } from 'react-icons/io5';
-import { useQueryParams } from '../../c/hooks/useQueryParams';
-import useFilteredParams from '../../c/hooks/useFilteredParams';
 
 interface ISortTable {
   sort: { label: string; value: string };

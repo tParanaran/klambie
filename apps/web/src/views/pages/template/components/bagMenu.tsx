@@ -10,11 +10,10 @@ import CartPrice from '../../cart/components/price';
 import Rupiah from '@/utils/rupiah';
 import LinkButton from '@/views/components/link';
 import { useCartQuery } from '../../p/hooks/useCartQuery';
-import { useToast } from '../../dashboard/hooks/useToast';
-import ToastMessage from '@/views/components/toastMessage';
+import { useToastStore } from '@/store/toastStore';
 
 export default function BagMenu() {
-  const { toast, showToast } = useToast();
+  const showToast = useToastStore((s) => s.showToast);
   const [showMenu, setShowMenu] = useState<boolean>(false);
   const menuRef = useRef<HTMLButtonElement>(null);
   const [carts, setCarts] = useState<[ICartItems[], ICartItems[]] | null>(null);
@@ -170,9 +169,6 @@ export default function BagMenu() {
           </div>
         </AnchoredModalContainer>
       </div>
-      {toast.visible && (
-        <ToastMessage {...toast} style="fixed bottom-3 right-3" />
-      )}
     </>
   );
 }

@@ -7,8 +7,8 @@ import Rupiah from '@/utils/rupiah';
 import Status from './status';
 import ModalContainer from '@/views/components/modalContainer';
 import SortVariants from './sortVariants';
-import SearchNotFound from '../../d/components/notfound';
 import ActionVariants from './actionVariants';
+import SearchNotFound from '@/views/pages/d/components/notfound';
 import VariantsModal from './variantsModal';
 
 export default function ProductsTableMobile({

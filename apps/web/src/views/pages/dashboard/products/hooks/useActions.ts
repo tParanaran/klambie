@@ -1,10 +1,10 @@
 import { useRouter } from 'next/navigation';
-import { useToast } from './useToast';
-import axiosInstanceClient from '@/lib/axios/client';
 import { IEditVariants } from '../types';
+import axiosInstanceClient from '@/lib/axios/client';
+import { useToastStore } from '@/store/toastStore';
 
 export default function useActions(id: number, closeModal?: () => void) {
-  const { toast, showToast } = useToast();
+  const showToast = useToastStore((s) => s.showToast);
   const router = useRouter();
 
   const archive = async (isArchive = false) => {
@@ -100,7 +100,6 @@ export default function useActions(id: number, closeModal?: () => void) {
   };
 
   return {
-    toast,
     router,
     archive,
     deleteHandler,

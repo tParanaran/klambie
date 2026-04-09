@@ -2,7 +2,6 @@
 
 import Loading from '@/views/components/loading';
 import { IoClose } from 'react-icons/io5';
-import ToastMessage from '@/views/components/toastMessage';
 import useDelete from '../hooks/useDelete';
 
 export default function DeleteButton({
@@ -12,7 +11,7 @@ export default function DeleteButton({
   variantId: number;
   inStock: boolean;
 }) {
-  const { DeleteCartHandler, isLoading, toast } = useDelete();
+  const { DeleteCartHandler, isLoading } = useDelete();
 
   return (
     <>
@@ -24,9 +23,6 @@ export default function DeleteButton({
         <IoClose />
       </button>
       {isLoading && <Loading />}
-      {toast.visible && (
-        <ToastMessage {...toast} style="fixed bottom-3 right-3" />
-      )}
     </>
   );
 }

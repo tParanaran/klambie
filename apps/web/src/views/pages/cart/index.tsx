@@ -8,7 +8,6 @@ import CheckoutButton from './components/checkoutButton';
 import useSelect from './hooks/useSelect';
 import NavbarCheckout from './components/navbar';
 import DeliveryAddress from './components/delivery';
-import ToastMessage from '@/views/components/toastMessage';
 import { useMemo } from 'react';
 
 export default function CartView({
@@ -17,10 +16,9 @@ export default function CartView({
   cartItems: [ICartItems[], ICartItems[]];
 }) {
   const total = useCartQuery();
-  const { selectedItems, totalPrice, toast, toggleItem, toggleSelectAll } =
-    useSelect({
-      cartItems: cartItems[0],
-    });
+  const { selectedItems, totalPrice, toggleItem, toggleSelectAll } = useSelect({
+    cartItems: cartItems[0],
+  });
 
   const selectedCount = useMemo(
     () => selectedItems.reduce((sum, item) => sum + item.quantity, 0),
@@ -68,10 +66,6 @@ export default function CartView({
         totalPrice={totalPrice}
         selectedCount={selectedCount}
       />
-
-      {toast.visible && (
-        <ToastMessage {...toast} style="fixed bottom-3 right-3" />
-      )}
     </>
   );
 }

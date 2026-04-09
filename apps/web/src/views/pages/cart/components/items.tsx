@@ -18,7 +18,6 @@ import SelectAllToggle from './selectAll';
 import Image from 'next/image';
 import ShippingDetails from './shipping';
 import EmptyCart from './empty';
-import ToastMessage from '@/views/components/toastMessage';
 import useDelete from '../hooks/useDelete';
 import DeleteAll from './deleteAll';
 
@@ -40,8 +39,8 @@ export default function CartItems({
   const errorsRefs = useRef<Record<number, IErrorsMessageHandle | null>>({});
   const errorsModalRef = useRef<IErrorsMessageHandle | null>(null);
   const [cartItemVariant, setCartItemVariant] = useState<IVariantAttribute>();
-  const handler = useDelete();
-  const { variants, showVariants, showVariantsHandler, variantHandler, toast } =
+  const { DeleteCartHandler } = useDelete();
+  const { variants, showVariants, showVariantsHandler, variantHandler } =
     useVariants();
   const { quantities, updateQuantity } = useCartQuantities({
     cartItems: cartItems[0],
@@ -110,13 +109,17 @@ export default function CartItems({
             <DeleteAll
               deleteAllHandler={() => {
                 const idsToDelete = selectedItems.map((item) => item.variantId);
-                handler.DeleteCartHandler(idsToDelete, true);
+                DeleteCartHandler(idsToDelete, true);
               }}
             />
           )}
         </div>
         <ShippingDetails />
-        {emptyCart && <EmptyCart />}
+        {emptyCart && (
+          <div className="bg-black/10 dark:bg-white/10 rounded-2xl p-3">
+            <EmptyCart />
+          </div>
+        )}
       </div>
       {cartItems?.map((itemsArray, arrayIndex) => {
         const isUnavailable = arrayIndex === 1;
@@ -135,7 +138,7 @@ export default function CartItems({
                         const idsToDelete = itemsArray.map(
                           (item) => item.productVariantId,
                         );
-                        handler.DeleteCartHandler(idsToDelete, false);
+                        DeleteCartHandler(idsToDelete, false);
                       }}
                     />
                   </div>
@@ -295,12 +298,6 @@ export default function CartItems({
             Confirm
           </Button>
         </ShowVariants>
-      )}
-      {toast.visible && (
-        <ToastMessage {...toast} style="fixed bottom-3 right-3" />
-      )}
-      {handler.toast.visible && (
-        <ToastMessage {...handler.toast} style="fixed bottom-3 right-3" />
       )}
     </div>
   );

@@ -6,6 +6,7 @@ import type { Metadata } from 'next';
 import { notoSans } from '@/utils/fonts';
 import { Suspense } from 'react';
 import AuthProvider from '@/provider/authProvider';
+import ToastWrapper from '@/views/components/toastWrapper';
 
 export const metadata: Metadata = {
   title: 'Klambie',
@@ -20,6 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={notoSans.className}>
+        <ToastWrapper />
         <AuthProvider>
           <Suspense>{children}</Suspense>
         </AuthProvider>

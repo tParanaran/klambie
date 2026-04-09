@@ -5,8 +5,7 @@ import { jwtDecode } from 'jwt-decode';
 import { useAuthStore } from '@/store/authStore';
 import { useRouter } from 'next/navigation';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { useToast } from '@/views/pages/dashboard/hooks/useToast';
-import ToastMessage from '@/views/components/toastMessage';
+import { useToastStore } from '@/store/toastStore';
 
 type Token = {
   email: string;
@@ -23,7 +22,7 @@ export default function AuthProvider({
   children: React.ReactNode;
 }) {
   const { onAuthSuccess, clearAuth } = useAuthStore();
-  const { toast, showToast } = useToast();
+  const showToast = useToastStore((s) => s.showToast);
   const redirect = useRouter();
   const access_token = getCookie('access_token') || '';
   const [queryClient] = useState(() => new QueryClient());
@@ -56,11 +55,6 @@ export default function AuthProvider({
     }
   }, []);
   return (
-    <QueryClientProvider client={queryClient}>
-      {children}
-      {toast.visible && (
-        <ToastMessage {...toast} style="fixed bottom-3 right-3" />
-      )}
-    </QueryClientProvider>
+    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
   );
 }
