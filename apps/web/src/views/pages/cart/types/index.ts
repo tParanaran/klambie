@@ -17,7 +17,7 @@ export interface ICartItems {
   image: string;
   brand: string;
   quantity: number;
-  stockAvailable: number;
+  availableStock: number;
   inStock: boolean;
   attributes: {
     attributeId: number;

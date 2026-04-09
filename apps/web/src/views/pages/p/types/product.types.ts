@@ -81,6 +81,8 @@ export interface IProduct {
   name: string;
   sku: string;
   slug: string;
+  type: string;
+  status: string;
   brand: { name: string; slug: string };
   attributes: { name: string; id: number }[];
   categories: { name: string; slug: string }[];

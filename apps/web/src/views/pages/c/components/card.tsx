@@ -147,6 +147,7 @@ export default function ProductCard({ products, style }: IProductCard) {
           <AddToCartButton
             isLoading={isLoading}
             handleAddToCart={handleAddToCart}
+            isDisabled={selectedVariant?.inStock ? false : true}
           >
             {' '}
             {total > 0 && (

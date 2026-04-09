@@ -11,9 +11,11 @@ import { PromotionService } from './promotion.service';
 import Decimal from 'decimal.js';
 import { Cart } from '@generated/prisma/client';
 import { ProductService } from './product.service';
+import { ProductHelper } from '@/helpers/product.helper';
 
 const promotionService = new PromotionService();
 const productService = new ProductService();
+const productHelper = new ProductHelper();
 
 export class CartService {
   async checkAvailableStock(productVariantId: number): Promise<number> {
@@ -148,18 +150,23 @@ export class CartService {
 
     if (!cart) return null;
 
-    const validatedItems = cart.cartItems.map((item) => {
-      const isProductActive = item.productVariant.product.status === 'ACTIVE';
-      const isVariantActive = item.productVariant?.isActive !== false;
-      const isInStock =
-        item.productVariant?.stock - item.productVariant?.reservedStock > 0;
+    const validatedItems = await Promise.all(
+      cart.cartItems.map(async (item) => {
+        const { isActive, stock, reservedStock, product } = item.productVariant;
 
-      return {
-        ...item,
-        inStock: isProductActive && isVariantActive && isInStock,
-      };
-    });
+        const { inStock } = await productHelper.validateStock({
+          status: product.status,
+          isActive,
+          stock,
+          reservedStock,
+        });
 
+        return {
+          ...item,
+          inStock,
+        };
+      }),
+    );
     const cartItemIds = validatedItems.map((item) => ({
       variantId: item.productVariantId,
       quantity: item.quantity,
@@ -309,12 +316,16 @@ export class CartService {
 
           if (!variant) return null;
 
-          const isProductActive = variant.product.status === 'ACTIVE';
-          const isVariantActive = variant.isActive !== false;
-          const isInStock = variant.stock - variant.reservedStock > 0;
-          const stockAvailable = variant.stock - variant.reservedStock;
+          const { isActive, product, stock, reservedStock } = variant;
 
-          const inStock = isProductActive && isVariantActive && isInStock;
+          const { inStock, availableStock } = await productHelper.validateStock(
+            {
+              status: product.status,
+              isActive,
+              stock,
+              reservedStock,
+            },
+          );
 
           const { slug } = variant.product;
           const [category, tag, brand, img] = await Promise.all([
@@ -373,7 +384,7 @@ export class CartService {
             quantity: item.quantity,
             slug: variant.product.slug,
             brand: brand?.brandName.name,
-            stockAvailable,
+            availableStock,
             inStock,
             attributes: variant.productVariantAttributes.map((a) => ({
               attributeId: a.attributeValue.attributeId,

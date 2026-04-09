@@ -6,7 +6,12 @@ import { TbHttpPatch } from 'react-icons/tb';
 import { Form, Formik, FormikProps } from 'formik';
 import { EditVariants } from '../schema';
 import NumberFieldForm from '@/views/components/formik/numberFieldForm';
-import { IEditVariants, IVariantsDashboard } from '../types';
+import { IVariantsDashboard } from '../types';
+
+interface IVariantEdit {
+  stock: number;
+  basePrice: number;
+}
 
 interface IEditModal {
   closeModal: () => void;
@@ -44,7 +49,7 @@ export default function EditVariantsModal({
                 });
               }}
             >
-              {(props: FormikProps<IEditVariants>) => {
+              {(props: FormikProps<IVariantEdit>) => {
                 const { values, handleChange, handleSubmit } = props;
                 return (
                   <Form onSubmit={handleSubmit}>

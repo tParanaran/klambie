@@ -12,14 +12,14 @@ export default function DeleteButton({
   variantId: number;
   inStock: boolean;
 }) {
-  const { DeleteCartHandler, isLoading, toast } = useDelete({ inStock });
+  const { DeleteCartHandler, isLoading, toast } = useDelete();
 
   return (
     <>
       <button
         className="text-light font-bold text-lg p-1 rounded-full bg-black/60 hover:scale-125"
         aria-label="Remove products"
-        onClick={() => DeleteCartHandler(variantId)}
+        onClick={() => DeleteCartHandler(variantId, inStock)}
       >
         <IoClose />
       </button>

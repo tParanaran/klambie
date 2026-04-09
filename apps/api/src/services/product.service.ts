@@ -228,12 +228,14 @@ export class ProductService {
     const product = await prisma.product.findUnique({
       where: { slug },
       select: {
+        status: true,
         productVariants: {
           select: {
             id: true,
             sku: true,
             barcode: true,
             basePrice: true,
+            isActive: true,
             stock: true,
             reservedStock: true,
             productVariantAttributes: {
@@ -292,7 +294,12 @@ export class ProductService {
         const { hasDiscount, appliedPromotion, price } =
           await promotionService.promotionRuleCheck(promoInput);
 
-        const availableStock = v.stock - v.reservedStock;
+        const { inStock, availableStock } = await productHelper.validateStock({
+          status: product.status,
+          isActive: v.isActive,
+          stock: v.stock,
+          reservedStock: v.reservedStock,
+        });
 
         return {
           id: v.id,
@@ -301,7 +308,7 @@ export class ProductService {
           hasDiscount,
           appliedPromotion,
           availableStock,
-          inStock: availableStock > 0,
+          inStock,
           attributes: v.productVariantAttributes.map((va) => ({
             id: va.attributeValue.id,
             value: va.attributeValue.value,
@@ -596,6 +603,7 @@ export class ProductService {
         name: true,
         sku: true,
         type: true,
+        status: true,
         productDetails: true,
         sizingGuide: {
           select: {
@@ -628,6 +636,7 @@ export class ProductService {
       sku,
       productAttributes,
       type,
+      status,
       sizingGuide,
     } = data;
 
@@ -638,6 +647,7 @@ export class ProductService {
       type,
       productDetails,
       slug,
+      status,
       attributes: productAttributes.map((atrr) => atrr.attribute),
       brand: products?.brand?.brandName ?? {
         name: 'Other',

@@ -8,6 +8,7 @@ import { Children } from 'react';
 
 interface IAddToCartButton {
   isLoading: boolean;
+  isDisabled: boolean;
   handleAddToCart: () => Promise<void>;
   children?: React.ReactNode;
 }
@@ -15,6 +16,7 @@ interface IAddToCartButton {
 export default function AddToCartButton({
   handleAddToCart,
   isLoading,
+  isDisabled,
   children,
 }: IAddToCartButton) {
   return (
@@ -26,14 +28,15 @@ export default function AddToCartButton({
             onClick={handleAddToCart}
             loading={isLoading}
             className="bg-orange-800 w-fit"
+            disabled={isDisabled}
           >
             Add
           </Button>
           {children}
           <Button
             onClick={() => console.log('Next Feature')}
-            disabled={false}
             loading={isLoading}
+            disabled={isDisabled}
             className="border border-orange-800 w-fit text-orange-800 dark:text-orange-600 dark:border-orange-600 hover:text-white hover:border-orange-700"
           >
             Buy Now

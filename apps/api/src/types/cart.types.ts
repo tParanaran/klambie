@@ -45,7 +45,7 @@ export type CartItems = {
   sku: string;
   image: string;
   quantity: number;
-  stockAvailable: number;
+  availableStock: number;
   inStock: boolean;
   attributes: {
     attributeId: number;
@@ -64,4 +64,11 @@ type TotalPrice = {
 export type CartItemsResponse = {
   cartItems: [CartItems[], CartItems[]];
   totalPrice: TotalPrice;
+};
+
+export type ValidateStock = {
+  status: string;
+  isActive: boolean;
+  stock: number;
+  reservedStock: number;
 };

@@ -20,7 +20,6 @@ import ShippingDetails from './shipping';
 import EmptyCart from './empty';
 import ToastMessage from '@/views/components/toastMessage';
 import useDelete from '../hooks/useDelete';
-import { IoRemoveCircleSharp } from 'react-icons/io5';
 import DeleteAll from './deleteAll';
 
 interface ICart {
@@ -41,7 +40,7 @@ export default function CartItems({
   const errorsRefs = useRef<Record<number, IErrorsMessageHandle | null>>({});
   const errorsModalRef = useRef<IErrorsMessageHandle | null>(null);
   const [cartItemVariant, setCartItemVariant] = useState<IVariantAttribute>();
-  const handler = useDelete({ inStock: false });
+  const handler = useDelete();
   const { variants, showVariants, showVariantsHandler, variantHandler, toast } =
     useVariants();
   const { quantities, updateQuantity } = useCartQuantities({
@@ -111,7 +110,7 @@ export default function CartItems({
             <DeleteAll
               deleteAllHandler={() => {
                 const idsToDelete = selectedItems.map((item) => item.variantId);
-                handler.DeleteCartHandler(idsToDelete);
+                handler.DeleteCartHandler(idsToDelete, true);
               }}
             />
           )}
@@ -136,7 +135,7 @@ export default function CartItems({
                         const idsToDelete = itemsArray.map(
                           (item) => item.productVariantId,
                         );
-                        handler.DeleteCartHandler(idsToDelete);
+                        handler.DeleteCartHandler(idsToDelete, false);
                       }}
                     />
                   </div>
@@ -233,7 +232,7 @@ export default function CartItems({
 
                         <QuantityButton
                           quantity={quantities[item.productVariantId]}
-                          stock={item.stockAvailable}
+                          stock={item.availableStock}
                           inStock={item.inStock}
                           onChange={(newQty) =>
                             updateQuantity(item.productVariantId, newQty)
@@ -288,7 +287,11 @@ export default function CartItems({
               />
             )}
           </div>
-          <Button onClick={confirmHandler} className="bg-orange-800">
+          <Button
+            onClick={confirmHandler}
+            className="bg-orange-800"
+            disabled={selectedVariant?.inStock ? false : true}
+          >
             Confirm
           </Button>
         </ShowVariants>

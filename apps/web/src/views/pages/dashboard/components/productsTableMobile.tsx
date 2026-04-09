@@ -51,14 +51,20 @@ export default function ProductsTableMobile({
             const isOpen = openVariants === product.slug;
             return (
               <div key={product.slug}>
-                <div className="relative p-1 border-b-[0.5px] border-gray-300 dark:border-black/90">
-                  <div className="flex space-x-2">
-                    <img
-                      src={product.image}
-                      className="aspect-square rounded-full h-16 object-cover my-auto"
-                      aria-label={product.name}
-                    />
-                    <div className="text-sm">
+                <div className="relative p-1 border-b-[0.5px] border-gray-300 dark:border-black/90 px-3">
+                  <div className="flex space-x-2 justify-between">
+                    <div className="flex flex-col gap-1 items-center my-auto flex-1">
+                      <img
+                        src={product.image}
+                        className="aspect-square rounded-full h-16 object-cover"
+                        aria-label={product.name}
+                      />
+                      <Status
+                        status={product.status}
+                        productId={product.productId}
+                      />
+                    </div>
+                    <div className="text-sm flex-2">
                       <h1 className="font-semibold">{product.brand}</h1>
                       <p className="line-clamp-2">{product.name}</p>
                       <p className="opacity-50">SKU: {product.sku}</p>
@@ -77,12 +83,6 @@ export default function ProductsTableMobile({
                         </p>
                       </div>
                     </div>
-
-                    <Status
-                      status={product.status}
-                      productId={product.productId}
-                      style="absolute right-1 top-0.5"
-                    />
                   </div>
 
                   <div className="overflow-y-scroll scrollbar-hide">

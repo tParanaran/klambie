@@ -113,7 +113,9 @@ export default function ShowVariants({
               onChange={(newQty) => updateQuantity(selectedVariant.id, newQty)}
             />
             {!selectedVariant.inStock ? (
-              <p className="text-sm text-orange-700">Out of Stock</p>
+              <p className="text-sm text-orange-700">
+                Oops! This item is currently out of stock.
+              </p>
             ) : (
               <p className="text-sm opacity-50">
                 Stock: {selectedVariant.availableStock}

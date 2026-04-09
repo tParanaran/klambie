@@ -2,6 +2,7 @@ import { GenerateSlug } from '@/utils/slug';
 import { DefaultArgs } from '@prisma/client/runtime/client';
 import { PrismaClient } from '@generated/prisma/client';
 import { ProductDashboard } from '@/types/product.type';
+import { ValidateStock } from '@/types/cart.types';
 
 export class ProductHelper {
   async findOrCreate<
@@ -215,5 +216,20 @@ export class ProductHelper {
       currentPages: safePage,
       totalPages,
     };
+  }
+  async validateStock({
+    status,
+    isActive,
+    stock,
+    reservedStock,
+  }: ValidateStock) {
+    const isProductActive = status === 'ACTIVE';
+    const isVariantActive = isActive !== false;
+    const isInStock = stock - reservedStock > 0;
+    const availableStock = stock - reservedStock;
+
+    const inStock = isProductActive && isVariantActive && isInStock;
+
+    return { availableStock, inStock };
   }
 }

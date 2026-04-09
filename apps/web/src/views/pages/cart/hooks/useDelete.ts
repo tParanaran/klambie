@@ -4,13 +4,16 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import axiosInstanceClient from '@/lib/axios/client';
 
-export default function useDelete({ inStock }: { inStock: boolean }) {
+export default function useDelete() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { toast, showToast } = useToast();
   const queryClient = useQueryClient();
   const router = useRouter();
 
-  const DeleteCartHandler = async (productIds: number | number[]) => {
+  const DeleteCartHandler = async (
+    productIds: number | number[],
+    inStock: boolean,
+  ) => {
     setIsLoading(true);
     try {
       const { data } = await axiosInstanceClient.delete(`/shop-cart/delete`, {

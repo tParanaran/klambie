@@ -28,12 +28,15 @@ export default function ProductView({
   product: IProduct;
   groupedAttributes: IGroupedAttribute[];
 }) {
+  console.log(product);
+  console.log(groupedAttributes);
+
   const errorsProductRef = useRef<IErrorsMessageHandle | null>(null);
   const [quantity, setQuantity] = useState<number>(1);
   const [showVariant, setShowVariant] = useState<boolean>(false);
   const { slug, categories, brand, name } = product;
   const {
-    inStockVariants,
+    defaultVariants,
     cheapestVariants,
     selectedAttributes,
     selectedVariant,
@@ -72,6 +75,9 @@ export default function ProductView({
     setShowVariant(false);
   };
 
+  const disabledButton =
+    selectedVariant?.inStock && product.status === 'ACTIVE' ? false : true;
+
   return (
     <div className="relative z-10">
       <div className="grid grid-cols-1 md:grid-cols-[1.2fr_1fr] lg:grid-cols-[1.5fr_1fr] pb-[5%] gap-4">
@@ -100,52 +106,70 @@ export default function ProductView({
           <div className="md:sticky md:top-24">
             <Title title={{ slug, categories, brand, name }} />
             <div className="flex space-x-1 mt-2">
-              {cheapestVariants[0]?.price && !selectedVariant && (
+              {cheapestVariants?.price && !selectedVariant && (
                 <p className="font-semibold text-orange-700">From</p>
               )}
               <ProductPrice
-                price={selectedVariant?.price || cheapestVariants[0]?.price}
+                price={selectedVariant?.price ?? cheapestVariants.price}
                 hasDiscount={
-                  selectedVariant?.hasDiscount ||
-                  cheapestVariants[0]?.hasDiscount
+                  selectedVariant?.hasDiscount ?? cheapestVariants.hasDiscount
                 }
               />
             </div>
             <div className="space-y-5 mt-5 lg:mt-10">
-              <Attributes
-                handleSelect={handleSelect}
-                selectedAttributes={selectedAttributes}
-                groupedAttributes={computedGroupedAttributes}
-              />
+              {product.type === 'VARIANT' && (
+                <Attributes
+                  handleSelect={handleSelect}
+                  selectedAttributes={selectedAttributes}
+                  groupedAttributes={computedGroupedAttributes}
+                />
+              )}
 
               <div className="hidden md:block">
                 {' '}
                 <h4>Quantity</h4>
                 <QuantityButton
-                  inStock={
-                    selectedVariant?.inStock || inStockVariants[0].inStock
-                  }
+                  inStock={!disabledButton}
                   stock={
-                    selectedVariant?.availableStock ||
-                    inStockVariants[0].availableStock
+                    selectedVariant?.availableStock ??
+                    defaultVariants?.availableStock ??
+                    0
                   }
                   quantity={quantity}
                   onChange={setQuantity}
                 />
-                {selectedVariant && !selectedVariant.inStock && (
-                  <p className="text-sm text-orange-700">Out of Stock</p>
-                )}
-                {selectedVariant && selectedVariant.availableStock ? (
-                  <p className="text-sm opacity-50">
-                    Stock: {selectedVariant.availableStock}
-                  </p>
-                ) : null}
               </div>
+              {product.status !== 'ACTIVE' ? (
+                <p className="text-sm text-orange-700">
+                  Oops! This item is currently unavailable. Check back soon!
+                </p>
+              ) : (
+                <div>
+                  {selectedVariant && !showVariant ? (
+                    <>
+                      {selectedVariant.inStock ? (
+                        <p className="text-sm opacity-50 hidden md:block">
+                          Stock: {selectedVariant.availableStock}
+                        </p>
+                      ) : (
+                        <p className="text-sm text-orange-700">
+                          Oops! This item is currently out of stock.
+                        </p>
+                      )}
+                    </>
+                  ) : (
+                    <p className="text-sm text-orange-700">
+                      Hei There! Please choose an option first.
+                    </p>
+                  )}
+                </div>
+              )}
               <div className="fixed md:absolute z-30 md:z-0 right-3 sm:right-10 md:right-0 bottom-14 sm:bottom-15 md:-bottom-12">
                 <ErrorsMessage ref={errorsProductRef} />
               </div>
               <div className="hidden md:block mt-14">
                 <AddToCartButton
+                  isDisabled={disabledButton}
                   isLoading={isLoading}
                   handleAddToCart={handleAddToCart}
                 />
@@ -155,6 +179,7 @@ export default function ProductView({
         </div>
       </div>
       <NavbarAddToCart
+        isDisabled={false}
         isLoading={isLoading}
         handleCartClick={handleCartClick}
       />
@@ -167,7 +192,7 @@ export default function ProductView({
           selectedColorId={selectedColorId}
           selectedAttributes={selectedAttributes}
           quantities={{
-            [selectedVariant?.id || inStockVariants[0].id]: quantity,
+            [selectedVariant?.id || cheapestVariants.id]: quantity,
           }}
           onClose={() => setShowVariant(false)}
           handleSelect={handleSelect}

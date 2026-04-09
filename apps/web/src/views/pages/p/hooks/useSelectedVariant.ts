@@ -20,18 +20,53 @@ export default function useSelectedVariant({
   const [selectedAttributes, setSelectedAttributes] = useState<
     Record<number, number>
   >({});
-  const inStockVariants = variants.filter((v) => v.inStock);
-  const prices = inStockVariants
-    .map((v) => Number(v.price.finalPrice))
-    .filter((p): p is number => p != null);
-  const minPrice = prices.length > 0 ? Math.min(...prices) : null;
-  const cheapestVariants =
-    minPrice !== null
-      ? inStockVariants.filter((v) => Number(v.price.finalPrice) === minPrice)
-      : [];
+
+  const { defaultVariants, cheapestVariants } = useMemo(() => {
+    const inStockVariants = variants.filter((v) => v.inStock);
+
+    const source = inStockVariants.length > 0 ? inStockVariants : variants;
+
+    const prices = source.map((v) => Number(v.price.finalPrice));
+
+    const minPrice = prices.length > 0 ? Math.min(...prices) : null;
+
+    const cheapestVariants =
+      minPrice !== null
+        ? source.filter((v) => Number(v.price.finalPrice) === minPrice)[0]
+        : source[0];
+
+    let defaultVariants: IVariant | undefined;
+
+    // Cart priority by cart items in cart
+    if (cartItemVariant) {
+      defaultVariants = variants.find(
+        (v) => v.id === cartItemVariant.variantId,
+      );
+    }
+
+    // Cheapest or InStock or First Variants fallback
+    if (!defaultVariants && isModal) {
+      defaultVariants = cheapestVariants || inStockVariants[0] || variants[0];
+    }
+
+    return { defaultVariants, cheapestVariants };
+  }, [variants, cartItemVariant, isModal]);
+
+  useEffect(() => {
+    if (!defaultVariants) return;
+
+    // Initialize selected attributes
+    const initialAttributes: Record<number, number> = {};
+
+    defaultVariants.attributes.forEach((attr) => {
+      initialAttributes[attr.attribute.id] = attr.id;
+    });
+
+    setSelectedAttributes(initialAttributes);
+  }, [defaultVariants]);
 
   const selectedVariant = useMemo(() => {
-    if (!variants || variants.length === 0) return null;
+    if (!variants || variants.length === 0) return undefined;
 
     return variants.find((variant) =>
       variant.attributes.every(
@@ -46,35 +81,6 @@ export default function useSelectedVariant({
       [attributeId]: valueId,
     }));
   };
-
-  useEffect(() => {
-    if (!variants || variants.length === 0) return;
-
-    if (inStockVariants.length === 0) return;
-
-    let defaultVariant: (typeof variants)[0] | undefined;
-
-    // Default by cart items
-    if (cartItemVariant) {
-      defaultVariant = inStockVariants.find(
-        (v) => v.id === cartItemVariant.variantId,
-      );
-    }
-
-    // Default by cheapest price
-    if (!defaultVariant && isModal) {
-      defaultVariant =
-        cheapestVariants.length > 0 ? cheapestVariants[0] : inStockVariants[0];
-    }
-
-    // Initialize selected attributes
-    const initialAttributes: Record<number, number> = {};
-    defaultVariant?.attributes.forEach((attr) => {
-      initialAttributes[attr.attribute.id] = attr.id;
-    });
-
-    setSelectedAttributes(initialAttributes);
-  }, [variants, cartItemVariant, isModal]);
 
   const colorAttributeId = useMemo(() => {
     return groupedAttributes.find(
@@ -115,7 +121,7 @@ export default function useSelectedVariant({
   }, [groupedAttributes, variants, selectedAttributes]);
 
   return {
-    inStockVariants,
+    defaultVariants,
     cheapestVariants,
     selectedAttributes,
     selectedVariant,

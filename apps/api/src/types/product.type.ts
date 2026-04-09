@@ -109,6 +109,7 @@ export type Product = {
   slug: string;
   sku: string;
   type: string;
+  status: string;
   brand: { name: string; slug: string };
   categories?: { name: string; slug: string }[];
   tags?: { name: string; slug: string }[];

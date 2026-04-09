@@ -48,7 +48,6 @@ export default function Attributes({
                       type="radio"
                       id={value.value}
                       className="hidden peer"
-                      disabled={value.isDisabled}
                       name={attr.attributeName}
                       checked={isSelected}
                       aria-label={value.value}

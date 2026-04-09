@@ -6,12 +6,12 @@ import useActions from '../hooks/useActions';
 export default function Status({
   status,
   productId,
-  style,
+
   isVariant = false,
 }: {
   status: string;
   productId: number;
-  style?: string;
+
   isVariant?: boolean;
 }) {
   const { archive, toast, updateVariant } = useActions(productId);
@@ -19,7 +19,7 @@ export default function Status({
   return (
     <>
       <button
-        className={`cursor-pointer py-1 px-2 w-16 text-center mx-auto rounded-full text-xs ${status === 'ACTIVE' ? 'text-red-700 bg-red-700/20' : status === 'ARCHIVE' ? 'text-yellow-700 bg-yellow-600/20' : 'text-gray-500 bg-gray-500/20'} ${style}`}
+        className={`cursor-pointer py-1 px-2 w-16 text-center mx-auto rounded-full text-xs ${status === 'ACTIVE' ? 'text-red-700 bg-red-700/20' : status === 'ARCHIVE' ? 'text-yellow-700 bg-yellow-600/20' : 'text-gray-500 bg-gray-500/20'}`}
         onClick={() => {
           isVariant
             ? updateVariant({ isActive: status === 'ACTIVE' ? false : true })

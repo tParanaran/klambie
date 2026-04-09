@@ -5,11 +5,13 @@ import AddToCartButton from './addButton';
 interface INavbarAddToCart {
   handleCartClick: () => Promise<void>;
   isLoading: boolean;
+  isDisabled: boolean;
 }
 
 export default function NavbarAddToCart({
   handleCartClick,
   isLoading,
+  isDisabled,
 }: INavbarAddToCart) {
   return (
     <NavbarBottomContainer>
@@ -18,6 +20,7 @@ export default function NavbarAddToCart({
         <div className="flex-2">
           <AddToCartButton
             isLoading={isLoading}
+            isDisabled={isDisabled}
             handleAddToCart={handleCartClick}
           />
         </div>
