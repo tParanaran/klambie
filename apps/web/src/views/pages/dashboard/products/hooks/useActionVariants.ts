@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { IVariantsDashboard } from '../types';
 
 export function useVariantActions() {
+  const [isChildren, setIsChildren] = useState<boolean>(false);
   const [selectedVariant, setSelectedVariant] =
     useState<IVariantsDashboard | null>(null);
   const [showDelete, setShowDelete] = useState(false);
@@ -33,6 +34,14 @@ export function useVariantActions() {
     }
   };
 
+  useEffect(() => {
+    if (showDelete || showEdit) {
+      setIsChildren(true);
+    } else {
+      setIsChildren(false);
+    }
+  }, [showEdit, showDelete]);
+
   return {
     selectedVariant,
     showDelete,
@@ -41,5 +50,6 @@ export function useVariantActions() {
     closeModal,
     openDelete,
     openEdit,
+    isChildren,
   };
 }

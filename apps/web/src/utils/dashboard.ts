@@ -1,11 +1,12 @@
-import { IoGrid, IoPeople, IoReceipt, IoSettings } from 'react-icons/io5';
+import { IoPeople, IoReceipt, IoSettings } from 'react-icons/io5';
 import { TbTruckDelivery } from 'react-icons/tb';
 import { RiDiscountPercentFill, RiProductHuntFill } from 'react-icons/ri';
+import { BiCategory } from 'react-icons/bi';
 
 export const sidebarItems = [
   {
     title: 'Dashboard',
-    Icon: IoGrid,
+    Icon: BiCategory,
     path: '/dashboard',
   },
   {

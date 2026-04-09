@@ -29,7 +29,7 @@ export default function Actions({
 
   return (
     <>
-      <div className="w-full flex mb-2 space-x-1 justify-start ml-0 sm:ml-2 lg:ml-5">
+      <div className="w-full flex mb-2 space-x-1 justify-start">
         {variantsLength > 0 && (
           <TagButton
             className={className}
@@ -41,14 +41,10 @@ export default function Actions({
             }
           >
             <span>
-              <p>{variantsLength} Variants</p>
+              <p>{variantsLength}</p>
             </span>
           </TagButton>
         )}
-
-        <TagButton className={className} href={`/p/${slug}`}>
-          <p>View Live </p>
-        </TagButton>
 
         <TagButton className={className} onClick={() => setShowModal(true)}>
           <p>Delete</p>
@@ -59,6 +55,10 @@ export default function Actions({
           onClick={() => router.push(`/dashboard/products/${id}`)}
         >
           <p>Edit</p>
+        </TagButton>
+
+        <TagButton className={className} href={`/p/${slug}`}>
+          <p>View</p>
         </TagButton>
       </div>
 

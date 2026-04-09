@@ -3,7 +3,6 @@ import React, { useRef, useState } from 'react';
 import { sortDashboardOptions } from '@/utils/productDashboard';
 import { IProductDashboard } from '../types';
 import { useVariantActions } from '../hooks/useActionVariants';
-import SortTable from './sort';
 import SearchNotFound from '@/views/pages/d/components/notfound';
 import Status from './status';
 import Rupiah from '@/utils/rupiah';
@@ -32,11 +31,10 @@ export default function ProductsTable({
           <tr className="bg-black/5 dark:bg-white/5">
             <th>Product Details</th>
             {sortDashboardOptions.map((sort, s) => (
-              <th key={s}>
-                <SortTable sort={sort} />
+              <th key={s} className="px-3 lg:px-10`">
+                {sort.label}
               </th>
             ))}
-            <th className="px-2 lg:px-5">Status</th>
           </tr>
         </thead>
         <tbody className="text-sm border-b-[0.5px] border-gray-300 dark:border-black/90">
@@ -56,7 +54,7 @@ export default function ProductsTable({
                     <tr
                       className={`relative h-22 ${p > 0 ? 'border-t-[0.5px] border-gray-300 dark:border-black/90' : ''}`}
                     >
-                      <td className="w-4xl">
+                      <td className="w-3xl">
                         <div className="flex space-x-2 lg:space-x-5 px-2 lg:px-5">
                           <img
                             src={product.image}
@@ -67,7 +65,7 @@ export default function ProductsTable({
                             <h1 className="font-semibold">{product.brand}</h1>
                             <p className="line-clamp-2">{product.name}</p>
                             <p className="text-xs opacity-50">
-                              SKU: {product.sku}
+                              # {product.sku}
                             </p>
                           </div>
                         </div>
@@ -76,7 +74,7 @@ export default function ProductsTable({
                       <td className="text-center">{product.stock}</td>
                       <td className="text-center">{product.reservedStock}</td>
                       <td className="text-center">{product.soldQty}</td>
-                      <td className="pr-2 lg:pr-5">
+                      <td className="flex items-center h-22 pr-2">
                         <Status
                           status={product.status}
                           productId={product.productId}
@@ -85,14 +83,16 @@ export default function ProductsTable({
                     </tr>
                     <tr className="relative">
                       <td colSpan={7}>
-                        <Actions
-                          toggleVariants={() => toggleVariants(product.slug)}
-                          isOpen={isOpen}
-                          variantsLength={product.productVariants.length}
-                          slug={product.slug}
-                          id={product.productId}
-                          name={product.name}
-                        />
+                        <div className="ml-0 sm:ml-3 lg:ml-5">
+                          <Actions
+                            toggleVariants={() => toggleVariants(product.slug)}
+                            isOpen={isOpen}
+                            variantsLength={product.productVariants.length}
+                            slug={product.slug}
+                            id={product.productId}
+                            name={product.name}
+                          />
+                        </div>
                       </td>
                     </tr>
                     <tr>
@@ -125,7 +125,7 @@ export default function ProductsTable({
                                   <div className="overflow-hidden">
                                     <p>{variant.name}</p>
                                     <p className="text-xs opacity-50">
-                                      SKU: {variant.sku}
+                                      # {variant.sku}
                                     </p>
                                   </div>
                                 </div>

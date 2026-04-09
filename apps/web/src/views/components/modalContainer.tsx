@@ -31,11 +31,11 @@ export default function ModalContainer({
         showModal
           ? 'opacity-100 pointer-events-auto'
           : 'opacity-0 pointer-events-none'
-      } ${isFilter || isDashboard ? 'bg-black/20 dark:bg-white/20' : ''}`}
+      } ${isFilter || isDashboard ? 'bg-black/20' : ''}`}
     >
       <div
         ref={modalRef}
-        className={`${isFilter ? '' : 'fixed text-sm sm:left-10 sm:right-10 left-3 right-3 p-3 sm:p-5 text-secondary bg-secondary-opacity shadow-xs backdrop-blur-xl rounded-2xl max-h-[75vh] overflow-y-auto space-y-3 transform transition-transform duration-300 ease-out scrollbar-hide'} ${style} ${showModal ? 'translate-y-0' : 'translate-y-full'}`}
+        className={`${isFilter ? '' : 'fixed text-sm sm:left-10 sm:right-10 left-3 right-3 p-3 sm:p-5 text-secondary bg-secondary-opacity shadow-xl backdrop-blur-xl rounded-2xl max-h-[75vh] overflow-y-auto space-y-3 transform transition-transform duration-300 ease-out scrollbar-hide'} ${style} ${showModal ? 'translate-y-0' : 'translate-y-full'}`}
         onClick={(e) => e.stopPropagation()}
       >
         <div ref={dropdownRef}>{children}</div>

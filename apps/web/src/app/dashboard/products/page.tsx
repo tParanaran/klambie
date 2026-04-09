@@ -24,7 +24,7 @@ export default async function Products({
   try {
     const { data } = await axiosInstanceServer.post(`/product/alldashboard`, {
       q,
-      limit: Number(limit) || 10,
+      limit: Number(limit) || 20,
       page: Number(page) || 1,
       sort,
       order,

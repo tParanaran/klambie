@@ -10,29 +10,23 @@ import SortVariants from './sortVariants';
 import ActionVariants from './actionVariants';
 import SearchNotFound from '@/views/pages/d/components/notfound';
 import VariantsModal from './variantsModal';
+import SortToggle from './sortToggle';
+import useFilteredParams from '@/views/pages/c/hooks/useFilteredParams';
 
 export default function ProductsTableMobile({
   products,
 }: {
   products: IProductDashboard[];
 }) {
+  const { currentOrder, currentSort } = useFilteredParams();
   const [openVariants, setOPenVariants] = useState<string | null>(null);
-  const [isChildren, setIsChildren] = useState<boolean>(false);
   const actionVariants = useVariantActions();
 
   const toggleVariants = (slug: string) => {
     setOPenVariants((prev) => (prev === slug ? null : slug));
   };
 
-  const { showDelete, showEdit, openDelete, openEdit } = actionVariants;
-
-  useEffect(() => {
-    if (showDelete || showEdit) {
-      setIsChildren(true);
-    } else {
-      setIsChildren(false);
-    }
-  }, [showEdit, showDelete]);
+  const { openDelete, openEdit, isChildren } = actionVariants;
 
   return (
     <div className="block sm:hidden bg-black/10 dark:bg-white/10 rounded-2xl overflow-hidden">
@@ -67,7 +61,7 @@ export default function ProductsTableMobile({
                     <div className="text-sm flex-2">
                       <h1 className="font-semibold">{product.brand}</h1>
                       <p className="line-clamp-2">{product.name}</p>
-                      <p className="opacity-50">SKU: {product.sku}</p>
+                      <p className="opacity-50"># {product.sku}</p>
                       <p className="opacity-50">
                         Price: {Rupiah(product.price)}
                       </p>
@@ -104,8 +98,13 @@ export default function ProductsTableMobile({
                     isDashboard={true}
                   >
                     <div>
-                      <div className="overflow-y-scroll scrollbar-hide -top-2 mx-auto sticky z-20 bg-secondary w-fit px-2 rounded-full">
-                        <SortVariants />
+                      <div className="overflow-y-scroll scrollbar-hide -top-2 mx-auto sticky z-20 bg-secondary w-fit rounded-xl">
+                        <SortToggle
+                          sort={'sort'}
+                          order={'order'}
+                          currentOrder={currentOrder}
+                          currentSort={currentSort}
+                        />
                       </div>
                       {product.productVariants.map((variant) => (
                         <div
@@ -128,7 +127,7 @@ export default function ProductsTableMobile({
                           <div className="text-sm">
                             <h1 className="line-clamp-2">{variant.name}</h1>
                             <p className="opacity-50 text-xs">
-                              SKU: {variant.sku}
+                              # {variant.sku}
                             </p>
                             <p className="opacity-50">
                               Price: {Rupiah(variant.price)}

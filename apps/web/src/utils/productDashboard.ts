@@ -15,4 +15,8 @@ export const sortDashboardOptions = [
     label: 'Sales',
     value: 'sales',
   },
+  {
+    label: 'Status',
+    value: 'status',
+  },
 ];
