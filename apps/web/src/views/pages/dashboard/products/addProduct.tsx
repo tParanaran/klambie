@@ -36,7 +36,7 @@ export default function AddProductDahsboardView() {
       <div className="grid grid-cols-[2fr_1fr] gap-5 mt-5">
         <AddProductForm />
         <div>
-          <div className="bg-black/5 dark:bg-white/5 rounded-2xl w-full h-screen p-3">
+          <div className="bg-black/5 dark:bg-white/5 rounded-2xl w-full h-125 p-3">
             <h1 className="opacity-50">Upload Photo</h1>
           </div>
         </div>

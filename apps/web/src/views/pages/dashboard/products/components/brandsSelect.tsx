@@ -32,7 +32,7 @@ export default function SelectBrandForm({
   const selected = options.find((o) => o.id === value);
 
   return (
-    <div className="relative w-full mt-1.5" ref={modalRef}>
+    <div className="relative w-full mt-2" ref={modalRef}>
       <label htmlFor={name} className="ml-4">
         Brand
       </label>
