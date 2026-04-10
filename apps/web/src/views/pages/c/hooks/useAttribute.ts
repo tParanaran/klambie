@@ -80,5 +80,12 @@ export default function useAttribute() {
     syncAttributes();
   }, []);
 
-  return { error, tags, brands, categories, attributes };
+  const brandOptions = brands
+    .sort((a, b) => Number(b.priority) - Number(a.priority))
+    .map((brand) => ({
+      id: brand.id,
+      name: brand.name,
+    }));
+
+  return { error, tags, brands, categories, attributes, brandOptions };
 }

@@ -11,7 +11,7 @@ export interface IHandleChange {
     : (e: string | React.ChangeEvent<any>) => void;
 }
 
-interface IFieldForm {
+export interface IFieldForm {
   handleChange: IHandleChange;
   values: string;
   name: string;
@@ -25,7 +25,7 @@ export default function TextFieldForm({
   label,
 }: IFieldForm) {
   return (
-    <div className="flex flex-col mt-3 grow">
+    <div className="flex flex-col mt-2 grow">
       <label htmlFor={name} className="ml-4">
         {label}
       </label>
@@ -36,7 +36,7 @@ export default function TextFieldForm({
         onChange={handleChange}
         values={values}
         placeholder={`Type your ${label.toLowerCase()} here`}
-        className="appearance-none bg-black/10 dark:bg-white/10 rounded-full py-3 px-4 leading-tight focus:outline-none focus:bg-background focus:border focus:border-gray-300 placeholder:text-sm"
+        className="appearance-none bg-black/10 dark:bg-white/10 rounded-full py-3 px-4 leading-tight focus:outline-none focus:bg-background focus:border focus:border-gray-300 placeholder:text-xs"
       />
       <ErrorForm name={name} />
     </div>

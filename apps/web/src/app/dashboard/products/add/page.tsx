@@ -1,3 +1,9 @@
+import AddProductDahsboardView from '@/views/pages/dashboard/products/addProduct';
+
 export default function AddProduct() {
-  return <section></section>;
+  return (
+    <section>
+      <AddProductDahsboardView />
+    </section>
+  );
 }

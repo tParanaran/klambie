@@ -18,7 +18,7 @@ export default function NumberFieldForm({
   sortLabel,
 }: IFieldForm) {
   return (
-    <div className="flex flex-col mt-1.5 grow">
+    <div className="flex flex-col mt-2 grow">
       {label && (
         <label htmlFor={name} className="ml-4">
           {label}

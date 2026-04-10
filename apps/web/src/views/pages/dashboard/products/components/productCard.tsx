@@ -63,7 +63,7 @@ export default function ProductCard({
                     </div>
                   </div>
                   <div className="text-sm">
-                    <h1 className="line-clamp-2 h-10">{product.name}</h1>
+                    <h1 className="line-clamp-3 h-10">{product.name}</h1>
                     <div className="text-sm opacity-50 my-1">
                       <p>{product.brand}</p>
                       <p className="text-xs"># {product.sku}</p>
@@ -81,7 +81,7 @@ export default function ProductCard({
                 {isOpen && !isChildren && product.productVariants && (
                   <ModalContainer
                     handlerModal={() => setOPenVariants(null)}
-                    style="lg:w-5xl z-50 mx-auto bg-primary-opacity shadow-xl backdrop-blur-xl rounded-2xl p-3 overflow-y-scroll scrollbar-hide max-h-[75vh] h-full mt-[25vh]"
+                    style="lg:w-5xl z-50 mx-auto bg-secondary-opacity shadow-xl backdrop-blur-xl rounded-2xl p-3 overflow-y-scroll scrollbar-hide max-h-[75vh] h-full mt-[25vh]"
                     showModal={isOpen}
                     isFilter={true}
                   >

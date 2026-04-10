@@ -98,7 +98,7 @@ export default function ProductsTableMobile({
                     isDashboard={true}
                   >
                     <div>
-                      <div className="overflow-y-scroll scrollbar-hide -top-2 mx-auto sticky z-20 bg-secondary w-fit rounded-xl">
+                      <div className="overflow-y-scroll scrollbar-hide -top-2 mx-auto sticky z-20 bg-secondary w-fit rounded-xl max-w-full">
                         <SortToggle
                           currentOrder={currentOrder}
                           currentSort={currentSort}
