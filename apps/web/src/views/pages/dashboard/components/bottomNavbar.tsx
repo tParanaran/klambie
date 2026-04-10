@@ -1,31 +1,22 @@
 import { useQueryParams } from '../../c/hooks/useQueryParams';
 import { sidebarItems } from '@/utils/dashboard';
 import Link from 'next/link';
-import useDetectIsMobile from '../../template/hooks/useDetectIsMobile';
 
 export default function BottomNavbar() {
   const { pathname } = useQueryParams();
-  const { isMobile } = useDetectIsMobile({ widthScreen: 390 });
 
   const navbarItems = sidebarItems.filter(
     (item) => item.path !== '/dashboard' && pathname.startsWith(item.path),
   );
 
   return (
-    <nav
-      style={{
-        zIndex: 20,
-        right: isMobile ? 12 : 'fit',
-      }}
-      className={`fixed left-0 md:left-20 lg:left-auto ml-4 transition-all duration-200 py-1.5 rounded-full overflow-x-scroll scrollbar-hide
-        px-2 backdrop-blur-xl top-18 sm:top-19 md:top-23`}
-    >
-      <div className="flex space-x-1">
+    <nav className="transition-all duration-200 p-1 rounded-xl shadow-sm overflow-x-scroll scrollbar-hide backdrop-blur-xl mx-3 w-auto max-w-full sm:w-fit dark:bg-white/10  bg-light z-10">
+      <div className="flex gap-1">
         {navbarItems[0]?.dropdown?.map((nav, n) => (
           <Link
             key={n}
             href={nav.path}
-            className={`px-3 py-2 whitespace-nowrap rounded-full uppercase text-xs sm:text-sm font-semibold ${pathname === nav.path ? 'bg-dark dark:bg-orange-800 text-light' : 'bg-black/15 dark:bg-white/10 '}`}
+            className={`px-3 py-2 whitespace-nowrap rounded-xl uppercase text-sm font-semibold ${pathname === nav.path ? 'bg-dark shadow-sm dark:bg-orange-800 text-light' : 'opacity-50 hover:text-orange-700 '}`}
           >
             {nav.title}
           </Link>

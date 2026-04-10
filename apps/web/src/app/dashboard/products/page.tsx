@@ -9,13 +9,16 @@ export default async function Products({
     q: string;
     limit: string;
     page: string;
+    status: string;
     order: string;
     sort: string;
     orderBy: string;
     sortBy: string;
+    isActive: string;
   };
 }) {
-  const { q, limit, page, sort, order, sortBy, orderBy } = await searchParams;
+  const { q, limit, page, sort, order, sortBy, orderBy, status, isActive } =
+    await searchParams;
 
   let products = [];
   let pages = null;
@@ -30,6 +33,8 @@ export default async function Products({
       order,
       sortBy,
       orderBy,
+      status,
+      isActive,
     });
     products = data.products;
     pages = data.pages;

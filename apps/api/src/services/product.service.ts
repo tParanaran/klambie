@@ -669,6 +669,8 @@ export class ProductService {
     q,
     limit,
     page,
+    status,
+    isActive,
     order,
     sort,
     sortBy,
@@ -690,6 +692,11 @@ export class ProductService {
         },
       ];
     }
+
+    if (status) {
+      whereClause.status = status;
+    }
+
     const isAggregateSort =
       sortBy === 'stock' || sortBy === 'order' || sortBy === 'sales';
 
@@ -704,7 +711,7 @@ export class ProductService {
 
       let filteredProductIds: number[] | undefined;
 
-      if (q) {
+      if (q || status) {
         const filteredProducts = await prisma.product.findMany({
           where: whereClause,
           select: { id: true },
@@ -745,7 +752,7 @@ export class ProductService {
         where: {
           id: { in: paginatedIds },
         },
-        select: await productHelper.baseSelect(sort, order),
+        select: await productHelper.baseSelect(sort, order, isActive),
       });
 
       const sortedProducts = paginatedIds.map((id) =>
@@ -776,7 +783,7 @@ export class ProductService {
       skip,
       take,
       orderBy: prismaOrder,
-      select: await productHelper.baseSelect(sort, order),
+      select: await productHelper.baseSelect(sort, order, isActive),
     });
 
     return {

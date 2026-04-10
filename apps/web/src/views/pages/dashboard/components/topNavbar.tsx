@@ -17,7 +17,7 @@ export default function TopNavbar() {
 
   return (
     <>
-      <nav className="sticky flex justify-between flex-nowrap flex-row md:flex-row-reverse top-0 left-0 right-0 px-3 max-w-screen text-sm overflow-y-scroll scrollbar-hide space-x-2 py-3 md:py-5 bg-dashboard">
+      <nav className="sticky flex justify-between flex-nowrap flex-row md:flex-row-reverse top-0 left-0 right-0 px-3 max-w-screen text-sm overflow-y-scroll scrollbar-hide space-x-2 py-3 bg-dashboard">
         <div className="flex space-x-1 items-start">
           <button
             className={`${className} block md:hidden`}

@@ -28,10 +28,12 @@ export default function ProductsDahsboardView({
     setView(viewMode);
   };
   return (
-    <div className="relative px-3 pt-15 sm:pt-18 md:pt-20">
-      <div className="my-1 flex justify-between space-x-1 sticky top-1 mx-1 z-10">
-        <ViewToggle view={view} setView={viewHandler} />
-        <div className="overflow-y-scroll scrollbar-hide max-w-108 w-full sm:w-fit backdrop-blur-xl rounded-xl">
+    <div className="relative px-3">
+      <div className="my-1 flex justify-between space-x-1 sticky top-1 z-10 mx-1">
+        <div className="bg-primary-opacity backdrop-blur-xl rounded-xl">
+          <ViewToggle view={view} setView={viewHandler} />
+        </div>
+        <div className="overflow-y-scroll scrollbar-hide max-w-108 w-full sm:w-fit bg-primary-opacity backdrop-blur-xl rounded-xl">
           <SortToggle
             view={view}
             sort={'sortBy'}
@@ -47,7 +49,6 @@ export default function ProductsDahsboardView({
           <ProductCard products={products} />
         ) : (
           <>
-            {' '}
             <ProductsTable products={products} />
             <ProductsTableMobile products={products} />
           </>

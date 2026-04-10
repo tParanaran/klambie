@@ -10,6 +10,8 @@ export default function useFilteredParams() {
   const brandParams = getAllParams('brand');
   const attributeParams = getAllParams('attributeId');
   const priceParams = getParams('price');
+  const statusParams = getParams('status');
+  const activeParams = getParams('isActive');
   const currentOrder = getParams('order');
   const currentSort = getParams('sort');
   const currentOrderBy = getParams('orderBy');
@@ -50,5 +52,7 @@ export default function useFilteredParams() {
     currentSort,
     currentOrderBy,
     currentSortBy,
+    statusParams,
+    activeParams,
   };
 }

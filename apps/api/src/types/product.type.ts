@@ -148,6 +148,8 @@ export type GetProductDashboard = {
   limit?: number;
   page?: number;
   q?: string;
+  status?: string;
+  isActive?: string;
   order?: string;
   orderBy?: string;
   sortBy?: string;

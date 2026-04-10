@@ -70,7 +70,7 @@ export class ProductHelper {
 
     return hierarchy;
   }
-  async baseSelect(sort?: string, order?: string) {
+  async baseSelect(sort?: string, order?: string, isActive?: string) {
     const variantOrder: any = {};
 
     if (sort === 'price') {
@@ -81,6 +81,12 @@ export class ProductHelper {
       variantOrder.reservedStock = order || 'desc';
     } else if (sort === 'sales') {
       variantOrder.soldQty === order || 'desc';
+    }
+
+    const whereClause: any = {};
+
+    if (isActive) {
+      whereClause.isActive = isActive === 'true' ? true : false;
     }
 
     return {
@@ -100,6 +106,7 @@ export class ProductHelper {
         },
       },
       productVariants: {
+        where: whereClause,
         orderBy: variantOrder,
         select: {
           id: true,

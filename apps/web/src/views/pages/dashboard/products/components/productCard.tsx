@@ -4,7 +4,6 @@ import Status from './status';
 import Actions from './actions';
 import { useState } from 'react';
 import SearchNotFound from '@/views/pages/d/components/notfound';
-import SortVariants from './sortVariants';
 import ModalContainer from '@/views/components/modalContainer';
 import ActionVariants from './actionVariants';
 import { useVariantActions } from '../hooks/useActionVariants';
@@ -82,7 +81,7 @@ export default function ProductCard({
                 {isOpen && !isChildren && product.productVariants && (
                   <ModalContainer
                     handlerModal={() => setOPenVariants(null)}
-                    style="lg:w-5xl z-50 mx-auto bg-secondary-opacity shadow-xl backdrop-blur-xl rounded-2xl p-3 overflow-y-scroll scrollbar-hide max-h-[75vh] h-full mt-[25vh]"
+                    style="lg:w-5xl z-50 mx-auto bg-primary-opacity shadow-xl backdrop-blur-xl rounded-2xl p-3 overflow-y-scroll scrollbar-hide max-h-[75vh] h-full mt-[25vh]"
                     showModal={isOpen}
                     isFilter={true}
                   >
@@ -90,18 +89,21 @@ export default function ProductCard({
                       <div className="overflow-x-scroll scrollbar-hide mx-auto max-w-108 w-full sm:w-fit bg-secondary rounded-xl">
                         <SortToggle
                           view="CARD"
-                          sort={'sort'}
-                          order={'order'}
                           currentOrder={currentOrder}
                           currentSort={currentSort}
                         />
                       </div>
                     </div>
+                    {product.productVariants.length <= 0 && (
+                      <div className="p-3 text-sm">
+                        <SearchNotFound children />
+                      </div>
+                    )}
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 pt-2">
                       {product.productVariants.map((variant) => (
                         <div
                           key={variant.productVariantId}
-                          className="rounded-2xl bg-light dark:bg-black/40 p-2"
+                          className="rounded-2xl bg-light dark:bg-white/5 p-2"
                         >
                           <div className="relative rounded-2xl overflow-hidden">
                             <img

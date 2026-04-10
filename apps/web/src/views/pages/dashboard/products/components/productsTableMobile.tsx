@@ -1,17 +1,17 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { IProductDashboard } from '../types';
 import { useVariantActions } from '../hooks/useActionVariants';
 import Actions from './actions';
 import Rupiah from '@/utils/rupiah';
 import Status from './status';
 import ModalContainer from '@/views/components/modalContainer';
-import SortVariants from './sortVariants';
 import ActionVariants from './actionVariants';
 import SearchNotFound from '@/views/pages/d/components/notfound';
 import VariantsModal from './variantsModal';
 import SortToggle from './sortToggle';
 import useFilteredParams from '@/views/pages/c/hooks/useFilteredParams';
+import EmptyCart from '@/views/pages/cart/components/empty';
 
 export default function ProductsTableMobile({
   products,
@@ -100,12 +100,15 @@ export default function ProductsTableMobile({
                     <div>
                       <div className="overflow-y-scroll scrollbar-hide -top-2 mx-auto sticky z-20 bg-secondary w-fit rounded-xl">
                         <SortToggle
-                          sort={'sort'}
-                          order={'order'}
                           currentOrder={currentOrder}
                           currentSort={currentSort}
                         />
                       </div>
+                      {product.productVariants.length <= 0 && (
+                        <div className="p-3 text-sm">
+                          <SearchNotFound children />
+                        </div>
+                      )}
                       {product.productVariants.map((variant) => (
                         <div
                           key={variant.productVariantId}

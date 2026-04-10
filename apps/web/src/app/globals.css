@@ -106,6 +106,10 @@
       background: #1a1a1a;
     }
 
+    .bg-primary-opacity {
+      background: #1a1a1acc;
+    }
+
     .bg-secondary-opacity {
       background: #1b1a1ecc;
     }
