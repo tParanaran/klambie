@@ -7,11 +7,13 @@ import { IHandleChange } from './textFieldForm';
 interface IFieldForm {
   handleChange: IHandleChange;
   values: string;
+  placeholder?: string;
 }
 
 export default function PasswordFieldForm({
   handleChange,
   values,
+  placeholder = `Type password here`,
 }: IFieldForm) {
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
@@ -27,7 +29,7 @@ export default function PasswordFieldForm({
           name="password"
           onChange={handleChange}
           values={values}
-          placeholder="Type your password here"
+          placeholder={placeholder}
           className="appearance-none w-full bg-black/10 dark:bg-white/10 rounded-full py-3 px-4 leading-tight focus:outline-none focus:bg-background focus:border focus:border-gray-300 placeholder:text-xs"
         />
         <button

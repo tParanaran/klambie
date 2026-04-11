@@ -7,6 +7,7 @@ export default function TextAreaFieldForm({
   values,
   name,
   label,
+  placeholder = `Type ${label.toLowerCase()} here`,
 }: IFieldForm) {
   return (
     <div className="flex flex-col mt-2 grow">
@@ -20,8 +21,8 @@ export default function TextAreaFieldForm({
         name={name}
         onChange={handleChange}
         values={values}
-        placeholder={`Type product ${label.toLocaleLowerCase()} here`}
-        className="appearance-none  bg-black/10 rounded-3xl py-3 px-4 leading-tight focus:outline-none focus:bg-background focus:border focus:border-gray-300 placeholder:text-xs h-28"
+        placeholder={placeholder}
+        className="appearance-none  bg-black/10 dark:bg-white/10 rounded-3xl py-3 px-4 leading-tight focus:outline-none focus:bg-background focus:border focus:border-gray-300 placeholder:text-xs h-28"
       />
       <ErrorForm name={name} />
     </div>

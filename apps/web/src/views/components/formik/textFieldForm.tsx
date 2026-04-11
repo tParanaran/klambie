@@ -16,6 +16,7 @@ export interface IFieldForm {
   values: string;
   name: string;
   label: string;
+  placeholder?: string;
 }
 
 export default function TextFieldForm({
@@ -23,6 +24,7 @@ export default function TextFieldForm({
   values,
   name,
   label,
+  placeholder = `Type ${label.toLowerCase()} here`,
 }: IFieldForm) {
   return (
     <div className="flex flex-col mt-2 grow">
@@ -35,7 +37,7 @@ export default function TextFieldForm({
         name={name}
         onChange={handleChange}
         values={values}
-        placeholder={`Type your ${label.toLowerCase()} here`}
+        placeholder={placeholder}
         className="appearance-none bg-black/10 dark:bg-white/10 rounded-full py-3 px-4 leading-tight focus:outline-none focus:bg-background focus:border focus:border-gray-300 placeholder:text-xs"
       />
       <ErrorForm name={name} />

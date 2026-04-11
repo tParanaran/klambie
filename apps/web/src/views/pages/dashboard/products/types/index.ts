@@ -33,15 +33,14 @@ export interface IEditVariants {
 
 export interface IProductDetails {
   description: string;
-  care: string;
-  feature: string;
-  material: string;
-
+  care?: string;
+  feature?: string;
+  material?: string;
   weight: number | null;
-  height: number | null;
-  width: number | null;
-  length: number | null;
-  volume: number | null;
+  height?: number | null;
+  width?: number | null;
+  length?: number | null;
+  volume?: number | null;
 }
 
 export interface IProductAttribute {
@@ -51,31 +50,26 @@ export interface IProductAttribute {
 
 export interface IProductImage {
   url: string;
-  attributeValueId?: number;
+  attributeValueId?: number | null;
 }
 
 export interface IProductVariant {
-  barcode: string | null;
-  basePrice: number | string;
+  barcode?: string;
+  basePrice: number | null;
   comparePrice?: number | null;
-  stock: number | string;
+  stock: number | null;
   attributeValueId: number[];
 }
 
 export interface IProductFormValues {
   name: string;
   brandId: number | null;
-  basePrice: number | string;
-
-  sizingGuideId: number | null;
-
+  basePrice: number | null;
+  productTags?: number[];
+  sizingGuideId?: number | null;
   productDetails: IProductDetails;
-
   productAttributes: IProductAttribute[];
-
-  productCategories: number[];
-
+  productCategories: string[];
   images: IProductImage[];
-
   productVariants: IProductVariant[];
 }

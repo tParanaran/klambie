@@ -4,10 +4,10 @@ import { IHandleChange } from './textFieldForm';
 
 interface IFieldForm {
   handleChange: IHandleChange;
-  values: number | String;
+  values: number | null | string;
   name: string;
   label?: string;
-  sortLabel?: string;
+  placeholder?: string;
 }
 
 export default function NumberFieldForm({
@@ -15,7 +15,7 @@ export default function NumberFieldForm({
   values,
   name,
   label,
-  sortLabel,
+  placeholder = `Type ${label?.toLowerCase() || name} here`,
 }: IFieldForm) {
   return (
     <div className="flex flex-col mt-2 grow">
@@ -30,7 +30,7 @@ export default function NumberFieldForm({
         name={name}
         onChange={handleChange}
         values={values}
-        placeholder={`${label ? `Type your ${label.toLowerCase()} here` : sortLabel}`}
+        placeholder={placeholder}
         className="appearance-none bg-black/10 dark:bg-white/10 rounded-full py-3 px-4 leading-tight focus:outline-none focus:bg-background focus:border focus:border-gray-300 placeholder:text-xs"
       />
       <ErrorForm name={name} />

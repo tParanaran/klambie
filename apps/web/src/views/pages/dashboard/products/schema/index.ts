@@ -1,4 +1,4 @@
-import { number, object } from 'yup';
+import { array, boolean, number, object, ref, string } from 'yup';
 
 export const EditVariants = object({
   stock: number()
@@ -12,93 +12,124 @@ export const EditVariants = object({
     .min(1, 'Price must be at least Rp 1'),
 });
 
-import * as Yup from 'yup';
-
-export const productValidationSchema = Yup.object({
-  name: Yup.string()
+export const productValidationSchema = object({
+  name: string()
     .required('Product name is required')
-    .min(3, 'Minimum 3 characters'),
+    .min(5, 'Minimum 3 characters'),
 
-  brandId: Yup.number().required('Brand is required').min(0),
+  brandId: number()
+    .typeError('Brand is required')
+    .required('Brand is required')
+    .min(1, 'Invalid brand'),
 
-  basePrice: Yup.number()
-    .required('Base price is required')
-    .min(0, 'Price must be greater than or equal to 0'),
+  basePrice: number()
+    .typeError('Must be a number')
+    .required('Price is required')
+    .min(1, 'Price must be at least Rp 1'),
 
-  sizingGuideId: Yup.number().nullable(),
+  productTags: array().of(number()).optional(),
 
-  productDetails: Yup.object({
-    description: Yup.string().required('Description is required'),
-    care: Yup.string().required('Care instructions are required'),
-    feature: Yup.string().required('Feature is required'),
-    material: Yup.string().required('Material is required'),
+  sizingGuideId: number().optional(),
 
-    weight: Yup.number().nullable().min(0, 'Weight must be positive'),
+  productCategories: array()
+    .of(string().required())
+    .min(1, 'At least one category is required'),
 
-    height: Yup.number().nullable().min(0, 'Height must be positive'),
+  productDetails: object({
+    description: string()
+      .required('Description is required')
+      .min(50, 'Minimum 50 characters'),
 
-    width: Yup.number().nullable().min(0, 'Width must be positive'),
+    care: string().optional(),
+    feature: string().optional(),
+    material: string().optional(),
 
-    length: Yup.number().nullable().min(0, 'Length must be positive'),
+    weight: number()
+      .typeError('Must be a number')
+      .required('Weight is required')
+      .min(1, 'Weight must be at least 1'),
 
-    volume: Yup.number().nullable().min(0, 'Volume must be positive'),
+    height: number()
+      .typeError('Height must be a number')
+      .nullable()
+      .transform((v, o) => (o === '' ? null : v)),
+
+    width: number()
+      .typeError('Width must be a number')
+      .nullable()
+      .transform((v, o) => (o === '' ? null : v)),
+
+    length: number()
+      .typeError('Length must be a number')
+      .nullable()
+      .transform((v, o) => (o === '' ? null : v)),
+
+    volume: number()
+      .typeError('Volume must be a number')
+      .nullable()
+      .transform((v, o) => (o === '' ? null : v)),
   }),
 
-  productAttributes: Yup.array()
+  productAttributes: array().of(
+    object({
+      attributeId: number()
+        .typeError('Attribute is required')
+        .required('Attribute is required'),
+
+      imageBased: boolean().optional(),
+    }),
+  ),
+
+  images: array()
     .of(
-      Yup.object({
-        attributeId: Yup.number().required(),
-        imageBased: Yup.boolean().optional(),
-      }),
-    )
-    .min(1, 'At least one attribute is required'),
+      object({
+        url: string().required('Image is required'),
 
-  productCategories: Yup.array()
-    .of(Yup.number().required())
-    .min(1, 'Select at least one category'),
-
-  images: Yup.array()
-    .of(
-      Yup.object({
-        url: Yup.string()
-          .required('Image URL is required')
-          .url('Invalid URL format'),
-
-        attributeValueId: Yup.number().optional(),
+        attributeValueId: number().optional(),
       }),
     )
     .min(1, 'At least one image is required'),
 
-  productVariants: Yup.array()
+  productVariants: array()
     .of(
-      Yup.object({
-        barcode: Yup.string().nullable(),
+      object({
+        barcode: string().optional(),
 
-        basePrice: Yup.number()
-          .required('Variant price is required')
-          .min(0, 'Price must be >= 0'),
+        basePrice: number()
+          .typeError('Must be a number')
+          .required('Price is required')
+          .min(1, 'Price must be at least Rp 1'),
 
-        comparePrice: Yup.number()
+        comparePrice: number()
+          .typeError('Must be a number')
           .nullable()
-          .min(0, 'Compare price must be >= 0')
-          .test(
-            'compare-greater',
-            'Compare price must be greater than base price',
-            function (value) {
-              const { basePrice } = this.parent;
-              if (value == null) return true;
-              return value >= basePrice;
-            },
-          ),
+          .transform((v, o) => (o === '' ? null : v))
+          .min(1, 'Price must be at least Rp 1')
+          .moreThan(ref('basePrice'), 'Must be greater than price'),
 
-        stock: Yup.number()
+        stock: number()
+          .typeError('Must be a number')
           .required('Stock is required')
-          .min(0, 'Stock cannot be negative'),
+          .integer('Stock must be a whole number')
+          .min(1, 'Stock must be at least 1 pc'),
 
-        attributeValueId: Yup.array()
-          .of(Yup.number().required())
+        attributeValueId: array()
+          .of(number().required())
           .min(1, 'Variant must have at least one attribute'),
       }),
     )
-    .min(1, 'At least one variant is required'),
+    .min(1, 'At least one variant is required')
+    .test('unique-variants', 'Duplicate variant combination', (variants) => {
+      if (!variants) return true;
+
+      const seen = new Set();
+
+      for (const v of variants) {
+        const key = v.attributeValueId?.sort().join('-');
+        if (seen.has(key)) return false;
+        seen.add(key);
+      }
+
+      return true;
+    }),
 });

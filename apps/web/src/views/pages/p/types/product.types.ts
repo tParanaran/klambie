@@ -12,7 +12,7 @@ export interface IPrice {
 }
 
 export interface ITag {
-  id?: number;
+  id: number;
   name: string;
   slug: string;
 }

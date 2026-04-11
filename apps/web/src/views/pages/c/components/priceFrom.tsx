@@ -39,7 +39,7 @@ export default function PriceFilterForm() {
                     handleChange={handleChange}
                     values={values.priceFrom}
                     name={'priceFrom'}
-                    sortLabel="Price From"
+                    placeholder="Price From"
                   />
                 </div>
                 <div className="block sm:hidden md:block">
@@ -50,7 +50,7 @@ export default function PriceFilterForm() {
                     handleChange={handleChange}
                     values={values.priceTo}
                     name={'priceTo'}
-                    sortLabel="Price To"
+                    placeholder="Price To"
                   />
                 </div>
               </div>

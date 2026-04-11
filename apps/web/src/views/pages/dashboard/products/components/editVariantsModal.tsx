@@ -68,7 +68,7 @@ export default function EditVariantsModal({
                           values={values.basePrice}
                           label="Price"
                           name={'basePrice'}
-                          sortLabel="Price"
+                          placeholder="Type new price here"
                         />
                       </div>
                       <div className="mt-2">
@@ -77,7 +77,7 @@ export default function EditVariantsModal({
                           values={values.stock}
                           label="Stock"
                           name={'stock'}
-                          sortLabel="Stock"
+                          placeholder="Type new stock here"
                         />
                       </div>
                     </div>

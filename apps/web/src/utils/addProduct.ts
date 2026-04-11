@@ -3,7 +3,7 @@ import { IProductFormValues } from '@/views/pages/dashboard/products/types';
 export const initialAddProductValues: IProductFormValues = {
   name: '',
   brandId: null,
-  basePrice: '',
+  basePrice: null,
 
   sizingGuideId: null,
 
@@ -26,16 +26,16 @@ export const initialAddProductValues: IProductFormValues = {
   images: [
     {
       url: '',
-      attributeValueId: undefined,
+      attributeValueId: null,
     },
   ],
 
   productVariants: [
     {
-      barcode: null,
-      basePrice: '',
+      barcode: '',
+      basePrice: null,
       comparePrice: null,
-      stock: '',
+      stock: null,
       attributeValueId: [],
     },
   ],
