@@ -36,11 +36,11 @@ export interface IProductDetails {
   care?: string;
   feature?: string;
   material?: string;
-  weight: number | null;
-  height?: number | null;
-  width?: number | null;
-  length?: number | null;
-  volume?: number | null;
+  weight: number | string;
+  height?: number | string;
+  width?: number | string;
+  length?: number | string;
+  volume?: number | string;
 }
 
 export interface IProductAttribute {
@@ -50,26 +50,29 @@ export interface IProductAttribute {
 
 export interface IProductImage {
   url: string;
-  attributeValueId?: number | null;
+  file?: File;
+  source?: 'local' | 'url';
+  attributeValueId?: number | string;
 }
 
 export interface IProductVariant {
   barcode?: string;
-  basePrice: number | null;
-  comparePrice?: number | null;
-  stock: number | null;
+  basePrice: number | string;
+  comparePrice?: number | string;
+  stock: number | string;
   attributeValueId: number[];
 }
 
 export interface IProductFormValues {
   name: string;
-  brandId: number | null;
-  basePrice: number | null;
+  brandId: number | string;
+  basePrice: number | string;
   productTags?: number[];
-  sizingGuideId?: number | null;
+  sizingGuideId?: number | string;
   productDetails: IProductDetails;
   productAttributes: IProductAttribute[];
   productCategories: string[];
   images: IProductImage[];
+  activeImageIndex: number;
   productVariants: IProductVariant[];
 }

@@ -22,9 +22,9 @@ export default function AddProductDahsboardView() {
         <h1 className="font-semibold">Add New Product Form</h1>
       </div>
       <div className="sticky top-1 z-10 mx-1 flex items-center justify-between">
-        <div className="ml-auto bg-primary-opacity backdrop-blur-xl p-1 rounded-xl">
+        <div className="ml-auto bg-primary-opacity backdrop-blur-xl p-1 rounded-lg">
           <div className="flex gap-1 text-xs sm:text-sm">
-            <Button className="flex-none border border-orange-800 dark:text-orange-700 dark:border-orange-700 text-orange-800 hover:border-orange-700 hover:text-white w-fit! rounded-xl! shadow">
+            <Button className="flex-none border border-orange-800 dark:text-orange-700 dark:border-orange-700 text-orange-800 hover:border-orange-700 hover:text-white w-fit! rounded-lg! shadow">
               <div className="flex items-center space-x-3">
                 <IoDocumentText className="text-xl" />
                 <p>Save Draft</p>
@@ -32,7 +32,7 @@ export default function AddProductDahsboardView() {
             </Button>
             <Button
               type="submit"
-              className="bg-orange-800 flex-none w-fit! rounded-xl! shadow"
+              className="bg-orange-800 flex-none w-fit! rounded-lg! shadow"
               onClick={addProductHandler}
             >
               <div className="flex items-center space-x-3">

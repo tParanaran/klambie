@@ -27,7 +27,7 @@ export default function ViewToggle({
   ];
   return (
     <div
-      className={`flex items-center dark:bg-white/10 rounded-xl p-1 w-fit shadow-sm ${view === 'TABLE' ? 'bg-black/10' : 'bg-light'}`}
+      className={`flex items-center dark:bg-white/10 rounded-lg p-1 w-fit shadow-sm ${view === 'TABLE' ? 'bg-black/10' : 'bg-light'}`}
     >
       {viewOptions.map((opt, o) => (
         <ToggleButton

@@ -86,7 +86,7 @@ export default function ProductCard({
                     isFilter={true}
                   >
                     <div className="sticky -top-2 z-20">
-                      <div className="overflow-x-scroll scrollbar-hide mx-auto max-w-108 w-full sm:w-fit bg-secondary rounded-xl">
+                      <div className="overflow-x-scroll scrollbar-hide mx-auto max-w-108 w-full sm:w-fit bg-secondary rounded-lg">
                         <SortToggle
                           view="CARD"
                           currentOrder={currentOrder}

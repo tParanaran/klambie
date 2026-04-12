@@ -30,10 +30,10 @@ export default function ProductsDahsboardView({
   return (
     <div className="relative px-3">
       <div className="my-1 flex justify-between space-x-1 sticky top-1 z-10 mx-1">
-        <div className="bg-primary-opacity backdrop-blur-xl rounded-xl">
+        <div className="bg-primary-opacity backdrop-blur-xl rounded-lg">
           <ViewToggle view={view} setView={viewHandler} />
         </div>
-        <div className="overflow-y-scroll scrollbar-hide max-w-108 w-full sm:w-fit bg-primary-opacity backdrop-blur-xl rounded-xl">
+        <div className="overflow-y-scroll scrollbar-hide max-w-108 w-full sm:w-fit bg-primary-opacity backdrop-blur-xl rounded-lg">
           <SortToggle
             view={view}
             sort={'sortBy'}

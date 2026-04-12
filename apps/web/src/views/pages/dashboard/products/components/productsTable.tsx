@@ -120,7 +120,7 @@ export default function ProductsTable({
                           <div>
                             {product.productVariants.length > 0 && (
                               <div className="w-full h-12 flex items-center justify-center sticky top-0">
-                                <div className="rounded-xl bg-body">
+                                <div className="rounded-lg bg-body">
                                   <SortToggle
                                     view="TABLE"
                                     currentOrder={currentOrder}

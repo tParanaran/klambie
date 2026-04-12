@@ -47,7 +47,7 @@ export default function CartView({
             <h1 className="font-bold mb-2">Voucher</h1>
             <AddVouchers />
             <h1 className="font-bold mb-2 mt-5">Orders Summary</h1>
-            <div className="md:bg-black/10 md:dark:bg-white/10 rounded-xl p-2 md:p-3">
+            <div className="md:bg-black/10 md:dark:bg-white/10 rounded-2xl p-2 md:p-3">
               <div className="space-y-5">
                 <CartSummary
                   totalPrice={totalPrice}

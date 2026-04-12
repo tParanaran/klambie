@@ -31,7 +31,7 @@ export default function NumberFieldForm({
         onChange={handleChange}
         values={values}
         placeholder={placeholder}
-        className="appearance-none bg-black/10 dark:bg-white/10 rounded-full py-3 px-4 leading-tight focus:outline-none focus:bg-background focus:border focus:border-gray-300 placeholder:text-xs"
+        className="appearance-none bg-black/10 dark:bg-white/10 rounded-full h-10 px-4 leading-tight focus:outline-none focus:bg-background focus:border focus:border-gray-300 placeholder:text-xs"
       />
       <ErrorForm name={name} />
     </div>

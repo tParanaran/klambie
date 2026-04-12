@@ -25,7 +25,7 @@ export default function SelectForm({
   placeholder = `Select ${label.toLowerCase()} here`,
   isMutipleSelect = false,
 }: CustomSelectProps) {
-  const [field, , helpers] = useField<number | number[]>(name);
+  const [field, meta, helpers] = useField<number | number[]>(name);
   const [open, setOpen] = useState<boolean>(false);
   const [search, setSearch] = useState<string>('');
 
@@ -72,7 +72,7 @@ export default function SelectForm({
   const labelName = isMutipleSelect
     ? selectedOptions.length === 0
       ? placeholder
-      : 'Add'
+      : 'Add Tag'
     : selectedOptions.length > 0
       ? selectedOptions[0].name
       : placeholder;
@@ -88,7 +88,7 @@ export default function SelectForm({
           selectedOptions.map((opt) => (
             <span
               key={opt.id}
-              className="bg-orange-800 text-white px-4 py-3 rounded-full text-sm flex items-center gap-2"
+              className="bg-orange-800 text-white px-4 h-10 rounded-full text-sm flex items-center gap-2"
             >
               {opt.name}
               <IoClose
@@ -104,7 +104,7 @@ export default function SelectForm({
         <button
           type="button"
           onClick={() => setOpen((prev) => !prev)}
-          className={`bg-black/10 dark:bg-white/10 rounded-full text-sm  px-4 py-3 text-left ${isMutipleSelect && selectedOptions.length > 0 ? 'w-fit' : 'grow'}`}
+          className={`rounded-full text-sm px-4 h-10 text-left ${isMutipleSelect && selectedOptions.length > 0 ? 'w-fit bg-black text-light' : 'grow bg-black/10 dark:bg-white/10 '}`}
         >
           <p
             className={selectedOptions.length === 0 ? 'text-xs opacity-50' : ''}
@@ -117,7 +117,7 @@ export default function SelectForm({
       {open && (
         <div
           ref={modalRef}
-          className="absolute z-20 mt-1 w-2xs bg-secondary-opacity backdrop-blur-xl rounded-2xl shadow py-3 max-h-[30vh] overflow-x-scroll scrollbar-hide"
+          className="absolute z-20 mt-1 w-2xs bg-secondary-opacity backdrop-blur-xl rounded-2xl shadow py-3 max-h-[30vh] overflow-x-scroll scrollbar-hide text-sm"
         >
           <div className="px-2 pb-2">
             <input

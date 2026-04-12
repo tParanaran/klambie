@@ -74,7 +74,7 @@ export default function sortToggle({
 
   return (
     <div
-      className={`flex items-center dark:bg-white/10 rounded-xl gap-0.5 p-1 w-fit shadow-sm ${view === 'TABLE' ? 'bg-black/10' : 'bg-light'}`}
+      className={`flex items-center dark:bg-white/10 rounded-lg gap-0.5 p-1 w-fit shadow-sm ${view === 'TABLE' ? 'bg-black/10' : 'bg-light'}`}
     >
       {sortDashboardOptions.map((opt, o) => (
         <ToggleButton
