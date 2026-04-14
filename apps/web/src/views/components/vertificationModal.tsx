@@ -4,7 +4,7 @@ import Link from 'next/link';
 export default function VertificationdModal({ html }: { html: string }) {
   return (
     <div className="fixed top-0 left-0 z-50">
-      <div className="absolute bg-light dark:bg-dark">
+      <div className="absolute bg-body">
         {' '}
         <div className="flex justify-center items-center h-screen w-screen">
           {' '}

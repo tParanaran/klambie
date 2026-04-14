@@ -16,13 +16,13 @@ export const initialTags = [
   },
   {
     id: 4,
-    name: 'Eid Collection',
-    slug: 'eid-collection',
+    name: 'Summer Collection',
+    slug: 'summer-collection',
   },
   {
     id: 5,
-    name: 'Ramadan Sale',
-    slug: 'ramadan-sale',
+    name: 'Mid Year Sale',
+    slug: 'mid-year-sale',
   },
 ];
 
@@ -105,43 +105,43 @@ export const initialAttributes = [
         hexUrl: '#0096FF',
       },
       {
-        id: 64,
+        id: 55,
         value: 'Beige',
         slug: 'beige',
         hexUrl: '#F5F5DC',
       },
       {
-        id: 65,
+        id: 56,
         value: 'Khaki',
         slug: 'khaki',
         hexUrl: '#F0E68C',
       },
       {
-        id: 66,
+        id: 57,
         value: 'Sage',
         slug: 'sage',
         hexUrl: '#8A9A5B',
       },
       {
-        id: 67,
+        id: 58,
         value: 'Orange',
         slug: 'orange',
         hexUrl: '#FF5F1F',
       },
       {
-        id: 68,
+        id: 59,
         value: 'Pink',
         slug: 'pink',
         hexUrl: '#FF69B4',
       },
       {
-        id: 69,
+        id: 60,
         value: 'Salmon',
         slug: 'salmon',
         hexUrl: '#FA8072',
       },
       {
-        id: 98,
+        id: 61,
         value: 'Violet',
         slug: 'violet',
         hexUrl: '#7F00FF',
@@ -255,7 +255,7 @@ export const initialAttributes = [
       },
       {
         id: 21,
-        value: '35.5',
+        value: '35.5**',
         slug: '355',
       },
       {
@@ -369,12 +369,104 @@ export const initialAttributes = [
     id: 3,
     name: 'Material',
     slug: 'material',
-    attributeValues: [],
+    attributeValues: [
+      {
+        id: 62,
+        value: 'Cotton',
+        slug: 'cotton',
+      },
+      {
+        id: 63,
+        value: 'Linen',
+        slug: 'linen',
+      },
+      {
+        id: 64,
+        value: 'Wool',
+        slug: 'wool',
+      },
+      {
+        id: 65,
+        value: 'Silk',
+        slug: 'silk',
+      },
+      {
+        id: 66,
+        value: 'Polyester',
+        slug: 'polyester',
+      },
+      {
+        id: 67,
+        value: 'Nylon',
+        slug: 'nylon',
+      },
+      {
+        id: 68,
+        value: 'Spandex',
+        slug: 'spandex',
+      },
+      {
+        id: 69,
+        value: 'Viscose',
+        slug: 'viscose',
+      },
+      {
+        id: 70,
+        value: 'Denim',
+        slug: 'denim',
+      },
+    ],
   },
   {
     id: 4,
     name: 'Motif',
     slug: 'motif',
-    attributeValues: [],
+    attributeValues: [
+      {
+        id: 71,
+        value: 'Polkadot',
+        slug: 'polkadot',
+      },
+      {
+        id: 72,
+        value: 'Stripes',
+        slug: 'stripes',
+      },
+      {
+        id: 73,
+        value: 'Retro',
+        slug: 'retro',
+      },
+      {
+        id: 74,
+        value: 'Floral',
+        slug: 'floral',
+      },
+      {
+        id: 75,
+        value: 'Plain',
+        slug: 'plain',
+      },
+      {
+        id: 76,
+        value: 'Graphic',
+        slug: 'graphic',
+      },
+      {
+        id: 77,
+        value: 'Batik',
+        slug: 'batik',
+      },
+      {
+        id: 78,
+        value: 'Ethnic',
+        slug: 'ethnic',
+      },
+      {
+        id: 79,
+        value: 'Printed',
+        slug: 'printed',
+      },
+    ],
   },
 ];

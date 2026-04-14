@@ -15,7 +15,7 @@ type SendMail = {
 export default async function SendMail(dataMail: SendMail): Promise<void> {
   const { email, name, htmlPath, subject } = dataMail;
 
-  const templatePath = path.join(__dirname, '../templates', htmlPath);
+  const templatePath = path.join(process.cwd(), '/src/templates', htmlPath);
   const templateSource = await fs.readFileSync(templatePath, 'utf-8');
   const compiledTemplate = Handlebars.compile(templateSource);
 

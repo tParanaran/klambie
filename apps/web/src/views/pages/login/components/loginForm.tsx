@@ -48,24 +48,14 @@ export default function LoginForm() {
       }}
     >
       {(props: FormikProps<ILogin>) => {
-        const { values, handleChange, handleSubmit } = props;
+        const { handleSubmit } = props;
         return (
           <Form
             onSubmit={handleSubmit}
             className="md:px-5 lg:px-10 pt-5 sm:pt-10 space-y-2"
           >
-            <TextFieldForm
-              handleChange={handleChange}
-              values={values.email}
-              name={'email'}
-              label={'Email'}
-            />
-
-            <PasswordFieldForm
-              handleChange={handleChange}
-              values={values.password}
-            />
-
+            <TextFieldForm name="email" label="Email" />
+            <PasswordFieldForm />
             <div className="mt-10">
               <ButtonForm message={message} href={'Login'} />
               <div className="text-center mt-2 text-sm">

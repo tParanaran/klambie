@@ -108,7 +108,7 @@ export default function SelectCategories() {
                   setOpenIndex(openIndex === index ? null : index);
                 }}
                 className={`bg-black/10 dark:bg-white/10 rounded-full px-4 h-10 flex items-center w-full
-                ${!currentCategories.length ? 'opacity-60 cursor-not-allowed mb-2' : ''}
+                ${!currentCategories.length ? 'cursor-not-allowed mb-2' : ''}
               `}
               >
                 <div className="flex flex-wrap gap-1 flex-1">
@@ -136,7 +136,7 @@ export default function SelectCategories() {
                       e.stopPropagation();
                       removeCategory(index);
                     }}
-                    className="text-red-400 text-2xl"
+                    className="text-red-600 text-lg"
                   />
                 )}
               </button>

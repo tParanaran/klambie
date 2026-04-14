@@ -46,19 +46,13 @@ export default function ResendEmailForm() {
         }}
       >
         {(props: FormikProps<IResend>) => {
-          const { values, handleChange, handleSubmit } = props;
+          const { handleSubmit } = props;
           return (
             <Form
               onSubmit={handleSubmit}
               className="md:px-5 lg:px-10 space-y-3 text-left"
             >
-              <TextFieldForm
-                handleChange={handleChange}
-                values={values.email}
-                name={'email'}
-                label={''}
-              />
-
+              <TextFieldForm name={'email'} label={''} />
               <ButtonForm message={message} href={'Resend Email'} />
             </Form>
           );

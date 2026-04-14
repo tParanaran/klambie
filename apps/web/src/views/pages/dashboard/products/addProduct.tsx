@@ -16,7 +16,7 @@ export default function AddProductDahsboardView() {
   };
 
   return (
-    <div className="relative px-3 my-10">
+    <div className="relative px-3 mt-5">
       <div className="flex space-x-2 items-center mb-5 sm:-mb-10">
         <MdNewLabel className="text-2xl" />
         <h1 className="font-semibold">Add New Product Form</h1>

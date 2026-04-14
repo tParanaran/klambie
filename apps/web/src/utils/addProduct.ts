@@ -4,9 +4,10 @@ export const initialAddProductValues: IProductFormValues = {
   name: '',
   brandId: '',
   basePrice: '',
-
+  baseStock: '',
+  comparePrice: '',
+  type: null,
   sizingGuideId: '',
-
   productDetails: {
     description: '',
     care: '',
@@ -20,20 +21,14 @@ export const initialAddProductValues: IProductFormValues = {
   },
 
   productAttributes: [],
-
   productCategories: [],
-
   images: [],
-
-  activeImageIndex: 0,
-
-  productVariants: [
-    {
-      barcode: '',
-      basePrice: '',
-      comparePrice: '',
-      stock: '',
-      attributeValueId: [],
-    },
-  ],
+  productVariants: [],
 };
+
+export function generateCombinations(arrays: number[][]): number[][] {
+  return arrays.reduce(
+    (acc, curr) => acc.flatMap((a) => curr.map((c) => [...a, c])),
+    [[]] as number[][],
+  );
+}

@@ -44,6 +44,7 @@ export default function ProductsDahsboardView({
           />
         </div>
       </div>
+
       <div className="transition-all duration-300">
         {view === 'CARD' ? (
           <ProductCard products={products} />

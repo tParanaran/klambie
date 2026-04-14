@@ -1,4 +1,4 @@
-import { array, boolean, number, object, ref, string } from 'yup';
+import { array, boolean, mixed, number, object, ref, string } from 'yup';
 
 export const EditVariants = object({
   stock: number()
@@ -12,25 +12,21 @@ export const EditVariants = object({
     .min(1, 'Price must be at least Rp 1'),
 });
 
-export const productValidationSchema = object({
+export const GeneralTabSchema = object({
   name: string()
     .required('Product name is required')
     .min(5, 'Minimum 3 characters'),
+
+  type: mixed<'NO_VARIANT' | 'VARIANT'>()
+    .oneOf(['NO_VARIANT', 'VARIANT'], 'Invalid product type')
+    .required('Product type is required'),
 
   brandId: number()
     .typeError('Brand is required')
     .required('Brand is required')
     .min(1, 'Invalid brand'),
 
-  basePrice: number()
-    .typeError('Must be a number')
-    .required('Price is required')
-    .min(1, 'Price must be at least Rp 1'),
-
   productTags: array().of(number()).optional(),
-
-  sizingGuideId: number().optional(),
-
   productCategories: array()
     .of(string().required())
     .min(1, 'At least one category is required'),
@@ -70,16 +66,6 @@ export const productValidationSchema = object({
       .transform((v, o) => (o === '' ? null : v)),
   }),
 
-  productAttributes: array().of(
-    object({
-      attributeId: number()
-        .typeError('Attribute is required')
-        .required('Attribute is required'),
-
-      imageBased: boolean().optional(),
-    }),
-  ),
-
   images: array()
     .of(
       object({
@@ -89,6 +75,48 @@ export const productValidationSchema = object({
       }),
     )
     .min(1, 'At least one image is required'),
+});
+
+export const productValidationSchema = object({
+  ...GeneralTabSchema.fields,
+  basePrice: number()
+    .typeError('Must be a number')
+    .required('Price is required')
+    .min(1, 'Price must be at least Rp 1'),
+
+  comparePrice: number()
+    .typeError('Must be a number')
+    .nullable()
+    .transform((v, o) => (o === '' ? null : v))
+    .min(1, 'Price must be at least Rp 1')
+    .moreThan(ref('basePrice'), 'Must be greater than price'),
+
+  baseStock: number()
+    .typeError('Must be a number')
+    .required('Stock is required')
+    .integer('Stock must be a whole number')
+    .min(1, 'Stock must be at least 1 pc'),
+
+  sizingGuideId: number().optional(),
+
+  productAttributes: array()
+    .of(
+      object({
+        attributeId: number()
+          .typeError('Attribute is required')
+          .required('Attribute is required'),
+
+        attributeValueId: number()
+          .nullable()
+          .transform((value, originalValue) =>
+            originalValue === '' ? null : value,
+          ),
+
+        imageBased: boolean().optional(),
+      }),
+    )
+    .min(1, 'At least one attribute is required')
+    .required('Product attributes are required'),
 
   productVariants: array()
     .of(
@@ -118,7 +146,11 @@ export const productValidationSchema = object({
           .min(1, 'Variant must have at least one attribute'),
       }),
     )
-    .min(1, 'At least one variant is required')
+    .when('type', {
+      is: 'VARIANT',
+      then: (schema) => schema.min(1, 'At least one variant is required'),
+      otherwise: (schema) => schema.notRequired(),
+    })
     .test('unique-variants', 'Duplicate variant combination', (variants) => {
       if (!variants) return true;
 

@@ -40,8 +40,6 @@ export class Cart {
   }
   async delete(req: Request, res: Response, next: NextFunction) {
     try {
-      console.log(req.body);
-
       const result = await cartService.deleteCart(
         req.body,
         req.cookies.sessionId,

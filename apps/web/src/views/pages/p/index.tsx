@@ -28,9 +28,6 @@ export default function ProductView({
   product: IProduct;
   groupedAttributes: IGroupedAttribute[];
 }) {
-  console.log(product);
-  console.log(groupedAttributes);
-
   const errorsProductRef = useRef<IErrorsMessageHandle | null>(null);
   const [quantity, setQuantity] = useState<number>(1);
   const [showVariant, setShowVariant] = useState<boolean>(false);

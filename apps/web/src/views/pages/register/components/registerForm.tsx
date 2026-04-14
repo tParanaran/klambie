@@ -54,25 +54,9 @@ export default function RegisterForm({ refferal }: IRefferal) {
               onSubmit={handleSubmit}
               className="md:px-5 lg:px-10 pt-5 sm:pt-10 space-y-2"
             >
-              <TextFieldForm
-                handleChange={handleChange}
-                values={values.name}
-                name={'name'}
-                label={'Name'}
-              />
-
-              <TextFieldForm
-                handleChange={handleChange}
-                values={values.email}
-                name={'email'}
-                label={'Email'}
-              />
-
-              <PasswordFieldForm
-                handleChange={handleChange}
-                values={values.password}
-              />
-
+              <TextFieldForm name="name" label="Name" />
+              <TextFieldForm name="email" label="Email" />
+              <PasswordFieldForm />
               <div className="mt-10">
                 <ButtonForm message={message} href={'Register'} />
                 <div className="text-center mt-2 text-sm">

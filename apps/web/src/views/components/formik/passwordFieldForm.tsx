@@ -1,34 +1,31 @@
-import { Field } from 'formik';
+import { useField } from 'formik';
 import { useState } from 'react';
 import ErrorForm from './errorForm';
 import { IoEyeOffOutline, IoEyeOutline } from 'react-icons/io5';
-import { IHandleChange } from './textFieldForm';
 
 interface IFieldForm {
-  handleChange: IHandleChange;
-  values: string;
+  name?: string;
   placeholder?: string;
 }
 
 export default function PasswordFieldForm({
-  handleChange,
-  values,
+  name = 'password',
   placeholder = `Type password here`,
 }: IFieldForm) {
+  const [field, meta, helpers] = useField(name);
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   return (
     <div className="flex flex-col mt-2 grow">
-      <label htmlFor="password" className="ml-4">
+      <label htmlFor={name} className="ml-4">
         Password
       </label>
       <div className="relative inline-block w-full">
-        <Field
-          id="password"
+        <input
+          {...field}
+          id={name}
           type={showPassword ? 'text' : 'password'}
-          name="password"
-          onChange={handleChange}
-          values={values}
+          name={name}
           placeholder={placeholder}
           className="appearance-none w-full bg-black/10 dark:bg-white/10 rounded-full h-10 px-4 leading-tight focus:outline-none focus:bg-background focus:border focus:border-gray-300 placeholder:text-xs"
         />
@@ -41,7 +38,7 @@ export default function PasswordFieldForm({
           {showPassword ? <IoEyeOffOutline /> : <IoEyeOutline />}
         </button>
       </div>
-      <ErrorForm name={'password'} />
+      <ErrorForm name={name} />
     </div>
   );
 }

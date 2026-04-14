@@ -30,28 +30,18 @@ export default function PriceFilterForm() {
         }}
       >
         {(props: FormikProps<IPriceFilter>) => {
-          const { values, handleChange, handleSubmit } = props;
+          const { handleSubmit } = props;
           return (
             <Form onSubmit={handleSubmit}>
               <div className="flex flex-row sm:flex-col md:flex-row items-center flex-wrap">
                 <div className={`w-24 sm:w-46 md:w-26 lg:w-30 flex-1`}>
-                  <NumberFieldForm
-                    handleChange={handleChange}
-                    values={values.priceFrom}
-                    name={'priceFrom'}
-                    placeholder="Price From"
-                  />
+                  <NumberFieldForm name="priceFrom" placeholder="Price From" />
                 </div>
                 <div className="block sm:hidden md:block">
                   <FaArrowsLeftRightToLine className="text-lg flex-none" />
                 </div>
                 <div className={`w-24 sm:w-46 md:w-26 lg:w-30 flex-1`}>
-                  <NumberFieldForm
-                    handleChange={handleChange}
-                    values={values.priceTo}
-                    name={'priceTo'}
-                    placeholder="Price To"
-                  />
+                  <NumberFieldForm name="priceTo" placeholder="Price To" />
                 </div>
               </div>
               <button

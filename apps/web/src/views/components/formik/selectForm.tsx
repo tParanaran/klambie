@@ -1,6 +1,6 @@
 import ErrorForm from '@/views/components/formik/errorForm';
 import useHandleClickOutside from '@/views/pages/template/hooks/useHandleClickOutside';
-import { useField } from 'formik';
+import { Field, useField } from 'formik';
 import { useState } from 'react';
 import { IoClose } from 'react-icons/io5';
 
@@ -8,6 +8,7 @@ interface Option {
   id: number;
   name: string;
   slug?: string;
+  hexUrl?: string;
 }
 
 interface CustomSelectProps {
@@ -16,6 +17,7 @@ interface CustomSelectProps {
   options: Option[];
   placeholder?: string;
   isMutipleSelect?: boolean;
+  onSelect?: (value: number | null) => void;
 }
 
 export default function SelectForm({
@@ -24,16 +26,18 @@ export default function SelectForm({
   label,
   placeholder = `Select ${label.toLowerCase()} here`,
   isMutipleSelect = false,
+  onSelect,
 }: CustomSelectProps) {
-  const [field, meta, helpers] = useField<number | number[]>(name);
+  const [field, meta, helpers] = useField<number | number[] | null>(name);
   const [open, setOpen] = useState<boolean>(false);
   const [search, setSearch] = useState<string>('');
 
-  const selectedIds: number[] = Array.isArray(field.value)
-    ? field.value
-    : field.value
-      ? [field.value]
-      : [];
+  const selectedIds: number[] =
+    field.value == null
+      ? []
+      : Array.isArray(field.value)
+        ? field.value
+        : [field.value];
 
   const selectedOptions = options.filter((o) => selectedIds.includes(o.id));
 
@@ -58,7 +62,12 @@ export default function SelectForm({
 
       helpers.setValue(newValue);
     } else {
-      helpers.setValue(id);
+      const isSame = field.value === id;
+
+      const newValue = isSame ? null : id;
+
+      helpers.setValue(newValue);
+      onSelect?.(newValue as number);
       setOpen(false);
     }
 
@@ -69,12 +78,11 @@ export default function SelectForm({
     opt.name.toLowerCase().includes(search.toLowerCase()),
   );
 
-  const labelName = isMutipleSelect
-    ? selectedOptions.length === 0
-      ? placeholder
-      : 'Add Tag'
-    : selectedOptions.length > 0
-      ? selectedOptions[0].name
+  const labelName =
+    selectedOptions.length > 0
+      ? isMutipleSelect
+        ? 'Add more'
+        : selectedOptions[0].name
       : placeholder;
 
   return (
@@ -107,9 +115,26 @@ export default function SelectForm({
           className={`rounded-full text-sm px-4 h-10 text-left ${isMutipleSelect && selectedOptions.length > 0 ? 'w-fit bg-black text-light' : 'grow bg-black/10 dark:bg-white/10 '}`}
         >
           <p
-            className={selectedOptions.length === 0 ? 'text-xs opacity-50' : ''}
+            className={
+              selectedOptions.length === 0
+                ? 'text-xs opacity-50'
+                : 'flex items-center justify-between'
+            }
           >
             {labelName}
+
+            {!isMutipleSelect && field.value && (
+              <span
+                className="ml-2 cursor-pointer"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  helpers.setValue(null);
+                  onSelect?.(null);
+                }}
+              >
+                <IoClose className="text-red-600 text-lg" />
+              </span>
+            )}
           </p>
         </button>
       </div>
@@ -117,7 +142,7 @@ export default function SelectForm({
       {open && (
         <div
           ref={modalRef}
-          className="absolute z-20 mt-1 w-2xs bg-secondary-opacity backdrop-blur-xl rounded-2xl shadow py-3 max-h-[30vh] overflow-x-scroll scrollbar-hide text-sm"
+          className="absolute z-20 mt-1 w-2xs max-w-full bg-secondary-opacity backdrop-blur-xl rounded-2xl shadow py-3 max-h-[30vh] overflow-x-scroll scrollbar-hide text-sm"
         >
           <div className="px-2 pb-2">
             <input

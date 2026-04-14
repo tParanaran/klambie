@@ -466,8 +466,6 @@ export class CartService {
 
     const idsToDelete = Array.isArray(productIds) ? productIds : [productIds];
 
-    console.log(idsToDelete);
-
     const deleteResults = await Promise.all(
       idsToDelete.map((productVariantId) =>
         prisma.cartItem.deleteMany({

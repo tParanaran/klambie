@@ -43,8 +43,10 @@ export interface IProductDetails {
   volume?: number | string;
 }
 
+type ProductType = 'NO_VARIANT' | 'VARIANT' | null;
+
 export interface IProductAttribute {
-  attributeId: number;
+  attributeId: number | string;
   imageBased?: boolean;
 }
 
@@ -67,12 +69,14 @@ export interface IProductFormValues {
   name: string;
   brandId: number | string;
   basePrice: number | string;
+  baseStock: number | string;
+  comparePrice: number | string;
+  type: ProductType;
   productTags?: number[];
   sizingGuideId?: number | string;
   productDetails: IProductDetails;
   productAttributes: IProductAttribute[];
   productCategories: string[];
   images: IProductImage[];
-  activeImageIndex: number;
   productVariants: IProductVariant[];
 }

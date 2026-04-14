@@ -49,7 +49,7 @@ export default function EditVariantsModal({
               }}
             >
               {(props: FormikProps<IVariantEdit>) => {
-                const { values, handleChange, handleSubmit } = props;
+                const { handleSubmit } = props;
                 return (
                   <Form onSubmit={handleSubmit}>
                     <div className="text-center">
@@ -64,19 +64,15 @@ export default function EditVariantsModal({
                     <div className="text-left my-5">
                       <div>
                         <NumberFieldForm
-                          handleChange={handleChange}
-                          values={values.basePrice}
                           label="Price"
-                          name={'basePrice'}
+                          name="basePrice"
                           placeholder="Type new price here"
                         />
                       </div>
                       <div className="mt-2">
                         <NumberFieldForm
-                          handleChange={handleChange}
-                          values={values.stock}
                           label="Stock"
-                          name={'stock'}
+                          name="stock"
                           placeholder="Type new stock here"
                         />
                       </div>
