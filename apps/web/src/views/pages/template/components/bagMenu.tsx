@@ -96,16 +96,19 @@ export default function BagMenu() {
                             className="object-cover h-20 w-20 rounded-full mt-5"
                             aria-placeholder="blur"
                           />
-                          <div className="absolute flex flex-wrap top-0 left-0 max-w-full gap-0.5">
-                            <div
-                              className="text-[10px] text-light bg-red-700 rounded-tl-xl rounded-br-xl py-0.5 px-1.5"
-                              title={item.appliedPromotions[0].badge}
-                            >
-                              {item.appliedPromotions
-                                .map((promo) => promo.badge)
-                                .join(' + ')}
-                            </div>
-                          </div>
+                          {item.appliedPromotions &&
+                            item.appliedPromotions.length > 0 && (
+                              <div className="absolute flex flex-wrap top-0 left-0 max-w-full gap-0.5">
+                                <div
+                                  className="text-[10px] text-light bg-red-700 rounded-tl-xl rounded-br-xl py-0.5 px-1.5"
+                                  title={item.appliedPromotions[0].badge}
+                                >
+                                  {item.appliedPromotions
+                                    .map((promo) => promo.badge)
+                                    .join(' + ')}
+                                </div>
+                              </div>
+                            )}
                         </div>
                         <div className="text-sm flex-1/2">
                           <div>

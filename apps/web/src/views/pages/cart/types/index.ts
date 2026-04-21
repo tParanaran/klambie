@@ -11,7 +11,7 @@ export interface ICartItems {
   slug: string;
   name: string;
   hasDiscount: boolean;
-  appliedPromotions: IAppliedPromotion[];
+  appliedPromotions?: IAppliedPromotion[];
   price: IPrice;
   sku: string;
   image: string;

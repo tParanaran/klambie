@@ -1,21 +1,25 @@
 import { Form, Formik, FormikProps } from 'formik';
 import { IProductFormValues } from '../types';
 import { initialAddProductValues } from '@/utils/addProduct';
-import { productValidationSchema } from '../schema';
+import {
+  AdvanceTabSchema,
+  GeneralTabSchema,
+  productValidationSchema,
+} from '../schema';
+import { validateTabs } from '@/utils/validateTabs';
 import { RefObject, useState } from 'react';
 import Tabs, { TabType } from './tabs';
 import TabPanel from '@/views/components/tabPanel';
 import GeneralTab from './generalTab';
 import AdvanceTab from './advanceTab';
-import CreateVariantModal from './createVariantsModal';
-import { validateGeneralTab } from '@/utils/validateGeneralTab';
+import VariantsTab from './variantsTab';
+import { generateAndMergeVariants } from '@/utils/generateProductVariants';
 
 interface IAddProductForm {
   formikRef: RefObject<FormikProps<IProductFormValues>>;
 }
 
 export default function AddProductForm({ formikRef }: IAddProductForm) {
-  const [openModal, setOpenModal] = useState<boolean>(false);
   const [tab, setTab] = useState<TabType>('GENERAL');
 
   return (
@@ -23,15 +27,25 @@ export default function AddProductForm({ formikRef }: IAddProductForm) {
       innerRef={formikRef}
       initialValues={initialAddProductValues}
       validationSchema={productValidationSchema}
-      onSubmit={(values) => {
-        console.log(values);
-      }}
+      onSubmit={(values) => {}}
     >
       {(props: FormikProps<IProductFormValues>) => {
         const handleChangeTab = async (nextTab: TabType) => {
           if (tab === 'GENERAL' && nextTab === 'DETAILS') {
-            const isValid = await validateGeneralTab(props);
+            const isValid = await validateTabs(props, GeneralTabSchema);
             if (!isValid) return;
+          }
+
+          if (
+            (tab === 'DETAILS' || tab === 'GENERAL') &&
+            nextTab === 'VARIANTS'
+          ) {
+            const isValid = await validateTabs(props, AdvanceTabSchema);
+
+            if (!isValid) return;
+
+            const variants = generateAndMergeVariants(props.values);
+            props.setFieldValue('productVariants', variants);
           }
 
           setTab(nextTab);
@@ -42,9 +56,7 @@ export default function AddProductForm({ formikRef }: IAddProductForm) {
             <Tabs
               setTab={handleChangeTab}
               tab={tab}
-              hasVariants={
-                values.type === 'VARIANT' && values.productVariants.length > 0
-              }
+              isHide={values.type === 'NO_VARIANT' || values.type === null}
             />
             <Form
               onSubmit={handleSubmit}
@@ -55,26 +67,12 @@ export default function AddProductForm({ formikRef }: IAddProductForm) {
                   <GeneralTab />
                 </TabPanel>
                 <TabPanel active={tab === 'DETAILS'}>
-                  <AdvanceTab
-                    onOpen={() => setOpenModal(true)}
-                    isReady={
-                      Number(values.basePrice) > 0 &&
-                      Number(values.baseStock) > 0
-                    }
-                  />
+                  <AdvanceTab />
                 </TabPanel>
                 <TabPanel active={tab === 'VARIANTS'}>
-                  <div></div>
+                  <VariantsTab />
                 </TabPanel>
               </div>
-              {openModal && (
-                <CreateVariantModal
-                  onClose={() => setOpenModal(false)}
-                  onDone={() => setTab('VARIANTS')}
-                  handlerModal={() => setOpenModal(!openModal)}
-                  showModal={openModal}
-                />
-              )}
             </Form>
           </div>
         );

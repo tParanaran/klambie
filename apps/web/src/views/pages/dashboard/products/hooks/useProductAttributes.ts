@@ -6,35 +6,77 @@ export function useProductAttributes() {
 
   const setValue = (
     attributeId: number,
-    value: number | null,
+    value: number[],
     imageBased: boolean = false,
   ) => {
     const current = values.productAttributes || [];
 
-    const index = current.findIndex(
-      (a: IProductAttribute) => a.attributeId === attributeId,
-    );
+    const index = current.findIndex((a) => a.attributeId === attributeId);
 
     let next = [...current];
 
-    if (value === null) {
-      next = current.filter(
-        (a: IProductAttribute) => a.attributeId !== attributeId,
-      );
-    } else if (index === -1) {
+    if (index === -1) {
       next.push({
         attributeId,
+        values: value,
         imageBased,
       });
     } else {
       next[index] = {
         ...next[index],
-        imageBased,
+        values: value,
+        imageBased: next[index].imageBased ?? imageBased,
       };
+    }
+
+    if (imageBased) {
+      next = next.map((attr) => ({
+        ...attr,
+        imageBased: attr.attributeId === attributeId,
+      }));
     }
 
     setFieldValue('productAttributes', next);
   };
 
-  return { setValue, values };
+  const setImageBased = (attributeId: number, enabled: boolean) => {
+    const current = values.productAttributes || [];
+
+    let next = current.map((attr) => ({
+      ...attr,
+      imageBased: enabled ? attr.attributeId === attributeId : false,
+    }));
+
+    setFieldValue('productAttributes', next);
+  };
+
+  const deleteAttributes = (attributeId: number) => {
+    const updatedAttributes = values.productAttributes.filter(
+      (attr: IProductAttribute) => attr.attributeId !== attributeId,
+    );
+
+    setFieldValue('productAttributes', updatedAttributes);
+  };
+
+  const toggleVariantAttribute = (attributeId: number) => {
+    const current = values.variantAttributeIds || [];
+
+    const exists = current.includes(attributeId);
+
+    const updated = exists
+      ? current.filter((id: number) => id !== attributeId)
+      : [...current, attributeId];
+
+    setFieldValue('variantAttributeIds', updated);
+  };
+
+  console.log(values);
+
+  return {
+    values,
+    deleteAttributes,
+    setValue,
+    setImageBased,
+    toggleVariantAttribute,
+  };
 }

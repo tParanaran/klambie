@@ -1,9 +1,13 @@
-import { GeneralTabSchema } from '@/views/pages/dashboard/products/schema';
+import { IProductFormValues } from '@/views/pages/dashboard/products/types';
 import { FormikProps, setIn } from 'formik';
+import { AnySchema } from 'yup';
 
-export const validateGeneralTab = async (formik: FormikProps<any>) => {
+export const validateTabs = async (
+  formik: FormikProps<IProductFormValues>,
+  schema: AnySchema,
+) => {
   try {
-    await GeneralTabSchema.validate(formik.values, {
+    await schema.validate(formik.values, {
       abortEarly: false,
     });
 

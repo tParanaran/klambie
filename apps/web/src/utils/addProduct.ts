@@ -24,6 +24,7 @@ export const initialAddProductValues: IProductFormValues = {
   productCategories: [],
   images: [],
   productVariants: [],
+  variantAttributeIds: [],
 };
 
 export function generateCombinations(arrays: number[][]): number[][] {

@@ -1,6 +1,6 @@
 import ErrorForm from '@/views/components/formik/errorForm';
 import useHandleClickOutside from '@/views/pages/template/hooks/useHandleClickOutside';
-import { Field, useField } from 'formik';
+import { useField } from 'formik';
 import { useState } from 'react';
 import { IoClose } from 'react-icons/io5';
 
@@ -17,7 +17,9 @@ interface CustomSelectProps {
   options: Option[];
   placeholder?: string;
   isMutipleSelect?: boolean;
-  onSelect?: (value: number | null) => void;
+  isAttribute?: boolean;
+  onSelect?: (value: number[]) => void;
+  onDelete?: () => void;
 }
 
 export default function SelectForm({
@@ -26,7 +28,9 @@ export default function SelectForm({
   label,
   placeholder = `Select ${label.toLowerCase()} here`,
   isMutipleSelect = false,
+  isAttribute = false,
   onSelect,
+  onDelete,
 }: CustomSelectProps) {
   const [field, meta, helpers] = useField<number | number[] | null>(name);
   const [open, setOpen] = useState<boolean>(false);
@@ -61,13 +65,13 @@ export default function SelectForm({
       }
 
       helpers.setValue(newValue);
+      onSelect?.(newValue);
     } else {
       const isSame = field.value === id;
 
       const newValue = isSame ? null : id;
 
       helpers.setValue(newValue);
-      onSelect?.(newValue as number);
       setOpen(false);
     }
 
@@ -80,9 +84,11 @@ export default function SelectForm({
 
   const labelName =
     selectedOptions.length > 0
-      ? isMutipleSelect
-        ? 'Add more'
-        : selectedOptions[0].name
+      ? isAttribute
+        ? selectedOptions.map((o) => o.name).join(', ')
+        : isMutipleSelect
+          ? 'Add more'
+          : selectedOptions[0].name
       : placeholder;
 
   return (
@@ -93,6 +99,7 @@ export default function SelectForm({
 
       <div className="flex flex-wrap items-center gap-1 w-full">
         {isMutipleSelect &&
+          !isAttribute &&
           selectedOptions.map((opt) => (
             <span
               key={opt.id}
@@ -112,7 +119,7 @@ export default function SelectForm({
         <button
           type="button"
           onClick={() => setOpen((prev) => !prev)}
-          className={`rounded-full text-sm px-4 h-10 text-left ${isMutipleSelect && selectedOptions.length > 0 ? 'w-fit bg-black text-light' : 'grow bg-black/10 dark:bg-white/10 '}`}
+          className={`rounded-full text-sm px-4 h-10 text-left ${isMutipleSelect && !isAttribute && selectedOptions.length > 0 ? 'w-fit bg-black text-light' : 'grow bg-black/10 dark:bg-white/10 '}`}
         >
           <p
             className={
@@ -123,13 +130,13 @@ export default function SelectForm({
           >
             {labelName}
 
-            {!isMutipleSelect && field.value && (
+            {isAttribute && field.value && (
               <span
                 className="ml-2 cursor-pointer"
                 onClick={(e) => {
                   e.stopPropagation();
                   helpers.setValue(null);
-                  onSelect?.(null);
+                  onDelete?.();
                 }}
               >
                 <IoClose className="text-red-600 text-lg" />

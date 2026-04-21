@@ -77,7 +77,7 @@ export const GeneralTabSchema = object({
     .min(1, 'At least one image is required'),
 });
 
-export const productValidationSchema = object({
+export const AdvanceTabSchema = object({
   ...GeneralTabSchema.fields,
   basePrice: number()
     .typeError('Must be a number')
@@ -97,7 +97,24 @@ export const productValidationSchema = object({
     .integer('Stock must be a whole number')
     .min(1, 'Stock must be at least 1 pc'),
 
-  sizingGuideId: number().optional(),
+  sizingGuideId: number()
+    .transform((value, originalValue) =>
+      originalValue === '' ? undefined : value,
+    )
+    .typeError('Sizing guide is required')
+    .required('Sizing guide is required')
+    .min(1, 'Invalid sizing guide'),
+
+  variantAttributeIds: array()
+    .of(number())
+    .when('type', {
+      is: 'VARIANT',
+      then: (schema) =>
+        schema
+          .min(1, 'Select at least one attribute for variants')
+          .required('Select at least one attribute for variants'),
+      otherwise: (schema) => schema.optional(),
+    }),
 
   productAttributes: array()
     .of(
@@ -106,18 +123,20 @@ export const productValidationSchema = object({
           .typeError('Attribute is required')
           .required('Attribute is required'),
 
-        attributeValueId: number()
-          .nullable()
-          .transform((value, originalValue) =>
-            originalValue === '' ? null : value,
-          ),
+        values: array()
+          .of(number().typeError('Attribute value is required'))
+          .min(1, 'At least one value is required')
+          .required('Values are required'),
 
         imageBased: boolean().optional(),
       }),
     )
     .min(1, 'At least one attribute is required')
     .required('Product attributes are required'),
+});
 
+export const productValidationSchema = object({
+  ...AdvanceTabSchema.fields,
   productVariants: array()
     .of(
       object({

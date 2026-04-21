@@ -20,6 +20,7 @@ import ShippingDetails from './shipping';
 import EmptyCart from './empty';
 import useDelete from '../hooks/useDelete';
 import DeleteAll from './deleteAll';
+import CheckBox from '@/views/components/checkBox';
 
 interface ICart {
   cartItems: [ICartItems[], ICartItems[]];
@@ -149,6 +150,9 @@ export default function CartItems({
               if (!errorsRefs.current[item.productVariantId]) {
                 errorsRefs.current[item.productVariantId] = null;
               }
+              const isChecked = selectedItems.some(
+                (i) => i.variantId === item.productVariantId,
+              );
               return (
                 <div key={i}>
                   <div
@@ -166,18 +170,17 @@ export default function CartItems({
                     </div>
                     <div className="flex space-x-2 items-center">
                       {!isUnavailable && (
-                        <div className="relative">
+                        <label className="relative">
                           <input
                             type="checkbox"
-                            checked={selectedItems.some(
-                              (i) => i.variantId === item.productVariantId,
-                            )}
+                            checked={isChecked}
                             onChange={() =>
                               toggleItem(item.productVariantId, item.quantity)
                             }
-                            className="w-4 h-4 appearance-none rounded-2xl border hover:ring hover:ring-black/90 hover:ring-offset-1 hover:ring-offset-slate-100 checked:ring-1 checked:ring-black/90 checked:ring-offset-2 checked:ring-offset-slate-100 cursor-pointer bg-gray-100"
+                            className="peer hidden"
                           />
-                        </div>
+                          <CheckBox isChecked={isChecked} />
+                        </label>
                       )}
                       <img
                         src={item.image}
@@ -190,16 +193,19 @@ export default function CartItems({
                         aria-placeholder="blur"
                       />
 
-                      <div className="absolute flex flex-wrap top-0 left-0 max-w-full gap-0.5">
-                        <div
-                          className={`text-xs text-light  rounded-tl-xl rounded-br-xl py-1 px-2 ${isUnavailable ? 'bg-gray-500' : 'bg-red-700'}`}
-                          title={item.appliedPromotions[0].badge}
-                        >
-                          {item.appliedPromotions
-                            .map((promo) => promo.badge)
-                            .join(' + ')}
-                        </div>
-                      </div>
+                      {item.appliedPromotions &&
+                        item.appliedPromotions.length > 0 && (
+                          <div className="absolute flex flex-wrap top-0 left-0 max-w-full gap-0.5">
+                            <div
+                              className={`text-xs text-light  rounded-tl-xl rounded-br-xl py-1 px-2 ${isUnavailable ? 'bg-gray-500' : 'bg-red-700'}`}
+                              title={item.appliedPromotions[0].badge}
+                            >
+                              {item.appliedPromotions
+                                .map((promo) => promo.badge)
+                                .join(' + ')}
+                            </div>
+                          </div>
+                        )}
                     </div>
                     <div className="text-sm flex-1/2">
                       <Link href={`/p/${item.slug}`} aria-label={item.name}>

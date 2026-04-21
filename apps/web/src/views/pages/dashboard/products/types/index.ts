@@ -48,13 +48,14 @@ type ProductType = 'NO_VARIANT' | 'VARIANT' | null;
 export interface IProductAttribute {
   attributeId: number | string;
   imageBased?: boolean;
+  values: number[];
 }
 
 export interface IProductImage {
   url: string;
   file?: File;
   source?: 'local' | 'url';
-  attributeValueId?: number | string;
+  attributeValueId: number;
 }
 
 export interface IProductVariant {
@@ -76,6 +77,7 @@ export interface IProductFormValues {
   sizingGuideId?: number | string;
   productDetails: IProductDetails;
   productAttributes: IProductAttribute[];
+  variantAttributeIds: number[];
   productCategories: string[];
   images: IProductImage[];
   productVariants: IProductVariant[];
