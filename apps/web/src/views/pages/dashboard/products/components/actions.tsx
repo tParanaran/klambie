@@ -9,6 +9,7 @@ interface IActions {
   toggleVariants: () => void;
   slug: string;
   name: string;
+  hasVariants: boolean;
   id: number;
   isOpen: boolean;
   variantsLength: number;
@@ -23,6 +24,7 @@ export default function Actions({
   name,
   isOpen,
   variantsLength,
+  hasVariants,
 }: IActions) {
   const [showModal, setShowModal] = useState<boolean>(false);
   const { router } = useActions(id);
@@ -30,7 +32,7 @@ export default function Actions({
   return (
     <>
       <div className="w-full flex mb-2 space-x-1 justify-start">
-        {variantsLength > 0 && (
+        {variantsLength > 0 && hasVariants && (
           <TagButton
             className={className}
             onClick={() => toggleVariants()}

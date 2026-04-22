@@ -108,6 +108,7 @@ export default function ProductsTable({
                             slug={product.slug}
                             id={product.productId}
                             name={product.name}
+                            hasVariants={product.type === 'VARIANT'}
                           />
                         </div>
                       </td>

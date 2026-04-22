@@ -84,6 +84,7 @@ export default function ProductsTableMobile({
                       toggleVariants={() => toggleVariants(product.slug)}
                       isOpen={isOpen}
                       variantsLength={product.productVariants.length}
+                      hasVariants={product.type === 'VARIANT'}
                       slug={product.slug}
                       id={product.productId}
                       name={product.name}

@@ -243,7 +243,7 @@ model ProductAttributeValue {
 model ProductVariant {
   id                       Int                       @id @default(autoincrement())
   productId                Int
-  sku                      String                    @unique
+  sku                      String?                   @unique
   barcode                  String?                   @unique
   basePrice                Decimal                   @db.Decimal(18, 2)
   stock                    Int

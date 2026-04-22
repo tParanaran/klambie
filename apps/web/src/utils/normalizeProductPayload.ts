@@ -66,14 +66,10 @@ export const normalizeProductPayload = (
     // VARIANTS
     // =========================
     productVariants: data.productVariants.map((v) => ({
-      attributeValueId: v.attributeValueId.map((id) => toNumber(id)),
-
+      attributeValueId: v.attributeValueId.map((id) => toNumber(id)) || [],
       basePrice: toNumber(v.basePrice),
-
       stock: toNumber(v.stock),
-
       comparePrice: v.comparePrice ? toNullableNumber(v.comparePrice) : null,
-
       barcode: v.barcode || null,
     })),
   };

@@ -9,25 +9,20 @@ import RadioButtonField from '@/views/components/formik/radioButtonField';
 import { useEffect } from 'react';
 import { useFormikContext } from 'formik';
 import { IProductFormValues } from '../types';
+import { useProductAttributes } from '../hooks/useProductAttributes';
 
 export default function GeneralTab() {
   const { values, setFieldValue } = useFormikContext<IProductFormValues>();
+  const { resetAttributesImages } = useProductAttributes();
   const { brandOptions, tags } = useAttribute();
 
   useEffect(() => {
     if (!values.type) return;
-    const currentImages = values.images || [];
-
-    const filteredImages = currentImages.filter((img) => {
-      return img.attributeValueId === 0;
-    });
-
-    setFieldValue('images', filteredImages);
 
     if (values.type === 'NO_VARIANT') {
       setFieldValue('productVariants', [
         {
-          barcode: '',
+          barcode: values.barcode || '',
           basePrice: values.basePrice || '',
           comparePrice: values.comparePrice || '',
           stock: values.baseStock || '',
@@ -40,8 +35,22 @@ export default function GeneralTab() {
       setFieldValue('productVariants', []);
     }
 
-    setFieldValue('images', filteredImages);
+    resetAttributesImages();
   }, [values.type]);
+
+  useEffect(() => {
+    if (values.type === 'NO_VARIANT') {
+      setFieldValue('productVariants', [
+        {
+          barcode: values.barcode,
+          basePrice: values.basePrice,
+          comparePrice: values.comparePrice,
+          stock: values.baseStock,
+          attributeValueId: [],
+        },
+      ]);
+    }
+  }, [values.basePrice, values.baseStock, values.comparePrice]);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[2fr_1fr] gap-5 mt-5">

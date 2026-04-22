@@ -94,6 +94,7 @@ export class ProductHelper {
       name: true,
       sku: true,
       slug: true,
+      type: true,
       basePrice: true,
       status: true,
       brand: {
@@ -189,6 +190,7 @@ export class ProductHelper {
         name: p.name,
         brand: p.brand?.name || 'Other',
         sku: p.sku,
+        type: p.type,
         status: p.status,
         slug: p.slug,
         price: p.basePrice,

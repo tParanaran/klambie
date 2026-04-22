@@ -15,23 +15,63 @@ import AdvanceTab from './advanceTab';
 import VariantsTab from './variantsTab';
 import { generateAndMergeVariants } from '@/utils/generateProductVariants';
 import { normalizeProductPayload } from '@/utils/normalizeProductPayload';
+import axiosInstanceClient from '@/lib/axios/client';
+import { useToastStore } from '@/store/toastStore';
+import { useRouter } from 'next/navigation';
 
 interface IAddProductForm {
   formikRef: RefObject<FormikProps<IProductFormValues>>;
+  submitType: 'ACTIVE' | 'DRAFT';
 }
 
-export default function AddProductForm({ formikRef }: IAddProductForm) {
+export default function AddProductForm({
+  formikRef,
+  submitType,
+}: IAddProductForm) {
   const [tab, setTab] = useState<TabType>('GENERAL');
+  const redirect = useRouter();
+  const showToast = useToastStore((s) => s.showToast);
 
   return (
     <Formik
       innerRef={formikRef}
       initialValues={initialAddProductValues}
-      validationSchema={productValidationSchema}
-      onSubmit={(values) => {
-        const payload = normalizeProductPayload(values);
+      validationSchema={
+        submitType === 'ACTIVE' ? productValidationSchema : GeneralTabSchema
+      }
+      onSubmit={async (values, { setSubmitting, setErrors, resetForm }) => {
+        try {
+          const payload = normalizeProductPayload(values);
 
-        console.log(payload);
+          const { data } = await axiosInstanceClient.post('/product/new', {
+            ...payload,
+            status: submitType,
+          });
+
+          if (submitType === 'ACTIVE') {
+            resetForm();
+          }
+
+          showToast({
+            message: data.message,
+            type: 'success',
+          });
+
+          redirect.push('/dashboard/products');
+        } catch (err: any) {
+          if (err?.response?.data?.errors) {
+            setErrors(err.response.data.errors);
+          }
+          showToast({
+            message:
+              err.response?.data?.message ||
+              err.message ||
+              'Something went wrong while create new products.',
+            type: 'error',
+          });
+        } finally {
+          setSubmitting(false);
+        }
       }}
     >
       {(props: FormikProps<IProductFormValues>) => {

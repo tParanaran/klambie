@@ -6,6 +6,7 @@ import useAttribute from '@/views/pages/c/hooks/useAttribute';
 import SelectForm from '@/views/components/formik/selectForm';
 import ErrorForm from '@/views/components/formik/errorForm';
 import CheckBox from '@/views/components/checkBox';
+import TextFieldForm from '@/views/components/formik/textFieldForm';
 
 export default function AdvanceTab() {
   const { attributes } = useAttribute();
@@ -113,11 +114,18 @@ export default function AdvanceTab() {
         <div className="bg-black/5 dark:bg-white/5 rounded-2xl w-full p-3 h-full">
           <h1 className="opacity-50">Details Product</h1>
           <div className="text-sm">
-            <SelectForm
-              name={'sizingGuideId'}
-              label={'Sizing Guide'}
-              options={[{ id: 1, name: 'No Sizing Guide' }]}
-            />
+            <div className="flex gap-x-1 lg:gap-x-3">
+              {values.type === 'NO_VARIANT' && (
+                <div className="grow flex-1/2">
+                  <TextFieldForm name="barcode" label="Barcode" />
+                </div>
+              )}
+              <SelectForm
+                name={'sizingGuideId'}
+                label={'Sizing Guide'}
+                options={[{ id: 1, name: 'No Sizing Guide' }]}
+              />
+            </div>
             <TextAreaFieldForm name="productDetails.feature" label="Feature" />
             <TextAreaFieldForm
               name="productDetails.material"

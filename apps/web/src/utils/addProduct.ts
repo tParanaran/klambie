@@ -8,6 +8,7 @@ export const initialAddProductValues: IProductFormValues = {
   comparePrice: '',
   type: null,
   sizingGuideId: '',
+  barcode: '',
   productDetails: {
     description: '',
     care: '',

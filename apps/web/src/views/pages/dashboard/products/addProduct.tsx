@@ -6,12 +6,19 @@ import { IoDocumentText, IoDuplicate } from 'react-icons/io5';
 import { MdNewLabel } from 'react-icons/md';
 import { FormikProps } from 'formik';
 import { IProductFormValues } from './types';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 
 export default function AddProductDahsboardView() {
   const formikRef = useRef<FormikProps<IProductFormValues>>(null);
+  const [submitType, setSubmitType] = useState<'ACTIVE' | 'DRAFT'>('ACTIVE');
 
   const addProductHandler = () => {
+    setSubmitType('ACTIVE');
+    formikRef.current?.submitForm();
+  };
+
+  const saveDraftHandler = () => {
+    setSubmitType('DRAFT');
     formikRef.current?.submitForm();
   };
 
@@ -24,7 +31,10 @@ export default function AddProductDahsboardView() {
       <div className="sticky top-1 z-10 mx-1 flex items-center justify-between">
         <div className="ml-auto bg-primary-opacity backdrop-blur-xl p-1 rounded-lg">
           <div className="flex gap-1 text-xs sm:text-sm">
-            <Button className="flex-none border border-orange-800 dark:text-orange-700 dark:border-orange-700 text-orange-800 hover:border-orange-700 hover:text-white w-fit! rounded-lg! shadow">
+            <Button
+              className="flex-none border border-orange-800 dark:text-orange-700 dark:border-orange-700 text-orange-800 hover:border-orange-700 hover:text-white w-fit! rounded-lg! shadow"
+              onClick={saveDraftHandler}
+            >
               <div className="flex items-center space-x-3">
                 <IoDocumentText className="text-xl" />
                 <p>Save Draft</p>
@@ -44,7 +54,7 @@ export default function AddProductDahsboardView() {
         </div>
       </div>
       <div>
-        <AddProductForm formikRef={formikRef} />
+        <AddProductForm formikRef={formikRef} submitType={submitType} />
       </div>
     </div>
   );

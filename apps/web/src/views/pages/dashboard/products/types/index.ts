@@ -13,6 +13,7 @@ export interface IVariantsDashboard {
 export interface IProductDashboard {
   productId: number;
   name: string;
+  type: 'VARIANT' | 'NO_VARIANT';
   brand: string;
   slug: string;
   sku: string;
@@ -69,15 +70,16 @@ export interface IProductVariant {
 export interface IProductFormValues {
   name: string;
   brandId: number | string;
+  barcode: string;
   basePrice: number | string;
   baseStock: number | string;
   comparePrice?: number | string;
   type: ProductType | null;
   productTags?: number[];
-  sizingGuideId: number;
+  sizingGuideId: number | string;
   productDetails: IProductDetails;
   productAttributes: IProductAttribute[];
-  variantAttributeIds?: number[];
+  variantAttributeIds: number[];
   productCategories: string[];
   images: IProductImage[];
   productVariants: IProductVariant[];

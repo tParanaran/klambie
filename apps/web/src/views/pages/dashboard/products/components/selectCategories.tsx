@@ -24,7 +24,7 @@ export default function SelectCategories() {
     let current = categories;
 
     for (const id of path) {
-      const found = current.find((c) => c.id === id);
+      const found = current.find((c) => c.hierarchyId === id);
       if (!found) return [];
       current = found.subcategories || [];
     }
@@ -37,7 +37,7 @@ export default function SelectCategories() {
     const labels: string[] = [];
 
     for (const id of path) {
-      const found = current.find((c) => c.id === id);
+      const found = current.find((c) => c.hierarchyId === id);
       if (!found) break;
 
       labels.push(found.name);
@@ -47,9 +47,9 @@ export default function SelectCategories() {
     return labels;
   };
 
-  const handleSelect = (index: number, catId: number) => {
+  const handleSelect = (index: number, hierarchyId: number) => {
     const path = paths[index];
-    const newPath = [...path, catId];
+    const newPath = [...path, hierarchyId];
 
     const next = getCategoriesByPath(categories, newPath);
 
@@ -75,6 +75,7 @@ export default function SelectCategories() {
     }
 
     setPaths(newPaths);
+
     setTimeout(() => {
       setOpenIndex(index);
     }, 0);
@@ -174,7 +175,7 @@ export default function SelectCategories() {
                       filteredOptions.map((cat) => (
                         <div
                           key={cat.id}
-                          onClick={() => handleSelect(index, cat.id)}
+                          onClick={() => handleSelect(index, cat.hierarchyId)}
                           className="px-3 py-2 cursor-pointer hover:bg-orange-800 hover:text-white"
                         >
                           {cat.name}

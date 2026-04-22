@@ -256,6 +256,7 @@ export class AttributeService {
       where: { id: categoryId },
       select: {
         path: true,
+        id: true,
         level: true,
         category: { select: { name: true, slug: true, id: true } },
       },
@@ -288,6 +289,7 @@ export class AttributeService {
 
     const root = {
       id: parent.category.id,
+      hierarchyId: parent.id,
       name: parent.category.name,
       level: parent.level,
       slug: parent.category.slug,
@@ -298,6 +300,7 @@ export class AttributeService {
     for (const item of descendants) {
       const node = {
         id: item.category.id,
+        hierarchyId: item.id,
         name: item.category.name,
         level: item.level,
         slug: item.category.slug,
@@ -338,6 +341,7 @@ export class AttributeService {
       if (!item.category) continue;
       const node: Filters = {
         id: item.category.id,
+        hierarchyId: item.id,
         name: item.category.name,
         slug: item.category.slug,
         level: item.level,

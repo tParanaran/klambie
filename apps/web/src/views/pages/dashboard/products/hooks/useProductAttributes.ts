@@ -39,9 +39,17 @@ export function useProductAttributes() {
     setFieldValue('productAttributes', next);
   };
 
+  const resetImages = () => {
+    const currentImages = values.images || [];
+    const filteredImages = currentImages.filter((img) => {
+      return img.attributeValueId === 0;
+    });
+
+    setFieldValue('images', filteredImages);
+  };
+
   const setImageBased = (attributeId: number, enabled: boolean) => {
     const current = values.productAttributes || [];
-    const currentImages = values.images || [];
 
     const nextAttributes = current.map((attr) => ({
       ...attr,
@@ -50,11 +58,20 @@ export function useProductAttributes() {
 
     setFieldValue('productAttributes', nextAttributes);
 
-    const filteredImages = currentImages.filter((img) => {
-      return img.attributeValueId === 0;
-    });
+    resetImages();
+  };
 
-    setFieldValue('images', filteredImages);
+  const resetAttributesImages = () => {
+    const current = values.productAttributes || [];
+
+    const next = current.map((attr) => ({
+      ...attr,
+      imageBased: false,
+    }));
+
+    setFieldValue('productAttributes', next);
+
+    resetImages();
   };
 
   const deleteAttributes = (attributeId: number) => {
@@ -85,5 +102,6 @@ export function useProductAttributes() {
     setValue,
     setImageBased,
     toggleVariantAttribute,
+    resetAttributesImages,
   };
 }

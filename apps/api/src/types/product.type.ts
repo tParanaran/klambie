@@ -1,6 +1,8 @@
 import Decimal from 'decimal.js';
 import { AppliedPromotion } from './promotion.type';
 
+type ProductType = 'VARIANT' | 'NO_VARIANT';
+
 export type Category = {
   categoriesId: number[];
   categoriesName: { name: string; slug: string }[];
@@ -42,6 +44,7 @@ export type InsertProduct = {
   name: string;
   brandId: number;
   basePrice: number;
+  type: ProductType;
   sizingGuideId?: number | null;
   productDetails: ProductDetails;
   productAttributes: {
@@ -49,7 +52,7 @@ export type InsertProduct = {
     imageBased: boolean;
     values: number[];
   }[];
-  productCategories: number[];
+  productCategories: string[];
   productTags?: number[];
   images: {
     url: string;
@@ -85,7 +88,7 @@ export type Products = {
   hasDiscount: boolean;
   price: Price;
   slug: string;
-  type: string;
+  type: ProductType;
   brand: { name: string; slug: string };
   categories?: { name: string; slug: string }[];
   tags?: { name: string; slug: string }[];
@@ -95,7 +98,7 @@ export type Products = {
 
 export type VariantProduct = {
   id: number;
-  sku: string;
+  sku: string | null;
   price: Price;
   appliedPromotion?: AppliedPromotion[];
   hasDiscount: boolean;
@@ -117,7 +120,7 @@ export type Product = {
   name: string;
   slug: string;
   sku: string;
-  type: string;
+  type: ProductType;
   status: string;
   brand: { name: string; slug: string };
   categories?: { name: string; slug: string }[];
@@ -130,6 +133,7 @@ export type Product = {
 
 export type Filters = {
   id: number;
+  hierarchyId: number;
   name: string;
   slug: string;
   level: number;
@@ -170,6 +174,7 @@ export type ProductDashboard = {
   name: string;
   brand: string;
   slug: string;
+  type: string;
   sku: string;
   price: Decimal;
   stock: number;

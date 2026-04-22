@@ -59,6 +59,7 @@ export default function ProductCard({
                         id={product.productId}
                         isOpen={isOpen}
                         variantsLength={product.productVariants.length}
+                        hasVariants={product.type === 'VARIANT'}
                       />
                     </div>
                   </div>
@@ -70,10 +71,12 @@ export default function ProductCard({
                     </div>
                     <div>
                       <p className="text-active">{Rupiah(product.price)}</p>
-                      <div className="flex space-x-3 flex-wrap">
-                        <p>Stock: {product.stock}</p>
-                        <p>Order: {product.reservedStock}</p>
-                        <p>Sales: {product.soldQty}</p>
+                      <div className="overflow-x-scroll max-w-full scrollbar-hide mt-2">
+                        <div className="flex space-x-3 whitespace-nowrap">
+                          <p>Stock: {product.stock}</p>
+                          <p>Order: {product.reservedStock}</p>
+                          <p>Sales: {product.soldQty}</p>
+                        </div>
                       </div>
                     </div>
                   </div>

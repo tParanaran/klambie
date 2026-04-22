@@ -1,5 +1,5 @@
 import Decimal from 'decimal.js';
-import { PromotionRule } from 'generated/prisma/client';
+import { PromotionRule } from '@generated/prisma/client';
 
 export type Product = {
   id: number;

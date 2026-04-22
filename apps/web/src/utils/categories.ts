@@ -4,18 +4,21 @@ import { ICategories } from '@/views/pages/c/types';
 export const initialCategories: ICategories[] = [
   {
     id: 1,
+    hierarchyId: 1,
     name: 'Men',
     slug: 'men',
     level: 1,
     subcategories: [
       {
         id: 4,
+        hierarchyId: 10,
         name: 'Sports',
         slug: 'sports',
         level: 2,
         subcategories: [
           {
             id: 6,
+            hierarchyId: 114,
             name: 'Clothing',
             slug: 'clothing',
             level: 3,
@@ -23,6 +26,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 7,
+            hierarchyId: 115,
             name: 'Shoes',
             slug: 'shoes',
             level: 3,
@@ -30,6 +34,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 8,
+            hierarchyId: 116,
             name: 'Accessories',
             slug: 'accessories',
             level: 3,
@@ -39,12 +44,14 @@ export const initialCategories: ICategories[] = [
       },
       {
         id: 15,
+        hierarchyId: 24,
         name: "Men's Care",
         slug: 'men-care',
         level: 2,
         subcategories: [
           {
             id: 93,
+            hierarchyId: 117,
             name: 'Fragrance',
             slug: 'fragrance',
             level: 3,
@@ -52,6 +59,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 18,
+            hierarchyId: 118,
             name: 'Skin Care',
             slug: 'skin-care',
             level: 3,
@@ -59,6 +67,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 20,
+            hierarchyId: 119,
             name: 'Hair Care',
             slug: 'hair-care',
             level: 3,
@@ -66,6 +75,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 41,
+            hierarchyId: 120,
             name: 'Body Care',
             slug: 'body-care',
             level: 3,
@@ -73,6 +83,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 42,
+            hierarchyId: 121,
             name: 'Grooming Tools',
             slug: 'grooming-tools',
             level: 3,
@@ -82,6 +93,7 @@ export const initialCategories: ICategories[] = [
       },
       {
         id: 10,
+        hierarchyId: 25,
         name: 'Localwears',
         slug: 'localwears',
         level: 2,
@@ -89,12 +101,14 @@ export const initialCategories: ICategories[] = [
       },
       {
         id: 6,
+        hierarchyId: 6,
         name: 'Clothing',
         slug: 'clothing',
         level: 2,
         subcategories: [
           {
             id: 50,
+            hierarchyId: 69,
             name: 'Shirts',
             slug: 'shirts',
             level: 3,
@@ -102,6 +116,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 51,
+            hierarchyId: 70,
             name: 'Etchnic Wear',
             slug: 'etchnic-wear',
             level: 3,
@@ -109,6 +124,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 52,
+            hierarchyId: 71,
             name: 'Polos',
             slug: 'polos',
             level: 3,
@@ -116,6 +132,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 53,
+            hierarchyId: 72,
             name: 'Jeans',
             slug: 'jeans',
             level: 3,
@@ -123,6 +140,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 54,
+            hierarchyId: 73,
             name: 'Shorts',
             slug: 'shorts',
             level: 3,
@@ -130,6 +148,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 55,
+            hierarchyId: 74,
             name: 'Underwear',
             slug: 'underwear',
             level: 3,
@@ -137,6 +156,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 56,
+            hierarchyId: 75,
             name: 'Beachwear',
             slug: 'beachwear',
             level: 3,
@@ -144,6 +164,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 57,
+            hierarchyId: 76,
             name: 'Cardigans',
             slug: 'cardigans',
             level: 3,
@@ -151,6 +172,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 58,
+            hierarchyId: 77,
             name: 'Jackets',
             slug: 'jackets',
             level: 3,
@@ -158,6 +180,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 59,
+            hierarchyId: 78,
             name: 'Hoodies',
             slug: 'hoodies',
             level: 3,
@@ -165,6 +188,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 60,
+            hierarchyId: 79,
             name: 'Blazers and Suits',
             slug: 'blazers-and-suits',
             level: 3,
@@ -172,6 +196,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 61,
+            hierarchyId: 80,
             name: 'Socks',
             slug: 'socks',
             level: 3,
@@ -179,12 +204,14 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 62,
+            hierarchyId: 81,
             name: 'Outwears',
             slug: 'outwears',
             level: 3,
             subcategories: [
               {
                 id: 65,
+                hierarchyId: 84,
                 name: 'Parkas',
                 slug: 'parkas',
                 level: 4,
@@ -192,6 +219,7 @@ export const initialCategories: ICategories[] = [
               },
               {
                 id: 58,
+                hierarchyId: 85,
                 name: 'Jackets',
                 slug: 'jackets',
                 level: 4,
@@ -199,6 +227,7 @@ export const initialCategories: ICategories[] = [
               },
               {
                 id: 66,
+                hierarchyId: 86,
                 name: 'Coats',
                 slug: 'coats',
                 level: 4,
@@ -206,6 +235,7 @@ export const initialCategories: ICategories[] = [
               },
               {
                 id: 67,
+                hierarchyId: 87,
                 name: 'Flannels',
                 slug: 'flannels',
                 level: 4,
@@ -215,12 +245,14 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 63,
+            hierarchyId: 82,
             name: 'T-Shirts',
             slug: 't-shirts',
             level: 3,
             subcategories: [
               {
                 id: 71,
+                hierarchyId: 91,
                 name: 'Oversized',
                 slug: 'oversized',
                 level: 4,
@@ -230,12 +262,14 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 64,
+            hierarchyId: 83,
             name: 'Pants',
             slug: 'pants',
             level: 3,
             subcategories: [
               {
                 id: 68,
+                hierarchyId: 88,
                 name: 'Cargos',
                 slug: 'cargos',
                 level: 4,
@@ -243,6 +277,7 @@ export const initialCategories: ICategories[] = [
               },
               {
                 id: 69,
+                hierarchyId: 89,
                 name: 'Chinos',
                 slug: 'chinos',
                 level: 4,
@@ -250,6 +285,7 @@ export const initialCategories: ICategories[] = [
               },
               {
                 id: 70,
+                hierarchyId: 90,
                 name: 'Formal',
                 slug: 'formal',
                 level: 4,
@@ -261,12 +297,14 @@ export const initialCategories: ICategories[] = [
       },
       {
         id: 7,
+        hierarchyId: 7,
         name: 'Shoes',
         slug: 'shoes',
         level: 2,
         subcategories: [
           {
             id: 72,
+            hierarchyId: 92,
             name: 'Sports Shoes',
             slug: 'sports-shoes',
             level: 3,
@@ -274,6 +312,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 73,
+            hierarchyId: 93,
             name: 'Shoes Accessories',
             slug: 'shoes-accessories',
             level: 3,
@@ -281,6 +320,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 74,
+            hierarchyId: 94,
             name: 'Sneakers',
             slug: 'sneakers',
             level: 3,
@@ -288,6 +328,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 70,
+            hierarchyId: 95,
             name: 'Formal',
             slug: 'formal',
             level: 3,
@@ -295,6 +336,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 75,
+            hierarchyId: 96,
             name: 'Slip-Ons',
             slug: 'slip-ons',
             level: 3,
@@ -302,6 +344,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 76,
+            hierarchyId: 97,
             name: 'Boots',
             slug: 'boots',
             level: 3,
@@ -309,6 +352,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 77,
+            hierarchyId: 98,
             name: 'Sandals',
             slug: 'sandals',
             level: 3,
@@ -318,12 +362,14 @@ export const initialCategories: ICategories[] = [
       },
       {
         id: 8,
+        hierarchyId: 8,
         name: 'Accessories',
         slug: 'accessories',
         level: 2,
         subcategories: [
           {
             id: 79,
+            hierarchyId: 100,
             name: 'Wallets',
             slug: 'wallets',
             level: 3,
@@ -331,6 +377,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 80,
+            hierarchyId: 101,
             name: 'Hats and Caps',
             slug: 'hats-and-caps',
             level: 3,
@@ -338,6 +385,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 81,
+            hierarchyId: 102,
             name: 'Stationery',
             slug: 'stationery',
             level: 3,
@@ -345,6 +393,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 82,
+            hierarchyId: 103,
             name: 'Ties and Accessories',
             slug: 'ties-and-accessories',
             level: 3,
@@ -352,6 +401,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 83,
+            hierarchyId: 104,
             name: 'Other Accessories',
             slug: 'other-accessories',
             level: 3,
@@ -359,6 +409,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 84,
+            hierarchyId: 105,
             name: 'Scarves and Shawls',
             slug: 'scarves-and-shawls',
             level: 3,
@@ -366,6 +417,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 85,
+            hierarchyId: 106,
             name: 'Watches',
             slug: 'watches',
             level: 3,
@@ -373,6 +425,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 86,
+            hierarchyId: 107,
             name: 'Eyewear',
             slug: 'eyewear',
             level: 3,
@@ -380,6 +433,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 87,
+            hierarchyId: 108,
             name: 'Jewellery',
             slug: 'jewellery',
             level: 3,
@@ -387,6 +441,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 78,
+            hierarchyId: 99,
             name: 'Belts',
             slug: 'belts',
             level: 3,
@@ -396,12 +451,14 @@ export const initialCategories: ICategories[] = [
       },
       {
         id: 9,
+        hierarchyId: 9,
         name: 'Bags',
         slug: 'bags',
         level: 2,
         subcategories: [
           {
             id: 88,
+            hierarchyId: 109,
             name: 'Backpacks',
             slug: 'backpacks',
             level: 3,
@@ -409,6 +466,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 89,
+            hierarchyId: 110,
             name: 'Travel Bags',
             slug: 'travel-bags',
             level: 3,
@@ -416,6 +474,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 90,
+            hierarchyId: 111,
             name: 'Tote Bags',
             slug: 'tote-bags',
             level: 3,
@@ -423,6 +482,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 91,
+            hierarchyId: 112,
             name: 'Laptop Bags',
             slug: 'laptop-bags',
             level: 3,
@@ -430,6 +490,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 92,
+            hierarchyId: 113,
             name: 'Crossbody Bags',
             slug: 'crossbody-bags',
             level: 3,
@@ -441,18 +502,21 @@ export const initialCategories: ICategories[] = [
   },
   {
     id: 2,
+    hierarchyId: 2,
     name: 'Women',
     slug: 'women',
     level: 1,
     subcategories: [
       {
         id: 6,
+        hierarchyId: 11,
         name: 'Clothing',
         slug: 'clothing',
         level: 2,
         subcategories: [
           {
             id: 94,
+            hierarchyId: 122,
             name: 'Dresses',
             slug: 'dresses',
             level: 3,
@@ -460,6 +524,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 51,
+            hierarchyId: 123,
             name: 'Etchnic Wear',
             slug: 'etchnic-wear',
             level: 3,
@@ -467,6 +532,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 95,
+            hierarchyId: 124,
             name: 'Skirts',
             slug: 'skirts',
             level: 3,
@@ -474,6 +540,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 54,
+            hierarchyId: 125,
             name: 'Shorts',
             slug: 'shorts',
             level: 3,
@@ -481,6 +548,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 96,
+            hierarchyId: 126,
             name: 'Blazers',
             slug: 'blazers',
             level: 3,
@@ -488,6 +556,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 97,
+            hierarchyId: 127,
             name: 'Lingerie',
             slug: 'lingerie',
             level: 3,
@@ -495,6 +564,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 98,
+            hierarchyId: 128,
             name: 'Swimwear',
             slug: 'swimwear',
             level: 3,
@@ -502,6 +572,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 56,
+            hierarchyId: 129,
             name: 'Beachwear',
             slug: 'beachwear',
             level: 3,
@@ -509,6 +580,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 53,
+            hierarchyId: 130,
             name: 'Jeans',
             slug: 'jeans',
             level: 3,
@@ -516,6 +588,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 64,
+            hierarchyId: 131,
             name: 'Pants',
             slug: 'pants',
             level: 3,
@@ -523,6 +596,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 57,
+            hierarchyId: 132,
             name: 'Cardigans',
             slug: 'cardigans',
             level: 3,
@@ -530,6 +604,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 58,
+            hierarchyId: 133,
             name: 'Jackets',
             slug: 'jackets',
             level: 3,
@@ -537,6 +612,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 99,
+            hierarchyId: 134,
             name: 'Maternity',
             slug: 'maternity',
             level: 3,
@@ -544,6 +620,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 100,
+            hierarchyId: 135,
             name: 'Playsuits',
             slug: 'playsuits',
             level: 3,
@@ -551,6 +628,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 61,
+            hierarchyId: 136,
             name: 'Socks',
             slug: 'socks',
             level: 3,
@@ -558,12 +636,14 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 63,
+            hierarchyId: 137,
             name: 'T-Shirts',
             slug: 't-shirts',
             level: 3,
             subcategories: [
               {
                 id: 71,
+                hierarchyId: 139,
                 name: 'Oversized',
                 slug: 'oversized',
                 level: 4,
@@ -573,6 +653,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 101,
+            hierarchyId: 138,
             name: 'Tops',
             slug: 'tops',
             level: 3,
@@ -582,12 +663,14 @@ export const initialCategories: ICategories[] = [
       },
       {
         id: 7,
+        hierarchyId: 12,
         name: 'Shoes',
         slug: 'shoes',
         level: 2,
         subcategories: [
           {
             id: 74,
+            hierarchyId: 140,
             name: 'Sneakers',
             slug: 'sneakers',
             level: 3,
@@ -595,6 +678,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 70,
+            hierarchyId: 141,
             name: 'Formal',
             slug: 'formal',
             level: 3,
@@ -602,6 +686,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 75,
+            hierarchyId: 142,
             name: 'Slip-Ons',
             slug: 'slip-ons',
             level: 3,
@@ -609,6 +694,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 76,
+            hierarchyId: 143,
             name: 'Boots',
             slug: 'boots',
             level: 3,
@@ -616,6 +702,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 77,
+            hierarchyId: 144,
             name: 'Sandals',
             slug: 'sandals',
             level: 3,
@@ -623,6 +710,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 102,
+            hierarchyId: 145,
             name: 'Heels',
             slug: 'heels',
             level: 3,
@@ -630,6 +718,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 103,
+            hierarchyId: 146,
             name: 'Wedges',
             slug: 'wedges',
             level: 3,
@@ -637,6 +726,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 104,
+            hierarchyId: 147,
             name: 'Flats',
             slug: 'flats',
             level: 3,
@@ -644,6 +734,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 105,
+            hierarchyId: 148,
             name: 'Flip Flops',
             slug: 'flip-flops',
             level: 3,
@@ -653,12 +744,14 @@ export const initialCategories: ICategories[] = [
       },
       {
         id: 8,
+        hierarchyId: 13,
         name: 'Accessories',
         slug: 'accessories',
         level: 2,
         subcategories: [
           {
             id: 85,
+            hierarchyId: 149,
             name: 'Watches',
             slug: 'watches',
             level: 3,
@@ -666,6 +759,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 86,
+            hierarchyId: 150,
             name: 'Eyewear',
             slug: 'eyewear',
             level: 3,
@@ -673,6 +767,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 87,
+            hierarchyId: 151,
             name: 'Jewellery',
             slug: 'jewellery',
             level: 3,
@@ -682,12 +777,14 @@ export const initialCategories: ICategories[] = [
       },
       {
         id: 9,
+        hierarchyId: 14,
         name: 'Bags',
         slug: 'bags',
         level: 2,
         subcategories: [
           {
             id: 88,
+            hierarchyId: 152,
             name: 'Backpacks',
             slug: 'backpacks',
             level: 3,
@@ -695,6 +792,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 89,
+            hierarchyId: 153,
             name: 'Travel Bags',
             slug: 'travel-bags',
             level: 3,
@@ -702,6 +800,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 90,
+            hierarchyId: 154,
             name: 'Tote Bags',
             slug: 'tote-bags',
             level: 3,
@@ -709,6 +808,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 91,
+            hierarchyId: 155,
             name: 'Laptop Bags',
             slug: 'laptop-bags',
             level: 3,
@@ -716,6 +816,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 92,
+            hierarchyId: 156,
             name: 'Crossbody Bags',
             slug: 'crossbody-bags',
             level: 3,
@@ -723,6 +824,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 106,
+            hierarchyId: 157,
             name: 'Handbags',
             slug: 'handbags',
             level: 3,
@@ -730,6 +832,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 107,
+            hierarchyId: 158,
             name: 'Clutch Bags',
             slug: 'clutch-bags',
             level: 3,
@@ -737,6 +840,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 108,
+            hierarchyId: 159,
             name: 'Leather Bags',
             slug: 'leather-bags',
             level: 3,
@@ -746,12 +850,14 @@ export const initialCategories: ICategories[] = [
       },
       {
         id: 4,
+        hierarchyId: 15,
         name: 'Sports',
         slug: 'sports',
         level: 2,
         subcategories: [
           {
             id: 6,
+            hierarchyId: 160,
             name: 'Clothing',
             slug: 'clothing',
             level: 3,
@@ -759,6 +865,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 7,
+            hierarchyId: 161,
             name: 'Shoes',
             slug: 'shoes',
             level: 3,
@@ -766,6 +873,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 8,
+            hierarchyId: 162,
             name: 'Accessories',
             slug: 'accessories',
             level: 3,
@@ -775,12 +883,14 @@ export const initialCategories: ICategories[] = [
       },
       {
         id: 14,
+        hierarchyId: 23,
         name: 'Beauty',
         slug: 'beauty',
         level: 2,
         subcategories: [
           {
             id: 18,
+            hierarchyId: 163,
             name: 'Skin Care',
             slug: 'skin-care',
             level: 3,
@@ -788,6 +898,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 109,
+            hierarchyId: 164,
             name: 'Nail Care',
             slug: 'nail-care',
             level: 3,
@@ -795,6 +906,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 20,
+            hierarchyId: 165,
             name: 'Hair Care',
             slug: 'hair-care',
             level: 3,
@@ -802,6 +914,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 93,
+            hierarchyId: 166,
             name: 'Fragrance',
             slug: 'fragrance',
             level: 3,
@@ -809,6 +922,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 22,
+            hierarchyId: 167,
             name: 'Bath and Body',
             slug: 'bath-and-body',
             level: 3,
@@ -816,6 +930,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 8,
+            hierarchyId: 168,
             name: 'Accessories',
             slug: 'accessories',
             level: 3,
@@ -825,6 +940,7 @@ export const initialCategories: ICategories[] = [
       },
       {
         id: 10,
+        hierarchyId: 26,
         name: 'Localwears',
         slug: 'localwears',
         level: 2,
@@ -834,18 +950,21 @@ export const initialCategories: ICategories[] = [
   },
   {
     id: 3,
+    hierarchyId: 3,
     name: 'Kids',
     slug: 'kids',
     level: 1,
     subcategories: [
       {
         id: 6,
+        hierarchyId: 16,
         name: 'Clothing',
         slug: 'clothing',
         level: 2,
         subcategories: [
           {
             id: 101,
+            hierarchyId: 169,
             name: 'Tops',
             slug: 'tops',
             level: 3,
@@ -853,6 +972,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 54,
+            hierarchyId: 170,
             name: 'Shorts',
             slug: 'shorts',
             level: 3,
@@ -860,6 +980,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 55,
+            hierarchyId: 171,
             name: 'Underwear',
             slug: 'underwear',
             level: 3,
@@ -867,6 +988,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 95,
+            hierarchyId: 172,
             name: 'Skirts',
             slug: 'skirts',
             level: 3,
@@ -874,6 +996,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 110,
+            hierarchyId: 173,
             name: 'Costumes',
             slug: 'costumes',
             level: 3,
@@ -881,6 +1004,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 111,
+            hierarchyId: 174,
             name: 'Clothing Sets',
             slug: 'clothing-sets',
             level: 3,
@@ -890,12 +1014,14 @@ export const initialCategories: ICategories[] = [
       },
       {
         id: 7,
+        hierarchyId: 17,
         name: 'Shoes',
         slug: 'shoes',
         level: 2,
         subcategories: [
           {
             id: 76,
+            hierarchyId: 175,
             name: 'Boots',
             slug: 'boots',
             level: 3,
@@ -903,6 +1029,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 74,
+            hierarchyId: 176,
             name: 'Sneakers',
             slug: 'sneakers',
             level: 3,
@@ -910,6 +1037,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 77,
+            hierarchyId: 177,
             name: 'Sandals',
             slug: 'sandals',
             level: 3,
@@ -917,6 +1045,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 104,
+            hierarchyId: 178,
             name: 'Flats',
             slug: 'flats',
             level: 3,
@@ -926,12 +1055,14 @@ export const initialCategories: ICategories[] = [
       },
       {
         id: 8,
+        hierarchyId: 18,
         name: 'Accessories',
         slug: 'accessories',
         level: 2,
         subcategories: [
           {
             id: 112,
+            hierarchyId: 179,
             name: 'Headwear',
             slug: 'headwear',
             level: 3,
@@ -939,6 +1070,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 113,
+            hierarchyId: 180,
             name: 'Scarves and Gloves',
             slug: 'scarves-and-gloves',
             level: 3,
@@ -946,6 +1078,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 114,
+            hierarchyId: 181,
             name: 'Belt',
             slug: 'belt',
             level: 3,
@@ -953,6 +1086,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 115,
+            hierarchyId: 182,
             name: 'Towels',
             slug: 'towels',
             level: 3,
@@ -960,6 +1094,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 88,
+            hierarchyId: 183,
             name: 'Backpacks',
             slug: 'backpacks',
             level: 3,
@@ -967,6 +1102,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 9,
+            hierarchyId: 184,
             name: 'Bags',
             slug: 'bags',
             level: 3,
@@ -974,6 +1110,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 116,
+            hierarchyId: 185,
             name: 'Blankets',
             slug: 'blankets',
             level: 3,
@@ -983,12 +1120,14 @@ export const initialCategories: ICategories[] = [
       },
       {
         id: 4,
+        hierarchyId: 19,
         name: 'Sports',
         slug: 'sports',
         level: 2,
         subcategories: [
           {
             id: 101,
+            hierarchyId: 186,
             name: 'Tops',
             slug: 'tops',
             level: 3,
@@ -996,6 +1135,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 117,
+            hierarchyId: 187,
             name: 'Bottoms',
             slug: 'bottoms',
             level: 3,
@@ -1003,6 +1143,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 74,
+            hierarchyId: 188,
             name: 'Sneakers',
             slug: 'sneakers',
             level: 3,
@@ -1010,6 +1151,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 8,
+            hierarchyId: 189,
             name: 'Accessories',
             slug: 'accessories',
             level: 3,
@@ -1019,6 +1161,7 @@ export const initialCategories: ICategories[] = [
       },
       {
         id: 11,
+        hierarchyId: 20,
         name: 'Boys',
         slug: 'boys',
         level: 2,
@@ -1026,6 +1169,7 @@ export const initialCategories: ICategories[] = [
       },
       {
         id: 12,
+        hierarchyId: 21,
         name: 'Girls',
         slug: 'girls',
         level: 2,
@@ -1033,6 +1177,7 @@ export const initialCategories: ICategories[] = [
       },
       {
         id: 13,
+        hierarchyId: 22,
         name: 'Baby',
         slug: 'baby',
         level: 2,
@@ -1042,24 +1187,28 @@ export const initialCategories: ICategories[] = [
   },
   {
     id: 4,
+    hierarchyId: 4,
     name: 'Sports',
     slug: 'sports',
     level: 1,
     subcategories: [
       {
         id: 1,
+        hierarchyId: 27,
         name: 'Men',
         slug: 'men',
         level: 2,
         subcategories: [
           {
             id: 6,
+            hierarchyId: 204,
             name: 'Clothing',
             slug: 'clothing',
             level: 3,
             subcategories: [
               {
                 id: 63,
+                hierarchyId: 207,
                 name: 'T-Shirts',
                 slug: 't-shirts',
                 level: 4,
@@ -1067,6 +1216,7 @@ export const initialCategories: ICategories[] = [
               },
               {
                 id: 54,
+                hierarchyId: 208,
                 name: 'Shorts',
                 slug: 'shorts',
                 level: 4,
@@ -1074,6 +1224,7 @@ export const initialCategories: ICategories[] = [
               },
               {
                 id: 64,
+                hierarchyId: 209,
                 name: 'Pants',
                 slug: 'pants',
                 level: 4,
@@ -1081,6 +1232,7 @@ export const initialCategories: ICategories[] = [
               },
               {
                 id: 62,
+                hierarchyId: 210,
                 name: 'Outwears',
                 slug: 'outwears',
                 level: 4,
@@ -1088,6 +1240,7 @@ export const initialCategories: ICategories[] = [
               },
               {
                 id: 98,
+                hierarchyId: 211,
                 name: 'Swimwear',
                 slug: 'swimwear',
                 level: 4,
@@ -1095,6 +1248,7 @@ export const initialCategories: ICategories[] = [
               },
               {
                 id: 56,
+                hierarchyId: 212,
                 name: 'Beachwear',
                 slug: 'beachwear',
                 level: 4,
@@ -1102,6 +1256,7 @@ export const initialCategories: ICategories[] = [
               },
               {
                 id: 118,
+                hierarchyId: 213,
                 name: 'Tanktops and Singlets',
                 slug: 'tanktops-and-singlets',
                 level: 4,
@@ -1109,6 +1264,7 @@ export const initialCategories: ICategories[] = [
               },
               {
                 id: 52,
+                hierarchyId: 214,
                 name: 'Polos',
                 slug: 'polos',
                 level: 4,
@@ -1118,6 +1274,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 119,
+            hierarchyId: 205,
             name: 'Footwear',
             slug: 'footwear',
             level: 3,
@@ -1125,6 +1282,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 8,
+            hierarchyId: 206,
             name: 'Accessories',
             slug: 'accessories',
             level: 3,
@@ -1134,18 +1292,21 @@ export const initialCategories: ICategories[] = [
       },
       {
         id: 2,
+        hierarchyId: 28,
         name: 'Women',
         slug: 'women',
         level: 2,
         subcategories: [
           {
             id: 6,
+            hierarchyId: 194,
             name: 'Clothing',
             slug: 'clothing',
             level: 3,
             subcategories: [
               {
                 id: 63,
+                hierarchyId: 195,
                 name: 'T-Shirts',
                 slug: 't-shirts',
                 level: 4,
@@ -1153,6 +1314,7 @@ export const initialCategories: ICategories[] = [
               },
               {
                 id: 54,
+                hierarchyId: 196,
                 name: 'Shorts',
                 slug: 'shorts',
                 level: 4,
@@ -1160,6 +1322,7 @@ export const initialCategories: ICategories[] = [
               },
               {
                 id: 64,
+                hierarchyId: 197,
                 name: 'Pants',
                 slug: 'pants',
                 level: 4,
@@ -1167,6 +1330,7 @@ export const initialCategories: ICategories[] = [
               },
               {
                 id: 62,
+                hierarchyId: 198,
                 name: 'Outwears',
                 slug: 'outwears',
                 level: 4,
@@ -1174,6 +1338,7 @@ export const initialCategories: ICategories[] = [
               },
               {
                 id: 98,
+                hierarchyId: 199,
                 name: 'Swimwear',
                 slug: 'swimwear',
                 level: 4,
@@ -1181,6 +1346,7 @@ export const initialCategories: ICategories[] = [
               },
               {
                 id: 56,
+                hierarchyId: 200,
                 name: 'Beachwear',
                 slug: 'beachwear',
                 level: 4,
@@ -1188,6 +1354,7 @@ export const initialCategories: ICategories[] = [
               },
               {
                 id: 118,
+                hierarchyId: 201,
                 name: 'Tanktops and Singlets',
                 slug: 'tanktops-and-singlets',
                 level: 4,
@@ -1197,6 +1364,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 119,
+            hierarchyId: 202,
             name: 'Footwear',
             slug: 'footwear',
             level: 3,
@@ -1204,6 +1372,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 8,
+            hierarchyId: 203,
             name: 'Accessories',
             slug: 'accessories',
             level: 3,
@@ -1213,12 +1382,14 @@ export const initialCategories: ICategories[] = [
       },
       {
         id: 3,
+        hierarchyId: 29,
         name: 'Kids',
         slug: 'kids',
         level: 2,
         subcategories: [
           {
             id: 74,
+            hierarchyId: 190,
             name: 'Sneakers',
             slug: 'sneakers',
             level: 3,
@@ -1226,6 +1397,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 101,
+            hierarchyId: 191,
             name: 'Tops',
             slug: 'tops',
             level: 3,
@@ -1233,6 +1405,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 117,
+            hierarchyId: 192,
             name: 'Bottoms',
             slug: 'bottoms',
             level: 3,
@@ -1240,6 +1413,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 8,
+            hierarchyId: 193,
             name: 'Accessories',
             slug: 'accessories',
             level: 3,
@@ -1249,6 +1423,7 @@ export const initialCategories: ICategories[] = [
       },
       {
         id: 16,
+        hierarchyId: 30,
         name: 'Brands',
         slug: 'brands',
         level: 2,
@@ -1256,6 +1431,7 @@ export const initialCategories: ICategories[] = [
       },
       {
         id: 17,
+        hierarchyId: 31,
         name: 'Activities',
         slug: 'activities',
         level: 2,
@@ -1265,18 +1441,21 @@ export const initialCategories: ICategories[] = [
   },
   {
     id: 5,
+    hierarchyId: 5,
     name: 'Groomity',
     slug: 'groomity',
     level: 1,
     subcategories: [
       {
         id: 18,
+        hierarchyId: 32,
         name: 'Skin Care',
         slug: 'skin-care',
         level: 2,
         subcategories: [
           {
             id: 23,
+            hierarchyId: 39,
             name: 'Masks',
             slug: 'masks',
             level: 3,
@@ -1284,6 +1463,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 24,
+            hierarchyId: 40,
             name: 'Moisturisers',
             slug: 'moisturisers',
             level: 3,
@@ -1291,6 +1471,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 25,
+            hierarchyId: 41,
             name: 'Sun Care',
             slug: 'sun-care',
             level: 3,
@@ -1298,6 +1479,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 26,
+            hierarchyId: 42,
             name: 'Skincare Sets',
             slug: 'skincare-sets',
             level: 3,
@@ -1305,6 +1487,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 27,
+            hierarchyId: 43,
             name: 'Cleansers',
             slug: 'cleansers',
             level: 3,
@@ -1312,6 +1495,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 28,
+            hierarchyId: 44,
             name: 'Toners',
             slug: 'toners',
             level: 3,
@@ -1321,12 +1505,14 @@ export const initialCategories: ICategories[] = [
       },
       {
         id: 19,
+        hierarchyId: 33,
         name: 'Make Up',
         slug: 'make-up',
         level: 2,
         subcategories: [
           {
             id: 29,
+            hierarchyId: 45,
             name: 'Cheeks',
             slug: 'cheeks',
             level: 3,
@@ -1334,6 +1520,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 30,
+            hierarchyId: 46,
             name: 'Face',
             slug: 'face',
             level: 3,
@@ -1341,6 +1528,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 31,
+            hierarchyId: 47,
             name: 'Lips',
             slug: 'lips',
             level: 3,
@@ -1348,6 +1536,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 32,
+            hierarchyId: 48,
             name: 'Eyes',
             slug: 'eyes',
             level: 3,
@@ -1355,6 +1544,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 33,
+            hierarchyId: 49,
             name: 'Removers',
             slug: 'removers',
             level: 3,
@@ -1362,6 +1552,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 34,
+            hierarchyId: 50,
             name: 'Palettes',
             slug: 'palettes',
             level: 3,
@@ -1371,12 +1562,14 @@ export const initialCategories: ICategories[] = [
       },
       {
         id: 20,
+        hierarchyId: 34,
         name: 'Hair Care',
         slug: 'hair-care',
         level: 2,
         subcategories: [
           {
             id: 35,
+            hierarchyId: 51,
             name: 'Shampooo and Conditioner',
             slug: 'shampooo-and-conditioner',
             level: 3,
@@ -1384,6 +1577,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 36,
+            hierarchyId: 52,
             name: 'Hair Oils',
             slug: 'hair-oils',
             level: 3,
@@ -1391,6 +1585,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 37,
+            hierarchyId: 53,
             name: 'Hair Tools',
             slug: 'hair-tools',
             level: 3,
@@ -1398,6 +1593,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 38,
+            hierarchyId: 54,
             name: 'Hair Care Sets',
             slug: 'hair-care-sets',
             level: 3,
@@ -1407,12 +1603,14 @@ export const initialCategories: ICategories[] = [
       },
       {
         id: 21,
+        hierarchyId: 35,
         name: 'Fragrances',
         slug: 'fragrances',
         level: 2,
         subcategories: [
           {
             id: 39,
+            hierarchyId: 55,
             name: 'Women Fragrances',
             slug: 'women-fragrances',
             level: 3,
@@ -1420,6 +1618,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 40,
+            hierarchyId: 56,
             name: 'Men Fragrances',
             slug: 'men-fragrances',
             level: 3,
@@ -1429,12 +1628,14 @@ export const initialCategories: ICategories[] = [
       },
       {
         id: 22,
+        hierarchyId: 36,
         name: 'Bath and Body',
         slug: 'bath-and-body',
         level: 2,
         subcategories: [
           {
             id: 47,
+            hierarchyId: 66,
             name: 'Personal Care',
             slug: 'personal-care',
             level: 3,
@@ -1442,6 +1643,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 48,
+            hierarchyId: 67,
             name: 'Hand and Body Wash',
             slug: 'hand-and-body-wash',
             level: 3,
@@ -1449,6 +1651,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 49,
+            hierarchyId: 68,
             name: 'Scrubs and Exfoliants',
             slug: 'scrubs-and-exfoliants',
             level: 3,
@@ -1458,12 +1661,14 @@ export const initialCategories: ICategories[] = [
       },
       {
         id: 15,
+        hierarchyId: 37,
         name: "Men's Care",
         slug: 'men-care',
         level: 2,
         subcategories: [
           {
             id: 21,
+            hierarchyId: 57,
             name: 'Fragrances',
             slug: 'fragrances',
             level: 3,
@@ -1471,6 +1676,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 18,
+            hierarchyId: 58,
             name: 'Skin Care',
             slug: 'skin-care',
             level: 3,
@@ -1478,6 +1684,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 20,
+            hierarchyId: 59,
             name: 'Hair Care',
             slug: 'hair-care',
             level: 3,
@@ -1485,6 +1692,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 41,
+            hierarchyId: 60,
             name: 'Body Care',
             slug: 'body-care',
             level: 3,
@@ -1492,6 +1700,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 42,
+            hierarchyId: 61,
             name: 'Grooming Tools',
             slug: 'grooming-tools',
             level: 3,
@@ -1501,12 +1710,14 @@ export const initialCategories: ICategories[] = [
       },
       {
         id: 8,
+        hierarchyId: 38,
         name: 'Accessories',
         slug: 'accessories',
         level: 2,
         subcategories: [
           {
             id: 43,
+            hierarchyId: 62,
             name: 'Brushes and Blenders',
             slug: 'brushes-and-blenders',
             level: 3,
@@ -1514,6 +1725,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 44,
+            hierarchyId: 63,
             name: 'Beauty Devices',
             slug: 'beauty-devices',
             level: 3,
@@ -1521,6 +1733,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 45,
+            hierarchyId: 64,
             name: 'Beauty Accessories',
             slug: 'beauty-accessories',
             level: 3,
@@ -1528,6 +1741,7 @@ export const initialCategories: ICategories[] = [
           },
           {
             id: 46,
+            hierarchyId: 65,
             name: 'Make Up Bags',
             slug: 'make-up-bags',
             level: 3,

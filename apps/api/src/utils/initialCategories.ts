@@ -1,6 +1,7 @@
 export const initialCategories = [
   {
     id: 1,
+    hierarchyId: 1,
     name: 'Men',
     slug: 'men',
     level: 1,
@@ -8,6 +9,7 @@ export const initialCategories = [
   },
   {
     id: 2,
+    hierarchyId: 2,
     name: 'Women',
     slug: 'women',
     level: 1,
@@ -15,6 +17,7 @@ export const initialCategories = [
   },
   {
     id: 3,
+    hierarchyId: 3,
     name: 'Kids',
     slug: 'kids',
     level: 1,
@@ -22,6 +25,7 @@ export const initialCategories = [
   },
   {
     id: 4,
+    hierarchyId: 4,
     name: 'Sports',
     slug: 'sports',
     level: 1,
@@ -29,6 +33,7 @@ export const initialCategories = [
   },
   {
     id: 5,
+    hierarchyId: 5,
     name: 'Groomity',
     slug: 'groomity',
     level: 1,

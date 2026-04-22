@@ -1,5 +1,6 @@
 export interface ICategories {
   id: number;
+  hierarchyId: number;
   name: string;
   slug: string;
   level: number;

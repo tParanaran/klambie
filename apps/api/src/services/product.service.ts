@@ -30,7 +30,7 @@ const attributeService = new AttributeService();
 
 export class ProductService {
   async newProduct(data: InsertProduct): Promise<{ message: string }> {
-    const { name, brandId, sizingGuideId, basePrice } = data;
+    const { name, brandId, sizingGuideId, basePrice, type } = data;
     const { productDetails, productCategories, productTags, images } = data;
     const { productAttributes, productVariants } = data;
 
@@ -42,6 +42,7 @@ export class ProductService {
           slug: await GenerateSlug(name),
           sku: await sku.generateProductSKU(name, brandId),
           sizingGuideId,
+          type,
           basePrice,
           productDetails: {
             create: productDetails,
@@ -59,9 +60,14 @@ export class ProductService {
             })),
           },
           productCategories: {
-            create: productCategories.map((id: number) => ({
-              categoryHierarchyId: id,
-            })),
+            create: productCategories.map((path: string) => {
+              const ids = path.split('.').map(Number);
+              const leafId = ids[ids.length - 1];
+
+              return {
+                categoryHierarchyId: leafId,
+              };
+            }),
           },
           ...(productTags &&
             productTags.length > 0 && {
@@ -78,19 +84,26 @@ export class ProductService {
       });
 
       for (const va of productVariants) {
+        const hasAttributes = va.attributeValueId?.length > 0;
+
         await tx.productVariant.create({
           data: {
             barcode: null,
             productId: product.id,
-            sku: await sku.generateVariantSKU(product.sku, va.attributeValueId),
             basePrice: va.basePrice,
             stock: va.stock,
             isActive: true,
-            productVariantAttributes: {
-              create: va.attributeValueId.map((attributeValueId: number) => ({
-                attributeValueId: attributeValueId,
-              })),
-            },
+            sku: hasAttributes
+              ? await sku.generateVariantSKU(product.sku, va.attributeValueId)
+              : null,
+
+            ...(hasAttributes && {
+              productVariantAttributes: {
+                create: va.attributeValueId.map((id: number) => ({
+                  attributeValueId: id,
+                })),
+              },
+            }),
           },
         });
       }
@@ -901,9 +914,14 @@ export class ProductService {
           ...(productCategories && {
             productCategories: {
               deleteMany: {},
-              create: productCategories.map((id: number) => ({
-                categoryHierarchyId: id,
-              })),
+              create: productCategories.map((path: string) => {
+                const ids = path.split('.').map(Number);
+                const leafId = ids[ids.length - 1];
+
+                return {
+                  categoryHierarchyId: leafId,
+                };
+              }),
             },
           }),
 
