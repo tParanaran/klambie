@@ -5,7 +5,7 @@ import { IProductDashboard } from '../types';
 import { useVariantActions } from '../hooks/useActionVariants';
 import SearchNotFound from '@/views/pages/d/components/notfound';
 import Status from './status';
-import Rupiah from '@/utils/rupiah';
+import Rupiah from '@/utils/formatValue';
 import Actions from './actions';
 import ActionVariants from './actionVariants';
 import VariantsModal from './variantsModal';

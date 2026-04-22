@@ -7,7 +7,7 @@ import axiosInstanceClient from '@/lib/axios/client';
 import DeleteButton from '../../cart/components/deleleButton';
 import Link from 'next/link';
 import CartPrice from '../../cart/components/price';
-import Rupiah from '@/utils/rupiah';
+import Rupiah from '@/utils/formatValue';
 import LinkButton from '@/views/components/link';
 import { useCartQuery } from '../../p/hooks/useCartQuery';
 import { useToastStore } from '@/store/toastStore';

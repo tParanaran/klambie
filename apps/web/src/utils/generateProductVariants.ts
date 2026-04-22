@@ -1,3 +1,4 @@
+import useAttribute from '@/views/pages/c/hooks/useAttribute';
 import { IAttribute } from '@/views/pages/c/types';
 import {
   IProductAttribute,
@@ -120,7 +121,8 @@ export const groupByImage = (
   return groups;
 };
 
-export const createValueMap = (attributes: IAttribute[]) => {
+export const createValueMap = () => {
+  const { attributes } = useAttribute();
   const map: Record<number, string> = {};
 
   attributes.forEach((attr) => {

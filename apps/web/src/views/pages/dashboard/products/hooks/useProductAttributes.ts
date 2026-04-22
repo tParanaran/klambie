@@ -41,13 +41,20 @@ export function useProductAttributes() {
 
   const setImageBased = (attributeId: number, enabled: boolean) => {
     const current = values.productAttributes || [];
+    const currentImages = values.images || [];
 
-    let next = current.map((attr) => ({
+    const nextAttributes = current.map((attr) => ({
       ...attr,
       imageBased: enabled ? attr.attributeId === attributeId : false,
     }));
 
-    setFieldValue('productAttributes', next);
+    setFieldValue('productAttributes', nextAttributes);
+
+    const filteredImages = currentImages.filter((img) => {
+      return img.attributeValueId === 0;
+    });
+
+    setFieldValue('images', filteredImages);
   };
 
   const deleteAttributes = (attributeId: number) => {

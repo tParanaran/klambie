@@ -70,11 +70,19 @@ export const GeneralTabSchema = object({
     .of(
       object({
         url: string().required('Image is required'),
-
         attributeValueId: number().optional(),
       }),
     )
-    .min(1, 'At least one image is required'),
+    .min(1, 'At least one image is required')
+    .test(
+      'at-least-one-without-attribute',
+      'At least one main image is required',
+      (images) => {
+        if (!images || images.length === 0) return false;
+
+        return images.some((img) => !img.attributeValueId);
+      },
+    ),
 });
 
 export const AdvanceTabSchema = object({
@@ -162,25 +170,41 @@ export const productValidationSchema = object({
 
         attributeValueId: array()
           .of(number().required())
-          .min(1, 'Variant must have at least one attribute'),
+          .when('type', {
+            is: 'VARIANT',
+            then: (schema) =>
+              schema
+                .min(1, 'Variant must have at least one attribute')
+                .required(),
+            otherwise: (schema) => schema.notRequired(),
+          }),
       }),
     )
     .when('type', {
       is: 'VARIANT',
-      then: (schema) => schema.min(1, 'At least one variant is required'),
+      then: (schema) =>
+        schema
+          .min(1, 'At least one variant is required')
+          .test(
+            'unique-variants',
+            'Duplicate variant combination',
+            (variants, ctx) => {
+              const type = ctx.from?.[1]?.value?.type;
+
+              if (type !== 'VARIANT') return true;
+              if (!variants) return true;
+
+              const seen = new Set();
+
+              for (const v of variants) {
+                const key = v.attributeValueId?.slice().sort().join('-');
+                if (seen.has(key)) return false;
+                seen.add(key);
+              }
+
+              return true;
+            },
+          ),
       otherwise: (schema) => schema.notRequired(),
-    })
-    .test('unique-variants', 'Duplicate variant combination', (variants) => {
-      if (!variants) return true;
-
-      const seen = new Set();
-
-      for (const v of variants) {
-        const key = v.attributeValueId?.sort().join('-');
-        if (seen.has(key)) return false;
-        seen.add(key);
-      }
-
-      return true;
     }),
 });

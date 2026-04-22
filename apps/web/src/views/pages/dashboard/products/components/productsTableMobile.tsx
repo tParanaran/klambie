@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { IProductDashboard } from '../types';
 import { useVariantActions } from '../hooks/useActionVariants';
 import Actions from './actions';
-import Rupiah from '@/utils/rupiah';
+import Rupiah from '@/utils/formatValue';
 import Status from './status';
 import ModalContainer from '@/views/components/modalContainer';
 import ActionVariants from './actionVariants';

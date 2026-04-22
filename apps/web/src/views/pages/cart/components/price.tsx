@@ -1,4 +1,4 @@
-import Rupiah from '@/utils/rupiah';
+import Rupiah from '@/utils/formatValue';
 import { IPrice } from '../types';
 
 export default function CartPrice({

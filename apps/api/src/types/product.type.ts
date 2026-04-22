@@ -44,12 +44,21 @@ export type InsertProduct = {
   basePrice: number;
   sizingGuideId?: number | null;
   productDetails: ProductDetails;
-  productAttributes: { attributeId: number; imageBased: boolean }[];
+  productAttributes: {
+    attributeId: number;
+    imageBased: boolean;
+    values: number[];
+  }[];
   productCategories: number[];
   productTags?: number[];
-  images: { url: string; attributeValueId: number | null }[];
+  images: {
+    url: string;
+    attributeValueId: number | null;
+    source: 'URL' | 'LOCAL';
+  }[];
   productVariants: {
     barcode?: string | null;
+    comparePrice?: number | null;
     basePrice: number;
     stock: number;
     attributeValueId: number[];

@@ -2,8 +2,8 @@ import { useRef, useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useField } from 'formik';
 import { IoAdd, IoClose } from 'react-icons/io5';
-import ErrorForm from '@/views/components/formik/errorForm';
 import { IProductImage } from '../types';
+import ErrorForm from '@/views/components/formik/errorForm';
 
 interface IImageUploaderProps {
   attributeValueId?: number;
@@ -17,13 +17,20 @@ export default function ImageUploader({
   const [field, , helpers] = useField('images');
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const thumbRef = useRef<HTMLDivElement>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
   const allImages: IProductImage[] = field.value || [];
+  const currentId = attributeValueId ?? 0;
 
-  const images = attributeValueId
-    ? allImages.filter(
-        (img) => Number(img.attributeValueId) === attributeValueId,
-      )
+  const images = isSinglePhoto
+    ? allImages.filter((img) => img.attributeValueId === currentId)
     : allImages.filter((img) => img.attributeValueId === 0);
+
+  const activeImage = images[activeIndex] || images[0] || null;
+
+  const setImages = (newImages: IProductImage[]) => {
+    helpers.setValue(newImages);
+    helpers.setTouched(true);
+  };
 
   useEffect(() => {
     if (!thumbRef.current) return;
@@ -34,120 +41,108 @@ export default function ImageUploader({
     });
   }, [images.length]);
 
-  const activeImage =
-    images.length > 0
-      ? (images[activeIndex] ?? images[images.length - 1])
-      : null;
-
-  const setImages = (newImages: any[]) => {
-    helpers.setValue(newImages);
-    helpers.setTouched(true);
-    setActiveIndex(newImages.length - 1);
-  };
-
+  // -------------------------
+  // UPLOAD
+  // -------------------------
   const onDrop = (files: File[]) => {
-    let updatedImages = [...images];
+    const file = files[0];
 
-    files.forEach((file) => {
-      const newImage: IProductImage = {
-        url: URL.createObjectURL(file),
-        file,
-        source: 'local',
-        attributeValueId: attributeValueId ?? 0,
-      };
+    const newImage: IProductImage = {
+      url: URL.createObjectURL(file),
+      file,
+      source: 'LOCAL',
+      attributeValueId: currentId,
+    };
 
-      if (isSinglePhoto) {
-        updatedImages = [newImage];
-        return;
-      }
+    let updated = [...allImages];
 
-      if (attributeValueId) {
-        const existingIndex = updatedImages.findIndex(
-          (img) => img.attributeValueId === attributeValueId,
-        );
+    if (isSinglePhoto) {
+      updated = updated.filter((img) => img.attributeValueId !== currentId);
+      updated.push(newImage);
+    } else {
+      updated.push(newImage);
+    }
 
-        if (existingIndex !== -1) {
-          updatedImages[existingIndex] = newImage;
-          return;
-        }
-      }
-
-      updatedImages.push(newImage);
-    });
-
-    setImages(updatedImages);
+    setImages(updated);
+    setActiveIndex(images.length);
   };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: { 'image/*': [] },
-    multiple: true,
+    multiple: !isSinglePhoto,
   });
 
+  // -------------------------
+  // PASTE URL
+  // -------------------------
   useEffect(() => {
     const handlePaste = (e: ClipboardEvent) => {
       const target = e.target as HTMLElement;
+      if (['INPUT', 'TEXTAREA'].includes(target.tagName)) return;
 
-      if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
-        return;
-      }
       const text = e.clipboardData?.getData('text');
+      if (!text || !text.startsWith('http')) return;
 
-      if (text && text.startsWith('http')) {
-        const newImage: IProductImage = {
-          url: text,
-          source: 'url',
-          attributeValueId: attributeValueId ?? 0,
-        };
+      const newImage: IProductImage = {
+        url: text,
+        source: 'URL',
+        attributeValueId: currentId,
+      };
 
-        let updatedImages = [...images];
+      let updated = [...allImages];
 
-        if (isSinglePhoto) {
-          updatedImages = [newImage];
-        } else if (attributeValueId) {
-          const existingIndex = updatedImages.findIndex(
-            (img) => img.attributeValueId === attributeValueId,
-          );
-
-          if (existingIndex !== -1) {
-            updatedImages[existingIndex] = newImage;
-          } else {
-            updatedImages.push(newImage);
-          }
-        } else {
-          updatedImages.push(newImage);
-        }
-
-        setImages(updatedImages);
+      if (isSinglePhoto) {
+        updated = updated.filter((img) => img.attributeValueId !== currentId);
       }
+
+      updated.push(newImage);
+
+      setImages(updated);
+      setActiveIndex(images.length);
     };
 
-    window.addEventListener('paste', handlePaste);
-    return () => window.removeEventListener('paste', handlePaste);
-  }, [images]);
+    const el = rootRef.current;
+    if (!el) return;
 
-  const removeImage = (index: number) => {
-    const updated = [...images];
-    updated.splice(index, 1);
+    el.addEventListener('paste', handlePaste);
+    return () => el.removeEventListener('paste', handlePaste);
+  }, [allImages, currentId, isSinglePhoto, images.length]);
 
-    helpers.setValue(updated);
-
-    if (updated.length === 0) {
-      setActiveIndex(0);
+  // -------------------------
+  // REMOVE IMAGE
+  // -------------------------
+  const removeImage = (index?: number) => {
+    if (isSinglePhoto) {
+      const updated = allImages.filter(
+        (img) => img.attributeValueId !== currentId,
+      );
+      setImages(updated);
       return;
     }
 
-    if (activeIndex >= updated.length) {
-      setActiveIndex(updated.length - 1);
+    const updated = allImages.filter((_, i) => i !== index);
+    setImages(updated);
+
+    if (activeIndex >= images.length - 1) {
+      setActiveIndex(Math.max(0, images.length - 2));
     }
   };
 
   return (
-    <div>
-      <div className={`w-full flex ${!isSinglePhoto ? 'gap-2' : ''}`}>
+    <div ref={rootRef}>
+      <div
+        className={`${!isSinglePhoto ? 'gap-2 w-full flex' : 'w-60 max-w-full mx-auto'}`}
+      >
         <div {...getRootProps()} className="flex-1 mt-1.5 ml-1.5">
-          <input {...getInputProps()} />
-          <div className="w-full h-72 md:h-95 lg:h-75 overflow-hidden rounded-2xl flex items-center justify-center cursor-pointer">
+          <input
+            {...getInputProps()}
+            tabIndex={attributeValueId ?? 0}
+            className="flex-1 mt-1.5 ml-1.5"
+          />
+          <div
+            className={`w-full overflow-hidden rounded-2xl flex items-center justify-center cursor-pointer ${!isSinglePhoto ? 'h-72 md:h-95 lg:h-75' : 'aspect-square'}`}
+          >
             {activeImage?.url ? (
               <img
                 src={activeImage.url}
@@ -171,7 +166,7 @@ export default function ImageUploader({
             {images.length > 0 && (
               <div
                 {...getRootProps()}
-                className={`aspect-square border-2 border-black/10 dark:border-white/10 border-dashed flex items-center justify-center rounded-lg cursor-pointer transition mb-1 ${
+                className={`aspect-square border-2 border-dashed flex items-center justify-center rounded-lg cursor-pointer transition mb-1 border-black/10 dark:border-white/10 ${
                   isDragActive ? 'bg-black/10 dark:bg-white/10' : ''
                 }`}
               >
@@ -179,6 +174,7 @@ export default function ImageUploader({
                 <IoAdd className="text-2xl p-1 bg-emerald-600 rounded-full text-light" />
               </div>
             )}
+
             {images.map((image, index) => (
               <div key={index} className="relative">
                 <button type="button" onClick={() => setActiveIndex(index)}>
@@ -195,7 +191,7 @@ export default function ImageUploader({
                 <button
                   type="button"
                   onClick={() => removeImage(index)}
-                  className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full"
+                  className="absolute top-1/3 right-1/3 bg-red-500 text-white p-1 rounded-full z-20"
                 >
                   <IoClose className="text-sm" />
                 </button>
@@ -203,7 +199,8 @@ export default function ImageUploader({
             ))}
           </div>
         )}
-      </div>{' '}
+      </div>
+
       <ErrorForm name="images" />
     </div>
   );

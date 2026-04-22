@@ -14,6 +14,7 @@ import GeneralTab from './generalTab';
 import AdvanceTab from './advanceTab';
 import VariantsTab from './variantsTab';
 import { generateAndMergeVariants } from '@/utils/generateProductVariants';
+import { normalizeProductPayload } from '@/utils/normalizeProductPayload';
 
 interface IAddProductForm {
   formikRef: RefObject<FormikProps<IProductFormValues>>;
@@ -27,7 +28,11 @@ export default function AddProductForm({ formikRef }: IAddProductForm) {
       innerRef={formikRef}
       initialValues={initialAddProductValues}
       validationSchema={productValidationSchema}
-      onSubmit={(values) => {}}
+      onSubmit={(values) => {
+        const payload = normalizeProductPayload(values);
+
+        console.log(payload);
+      }}
     >
       {(props: FormikProps<IProductFormValues>) => {
         const handleChangeTab = async (nextTab: TabType) => {

@@ -1,7 +1,7 @@
 'use client';
 import { useCartQuery } from '../../p/hooks/useCartQuery';
 import { ITotalPrice } from '../types';
-import Rupiah from '@/utils/rupiah';
+import Rupiah from '@/utils/formatValue';
 
 export default function CartSummary({
   totalPrice,

@@ -47,7 +47,16 @@ export class ProductService {
             create: productDetails,
           },
           productAttributes: {
-            create: productAttributes,
+            create: productAttributes.map((attr) => ({
+              attributeId: attr.attributeId,
+              imageBased: attr.imageBased ?? false,
+
+              values: {
+                create: attr.values.map((valueId: number) => ({
+                  attributeValueId: valueId,
+                })),
+              },
+            })),
           },
           productCategories: {
             create: productCategories.map((id: number) => ({
@@ -843,6 +852,19 @@ export class ProductService {
     } = data;
 
     const result = await prisma.$transaction(async (tx) => {
+      await tx.productAttributeValue.deleteMany({
+        where: {
+          productAttribute: {
+            productId: id,
+          },
+        },
+      });
+
+      await tx.productAttribute.deleteMany({
+        where: {
+          productId: id,
+        },
+      });
       const product = await tx.product.update({
         where: { id },
         data: {
@@ -863,8 +885,16 @@ export class ProductService {
 
           ...(productAttributes && {
             productAttributes: {
-              deleteMany: {},
-              create: productAttributes,
+              create: productAttributes.map((attr) => ({
+                attributeId: attr.attributeId,
+                imageBased: attr.imageBased ?? false,
+
+                values: {
+                  create: (attr.values || []).map((valueId: number) => ({
+                    attributeValueId: valueId,
+                  })),
+                },
+              })),
             },
           }),
 

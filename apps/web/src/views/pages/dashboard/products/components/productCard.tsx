@@ -1,5 +1,5 @@
 import { IProductDashboard } from '../types';
-import Rupiah from '@/utils/rupiah';
+import Rupiah from '@/utils/formatValue';
 import Status from './status';
 import Actions from './actions';
 import { useState } from 'react';

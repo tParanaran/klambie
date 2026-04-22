@@ -3,7 +3,7 @@ import { ITotalPrice } from '../types';
 import { useState } from 'react';
 import CheckoutButton from './checkoutButton';
 import SelectAllToggle from './selectAll';
-import Rupiah from '@/utils/rupiah';
+import Rupiah from '@/utils/formatValue';
 import AddVouchers from './vouchers';
 import CartSummary from './summary';
 import NavbarBottomContainer from '@/views/components/navbarBottomContainer';

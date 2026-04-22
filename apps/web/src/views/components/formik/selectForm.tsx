@@ -97,13 +97,13 @@ export default function SelectForm({
         {label}
       </label>
 
-      <div className="flex flex-wrap items-center gap-1 w-full">
+      <div className="flex flex-wrap items-center gap-1 lg:gap-x-3 w-full">
         {isMutipleSelect &&
           !isAttribute &&
           selectedOptions.map((opt) => (
             <span
               key={opt.id}
-              className="bg-orange-800 text-white px-4 h-10 rounded-full text-sm flex items-center gap-2"
+              className="bg-orange-800 text-white px-4 h-10 rounded-full text-sm flex items-center gap-2 grow justify-between"
             >
               {opt.name}
               <IoClose

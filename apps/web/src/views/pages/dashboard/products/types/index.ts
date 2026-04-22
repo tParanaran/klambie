@@ -43,7 +43,7 @@ export interface IProductDetails {
   volume?: number | string;
 }
 
-type ProductType = 'NO_VARIANT' | 'VARIANT' | null;
+type ProductType = 'NO_VARIANT' | 'VARIANT';
 
 export interface IProductAttribute {
   attributeId: number | string;
@@ -54,7 +54,7 @@ export interface IProductAttribute {
 export interface IProductImage {
   url: string;
   file?: File;
-  source?: 'local' | 'url';
+  source?: 'URL' | 'LOCAL';
   attributeValueId: number;
 }
 
@@ -71,14 +71,52 @@ export interface IProductFormValues {
   brandId: number | string;
   basePrice: number | string;
   baseStock: number | string;
-  comparePrice: number | string;
-  type: ProductType;
+  comparePrice?: number | string;
+  type: ProductType | null;
   productTags?: number[];
-  sizingGuideId?: number | string;
+  sizingGuideId: number;
   productDetails: IProductDetails;
   productAttributes: IProductAttribute[];
-  variantAttributeIds: number[];
+  variantAttributeIds?: number[];
   productCategories: string[];
   images: IProductImage[];
   productVariants: IProductVariant[];
+}
+
+export interface IProductPayload {
+  name: string;
+  brandId: number;
+  basePrice: number;
+  type: ProductType;
+  productTags?: number[];
+  sizingGuideId: number;
+  productDetails: {
+    description: string;
+    care?: string | null;
+    feature?: string | null;
+    material?: string | null;
+    weight: number;
+    height?: number | null;
+    width?: number | null;
+    length?: number | null;
+    volume?: number | null;
+  };
+  productAttributes: {
+    attributeId: number;
+    imageBased: boolean;
+    values: number[];
+  }[];
+  productCategories: string[];
+  productVariants: {
+    attributeValueId: number[];
+    basePrice: number;
+    stock: number;
+    comparePrice?: number | null;
+    barcode?: string | null;
+  }[];
+  images: {
+    url: string;
+    source: 'URL' | 'LOCAL';
+    attributeValueId: number | null;
+  }[];
 }

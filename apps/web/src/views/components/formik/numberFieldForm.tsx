@@ -16,7 +16,7 @@ export default function NumberFieldForm({
   return (
     <div className="flex flex-col mt-2 grow">
       {label && (
-        <label htmlFor={name} className="ml-4">
+        <label htmlFor={name} className="ml-4 line-clamp-1">
           {label}
         </label>
       )}

@@ -26,10 +26,3 @@ export const initialAddProductValues: IProductFormValues = {
   productVariants: [],
   variantAttributeIds: [],
 };
-
-export function generateCombinations(arrays: number[][]): number[][] {
-  return arrays.reduce(
-    (acc, curr) => acc.flatMap((a) => curr.map((c) => [...a, c])),
-    [[]] as number[][],
-  );
-}

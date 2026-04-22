@@ -26,6 +26,8 @@ export const validateTabs = async (
     formik.setTouched(touched);
     formik.setErrors(errors);
 
+    console.log(errors);
+
     const firstErrorPath = err.inner?.[0]?.path;
 
     if (firstErrorPath) {

@@ -3,14 +3,14 @@ import ErrorForm from './errorForm';
 
 export interface IFieldForm {
   name: string;
-  label?: string;
+  label: string;
   placeholder?: string;
 }
 
 export default function TextFieldForm({
   name,
   label,
-  placeholder = `Type ${name.toLowerCase()} here`,
+  placeholder = `Type ${label.toLowerCase()} here`,
 }: IFieldForm) {
   const [field, meta, helpers] = useField(name);
 
