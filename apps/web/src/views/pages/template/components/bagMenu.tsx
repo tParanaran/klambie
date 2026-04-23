@@ -118,19 +118,21 @@ export default function BagMenu() {
                             >
                               <h1 className="font-semibold">{item.brand}</h1>
                               <h1 className="font-semibold">{item.name}</h1>
-                              <div className="opacity-50 text-xs text-light">
+                              <div className="opacity-50 text-xs">
                                 <p>SKU : {item.sku}</p>
                               </div>
                             </Link>
                           </div>{' '}
                           <div className="flex space-x-1">
-                            <div className="py-1 px-2 rounded-full w-fit items-center bg-black/10 dark:bg-white/10 h-fit my-1">
-                              <p className="text-xs">
-                                {item.attributes
-                                  .map((attr) => attr.value)
-                                  .join(', ')}
-                              </p>
-                            </div>
+                            {item.type === 'VARIANT' && (
+                              <div className="py-1 px-2 rounded-full w-fit items-center bg-black/10 dark:bg-white/10 h-fit my-1">
+                                <p className="text-xs">
+                                  {item.attributes
+                                    .map((attr) => attr.value)
+                                    .join(', ')}
+                                </p>
+                              </div>
+                            )}
                             <div className="py-1 px-2 rounded-full w-fit items-center bg-black/10 dark:bg-white/10 h-fit my-1">
                               <p className="text-xs">
                                 {item.quantity + ' Qty'}

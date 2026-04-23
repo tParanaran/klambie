@@ -21,15 +21,15 @@ export default function CartSummary({
         <p>{Rupiah(totalPrice?.subTotal ?? '0')}</p>
       </div>
 
-      {totalPrice?.discountTotal ? (
+      {totalPrice?.discountTotal && totalPrice.discountTotal !== '0' && (
         <div>
           <h1>Total Saving</h1>
           <div className="flex justify-between opacity-50 flex-wrap text-sm">
             <h1>Discount on Sale</h1>
-            <p>- {Rupiah(totalPrice.discountTotal ?? '0')}</p>
+            <p>- {Rupiah(totalPrice.discountTotal)}</p>
           </div>
         </div>
-      ) : null}
+      )}
 
       {/* {detailsVoucher.length > 0 ? (
         <div className="my-2">
@@ -57,11 +57,9 @@ export default function CartSummary({
           <p className="my-auto font-semibold">
             {Rupiah(totalPrice?.grandTotal ?? '0')}
           </p>
-          {totalPrice?.discountTotal ? (
-            <p className="text-xs">
-              Saved {Rupiah(totalPrice.discountTotal ?? '0')}
-            </p>
-          ) : null}
+          {totalPrice?.discountTotal && totalPrice.discountTotal !== '0' && (
+            <p className="text-xs">Saved {Rupiah(totalPrice.discountTotal)}</p>
+          )}
         </div>
       </div>
     </>

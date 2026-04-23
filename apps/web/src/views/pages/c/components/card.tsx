@@ -48,6 +48,7 @@ export default function ProductCard({ products, style }: IProductCard) {
     selectedVariant,
     quantity,
     errorsProductRef,
+    hasVariants: computedGroupedAttributes.length > 0,
   });
 
   return (
@@ -88,7 +89,7 @@ export default function ProductCard({ products, style }: IProductCard) {
                 </div> */}
           </Swiper>{' '}
           <Link href={`/p/${item.slug}`}>
-            <div className="flex space-x-1 my-3 flex-wrap">
+            <div className="flex space-x-1 my-1 flex-wrap">
               {' '}
               {item.hexUrl.map((color, c) => (
                 <span
@@ -99,9 +100,9 @@ export default function ProductCard({ products, style }: IProductCard) {
               ))}
             </div>
 
-            <div>
+            <div className="mt-1">
               {pathname.includes('/c') && (
-                <h1 className="text-dark text-[11px] uppercase mb-1 opacity-70">
+                <h1 className="text-dark text-[11px] uppercase opacity-70">
                   {item.categories
                     .map((category) => {
                       return category.name;
@@ -109,15 +110,15 @@ export default function ProductCard({ products, style }: IProductCard) {
                     .join(', ')}
                 </h1>
               )}
-              <div className="mt-3">
-                <p className="font-bold text-base">{item.brand.name}</p>
-                <p className="font-light line-clamp-3 h-11">{item.name}</p>
-                <div className="flex items-center space-x-2 flex-wrap text-base">
-                  <ProductPrice
-                    price={item.price}
-                    hasDiscount={item.hasDiscount}
-                  />
-                </div>
+            </div>
+            <div className="mt-1">
+              <p className="font-bold text-base">{item.brand.name}</p>
+              <p className="font-light line-clamp-3 h-11">{item.name}</p>
+              <div className="flex items-center space-x-2 flex-wrap text-base">
+                <ProductPrice
+                  price={item.price}
+                  hasDiscount={item.hasDiscount}
+                />
               </div>
             </div>
           </Link>

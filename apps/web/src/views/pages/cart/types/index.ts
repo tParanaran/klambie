@@ -1,3 +1,4 @@
+import { ProductType } from '../../dashboard/products/types';
 import { IAppliedPromotion } from '../../p/types/product.types';
 
 export interface IPrice {
@@ -12,6 +13,7 @@ export interface ICartItems {
   name: string;
   hasDiscount: boolean;
   appliedPromotions?: IAppliedPromotion[];
+  type: ProductType;
   price: IPrice;
   sku: string;
   image: string;

@@ -34,6 +34,7 @@ export default function CartView({
           </h1>
           <DeliveryAddress />
           <CartItems
+            totalItems={total}
             cartItems={cartItems}
             selectedItems={selectedItems}
             selectedCount={selectedCount}

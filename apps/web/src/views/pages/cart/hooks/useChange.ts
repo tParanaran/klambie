@@ -3,12 +3,13 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { IVariant } from '../../p/types/product.types';
 import { IVariantAttribute } from '../types';
-import { AddToCartSchema } from '../../p/schema';
+import { getAddToCartSchema } from '../../p/schema';
 import { RefObject } from 'react';
 import { ValidationError } from 'yup';
 import { IErrorsMessageHandle } from '../../p/components/errors';
 
 interface IUseChange {
+  hasVariants: boolean;
   selectedVariant: IVariant | null | undefined;
   cartItemVariant: IVariantAttribute | undefined;
   selectedAttributes: Record<number, number>;
@@ -22,6 +23,7 @@ interface IUseChange {
 }
 
 export default function useChangeVariant({
+  hasVariants,
   selectedVariant,
   cartItemVariant,
   selectedAttributes,
@@ -44,11 +46,13 @@ export default function useChangeVariant({
         showVariantsHandler();
       } else {
         try {
-          await AddToCartSchema.validate(
+          const schema = getAddToCartSchema(hasVariants);
+
+          await schema.validate(
             {
+              quantity: quantities[selectedVariant.id],
               selectedAttributes,
               selectedVariant,
-              quantity: quantities[selectedVariant.id],
             },
             { abortEarly: false },
           );

@@ -23,13 +23,13 @@ export default function AddProductDahsboardView() {
   };
 
   return (
-    <div className="relative px-3 mt-5">
-      <div className="flex space-x-2 items-center mb-5 sm:-mb-10">
-        <MdNewLabel className="text-2xl" />
-        <h1 className="font-semibold">Add New Product Form</h1>
-      </div>
-      <div className="sticky top-1 z-10 mx-1 flex items-center justify-between">
-        <div className="ml-auto bg-primary-opacity backdrop-blur-xl p-1 rounded-lg">
+    <div className="relative mt-2">
+      <div className="sticky top-0 z-10 flex items-center justify-between flex-wrap bg-body w-full">
+        <div className="flex space-x-2 items-center my-2 px-3">
+          <MdNewLabel className="text-2xl" />
+          <h1 className="font-semibold">Add New Product</h1>
+        </div>
+        <div className="ml-auto bg-primary-opacity backdrop-blur-xl p-1 rounded-lg px-3">
           <div className="flex gap-1 text-xs sm:text-sm">
             <Button
               className="flex-none border border-orange-800 dark:text-orange-700 dark:border-orange-700 text-orange-800 hover:border-orange-700 hover:text-white w-fit! rounded-lg! shadow"
@@ -53,7 +53,7 @@ export default function AddProductDahsboardView() {
           </div>
         </div>
       </div>
-      <div>
+      <div className="px-3">
         <AddProductForm formikRef={formikRef} submitType={submitType} />
       </div>
     </div>

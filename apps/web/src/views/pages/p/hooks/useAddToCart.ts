@@ -1,5 +1,5 @@
 import { RefObject, useEffect, useState } from 'react';
-import { AddToCartSchema } from '../schema';
+import { getAddToCartSchema } from '../schema';
 import { ValidationError } from 'yup';
 import { IVariant } from '../types/product.types';
 import { useQueryClient } from '@tanstack/react-query';
@@ -12,6 +12,7 @@ interface IAddToCart {
   selectedAttributes: Record<number, number>;
   selectedVariant: IVariant | null | undefined;
   errorsProductRef?: RefObject<IErrorsMessageHandle>;
+  hasVariants: boolean;
 }
 
 export default function useAddToCart({
@@ -19,6 +20,7 @@ export default function useAddToCart({
   selectedAttributes,
   selectedVariant,
   errorsProductRef,
+  hasVariants,
 }: IAddToCart) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const queryClient = useQueryClient();
@@ -26,8 +28,10 @@ export default function useAddToCart({
   const handleAddToCart = async () => {
     setIsLoading(true);
     try {
-      await AddToCartSchema.validate(
-        { selectedAttributes, selectedVariant, quantity },
+      const schema = getAddToCartSchema(hasVariants);
+
+      await schema.validate(
+        { quantity, selectedAttributes, selectedVariant },
         { abortEarly: false },
       );
 

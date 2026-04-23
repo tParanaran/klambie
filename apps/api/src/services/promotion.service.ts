@@ -183,7 +183,7 @@ export class PromotionService {
           discountApplied: new Decimal(0),
           discountPercentage,
         },
-        hasDiscount: discountPercentage !== null,
+        hasDiscount: discountPercentage.gt(0),
       };
 
     // ----------------------------------
@@ -241,7 +241,7 @@ export class PromotionService {
       }
     }
 
-    discountPercentage = bestPrice.equals(0)
+    discountPercentage = bestDiscount.equals(0)
       ? new Decimal(0)
       : new Decimal(bestDiscount.div(originalPrice).mul(100).toFixed(1));
 
@@ -253,7 +253,7 @@ export class PromotionService {
         discountApplied: new Decimal(bestDiscount),
         discountPercentage,
       },
-      hasDiscount: discountPercentage !== null,
+      hasDiscount: discountPercentage.gt(0),
       appliedPromotion: bestApplied,
     };
   }

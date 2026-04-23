@@ -1,12 +1,19 @@
-import { IProductDetails } from '../types/product.types';
+import { IAttributes, IProductDetails } from '../types/product.types';
 import Dropdown from './dropdown';
 
 interface IDetails {
   details: IProductDetails;
+  selectedAttributes: Record<number, number>;
+  attributes: IAttributes[];
   sku: string;
 }
 
-export default function Details({ details, sku }: IDetails) {
+export default function Details({
+  details,
+  attributes,
+  sku,
+  selectedAttributes,
+}: IDetails) {
   const {
     material,
     care,
@@ -26,12 +33,63 @@ export default function Details({ details, sku }: IDetails) {
         <div className="text-sm leading-6">
           <h1 className="text-base mb-2 font-semibold">Details</h1>
           <div className="font-light">
-            <p>SKU : {sku}</p>
-            <p>Weight: {weight} gram</p>
-            {volume ? <p>Volume: {volume} liter</p> : null}
-            {height ? <p>Heigth: {height} cm</p> : null}
-            {width ? <p>Width: {width} cm</p> : null}
-            {length ? <p>Length: {length} cm</p> : null}
+            <div className="flex space-y-0.5">
+              <span className="w-24 shrink-0">SKU</span>
+              <span>: {sku}</span>
+            </div>
+
+            <div className="flex">
+              <span className="w-24 shrink-0">Weight</span>
+              <span>: {weight} gram</span>
+            </div>
+
+            {volume && (
+              <div className="flex">
+                <span className="w-24 shrink-0">Volume</span>
+                <span>: {volume} liter</span>
+              </div>
+            )}
+
+            {height && (
+              <div className="flex">
+                <span className="w-24 shrink-0">Height</span>
+                <span>: {height} cm</span>
+              </div>
+            )}
+
+            {width && (
+              <div className="flex">
+                <span className="w-24 shrink-0">Width</span>
+                <span>: {width} cm</span>
+              </div>
+            )}
+
+            {length && (
+              <div className="flex">
+                <span className="w-24 shrink-0">Length</span>
+                <span>: {length} cm</span>
+              </div>
+            )}
+
+            {attributes?.map((attribute) => {
+              const selectedValueId = selectedAttributes[attribute.id];
+
+              const selectedValue = attribute.values.find(
+                (val) => val.id === selectedValueId,
+              );
+
+              return (
+                <div key={attribute.id} className="flex">
+                  <span className="w-24 shrink-0">{attribute.name}</span>
+                  <span>
+                    :{' '}
+                    {selectedValue
+                      ? selectedValue.name
+                      : attribute.values.map((val) => val.name).join(', ')}
+                  </span>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>

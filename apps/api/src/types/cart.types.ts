@@ -1,5 +1,6 @@
 import Decimal from 'decimal.js';
 import { AppliedPromotion } from './promotion.type';
+import { ProductType } from '@generated/prisma/enums';
 
 export type InsertCart = {
   productVariantId: number;
@@ -43,6 +44,7 @@ export type CartItems = {
   appliedPromotions: AppliedPromotion[];
   price: Price;
   sku: string;
+  type: ProductType;
   image: string;
   quantity: number;
   availableStock: number;

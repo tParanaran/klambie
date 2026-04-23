@@ -1,3 +1,5 @@
+import { ProductType } from '../../dashboard/products/types';
+
 export interface IAppliedPromotion {
   name: string;
   badge: string;
@@ -52,6 +54,12 @@ export interface IProductDetails {
   care?: string;
 }
 
+export interface IAttributes {
+  id: number;
+  name: string;
+  values: { id: number; name: string }[];
+}
+
 export interface IVariant {
   id: number;
   sku: string;
@@ -81,10 +89,10 @@ export interface IProduct {
   name: string;
   sku: string;
   slug: string;
-  type: string;
+  type: ProductType;
   status: string;
   brand: { name: string; slug: string };
-  attributes: { name: string; id: number }[];
+  attributes: IAttributes[];
   categories: { name: string; slug: string }[];
   tags: ITag[];
   productDetails: IProductDetails;

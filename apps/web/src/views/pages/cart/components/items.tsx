@@ -26,11 +26,13 @@ interface ICart {
   cartItems: [ICartItems[], ICartItems[]];
   selectedItems: ICartItemIds[];
   selectedCount: number;
+  totalItems: number;
   toggleItem: (id: number, qty: number) => void;
   toggleSelectAll: () => void;
 }
 
 export default function CartItems({
+  totalItems,
   cartItems,
   selectedItems,
   selectedCount,
@@ -60,6 +62,7 @@ export default function CartItems({
     groupedAttributes: variants?.groupedAttributes ?? [],
   });
   const { confirmHandler } = useChangeVariant({
+    hasVariants: computedGroupedAttributes.length > 0,
     selectedVariant,
     cartItemVariant,
     selectedAttributes,
@@ -82,8 +85,7 @@ export default function CartItems({
     }
   }, [selectedVariant]);
 
-  const availableTotal = cartItems[0].length ?? 0;
-  const emptyCart = availableTotal <= 0;
+  const emptyCart = totalItems <= 0;
 
   return (
     <div>
@@ -94,7 +96,7 @@ export default function CartItems({
               <div className="hidden md:block  mr-2">
                 <SelectAllToggle
                   toggleSelectAll={toggleSelectAll}
-                  isSelectedItem={selectedCount === availableTotal}
+                  isSelectedItem={selectedCount === totalItems}
                 />
               </div>
             )}
@@ -102,7 +104,7 @@ export default function CartItems({
             <div className="flex space-x-2 items-center">
               <Image src="/icon.svg" alt="Klambie" height={20} width={20} />
               <p className="font-semibold text-sm">
-                KLAMBIE ({selectedCount + '/' + availableTotal} Items selected)
+                KLAMBIE ({selectedCount + '/' + totalItems} Items selected)
               </p>
             </div>
           </div>
@@ -228,16 +230,18 @@ export default function CartItems({
                           });
                         }}
                       >
-                        <VariantsButton
-                          attribute={item.attributes
-                            .map((attr) => attr.value)
-                            .join(', ')}
-                          onClick={variantHandler}
-                          isDisabled={isUnavailable}
-                          slug={item.slug}
-                          name={item.name}
-                          quantity={item.quantity}
-                        />
+                        {item.type === 'VARIANT' && (
+                          <VariantsButton
+                            attribute={item.attributes
+                              .map((attr) => attr.value)
+                              .join(', ')}
+                            onClick={variantHandler}
+                            isDisabled={isUnavailable}
+                            slug={item.slug}
+                            name={item.name}
+                            quantity={item.quantity}
+                          />
+                        )}
 
                         <QuantityButton
                           quantity={quantities[item.productVariantId]}

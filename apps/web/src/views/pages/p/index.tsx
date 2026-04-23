@@ -50,6 +50,7 @@ export default function ProductView({
     selectedVariant,
     quantity,
     errorsProductRef,
+    hasVariants: product.type === 'VARIANT',
   });
 
   useEffect(() => {
@@ -75,6 +76,8 @@ export default function ProductView({
   const disabledButton =
     selectedVariant?.inStock && product.status === 'ACTIVE' ? false : true;
 
+  console.log(selectedVariant);
+
   return (
     <div className="relative z-10">
       <div className="grid grid-cols-1 md:grid-cols-[1.2fr_1fr] lg:grid-cols-[1.5fr_1fr] pb-[5%] gap-4">
@@ -95,6 +98,8 @@ export default function ProductView({
           <Details
             details={product.productDetails}
             sku={selectedVariant?.sku || product.sku}
+            selectedAttributes={selectedAttributes}
+            attributes={product.attributes}
           />
           {/* <Reviews id={id} reviews={reviews} /> */}
         </div>

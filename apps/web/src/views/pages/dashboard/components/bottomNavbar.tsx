@@ -1,6 +1,7 @@
 import { useQueryParams } from '../../c/hooks/useQueryParams';
 import { sidebarItems } from '@/utils/dashboard';
 import Link from 'next/link';
+import LogoutButton from '../../template/components/logoutButton';
 
 export default function BottomNavbar() {
   const { pathname } = useQueryParams();
@@ -10,18 +11,16 @@ export default function BottomNavbar() {
   );
 
   return (
-    <nav className="transition-all duration-200 p-1 rounded-lg shadow-sm overflow-x-scroll scrollbar-hide backdrop-blur-xl mx-3 w-auto max-w-full sm:w-fit dark:bg-white/10  bg-light z-10">
-      <div className="flex gap-1">
-        {navbarItems[0]?.dropdown?.map((nav, n) => (
-          <Link
-            key={n}
-            href={nav.path}
-            className={`px-3 py-2 whitespace-nowrap rounded-lg uppercase text-sm font-semibold ${pathname === nav.path ? 'bg-dark shadow-sm dark:bg-orange-800 text-light' : 'opacity-50 hover:text-orange-700 '}`}
-          >
-            {nav.title}
-          </Link>
-        ))}
-      </div>
+    <nav className="bg-primary rounded-full h-9 md:h-10 flex items-center w-fit overflow-x-scroll scrollbar-hide ransition-all duration-200 mx-auto mb-1">
+      {navbarItems[0]?.dropdown?.map((nav, n) => (
+        <Link
+          key={n}
+          href={nav.path}
+          className={`py-2.5 px-3 lg:px-6 rounded-full text-xs md:text-sm uppercase flex-none ${pathname === nav.path ? 'bg-dark shadow-sm dark:bg-orange-800 text-light' : 'text-active hover:opacity-50'}`}
+        >
+          {nav.title}
+        </Link>
+      ))}
     </nav>
   );
 }

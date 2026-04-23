@@ -82,6 +82,12 @@ export type PromoResult = {
   price: Price;
 };
 
+export type Attributes = {
+  id: number;
+  name: string;
+  values: { id: number; name: string }[];
+};
+
 export type Products = {
   name: string;
   appliedPromotion?: AppliedPromotion[];
@@ -127,7 +133,7 @@ export type Product = {
   tags?: { name: string; slug: string }[];
   productDetails: ProductDetails | null;
   images?: { attributeId?: number | null; url: string }[];
-  attributes: { id: number; name: string }[];
+  attributes: Attributes[];
   variants: VariantProduct[];
 };
 

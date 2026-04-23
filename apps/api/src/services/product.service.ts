@@ -251,6 +251,7 @@ export class ProductService {
       where: { slug },
       select: {
         status: true,
+        sku: true,
         productVariants: {
           select: {
             id: true,
@@ -325,7 +326,7 @@ export class ProductService {
 
         return {
           id: v.id,
-          sku: v.sku,
+          sku: v.sku ?? product.sku,
           price,
           hasDiscount,
           appliedPromotion,
@@ -640,6 +641,16 @@ export class ProductService {
                 name: true,
               },
             },
+            values: {
+              select: {
+                attributeValueId: true,
+                attributeValue: {
+                  select: {
+                    value: true,
+                  },
+                },
+              },
+            },
           },
         },
       },
@@ -670,7 +681,14 @@ export class ProductService {
       productDetails,
       slug,
       status,
-      attributes: productAttributes.map((atrr) => atrr.attribute),
+      attributes: productAttributes.map((attr) => ({
+        id: attr.attribute.id,
+        name: attr.attribute.name,
+        values: attr.values.map((val) => ({
+          id: val.attributeValueId,
+          name: val.attributeValue.value,
+        })),
+      })),
       brand: products?.brand?.brandName ?? {
         name: 'Other',
         slug: 'other',
@@ -824,6 +842,12 @@ export class ProductService {
 
     if (!product) {
       throw new Error('Product not found');
+    }
+
+    if (product.status === 'DRAFT') {
+      throw new Error(
+        'Draft product cannot change status, must be published first',
+      );
     }
 
     const { isArchive } = data;

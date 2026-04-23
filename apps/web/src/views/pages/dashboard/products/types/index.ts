@@ -44,7 +44,7 @@ export interface IProductDetails {
   volume?: number | string;
 }
 
-type ProductType = 'NO_VARIANT' | 'VARIANT';
+export type ProductType = 'NO_VARIANT' | 'VARIANT';
 
 export interface IProductAttribute {
   attributeId: number | string;
