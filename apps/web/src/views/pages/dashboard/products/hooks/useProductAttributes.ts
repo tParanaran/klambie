@@ -4,46 +4,43 @@ import { IProductAttribute, IProductFormValues } from '../types';
 export function useProductAttributes() {
   const { values, setFieldValue } = useFormikContext<IProductFormValues>();
 
-  const setValue = (
-    attributeId: number,
-    value: number[],
-    imageBased: boolean = false,
-  ) => {
+  const setValue = (attributeId: number, value: number[]) => {
     const current = values.productAttributes || [];
 
-    const index = current.findIndex((a) => a.attributeId === attributeId);
+    const existing = current.find((a) => a.attributeId === attributeId);
 
-    let next = [...current];
+    let updated;
 
-    if (index === -1) {
-      next.push({
-        attributeId,
-        values: value,
-        imageBased,
-      });
+    if (existing) {
+      updated = current.map((a) =>
+        a.attributeId === attributeId
+          ? {
+              ...a,
+              values: value,
+              imageBased: a.imageBased ?? false,
+            }
+          : a,
+      );
     } else {
-      next[index] = {
-        ...next[index],
-        values: value,
-        imageBased: next[index].imageBased ?? imageBased,
-      };
+      updated = [
+        ...current,
+        {
+          attributeId,
+          values: value,
+          imageBased: false,
+        },
+      ];
     }
 
-    if (imageBased) {
-      next = next.map((attr) => ({
-        ...attr,
-        imageBased: attr.attributeId === attributeId,
-      }));
-    }
-
-    setFieldValue('productAttributes', next);
+    setFieldValue('productAttributes', updated);
   };
 
   const resetImages = () => {
     const currentImages = values.images || [];
-    const filteredImages = currentImages.filter((img) => {
-      return img.attributeValueId === 0;
-    });
+
+    const filteredImages = currentImages.filter(
+      (img) => !img.attributeValueId || img.attributeValueId === 0,
+    );
 
     setFieldValue('images', filteredImages);
   };
@@ -51,13 +48,25 @@ export function useProductAttributes() {
   const setImageBased = (attributeId: number, enabled: boolean) => {
     const current = values.productAttributes || [];
 
-    const nextAttributes = current.map((attr) => ({
-      ...attr,
-      imageBased: enabled ? attr.attributeId === attributeId : false,
-    }));
+    const nextAttributes = current.map((attr) => {
+      if (enabled) {
+        return {
+          ...attr,
+          imageBased: attr.attributeId === attributeId,
+        };
+      }
+
+      if (attr.attributeId === attributeId) {
+        return {
+          ...attr,
+          imageBased: false,
+        };
+      }
+
+      return attr;
+    });
 
     setFieldValue('productAttributes', nextAttributes);
-
     resetImages();
   };
 
@@ -70,7 +79,6 @@ export function useProductAttributes() {
     }));
 
     setFieldValue('productAttributes', next);
-
     resetImages();
   };
 

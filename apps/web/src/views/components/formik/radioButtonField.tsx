@@ -10,12 +10,14 @@ interface RadioFieldFormProps {
   name: string;
   label: string;
   options: RadioOption[];
+  onValueChange?: (value: boolean) => void;
 }
 
 export default function RadioButtonField({
   name,
   label,
   options,
+  onValueChange,
 }: RadioFieldFormProps) {
   const [field, meta, helpers] = useField(name);
 
@@ -29,7 +31,7 @@ export default function RadioButtonField({
             key={String(opt.value)}
             className={`flex items-center px-4 h-10 rounded-full cursor-pointer border transition grow ${
               field.value === opt.value
-                ? 'bg-orange-800 text-light'
+                ? 'bg-orange-800 text-light border-orange-800'
                 : 'bg-black/10 dark:bg-white/10 border-transparent'
             }`}
           >
@@ -39,7 +41,10 @@ export default function RadioButtonField({
               name={name}
               value={String(opt.value)}
               checked={field.value === opt.value}
-              onChange={() => helpers.setValue(opt.value)}
+              onChange={() => {
+                helpers.setValue(opt.value);
+                onValueChange?.(opt.value === 'VARIANT');
+              }}
               className="hidden"
             />
             {opt.label}

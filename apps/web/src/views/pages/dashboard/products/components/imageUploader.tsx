@@ -176,11 +176,11 @@ export default function ImageUploader({
             )}
 
             {images.map((image, index) => (
-              <div key={index} className="relative">
+              <div key={index} className="relative w-22">
                 <button type="button" onClick={() => setActiveIndex(index)}>
                   <img
                     src={image.url}
-                    className={`border rounded-lg object-cover aspect-square w-fit max-w-22 ${
+                    className={`border rounded-lg object-cover aspect-square w-22 ${
                       activeIndex === index
                         ? 'border-black p-1'
                         : 'border-transparent'

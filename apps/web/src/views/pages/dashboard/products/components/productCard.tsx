@@ -60,6 +60,7 @@ export default function ProductCard({
                         isOpen={isOpen}
                         variantsLength={product.productVariants.length}
                         hasVariants={product.type === 'VARIANT'}
+                        isNotDraft={product.status !== 'DRAFT'}
                       />
                     </div>
                   </div>

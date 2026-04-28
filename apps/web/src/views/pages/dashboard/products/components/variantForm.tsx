@@ -15,18 +15,16 @@ export default function VariantForm({ index, attributeValueId }: IProps) {
       <span className="opacity-50 text-base">
         {attributeValueId.map((id) => valueMap[id] || id).join(' / ')}
       </span>{' '}
-      <div className="grid grid-cols-2 sm:grid-cols-4! gap-x-1 sm:gap-x-3">
-        <TextFieldForm
-          name={`productVariants.${index}.barcode`}
-          label="Barcode"
-        />
+      <div className="grid grid-cols-2 sm:grid-cols-3! gap-x-1 sm:gap-x-3">
+        <div className="col-span-2 sm:col-span-1">
+          <TextFieldForm
+            name={`productVariants.${index}.barcode`}
+            label="Barcode"
+          />
+        </div>
         <NumberFieldForm
           name={`productVariants.${index}.basePrice`}
           label="Price"
-        />
-        <NumberFieldForm
-          name={`productVariants.${index}.comparePrice`}
-          label="Compare Price"
         />
         <NumberFieldForm
           name={`productVariants.${index}.stock`}

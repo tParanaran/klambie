@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ICategories } from '@/views/pages/c/types';
 import useAttribute from '@/views/pages/c/hooks/useAttribute';
 import { useField } from 'formik';
@@ -16,6 +16,16 @@ export default function SelectCategories() {
   const { modalRef, dropdownRef } = useHandleClickOutside({
     handleClickOutside: () => setOpenIndex(null),
   });
+
+  useEffect(() => {
+    if (!field.value || field.value.length === 0) {
+      setPaths([[]]);
+      return;
+    }
+    const parsed = field.value.map((p) => p.split('.').map(Number));
+
+    setPaths([...parsed, []]);
+  }, [field.value]);
 
   const getCategoriesByPath = (
     categories: ICategories[],
@@ -115,8 +125,8 @@ export default function SelectCategories() {
                   if (!currentCategories.length) return;
                   setOpenIndex(openIndex === index ? null : index);
                 }}
-                className={`bg-black/10 dark:bg-white/10 rounded-full px-4 h-10 flex items-center w-full
-                ${!currentCategories.length ? 'cursor-not-allowed mb-2' : ''}
+                className={`bg-black/10 dark:bg-white/10 rounded-full px-4 h-10 flex items-center w-full mb-2
+                ${!currentCategories.length ? 'cursor-not-allowed' : ''}
               `}
               >
                 <div className="flex gap-1 flex-1 min-w-0 overflow-y-scroll scrollbar-hide">
@@ -192,7 +202,9 @@ export default function SelectCategories() {
             </div>
           );
         })}
-        <ErrorForm name={'productCategories'} />
+        <div className="-mt-2">
+          <ErrorForm name={'productCategories'} />
+        </div>
       </div>
     </div>
   );

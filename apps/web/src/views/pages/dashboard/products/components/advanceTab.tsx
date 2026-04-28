@@ -43,6 +43,7 @@ export default function AdvanceTab() {
                     label={attribute.name}
                     isMutipleSelect={true}
                     isAttribute={true}
+                    value={selectedAttr?.values || []}
                     options={attribute.attributeValues.map((o) => ({
                       id: o.id,
                       name: o.value,
@@ -73,15 +74,13 @@ export default function AdvanceTab() {
                         <label className="flex items-center gap-1 cursor-pointer ml-3">
                           <input
                             type="checkbox"
-                            checked={selectedAttr.imageBased || false}
+                            checked={!!selectedAttr?.imageBased}
                             onChange={(e) =>
                               setImageBased(attribute.id, e.target.checked)
                             }
                             className="peer hidden"
                           />
-                          <CheckBox
-                            isChecked={selectedAttr.imageBased || false}
-                          />
+                          <CheckBox isChecked={!!selectedAttr?.imageBased} />
                           <span className="text-xs">Use as variants image</span>
                         </label>
                       )}
@@ -103,10 +102,7 @@ export default function AdvanceTab() {
           <h1 className="opacity-50">Pricing and Stock</h1>
           <div className="text-sm">
             <NumberFieldForm name="basePrice" label="Price" />
-            <div className="grid grid-cols-2 gap-x-1 sm:gap-x-3">
-              <NumberFieldForm name="baseStock" label="Stock" />
-              <NumberFieldForm name="comparePrice" label="Compare Price" />
-            </div>
+            <NumberFieldForm name="baseStock" label="Stock" />
           </div>
         </div>
       </div>

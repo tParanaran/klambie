@@ -1,5 +1,6 @@
 import Decimal from 'decimal.js';
 import { AppliedPromotion } from './promotion.type';
+import { Prisma } from '@generated/prisma/client';
 
 type ProductType = 'VARIANT' | 'NO_VARIANT';
 
@@ -42,6 +43,7 @@ type ProductDetails = {
 
 export type InsertProduct = {
   name: string;
+  status: 'DRAFT' | 'ACTIVE';
   brandId: number;
   basePrice: number;
   type: ProductType;
@@ -61,7 +63,6 @@ export type InsertProduct = {
   }[];
   productVariants: {
     barcode?: string | null;
-    comparePrice?: number | null;
     basePrice: number;
     stock: number;
     attributeValueId: number[];
@@ -219,3 +220,27 @@ export type GroupedAttributes = {
     isDisabled: boolean;
   }[];
 };
+
+export type ExistingProduct = Prisma.ProductGetPayload<{
+  select: {
+    id: true;
+    sku: true;
+    name: true;
+    brandId: true;
+    status: true;
+    basePrice: true;
+    productAttributes: { include: { values: true } };
+    productCategories: true;
+    productTags: true;
+    images: true;
+    productVariants: {
+      include: {
+        productVariantAttributes: {
+          select: {
+            attributeValueId: true;
+          };
+        };
+      };
+    };
+  };
+}>;

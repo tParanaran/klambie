@@ -88,6 +88,7 @@ export default function ProductsTableMobile({
                       slug={product.slug}
                       id={product.productId}
                       name={product.name}
+                      isNotDraft={product.status !== 'DRAFT'}
                     />
                   </div>
                 </div>

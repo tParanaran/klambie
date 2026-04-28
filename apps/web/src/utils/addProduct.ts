@@ -5,7 +5,6 @@ export const initialAddProductValues: IProductFormValues = {
   brandId: '',
   basePrice: '',
   baseStock: '',
-  comparePrice: '',
   type: null,
   sizingGuideId: '',
   barcode: '',

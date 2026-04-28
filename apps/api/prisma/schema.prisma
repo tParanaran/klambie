@@ -226,6 +226,7 @@ model ProductAttribute {
 
   values ProductAttributeValue[]
 
+  @@unique([productId, attributeId])
   @@map("product_attribute")
 }
 

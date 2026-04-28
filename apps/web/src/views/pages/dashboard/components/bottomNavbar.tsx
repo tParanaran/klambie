@@ -1,7 +1,6 @@
 import { useQueryParams } from '../../c/hooks/useQueryParams';
 import { sidebarItems } from '@/utils/dashboard';
 import Link from 'next/link';
-import LogoutButton from '../../template/components/logoutButton';
 
 export default function BottomNavbar() {
   const { pathname } = useQueryParams();
@@ -11,7 +10,7 @@ export default function BottomNavbar() {
   );
 
   return (
-    <nav className="bg-primary rounded-full h-9 md:h-10 flex items-center w-fit overflow-x-scroll scrollbar-hide ransition-all duration-200 mx-auto mb-1">
+    <nav className="bg-light dark:bg-black rounded-full h-9 md:h-10 flex items-center w-fit overflow-x-scroll scrollbar-hide ransition-all duration-200 mx-auto mb-1">
       {navbarItems[0]?.dropdown?.map((nav, n) => (
         <Link
           key={n}

@@ -13,6 +13,7 @@ interface IActions {
   id: number;
   isOpen: boolean;
   variantsLength: number;
+  isNotDraft: boolean;
 }
 
 const className = 'flex-none bg-black/15! dark:bg-white/10! text-dark';
@@ -25,6 +26,7 @@ export default function Actions({
   isOpen,
   variantsLength,
   hasVariants,
+  isNotDraft,
 }: IActions) {
   const [showModal, setShowModal] = useState<boolean>(false);
   const { router } = useActions(id);
@@ -56,12 +58,14 @@ export default function Actions({
           className={className}
           onClick={() => router.push(`/dashboard/products/${id}`)}
         >
-          <p>Edit</p>
+          <p>{isNotDraft ? 'Edit' : 'Resume'}</p>
         </TagButton>
 
-        <TagButton className={className} href={`/p/${slug}`}>
-          <p>View</p>
-        </TagButton>
+        {isNotDraft && (
+          <TagButton className={className} href={`/p/${slug}`}>
+            <p>View</p>
+          </TagButton>
+        )}
       </div>
 
       <DeleteModal

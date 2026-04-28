@@ -14,7 +14,7 @@ const tabsOptions: { name: string; type: TabType }[] = [
 
 export default function Tabs({ tab, setTab, isHide }: TabsProps) {
   return (
-    <div className="flex border-black/10 dark:border-white/10 border-b-[0.5px]">
+    <div className="flex border-black/10 dark:border-white/10 border-b-[0.5px] mt-2">
       {tabsOptions.map((opt) => {
         const isHidden = opt.type === 'VARIANTS' && isHide;
         return (
@@ -22,7 +22,7 @@ export default function Tabs({ tab, setTab, isHide }: TabsProps) {
             key={opt.name}
             type="button"
             onClick={() => setTab(opt.type)}
-            className={`px-4 py-2 text-sm border-b-2 ${
+            className={`px-4 pb-2 text-sm border-b-2 ${
               tab === opt.type
                 ? 'border-orange-700 font-medium'
                 : 'border-transparent opacity-50'

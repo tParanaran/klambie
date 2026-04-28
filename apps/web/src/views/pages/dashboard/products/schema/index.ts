@@ -92,13 +92,6 @@ export const AdvanceTabSchema = object({
     .required('Price is required')
     .min(1, 'Price must be at least Rp 1'),
 
-  comparePrice: number()
-    .typeError('Must be a number')
-    .nullable()
-    .transform((v, o) => (o === '' ? null : v))
-    .min(1, 'Price must be at least Rp 1')
-    .moreThan(ref('basePrice'), 'Must be greater than price'),
-
   baseStock: number()
     .typeError('Must be a number')
     .required('Stock is required')
@@ -154,13 +147,6 @@ export const productValidationSchema = object({
           .typeError('Must be a number')
           .required('Price is required')
           .min(1, 'Price must be at least Rp 1'),
-
-        comparePrice: number()
-          .typeError('Must be a number')
-          .nullable()
-          .transform((v, o) => (o === '' ? null : v))
-          .min(1, 'Price must be at least Rp 1')
-          .moreThan(ref('basePrice'), 'Must be greater than price'),
 
         stock: number()
           .typeError('Must be a number')

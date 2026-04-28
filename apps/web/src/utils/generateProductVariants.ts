@@ -8,56 +8,79 @@ import {
 
 // SAFE KEY
 ///////////
-const makeKey = (ids?: number[]) => {
-  if (!Array.isArray(ids)) return '';
-  return ids
-    .slice()
-    .sort((a, b) => a - b)
-    .join('-');
+type Key = string;
+
+const uniq = (arr: number[]) => [...new Set(arr)];
+
+const makeKey = (combo: number[], attrs: IProductAttribute[]): Key => {
+  return combo.map((valId, i) => `${attrs[i].attributeId}:${valId}`).join('|');
+};
+
+const getVariantAttributes = (
+  values: IProductFormValues,
+): IProductAttribute[] => {
+  const variantIds = new Set((values.variantAttributeIds || []).map(Number));
+
+  return (values.productAttributes || [])
+    .filter(
+      (attr) =>
+        variantIds.has(Number(attr.attributeId)) &&
+        Array.isArray(attr.values) &&
+        attr.values.length > 0,
+    )
+    .map((attr) => ({
+      ...attr,
+      values: uniq(attr.values),
+    }));
 };
 
 // COMBINATIONS
 ///////////////
 const generateCombinations = (arrays: number[][]): number[][] => {
-  if (!arrays.length) return [[]];
+  if (!arrays.length) return [];
 
-  return arrays.reduce(
-    (acc, curr) => {
-      const res: number[][] = [];
-
-      acc.forEach((a) => {
-        curr.forEach((b) => res.push([...a, b]));
-      });
-
-      return res;
-    },
-    [[]] as number[][],
+  return arrays.reduce<number[][]>(
+    (acc, curr) => acc.flatMap((a) => curr.map((b) => [...a, b])),
+    [[]],
   );
 };
 
 // BUILD VARIANTS
 /////////////////
-const buildVariants = (values: IProductFormValues): IProductVariant[] => {
-  const variantAttrs = values.productAttributes.filter(
-    (attr: IProductAttribute) =>
-      values.variantAttributeIds.includes(Number(attr.attributeId)) &&
-      Array.isArray(attr.values) &&
-      attr.values.length > 0,
-  );
+const buildVariants = (
+  values: IProductFormValues,
+  attrs: IProductAttribute[],
+): IProductVariant[] => {
+  if (!attrs.length) return [];
 
-  if (!variantAttrs.length) return [];
-
-  const matrix = variantAttrs.map((a) => a.values);
-
+  const matrix = attrs.map((a) => a.values);
   const combos = generateCombinations(matrix);
 
   return combos.map((combo) => ({
-    attributeValueId: Array.isArray(combo) ? combo : [],
+    attributeValueId: combo,
     basePrice: values.basePrice,
     stock: values.baseStock,
-    comparePrice: values.comparePrice || '',
     barcode: '',
   }));
+};
+
+const indexOldVariants = (
+  oldVariants: IProductVariant[],
+  attrs: IProductAttribute[],
+): Map<Key, IProductVariant> => {
+  const map = new Map<Key, IProductVariant>();
+
+  for (const v of oldVariants || []) {
+    if (!Array.isArray(v.attributeValueId)) continue;
+
+    const key = makeKey(v.attributeValueId, attrs);
+
+    if (!map.has(key)) {
+      map.set(key, v); // keep first, ignore duplicates
+    }
+  }
+
+  return map;
 };
 
 // GENERATE + MERGE
@@ -65,33 +88,41 @@ const buildVariants = (values: IProductFormValues): IProductVariant[] => {
 export const generateAndMergeVariants = (
   values: IProductFormValues,
 ): IProductVariant[] => {
-  const generated = buildVariants(values);
-  const oldVariants: IProductVariant[] = values.productVariants || [];
+  const attrs = getVariantAttributes(values);
 
-  const oldMap = new Map(
-    oldVariants
-      .filter((v) => Array.isArray(v.attributeValueId))
-      .map((v) => [makeKey(v.attributeValueId), v]),
-  );
+  const fresh = buildVariants(values, attrs);
+  const oldMap = indexOldVariants(values.productVariants || [], attrs);
 
-  const merged = generated.map((newVar) => {
-    const key = makeKey(newVar.attributeValueId);
+  const next: IProductVariant[] = [];
+  const usedKeys = new Set<Key>();
+
+  for (const v of fresh) {
+    const key = makeKey(v.attributeValueId, attrs);
     const old = oldMap.get(key);
 
     if (old) {
-      return {
-        ...newVar,
+      next.push({
+        ...v,
         basePrice: old.basePrice,
         stock: old.stock,
         barcode: old.barcode,
-        comparePrice: old.comparePrice,
-      };
+      });
+    } else {
+      next.push(v);
     }
 
-    return newVar;
-  });
+    usedKeys.add(key);
+  }
 
-  return merged;
+  const removed: IProductVariant[] = [];
+
+  for (const [key, old] of oldMap.entries()) {
+    if (!usedKeys.has(key)) {
+      removed.push(old);
+    }
+  }
+
+  return next;
 };
 
 export const groupByImage = (
@@ -102,21 +133,18 @@ export const groupByImage = (
 
   if (!imageAttr) return null;
 
+  const validValues = new Set(imageAttr.values);
+
   const groups: Record<number, IProductVariant[]> = {};
 
-  variants.forEach((variant) => {
-    const imageValueId = variant.attributeValueId.find((id) =>
-      imageAttr.values.includes(id),
-    );
+  for (const variant of variants) {
+    const id = variant.attributeValueId.find((v) => validValues.has(v));
 
-    if (!imageValueId) return;
+    if (!id) continue;
 
-    if (!groups[imageValueId]) {
-      groups[imageValueId] = [];
-    }
-
-    groups[imageValueId].push(variant);
-  });
+    if (!groups[id]) groups[id] = [];
+    groups[id].push(variant);
+  }
 
   return groups;
 };

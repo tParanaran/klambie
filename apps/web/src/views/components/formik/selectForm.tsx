@@ -1,7 +1,7 @@
 import ErrorForm from '@/views/components/formik/errorForm';
 import useHandleClickOutside from '@/views/pages/template/hooks/useHandleClickOutside';
 import { useField } from 'formik';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { IoClose } from 'react-icons/io5';
 
 interface Option {
@@ -18,6 +18,7 @@ interface CustomSelectProps {
   placeholder?: string;
   isMutipleSelect?: boolean;
   isAttribute?: boolean;
+  value?: number[];
   onSelect?: (value: number[]) => void;
   onDelete?: () => void;
 }
@@ -29,6 +30,7 @@ export default function SelectForm({
   placeholder = `Select ${label.toLowerCase()} here`,
   isMutipleSelect = false,
   isAttribute = false,
+  value = [],
   onSelect,
   onDelete,
 }: CustomSelectProps) {
@@ -37,11 +39,19 @@ export default function SelectForm({
   const [search, setSearch] = useState<string>('');
 
   const selectedIds: number[] =
-    field.value == null
-      ? []
-      : Array.isArray(field.value)
-        ? field.value
-        : [field.value];
+    value && value.length > 0
+      ? value
+      : field.value == null
+        ? []
+        : Array.isArray(field.value)
+          ? field.value
+          : [field.value];
+
+  useEffect(() => {
+    if (value && value.length > 0 && !field.value) {
+      helpers.setValue(value);
+    }
+  }, [value]);
 
   const selectedOptions = options.filter((o) => selectedIds.includes(o.id));
 

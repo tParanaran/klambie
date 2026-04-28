@@ -62,18 +62,17 @@ export interface IProductImage {
 export interface IProductVariant {
   barcode?: string;
   basePrice: number | string;
-  comparePrice?: number | string;
   stock: number | string;
   attributeValueId: number[];
 }
 
 export interface IProductFormValues {
+  id?: number;
   name: string;
   brandId: number | string;
   barcode: string;
   basePrice: number | string;
   baseStock: number | string;
-  comparePrice?: number | string;
   type: ProductType | null;
   productTags?: number[];
   sizingGuideId: number | string;
@@ -113,7 +112,6 @@ export interface IProductPayload {
     attributeValueId: number[];
     basePrice: number;
     stock: number;
-    comparePrice?: number | null;
     barcode?: string | null;
   }[];
   images: {

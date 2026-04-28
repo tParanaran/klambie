@@ -109,6 +109,7 @@ export default function ProductsTable({
                             id={product.productId}
                             name={product.name}
                             hasVariants={product.type === 'VARIANT'}
+                            isNotDraft={product.status !== 'DRAFT'}
                           />
                         </div>
                       </td>

@@ -47,10 +47,22 @@ export class ProductRouter {
       this.product.deleteVariant,
     );
     this.router.patch(
+      '/edit/:id',
+      VerificationToken,
+      AdminGuard,
+      this.product.updateProduct,
+    );
+    this.router.patch(
       '/updateVariant/:id',
       VerificationToken,
       AdminGuard,
-      this.product.uppdateVariant,
+      this.product.updateVariant,
+    );
+    this.router.get(
+      '/fetchForEdit/:id',
+      VerificationToken,
+      AdminGuard,
+      this.product.fetchEditProduct,
     );
   }
 

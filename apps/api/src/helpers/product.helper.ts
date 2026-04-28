@@ -1,8 +1,15 @@
 import { GenerateSlug } from '@/utils/slug';
 import { DefaultArgs } from '@prisma/client/runtime/client';
-import { PrismaClient } from '@generated/prisma/client';
-import { ProductDashboard } from '@/types/product.type';
+import { Prisma, PrismaClient } from '@generated/prisma/client';
+import {
+  ExistingProduct,
+  InsertProduct,
+  ProductDashboard,
+} from '@/types/product.type';
 import { ValidateStock } from '@/types/cart.types';
+import { SKU } from '@/utils/sku';
+
+const sku = new SKU();
 
 export class ProductHelper {
   async findOrCreate<
@@ -240,5 +247,268 @@ export class ProductHelper {
     const inStock = isProductActive && isVariantActive && isInStock;
 
     return { availableStock, inStock };
+  }
+  async buildProductData(data: InsertProduct) {
+    const baseData: any = {
+      name: data.name ?? '',
+      status: data.status,
+      brandId: data.brandId ?? 0,
+      sizingGuideId: data.sizingGuideId ? data.sizingGuideId : 1,
+      slug: await GenerateSlug(data.name ?? 'draft'),
+      sku: await sku.generateProductSKU(
+        data.name ?? 'draft',
+        data.brandId ?? 0,
+      ),
+      type: data.type,
+      basePrice: data.basePrice ?? 0,
+    };
+
+    if (data.productDetails) {
+      baseData.productDetails = {
+        create: data.productDetails,
+      };
+    }
+
+    if (data.productAttributes?.length) {
+      baseData.productAttributes = {
+        create: data.productAttributes.map((attr) => ({
+          attributeId: attr.attributeId,
+          imageBased: attr.imageBased ?? false,
+          values: {
+            create: attr.values.map((valueId: number) => ({
+              attributeValueId: valueId,
+            })),
+          },
+        })),
+      };
+    }
+
+    if (data.productCategories?.length) {
+      baseData.productCategories = {
+        create: data.productCategories.map((path: string) => {
+          const ids = path.split('.').map(Number);
+          return {
+            categoryHierarchyId: ids[ids.length - 1],
+          };
+        }),
+      };
+    }
+
+    if (data.productTags?.length) {
+      baseData.productTags = {
+        create: data.productTags.map((id: number) => ({
+          tagId: id,
+        })),
+      };
+    }
+
+    if (data.images?.length) {
+      baseData.images = {
+        create: data.images,
+      };
+    }
+
+    return baseData;
+  }
+  async buildUpdateData(data: InsertProduct) {
+    return {
+      name: data.name,
+      status: data.status,
+      brandId: data.brandId,
+      sizingGuideId: data.sizingGuideId,
+      type: data.type,
+      basePrice: data.basePrice,
+      slug: data.name ? await GenerateSlug(data.name) : undefined,
+      sku: await sku.generateProductSKU(
+        data.name ?? 'draft',
+        data.brandId ?? 0,
+      ),
+
+      productDetails: data.productDetails
+        ? {
+            upsert: {
+              update: data.productDetails,
+              create: data.productDetails,
+            },
+          }
+        : undefined,
+
+      productAttributes: {
+        deleteMany: {},
+        create:
+          data.productAttributes?.map((attr) => ({
+            attributeId: attr.attributeId,
+            imageBased: attr.imageBased ?? false,
+            values: {
+              create: attr.values.map((v) => ({
+                attributeValueId: v,
+              })),
+            },
+          })) ?? [],
+      },
+
+      productCategories: {
+        deleteMany: {},
+        create:
+          data.productCategories?.map((path) => {
+            const ids = path.split('.').map(Number);
+            return { categoryHierarchyId: ids.at(-1)! };
+          }) ?? [],
+      },
+
+      productTags: {
+        deleteMany: {},
+        create: data.productTags?.map((id) => ({ tagId: id })) ?? [],
+      },
+
+      images: {
+        deleteMany: {},
+        create: data.images ?? [],
+      },
+    };
+  }
+  async buildDraftVariants(product: ExistingProduct, data?: InsertProduct) {
+    if (!data?.productVariants.length) return undefined;
+
+    const create = await Promise.all(
+      data.productVariants.map(async (va) => {
+        const attrs = va.attributeValueId ?? [];
+        const hasAttributes = attrs.length > 0;
+
+        return {
+          barcode: va.barcode ?? null,
+          basePrice: va.basePrice ?? 0,
+          stock: va.stock ?? 0,
+          isActive: data.status === 'DRAFT' ? false : true,
+
+          sku: hasAttributes
+            ? await sku.generateVariantSKU(product.sku, attrs)
+            : null,
+
+          ...(hasAttributes && {
+            productVariantAttributes: {
+              create: attrs.map((id) => ({
+                attributeValueId: id,
+              })),
+            },
+          }),
+        };
+      }),
+    );
+
+    return {
+      deleteMany: {},
+      create,
+    };
+  }
+  async buildActiveVariants(
+    tx: Prisma.TransactionClient,
+    product: ExistingProduct,
+    data: InsertProduct,
+  ) {
+    if (!data.productVariants) return;
+
+    const getKey = (ids: number[] = []) =>
+      [...ids].sort((a, b) => a - b).join('-');
+
+    const existingMap = new Map(
+      product.productVariants.map((v: any) => [
+        getKey(v.productVariantAttributes.map((a: any) => a.attributeValueId)),
+        v,
+      ]),
+    );
+
+    const incomingMap = new Map(
+      data.productVariants.map((v) => [getKey(v.attributeValueId), v]),
+    );
+
+    const toDelete: number[] = [];
+    const toCreate: any[] = [];
+    const toCreateMeta: any[] = [];
+    const toUpdate: any[] = [];
+
+    for (const [key, existing] of existingMap) {
+      if (!incomingMap.has(key)) {
+        toDelete.push(existing.id);
+      }
+    }
+
+    for (const [key, incoming] of incomingMap) {
+      const existing = existingMap.get(key);
+      const attrs = incoming.attributeValueId ?? [];
+      const hasAttr = attrs.length > 0;
+
+      if (!existing) {
+        const skuCode = hasAttr
+          ? await sku.generateVariantSKU(product.sku, attrs)
+          : null;
+
+        toCreate.push({
+          productId: product.id,
+          barcode: incoming.barcode ?? null,
+          basePrice: incoming.basePrice ?? 0,
+          stock: incoming.stock ?? 0,
+          isActive: true,
+          sku: skuCode,
+        });
+
+        toCreateMeta.push({
+          sku: skuCode,
+          attrs,
+        });
+      } else {
+        toUpdate.push({
+          where: { id: existing.id },
+          data: {
+            barcode: incoming.barcode ?? existing.barcode,
+            basePrice: incoming.basePrice ?? existing.basePrice,
+            ...(incoming.stock !== undefined && {
+              stock: incoming.stock,
+            }),
+          },
+        });
+      }
+    }
+
+    if (toDelete.length) {
+      await tx.productVariant.deleteMany({
+        where: { id: { in: toDelete } },
+      });
+    }
+
+    if (toCreate.length) {
+      await tx.productVariant.createMany({
+        data: toCreate,
+        skipDuplicates: true,
+      });
+
+      const createdVariants = await tx.productVariant.findMany({
+        where: {
+          productId: product.id,
+          sku: { in: toCreateMeta.map((v) => v.sku).filter(Boolean) },
+        },
+      });
+
+      const attrRows = createdVariants.flatMap((variant) => {
+        const meta = toCreateMeta.find((m) => m.sku === variant.sku);
+        if (!meta) return [];
+
+        return meta.attrs.map((attrId: number) => ({
+          productVariantId: variant.id,
+          attributeValueId: attrId,
+        }));
+      });
+
+      if (attrRows.length) {
+        await tx.productVariantAttribute.createMany({
+          data: attrRows,
+          skipDuplicates: true,
+        });
+      }
+    }
+
+    for (const update of toUpdate) {
+      await tx.productVariant.update(update);
+    }
   }
 }

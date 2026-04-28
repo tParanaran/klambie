@@ -17,58 +17,53 @@ export default function GeneralTab() {
   const { brandOptions, tags } = useAttribute();
 
   useEffect(() => {
-    if (!values.type) return;
-
-    if (values.type === 'NO_VARIANT') {
-      setFieldValue('productVariants', [
-        {
-          barcode: values.barcode || '',
-          basePrice: values.basePrice || '',
-          comparePrice: values.comparePrice || '',
-          stock: values.baseStock || '',
-          attributeValueId: [],
-        },
-      ]);
-    }
-
-    if (values.type === 'VARIANT') {
-      setFieldValue('productVariants', []);
-    }
-
-    resetAttributesImages();
-  }, [values.type]);
-
-  useEffect(() => {
     if (values.type === 'NO_VARIANT') {
       setFieldValue('productVariants', [
         {
           barcode: values.barcode,
           basePrice: values.basePrice,
-          comparePrice: values.comparePrice,
           stock: values.baseStock,
           attributeValueId: [],
         },
       ]);
     }
-  }, [values.basePrice, values.baseStock, values.comparePrice]);
+  }, [values.basePrice, values.baseStock]);
+
+  const handleTypeChange = (value: boolean) => {
+    resetAttributesImages();
+    if (value) {
+      setFieldValue('productVariants', []);
+    } else if (!value && values.productVariants.length === 0) {
+      setFieldValue('productVariants', [
+        {
+          barcode: values.barcode || '',
+          basePrice: values.basePrice || '',
+          stock: values.baseStock || '',
+          attributeValueId: [],
+        },
+      ]);
+    }
+  };
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[2fr_1fr] gap-5 mt-5">
       <div className="flex flex-col">
-        <div className="bg-black/5 dark:bg-white/5 rounded-2xl w-full p-2 mb-5">
+        <div className="bg-black/5 dark:bg-white/5 rounded-2xl w-full h-full p-2 mb-5">
           <h1 className="opacity-50">Categories</h1>
           <div className="text-sm">
             <SelectCategories />
-            <SelectForm
-              name={'productTags'}
-              label="Tag"
-              options={tags}
-              isMutipleSelect={true}
-              placeholder="Select product tags here"
-            />
+            <div>
+              <SelectForm
+                name={'productTags'}
+                label="Tag"
+                options={tags}
+                isMutipleSelect={true}
+                placeholder="Select product tags here"
+              />
+            </div>
           </div>
         </div>
-        <div className="bg-black/5 dark:bg-white/5 rounded-2xl w-full h-full p-2">
+        <div className="bg-black/5 dark:bg-white/5 rounded-2xl w-full p-2">
           <h1 className="opacity-50">General Information</h1>
           <div className="text-sm">
             <TextFieldForm
@@ -85,6 +80,7 @@ export default function GeneralTab() {
                   { label: 'Has Variants', value: 'VARIANT' },
                   { label: 'Single Product', value: 'NO_VARIANT' },
                 ]}
+                onValueChange={handleTypeChange}
               />
               <div className="grow min-w-fit">
                 <SelectForm

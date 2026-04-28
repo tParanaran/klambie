@@ -27,21 +27,27 @@ export default function sortToggle({
 
   const handleClick = (value: string) => {
     if (value === 'status') {
-      if (statusParams === 'ACTIVE' || activeParams === 'true') {
-        createParams(
-          isScroll ? { status: 'ARCHIVE' } : { isActive: 'false' },
-          { append: false },
-          isScroll,
-        );
-      } else if (statusParams === 'ARCHIVE' || activeParams === 'false') {
-        clearAllParams(isScroll);
+      if (isScroll) {
+        if (!statusParams) {
+          createParams({ status: 'ACTIVE' }, { append: false }, isScroll);
+        } else if (statusParams === 'ACTIVE') {
+          createParams({ status: 'DRAFT' }, { append: false }, isScroll);
+        } else if (statusParams === 'DRAFT') {
+          createParams({ status: 'ARCHIVE' }, { append: false }, isScroll);
+        } else {
+          clearAllParams(isScroll);
+        }
       } else {
-        createParams(
-          isScroll ? { status: 'ACTIVE' } : { isActive: 'true' },
-          { append: false },
-          isScroll,
-        );
+        if (!activeParams) {
+          createParams({ isActive: 'true' }, { append: false }, isScroll);
+        } else if (activeParams === 'true') {
+          createParams({ isActive: 'false' }, { append: false }, isScroll);
+        } else {
+          clearAllParams(isScroll);
+        }
       }
+
+      return;
     } else {
       if (currentSort === value) {
         currentOrder === 'desc'
@@ -62,12 +68,14 @@ export default function sortToggle({
   };
 
   const isToggle = isScroll
-    ? ['ACTIVE', 'ARCHIVE'].includes(statusParams!)
+    ? ['ACTIVE', 'DRAFT', 'ARCHIVE'].includes(statusParams!)
     : ['true', 'false'].includes(activeParams!);
 
   let statusLabel = 'Status';
   if (isScroll && statusParams) {
-    statusLabel = statusParams === 'ARCHIVE' ? 'Archive' : 'Active';
+    if (statusParams === 'ACTIVE') statusLabel = 'Active';
+    else if (statusParams === 'DRAFT') statusLabel = 'Draft';
+    else if (statusParams === 'ARCHIVE') statusLabel = 'Archive';
   } else if (!isScroll && activeParams) {
     statusLabel = activeParams === 'false' ? 'Archive' : 'Active';
   }

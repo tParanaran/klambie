@@ -109,11 +109,30 @@ export class Product {
       next(error);
     }
   }
-  async uppdateVariant(req: Request, res: Response, next: NextFunction) {
+  async updateProduct(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.params;
+
+      const result = await productService.updateProduct(Number(id), req.body);
+      res.status(200).send(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+  async updateVariant(req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
 
       const result = await productService.updateVariant(Number(id), req.body);
+      res.status(200).send(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+  async fetchEditProduct(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.params;
+      const result = await productService.getProductForEdit(Number(id));
       res.status(200).send(result);
     } catch (error) {
       next(error);
