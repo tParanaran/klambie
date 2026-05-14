@@ -56,11 +56,6 @@ export default function AddProductForm({
     nextTab: TabType,
     props: FormikProps<IProductFormValues>,
   ) => {
-    if (submitType === 'DRAFT' && mode === 'CREATE') {
-      setTab(nextTab);
-      return;
-    }
-
     if (tab === 'GENERAL' && nextTab === 'DETAILS') {
       const isValid = await validateTabs(props, GeneralTabSchema);
       if (!isValid) return;

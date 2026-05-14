@@ -406,7 +406,17 @@ export class ProductHelper {
     product: ExistingProduct,
     data: InsertProduct,
   ) {
-    if (!data.productVariants) return;
+    if (
+      !data.productVariants ||
+      data.productVariants.length === 0 ||
+      data.type === 'NO_VARIANT'
+    ) {
+      await tx.productVariantAttribute.deleteMany({
+        where: { productVariant: { productId: product.id } },
+      });
+
+      return;
+    }
 
     const getKey = (ids: number[] = []) =>
       [...ids].sort((a, b) => a - b).join('-');

@@ -113,7 +113,9 @@ export default function ProductCard({ products, style }: IProductCard) {
             </div>
             <div className="mt-1">
               <p className="font-bold text-base">{item.brand.name}</p>
-              <p className="font-light line-clamp-3 h-11">{item.name}</p>
+              <p className="font-light line-clamp-3 max-h-11 h-fit">
+                {item.name}
+              </p>
               <div className="flex items-center space-x-2 flex-wrap text-base">
                 <ProductPrice
                   price={item.price}

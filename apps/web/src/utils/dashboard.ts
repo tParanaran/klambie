@@ -15,8 +15,8 @@ export const sidebarItems = [
     path: '/dashboard/products',
     dropdown: [
       { title: 'All Products', path: '/dashboard/products' },
-      { title: 'Categories', path: '/dashboard/products/categories' },
       { title: 'Add Product', path: '/dashboard/products/add' },
+      { title: 'Categories', path: '/dashboard/products/categories' },
     ],
   },
   {
